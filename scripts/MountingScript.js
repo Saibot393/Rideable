@@ -140,7 +140,6 @@ class MountingManager {
 	
 	
 	static UnMountSelected() {
-		console.log("Check1");
 		//fork dependent on GM status of user (either direct unmount or unmount request through Token ID send via socket)
 		if (game.user.isGM) {
 			if (RideableUtils.selectedTokens().length > 0) {
@@ -193,10 +192,10 @@ class MountingManager {
 		}
 	} 
 	
-	static onUnMount(pToken) {
+	static async onUnMount(pToken) {
 		if (pToken) {
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+				await pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
 			}
 		}
 	} 

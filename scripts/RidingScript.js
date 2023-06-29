@@ -43,14 +43,16 @@ class Ridingmanager {
 		//Check if Token is Rider
 		let vToken = pDocument.object;
 		if (RideableFlags.isRider(vToken)) {
-			if (!pInfos.RidingMovement) {
-				if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
-					delete pchanges.x;
-					delete pchanges.y;
-					delete pchanges.elevation;
+			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation")) {
+				if (!pInfos.RidingMovement) {
+					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
+						delete pchanges.x;
+						delete pchanges.y;
+						delete pchanges.elevation;
+					}
+					
+					Hooks.call(cModuleName+".IndependentRiderMovement", vToken)
 				}
-				
-				Hooks.call(cModuleName+".IndependentRiderMovement", vToken)
 			}
 		}
 	}
