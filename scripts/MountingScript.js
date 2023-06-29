@@ -34,13 +34,15 @@ class MountingManager {
 	//Basic Mounting /UnMounting
 	static MountSelectedGM(pTarget, pselectedTokens) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
-	static MountSelected(pTargetHovered = false) {} //exceutes a MountSelectedGM request Hook for players or MountSelectedGM directly for GMs
+	static MountSelected(pTargetHovered = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
 	static MountRequest(pTargetID, pselectedTokensID) {} //Request GM user to execute MountSelectedGM with given parameters
 	
 	static UnMountSelectedGM(pselectedTokens) {} //remove all riding flags concerning pselectedTokens
 	
-	static UnMountSelected() {} //exceutes a UnMountSelectedGM request Hook for players or UnMountSelectedGM directly for GMs
+	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
+	
+	static RequestUnmount(pTokens) {} //exceutes a UnMountSelectedGM request socket for players or UnMountSelectedGM directly for GMs
 
 	static UnMountRequest({ pselectedTokenID } = {}) {} //Request GM user to execute UnMountSelectedGM with given parameters
 	
@@ -158,18 +160,22 @@ class MountingManager {
 				}
 			}
 			
-			if (game.user.isGM) {
-				MountingManager.UnMountSelectedGM(vUnMountTokens);
-			}
-			else {
-				if (!game.paused) {
-					let vUnMountTokensIDs = RideableUtils.IDsfromTokens(vUnMountTokens);
-					
-					game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vUnMountTokensIDs}});
-				}
-			}
+			MountingManager.RequestUnmount(vUnMountTokens);
 		}
 	}
+	
+	static RequestUnmount(pTokens) {
+		if (game.user.isGM) {
+			MountingManager.UnMountSelectedGM(pTokens);
+		}
+		else {
+			if (!game.paused) {
+				let vUnMountTokensIDs = RideableUtils.IDsfromTokens(pTokens);
+				
+				game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vUnMountTokensIDs}});
+			}
+		}
+	} 
 	
 	static UnMountRequest({ pselectedTokenIDs } = {}) { 
 		//Handels UnMount request by matching TokenIDs to Tokens and unmounting them
@@ -195,7 +201,7 @@ class MountingManager {
 	static onIndependentRiderMovement(pToken) {
 		if (RideableFlags.isRider(pToken)) {
 			if (game.settings.get(cModuleName, "RiderMovement") == "RiderMovement-dismount") {
-				MountingManager.UnMountSelectedGM([pToken]);
+				MountingManager.RequestUnmount([pToken]);
 			}
 		}
 	}
