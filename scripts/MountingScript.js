@@ -49,7 +49,7 @@ class MountingManager {
 	static UnMountallRiders(pRiddenToken) {} //Unmounts all Tokens that currently Ride pRiddenToken
 	
 	//Additional functions
-	static onRiderMovement(pToken, pChanges, pInfos) {} //everything that happens upon a rider moving (besides the basics)
+	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
 	static onMount(pToken) {} //everything that happens upon a token mounting (besides the basics)
 	
@@ -126,7 +126,7 @@ class MountingManager {
 	static UnMountSelectedGM(pselectedTokens) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
-			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));;//.filter(vToken => RideableFlags.isRider(vToken));	
+			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));//.filter(vToken => RideableFlags.isRider(vToken));
 			
 			RideableFlags.stopRiding(vRiderTokens);
 			
@@ -140,6 +140,7 @@ class MountingManager {
 	
 	
 	static UnMountSelected() {
+		console.log("Check1");
 		//fork dependent on GM status of user (either direct unmount or unmount request through Token ID send via socket)
 		if (game.user.isGM) {
 			if (RideableUtils.selectedTokens().length > 0) {
@@ -147,7 +148,6 @@ class MountingManager {
 			}
 		}
 		else {
-			console.log("Check1");
 			if (!game.paused) {
 				if (RideableUtils.selectedTokens().length > 0) {
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(RideableUtils.selectedTokens());
@@ -179,10 +179,10 @@ class MountingManager {
 	
 	//Additional functions
 	
-	static onRiderMovement(pToken, pChanges, pInfos) {
+	static onIndependentRiderMovement(pToken) {
 		if (RideableFlags.isRider(pToken)) {
-			if (!hasProperty(pInfos, "RidingMovement")) {
-				
+			if (game.settings.get(cModuleName, "RiderMovement") == "RiderMovement-dismount") {
+				MountingManager.UnMountSelectedGM([pToken]);
 			}
 		}
 	}
@@ -194,8 +194,10 @@ class MountingManager {
 	} 
 	
 	static onUnMount(pToken) {
-		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-			pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+		if (pToken) {
+			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
+				pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+			}
 		}
 	} 
 	
@@ -235,6 +237,8 @@ class MountingManager {
 
 //Hooks
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
+
+Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
 
 Hooks.on("ready", function() { MountingEffectManager.preloadEffects(); });
 

@@ -7,7 +7,7 @@
     "name": "saibot"
     }
   ],
-  "version": "2.4.0",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": "11",
     "verified": "11"
