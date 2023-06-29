@@ -20,10 +20,10 @@
 	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
 	
 	"Rideable.Mount.name"							: "Aufsteigen",
-	"Rideable.Mount.descrp"							: "Lässt die kontrollierten Marken die angezielte Marke besteigen",
+	"Rideable.Mount.descrp"							: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")",
 	
 	"Rideable.UnMount.name"							: "Absteigen",
-	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen",
+	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }

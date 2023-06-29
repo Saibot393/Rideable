@@ -7,9 +7,9 @@
     "name": "saibot"
     }
   ],
-  "version": "1.0.0",
+  "version": "0.0.0",
   "compatibility": {
-    "minimum": "11",
+    "minimum": "10",
     "verified": "11"
   },
   "socket": "true",
@@ -35,5 +35,13 @@
 	"scripts/SocketHandler.js",
 	"scripts/MacroHooks.js",
 	"scripts/RideableSettings.js"
+  ],
+  "packs": [
+	{
+	  "name": "rideable",
+	  "label": "Rideable",
+	  "path": "packs/rideable.db",
+	  "type": "Macro"
+	}
   ]
 }
