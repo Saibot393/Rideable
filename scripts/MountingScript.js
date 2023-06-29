@@ -90,8 +90,12 @@ class MountingManager {
 	static MountSelected(pTargetHovered = false) {
 		let vTarget = RideableUtils.targetedToken();
 		
-		if (pTargetHovered) {
+		if (pTargetHovered || !vTarget) {
 			vTarget = RideableUtils.hoveredToken();
+			
+			if (!vTarget) {
+				vTarget = RideableUtils.targetedToken();
+			}
 		}
 		
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
