@@ -147,6 +147,7 @@ class MountingManager {
 			}
 		}
 		else {
+			console.log("Check1");
 			if (!game.paused) {
 				if (RideableUtils.selectedTokens().length > 0) {
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(RideableUtils.selectedTokens());
@@ -239,9 +240,9 @@ Hooks.on("ready", function() { MountingEffectManager.preloadEffects(); });
 
 //wrap and export functions
 
-function MountSelected(pTargetHovered = false) {return MountingManager.MountSelected(pTargetHovered); }
+function MountSelected(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered); }
 
-function MountRequest({ pTargetID, pselectedTokensID } = {}) {return MountingManager.MountRequest({pTargetID, pselectedTokensID}); }
+function MountRequest({ pTargetID, pselectedTokensID } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID}); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 

@@ -1,10 +1,11 @@
 import {  MountRequest, UnMountRequest } from "./MountingScript.js";
 
 //execute functions with pData depending on pFunction
-function async organiseSocketEvents({pFunction, pData} = {}) {
+function organiseSocketEvents({pFunction, pData} = {}) {
 	switch(pFunction) {
 		case "MountRequest":
-			await MountRequest(pData);
+			console.log("Check4")
+			MountRequest(pData);
 			break;
 		case "UnMountRequest":
 			UnMountRequest(pData);
