@@ -1,9 +1,10 @@
 //CONSTANTS
-const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 const cModuleName = "Rideable"; //name of Module
+const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
-const cRideableTag = "rideable"; //Rideable tokens need this tag
+const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
+
 const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script
 
 export { cPf2eName, cModuleName};
@@ -93,9 +94,13 @@ class RideableUtils {
 		if (pToken) {
 			switch (game.system.id) {
 				case cPf2eName:
-					if (pToken.actor.system.traits) {				
-						return pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag));
+					if (game.settings.get(cModuleName, "RideableTag")) {
+						if (pToken.actor.system.traits) {				
+							return pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag));
+						}
 					}
+					return true;
+					
 					break;
 				default:
 					return true;

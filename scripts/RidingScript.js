@@ -2,21 +2,9 @@ import { RideableFlags } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 
 //CONSTANTS
-const cRidingString = "Ridden by:"; //effects have to consist of this string followed by a space and the riding tokens name
-const cRideableTag = "rideable"; //Rideable tokens need this tag
-const cRidingzHeight = 3; //Riders will be lifted up by this value to alway appear above the Ridden
-
 const cbetterRiderPositioning = true; //for more complex positioning calculations
 
 const cRidingEffectTokenImage = true; //set the Image of Riding effects to the Riding tokens image
-const cDefaultRideeffectimg = "systems/pf2e/icons/default-icons/effect.svg"; //standart Riding effect image
-
-const cTokensthroughID = true; //toggles wether the token name or the token id is used to identify riding tokens
-
-const cAllowRiderMovement = false; //toggles wethter Riders can move independently of their mounts
-
-//Export constants
-export { cRidingEffectTokenImage, cRidingzHeight };
 
 //Ridingmanager will do all the work for placing riders
 class Ridingmanager {
@@ -58,7 +46,7 @@ class Ridingmanager {
 			//Check if Token is Rider
 			if (RideableFlags.isRider(vToken)) {
 				if (!pInfos.RidingMovement) {
-					if (!cAllowRiderMovement) {	
+					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
 						delete pchanges.x;
 						delete pchanges.y;
 						delete pchanges.elevation;
@@ -137,7 +125,7 @@ class Ridingmanager {
 			
 			let vTargety = pUpdateDocument.y + pUpdateDocument.object.h/2 - pRiderTokenList[i].h/2;
 			
-			let vTargetz = pUpdateDocument.elevation + cRidingzHeight;
+			let vTargetz = pUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight");
 			
 			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
 				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {RidingMovement : true});
@@ -153,7 +141,7 @@ class Ridingmanager {
 	static UnsetRidingHeight(pRiderTokens) {
 		for (let i = 0; i < pRiderTokens.length; i++) {
 			if (pRiderTokens[i]) {
-				let vTargetz = pRiderTokens[i].document.elevation - cRidingzHeight;
+				let vTargetz = pRiderTokens[i].document.elevation - game.settings.get(cModuleName, "RidingHeight");
 
 				pRiderTokens[i].document.update({elevation: vTargetz}, {RidingMovement : true});
 			}

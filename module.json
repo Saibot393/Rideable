@@ -13,6 +13,20 @@
     "verified": "11"
   },
   "socket": "true",
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json",
+      "flags": {}
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json",
+      "flags": {}
+    }
+  ],
   "esmodules": [
 	"scripts/RideableUtils.js",
 	"scripts/RideableFlags.js",

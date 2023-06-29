@@ -1,16 +1,10 @@
 import { RideableFlags } from "./RideableFlags.js";
-import { RideableUtils } from "./RideableUtils.js";
-import { cRidingEffectTokenImage, cRidingzHeight } from "./RidingScript.js";
+import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 
-var vSystemRidingEffect = null;
+var vSystemRidingEffect = null; //saves the systems mounting effects (if any)
 
-const capplyMountedSystemEffect = true; //wether the pf2e Mounted Effect should be applied on mount
 const cMountedPf2eEffectID = "Compendium.pf2e.other-effects.Item.9c93NfZpENofiGUp"; //Mounted effects of Pf2e system
-
-const cMaxRideDistance = 5;
-
-const cBorderDistance = true; //wether the Border to Border distance should be used for the mounting distance
 
 class MountingEffectManager {
 	//DECLARATIONS
@@ -74,16 +68,18 @@ class MountingManager {
 		if (game.user.isGM) {		
 			//make sure ptarget exists			
 			if (pTarget) {
-				let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
-				
-				let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
-				
-				RideableFlags.addRiderTokens(pTarget, vValidTokens);
-				
-				UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
-				
-				for (let i = 0; i < vValidTokens.length; i++) {
-					MountingManager.onMount(vValidTokens[i]);
+				if (RideableUtils.TokenisRideable(pTarget)) {
+					let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
+					
+					let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
+					
+					RideableFlags.addRiderTokens(pTarget, vValidTokens);
+					
+					UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
+					
+					for (let i = 0; i < vValidTokens.length; i++) {
+						MountingManager.onMount(vValidTokens[i]);
+					}
 				}
 			}
 		}
@@ -191,13 +187,13 @@ class MountingManager {
 	}
 	
 	static onMount(pToken) {
-		if (capplyMountedSystemEffect) {
+		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
 			pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
 		}
 	} 
 	
 	static onUnMount(pToken) {
-		if (capplyMountedSystemEffect) {
+		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
 			pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
 		}
 	} 
@@ -205,12 +201,12 @@ class MountingManager {
 	//Aditional Informations
 	
 	static TokencanMount (pRider, pRidden) {
-		if (cMaxRideDistance >= 0) {
-			if (cBorderDistance) {
-				return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= cMaxRideDistance);
+		if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+			if (game.settings.get(cModuleName, "BorderDistance")) {
+				return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
 			}
 			else {
-				return (RideableUtils.TokenDistance(pRidden, pRider) <= cMaxRideDistance);
+				return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
 			}
 		}
 		else {

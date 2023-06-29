@@ -1,7 +1,7 @@
 import { RideableUtils, cModuleName} from "./RideableUtils.js";
 import { MountSelected, UnMountSelected } from "./MountingScript.js";
 
-Hooks.once("init", () => {  
+Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
   game.settings.register(cModuleName, "RidingHeight", {
 	name: "Riding height",
@@ -14,7 +14,7 @@ Hooks.once("init", () => {
 
   game.settings.register(cModuleName, "MountingDistance", {
 	name: "Mounting distance",
-	hint: "The maximum distance a token can have to its mounting target (0 for an unlimited range)",
+	hint: "The maximum distance a token can have to its mounting target (-1 for an unlimited range)",
 	scope: "world",
 	config: true,
 	type: Number,
