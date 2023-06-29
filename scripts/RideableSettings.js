@@ -4,8 +4,8 @@ import { MountSelected, UnMountSelected } from "./MountingScript.js";
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
   game.settings.register(cModuleName, "RidingHeight", {
-	name: Translate("RidingHeight"),
-	hint: "The z-height which a riding token has compared to its mount (recommended to be above 0)",
+	name: Translate("RidingHeight.name"),
+	hint: Translate("RidingHeight.descrp"),
 	scope: "world",
 	config: true,
 	type: Number,
@@ -13,8 +13,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   });
 
   game.settings.register(cModuleName, "MountingDistance", {
-	name: "Mounting distance",
-	hint: "The maximum distance a token can have to its mounting target (-1 for an unlimited range)",
+	name: Translate("MountingDistance.name"),
+	hint: Translate("MountingDistance.descrp"),
 	scope: "world",
 	config: true,
 	type: Number,
@@ -22,8 +22,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   });
   
   game.settings.register(cModuleName, "BorderDistance", {
-	name: "Border to border distance",
-	hint: "If the mounting distance should be calculated from the tokens border instead of the middle point (only works correctly for circular/square tokens)",
+	name: Translate("BorderDistance.name"),
+	hint: Translate("BorderDistance.descrp"),
 	scope: "world",
 	config: true,
 	type: Boolean,
@@ -31,21 +31,21 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   });
   
   game.settings.register(cModuleName, "RiderMovement", {
-	name: "Rider movement",
-	hint: "What should happen if a riding token tries to move on its own",
+	name: Translate("RiderMovement.name"),
+	hint: Translate("RiderMovement.descrp"),
 	scope: "world",
 	config: true,
 	type: String,
 	choices: {
-		"RiderMovement-disallow": "Prevent movement",
-		"RiderMovement-dismount": "Unmount rider"
+		"RiderMovement-disallow": Translate("RiderMovement.RiderMovement-disallow"),
+		"RiderMovement-dismount": Translate("RiderMovement.RiderMovement-dismount")
 	},
 	default: "RiderMovement-disallow"
   });
   
   game.settings.register(cModuleName, "RidingSystemEffects", {
-	name: "Apply \"Mounted\" effect",
-	hint: "If a token starts riding, a system dependent effect will be applied to the token (only works if the game system has a known \"Mounted\" effect. Compatible systems: Pf2e)",
+	name: Translate("RidingSystemEffects.name"),
+	hint: Translate("RidingSystemEffects.descrp"),
 	scope: "world",
 	config: true,
 	type: Boolean,
@@ -53,13 +53,14 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   });  
   
   game.settings.register(cModuleName, "RideableTag", {
-	name: "Mounts require \"Rideable\" tag",
-	hint: "Allows only tokens which have the 'Rideable' tag to be ridden (the \"Rideable\" tag has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits",
+	name: Translate("RideableTag.name"),
+	hint: Translate("RideableTag.descrp"),
 	scope: "world",
 	config: RideableUtils.isPf2e(),
 	type: Boolean,
 	default: false
   });  
+  
   //Keys
   game.keybindings.register(cModuleName, "Mount", {
     name: "Mount",

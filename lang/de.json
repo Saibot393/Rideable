@@ -1,4 +1,23 @@
 {
-    "Rideable.RidingHeight"     : "Riding Height"
-
+    "Rideable.RidingHeight.name"     				: "Reithöhe",
+	"Rideable.RidingHeight.descrp"					: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)",
+	
+	"Rideable.MountingDistance.name"     			: "Reitdistanz",
+	"Rideable.MountingDistance.descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)",
+	
+	"Rideable.BorderDistance.name"     				: "Rand zu Rand Distanz",
+	"Rideable.BorderDistance.descrp"				: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)",
+	
+	"Rideable.RiderMovement.name"     				: "Reiter Bewegung",
+	"Rideable.RiderMovement.descrp"					: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
+	"Rideable.RiderMovement.RiderMovement-disallow"	: "verhindere Bewegung",
+	"Rideable.RiderMovement.RiderMovement-dismount"	: "lasse Reiter absteigen",
+	
+	"Rideable.RidingSystemEffects.name"     		: "\"Reitend\" Effekt anwenden",
+	"Rideable.RidingSystemEffects.descrp"			: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)",
+	
+	"Rideable.RideableTag.name"     				: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
+	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"
+	
+	"Rideable.RideableTag.str"						: "rideable"
 }
