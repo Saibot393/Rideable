@@ -1,0 +1,27 @@
+{
+  "id": "Rideable",
+  "title": "Rideable",
+  "description": "A small module to automate the movement of riders and ridden tokens relying on effects",
+  "authors": [
+    {
+    "name": "saibot"
+    }
+  ],
+  "version": "2.3.1",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11"
+  },
+  "socket": "true",
+  "esmodules": [
+	"scripts/RideableUtils.js",
+	"scripts/RideableFlags.js",
+	"scripts/RidingScript.js",
+	"scripts/MountingScript.js",
+	"scripts/SocketHandler.js",
+	"scripts/MacroHooks.js",
+	"scripts/RideableSettings.js"
+  ]
+}
+
+test

@@ -1,0 +1,114 @@
+class RidingSupport {
+	//DECLARATIONS
+	static EffectstoRiders(pEffects) {} //Takes an array of (Riding)effects and returns an array of corresponding Rider Tokens
+	
+	static createRideEffect(pName, pDescription, pImage = cDefaultRideeffectimg) {} //creates an empty effect to be filled with data
+	
+	static selectedTokens() {} //get array of all selected tokens
+	
+	static currentTargeted() {} //get first selected token
+	
+	static IDtoToken(pIDs) {} //get array of Tokens from array of Token IDs
+	
+	static Ridingstring(pToken) {} //get Matching RidingString for a given Token
+	
+	static TokenisRider(pTokenid) {} //returns the First found Rideable Token Mounted by Token with pTokenid (if pToken is Rider at all)
+	
+	static RideableTokens() {} //returns an array containing all Rideable Tokens
+	
+	//IMPLEMENTATIONS
+	static EffectstoRiders(pEffects) {
+		let vRiderTokenList = [];
+					
+		//find all Riders and return them
+		for (let i = 0; i < pEffects.length; i++) {
+			let vBuffer = null;
+			
+			if (!cTokensthroughID) {
+				vBuffer = canvas.tokens.placeables.find(velement => velement.name === pEffects[i].name.substring(cRidingString.length + 1));
+			}
+			else {
+				vBuffer = canvas.tokens.placeables.find(velement => velement.id === pEffects[i].description);
+			}
+			
+			if (vBuffer) {
+				vRiderTokenList[vRiderTokenList.length] = vBuffer;
+			}
+		}
+		
+		return vRiderTokenList;
+	}
+	
+	static createRideEffect(pName, pDescription, pImage = cDefaultRideeffectimg) {
+	  //const image = randomImage({ id: kindaRandomString });
+	  return {
+		type: "effect",
+		name: pName, //localize('.nameOfQuickUntitledEffect'),
+		img: pImage,
+		data: {
+		  tokenIcon: { show: true },
+		  duration: {
+			value: 1,
+			unit: "unlimited",
+			sustained: false,
+			expiry: "turn-start"
+		  },
+		  description: {
+			value: pDescription,
+		  },
+		  unidentified: false,
+		  traits: {
+			custom: "",
+			rarity: "common",
+			value: []
+		  },
+		  level: {
+			value: 0
+		  },
+		  source: {
+			value: ""
+		  }
+		},
+		flags: {}
+	  }
+	} 
+	
+	static selectedTokens() {
+		return canvas.tokens.controlled;
+	}
+	
+	static currentTargeted() {
+		return canvas.tokens.placeables.find(velement => velement.id === game.user.targets.ids[0]);
+	}
+	
+	static IDtoToken(pIDs) {
+		let vTokens = [];
+		
+		for (let i = 0; i < pIDs.length; i++) {
+			let vBuffer = canvas.tokens.placeables.find(velement => velement.id === pIDs[i]);
+			
+			if (vBuffer) {
+				vTokens[vTokens.length] = vBuffer;
+			}
+		}
+		
+		return vTokens;
+	}
+	
+	static Ridingstring(pToken) {
+		if (pToken) {
+			return cRidingString + " " + pToken.name;
+		}
+		else {
+			return cRidingString;
+		}
+	}
+	
+	static TokenisRider(pTokenid) {
+								//Finds First Token which includes Ridden Token with pTokenid
+		return RidingSupport.RideableTokens().find(velement => velement.actor.items.find(vEffect => vEffect.description === pTokenid));
+	}
+	
+	static RideableTokens() {												//only tokens which have actors with traits							
+		return canvas.tokens.placeables.filter(velement => velement.actor).filter(velement => velement.actor.system.traits).filter(velement => velement.actor.system.traits.value.find(vtag => vtag.includes("rideable")));
+	}
