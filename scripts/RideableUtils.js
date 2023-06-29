@@ -185,5 +185,10 @@ class RideableUtils {
 	} 
 }
 
+//for easy translation
+function Translate(pName){
+  return game.i18n.localize(cModuleName+"."+pName);
+}
+
 //Export RideableFlags Class
-export{ RideableUtils };
+export{ RideableUtils, Translate };

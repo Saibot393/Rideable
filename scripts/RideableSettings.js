@@ -1,10 +1,10 @@
-import { RideableUtils, cModuleName} from "./RideableUtils.js";
+import { RideableUtils, cModuleName, Translate} from "./RideableUtils.js";
 import { MountSelected, UnMountSelected } from "./MountingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
   game.settings.register(cModuleName, "RidingHeight", {
-	name: "Riding height",
+	name: Translate("RidingHeight"),
 	hint: "The z-height which a riding token has compared to its mount (recommended to be above 0)",
 	scope: "world",
 	config: true,
