@@ -145,17 +145,27 @@ class MountingManager {
 	
 	static UnMountSelected() {
 		//fork dependent on GM status of user (either direct unmount or unmount request through Token ID send via socket)
-		if (game.user.isGM) {
-			if (RideableUtils.selectedTokens().length > 0) {
-				MountingManager.UnMountSelectedGM(RideableUtils.selectedTokens());
+		if (RideableUtils.selectedTokens().length > 0) {
+			let vUnMountTokens = RideableUtils.selectedTokens();
+			
+			let vTarget = RideableUtils.targetedToken();
+			
+			
+			//to allow mounts to unmount targeted rider
+			if (vTarget) {
+				if (RideableFlags.isRiddenby(RideableUtils.selectedTokens()[0], vTarget)) {
+					vUnMountTokens = [vTarget];
+				}
 			}
-		}
-		else {
-			if (!game.paused) {
-				if (RideableUtils.selectedTokens().length > 0) {
-					let vselectedTokenIDs = RideableUtils.IDsfromTokens(RideableUtils.selectedTokens());
+			
+			if (game.user.isGM) {
+				MountingManager.UnMountSelectedGM(vUnMountTokens);
+			}
+			else {
+				if (!game.paused) {
+					let vUnMountTokensIDs = RideableUtils.IDsfromTokens(vUnMountTokens);
 					
-					game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vselectedTokenIDs}});
+					game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vUnMountTokensIDs}});
 				}
 			}
 		}
