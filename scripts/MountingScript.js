@@ -202,14 +202,18 @@ class MountingManager {
 	
 	static onMount(pToken) {
 		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-			pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+			if (MountingEffectManager.getSystemMountingEffect()) {
+				pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+			}
 		}
 	} 
 	
 	static async onUnMount(pToken) {
 		if (pToken) {
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				await pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+				if (MountingEffectManager.getSystemMountingEffect()) {
+					await pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+				}
 			}
 		}
 	} 
