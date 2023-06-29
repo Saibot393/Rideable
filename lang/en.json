@@ -19,5 +19,11 @@
 	"Rideable.RideableTag.name"     				: "Mounts require \"Rideable\" trait",
 	"Rideable.RideableTag.descrp"					: "Allows only tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
 	
+	"Rideable.Mount.name"							: "Mount",
+	"Rideable.Mount.descrp"							: "Mount controlled Tokens to targeted Token",
+	
+	"Rideable.UnMount.name"							: "Unmount",
+	"Rideable.UnMount.descrp"						: "Unmount controlled Tokens from their ridden Token, or unmount targeted Token from controlled Token",
+	
 	"Rideable.RideableTag.str"						: "rideable"
 }

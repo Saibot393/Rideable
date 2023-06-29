@@ -17,7 +17,13 @@
 	"Rideable.RidingSystemEffects.descrp"			: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)",
 	
 	"Rideable.RideableTag.name"     				: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
-	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"
+	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
+	
+	"Rideable.Mount.name"							: "Aufsteigen",
+	"Rideable.Mount.descrp"							: "Lässt die kontrollierten Marken die angezielte Marke besteigen",
+	
+	"Rideable.UnMount.name"							: "Absteigen",
+	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }

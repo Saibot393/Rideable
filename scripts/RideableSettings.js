@@ -63,8 +63,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   
   //Keys
   game.keybindings.register(cModuleName, "Mount", {
-    name: "Mount",
-    hint: "Mount hovered Token",
+    name: Translate("Mount.name"),
+    hint: Translate("Mount.descrp"),
     editable: [
       {
         key: "KeyM"
@@ -76,8 +76,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   });
   
   game.keybindings.register(cModuleName, "UnMount", {
-    name: "UnMount",
-    hint: "UnMount controlled Tokens",
+    name: Translate("UnMount.name"),
+    hint: Translate("UnMount.descrp"),
     editable: [
       {
         key: "KeyN"
