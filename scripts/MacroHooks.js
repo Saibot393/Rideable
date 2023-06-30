@@ -7,7 +7,3 @@ Hooks.on("init",() => {
 		UnMountSelected
 	};
 });
-
-Hooks.on("ready", function() {
-  console.log("---Test Check---");
-});

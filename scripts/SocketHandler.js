@@ -14,7 +14,3 @@ function organiseSocketEvents({pFunction, pData} = {}) {
 }
 
 Hooks.once("ready", () => { game.socket.on("module.Rideable", organiseSocketEvents); });
-
-Hooks.on("ready", function() {
-  console.log("---Test Check---");
-});

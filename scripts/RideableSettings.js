@@ -88,7 +88,3 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
 });
-
-Hooks.on("ready", function() {
-  console.log("---Test Check---");
-});
