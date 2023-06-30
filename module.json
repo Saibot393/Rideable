@@ -43,5 +43,12 @@
 	  "path": "packs/rideable.db",
 	  "type": "Macro"
 	}
-  ]
+  ],
+  "url": "https://github.com/Saibot393/Rideable",
+  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v1.0.0.zip",
+  "manifest": "https://raw.githubusercontent.com/Saibot393/Rideable/v1.0.0/module.json",
+  "readme": "https://github.com/Saibot393/Rideable/blob/main/README.md",
+  "changelog": "https://github.com/Saibot393/Rideable/blob/main/CHANGELOG.md",
+  "bugs": "https://github.com/Saibot393/Rideable/issues",
+  "allowBugReporter": true
 }
