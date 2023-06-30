@@ -1,0 +1,9 @@
+For Mount: game.Rideable.MountSelected();
+suggested icons:
+-Pf2e: systems/pf2e/icons/equipment/worn-items/companion-items/barding-of-the-zephyr.webp
+-D&D5e: icons/environment/creatures/horse-brown.webp
+
+For Unmount: game.Rideable.UnMountSelected();
+suggested icons:
+-Pf2e: systems/pf2e/icons/equipment/worn-items/other-worn-items/boots-of-bounding.webp
+s-D&D 5e: icons/equipment/feet/boots-collared-simple-leather.webp
