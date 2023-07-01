@@ -1,6 +1,10 @@
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
+
+//System names
 const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
+
+//Module names
 
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
 const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
@@ -11,8 +15,7 @@ const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
 const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
 
-
-export { cPf2eName, cModuleName};
+export { cPf2eName, cModuleName, cStairwaysname};
 
 //a few support functions
 class RideableUtils {
@@ -20,6 +23,9 @@ class RideableUtils {
 	
 	//Identification
 	static isPf2e() {} //used for special Pf2e functions
+	
+	//Modules
+	static isactiveModule(pModule) {};
 	
 	//Token IDs
 	static TokensfromIDs (pIDs) {} //returns an array of Tokens belonging to the pIDs
@@ -53,11 +59,19 @@ class RideableUtils {
 	
 	//IMPLEMENTATIONS
 	
-	//Identification
-	
+	//Identification	
 	static isPf2e() {
 		return game.system.id === cPf2eName;
 	}
+	
+	//Modules
+	static isactiveModule(pModule) {
+		if (game.modules.find(vModule => vModule.id == pModule)) {
+			return game.modules.find(vModule => vModule.id == pModule).active;
+		}
+		
+		return false;
+	};
 	
 	
 	//Token IDs

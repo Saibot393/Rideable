@@ -153,7 +153,7 @@ class RideableFlags {
 		let vToken = RideableUtils.TokenfromID(pRiddenTokenID);
 		
 		if (vToken) {
-			return isRidden(vToken);
+			return RideableFlags.isRidden(vToken);
 		}
 		
 		return false;

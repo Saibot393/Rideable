@@ -13,13 +13,13 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pDocument, pchanges, pInfos) {} //Handles atempted movement of Riders
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
 	
-	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
+	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
-	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
 	static UnsetRidingHeight(pRiderTokens) {} //Reduces Tokens Elevation by Riding height
 	
@@ -35,7 +35,7 @@ class Ridingmanager {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
 					
-					Ridingmanager.planRiderTokens(vToken, pDocument, vRiderTokenList);
+					Ridingmanager.planRiderTokens(vToken, pDocument, vRiderTokenList, false, pInfos.animate);
 				}
 			}
 		}
@@ -59,15 +59,15 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false) {
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		if (priddenToken) {
 			if (RideableUtils.TokenisRideable(priddenToken) || pallFamiliars) {
-				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars);
+				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
 			}
 		}
 	} 
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false) {
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars
 		
@@ -116,16 +116,16 @@ class Ridingmanager {
 					vxdelta = 0; //every Rider has a custom delta, set higher for Rider seperation
 				}
 			}
-			//place riders			
-			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders);
+			//place riders				
+			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
 		}
 		
 		if (vRiderFamiliarList) {
-			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList);
+			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
 		}
 	}
 	
-	static placeRiderTokens(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders) {
+	static placeRiderTokens(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			
 			//update riders position in x, y and z (only if not already on target position)
@@ -147,7 +147,7 @@ class Ridingmanager {
 			let vTargetz = pUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight");
 			
 			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
-				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {RidingMovement : true});
+				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {animate : pAnimations, RidingMovement : true});
 			}
 			
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
@@ -157,7 +157,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList) {
+	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {
 		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, 3), pRiderTokenList.length); i++) { //no more then 4 corner places
 			let vxoffset = pRiderTokenList[i].w/2;
 			let vyoffset = pRiderTokenList[i].h/2;
@@ -190,7 +190,7 @@ class Ridingmanager {
 			let vTargetz = pUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight");
 			
 			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
-				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {RidingMovement : true});
+				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {animate : pAnimations, RidingMovement : true});
 			}
 			
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
@@ -212,8 +212,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars);
+function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false, pAnimations = true) {
+	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars, pAnimations);
 }
 function UnsetRidingHeight(pRiderTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens);

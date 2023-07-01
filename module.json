@@ -32,6 +32,7 @@
 	"scripts/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",
+	"scripts/RideableCompatability.js",
 	"scripts/SocketHandler.js",
 	"scripts/MacroHooks.js",
 	"scripts/RideableSettings.js"
