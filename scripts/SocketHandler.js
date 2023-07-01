@@ -4,7 +4,6 @@ import {  MountRequest, UnMountRequest } from "./MountingScript.js";
 function organiseSocketEvents({pFunction, pData} = {}) {
 	switch(pFunction) {
 		case "MountRequest":
-			console.log("Check4")
 			MountRequest(pData);
 			break;
 		case "UnMountRequest":

@@ -290,7 +290,7 @@ function MountSelected(pTargetHovered = false) { return MountingManager.MountSel
 
 function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, true); }
 
-function MountRequest({ pTargetID, pselectedTokensID } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID}); }
+function MountRequest({ pTargetID, pselectedTokensID, pFamiliar } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID, pFamiliar}); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
