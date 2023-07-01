@@ -61,7 +61,7 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false) {
 		if (priddenToken) {
-			if (RideableUtils.TokenisRideable(priddenToken)) {
+			if (RideableUtils.TokenisRideable(priddenToken) || pallFamiliars) {
 				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars);
 			}
 		}

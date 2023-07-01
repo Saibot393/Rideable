@@ -72,7 +72,7 @@ class MountingManager {
 			if ((!pFamiliar) || (game.settings.get(cModuleName, "FamiliarRiding"))) {
 				//pFamiliar riding can only be handled if setting is activated
 				if (pTarget) {
-					if (RideableUtils.TokenisRideable(pTarget)) {
+					if (RideableUtils.TokenisRideable(pTarget) || pFamiliar) {
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
 						
 						if (vValidTokens.length) {
