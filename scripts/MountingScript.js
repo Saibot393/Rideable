@@ -66,7 +66,6 @@ class MountingManager {
 	//IMPLEMENTATION
 	//Basic Mounting /UnMounting
 	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false) {
-		console.log(pFamiliar);
 		//only works directly for GMs
 		if (game.user.isGM) {		
 			//make sure ptarget exists	
@@ -101,8 +100,6 @@ class MountingManager {
 	}
 	
 	static MountSelected(pTargetHovered = false, pFamiliar = false) {
-		console.log(pFamiliar);
-		
 		let vValidRiders = RideableUtils.selectedTokens();
 		let vTarget = RideableUtils.targetedToken();
 		
@@ -114,12 +111,9 @@ class MountingManager {
 			}
 		}
 		
-		console.log(vValidRiders);
-		
 		if (pFamiliar) {
 			//pFamiliar make sure selected are actually familairs of target
 			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
-			console.log(vValidRiders);
 		}
 		
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
@@ -294,7 +288,7 @@ Hooks.on("ready", function() { MountingEffectManager.preloadEffects(); });
 
 function MountSelected(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered); }
 
-function MountSelectedFamiliar(pTargetHovered = false) { console.log(true); return MountingManager.MountSelected(pTargetHovered, true); }
+function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, true); }
 
 function MountRequest({ pTargetID, pselectedTokensID } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID}); }
 

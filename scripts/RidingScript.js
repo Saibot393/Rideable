@@ -151,7 +151,7 @@ class Ridingmanager {
 			}
 			
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
-				pRiderTokenList[i].document.update({elevation: vTargetz});
+				pRiderTokenList[i].document.update({elevation: vTargetz}, {RidingMovement : true});
 			}
 			
 		}
@@ -194,7 +194,7 @@ class Ridingmanager {
 			}
 			
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
-				pRiderTokenList[i].document.update({elevation: vTargetz});
+				pRiderTokenList[i].document.update({elevation: vTargetz}, {RidingMovement : true});
 			}			
 		}
 	}
