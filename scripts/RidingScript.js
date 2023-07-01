@@ -19,6 +19,8 @@ class Ridingmanager {
 	
 	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
+	static placeRiderTokenscorner(priddenToken, pRiderTokenList) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	
 	static UnsetRidingHeight(pRiderTokens) {} //Reduces Tokens Elevation by Riding height
 	
 	//IMPLEMENTATIONS
@@ -66,8 +68,17 @@ class Ridingmanager {
 	} 
 	
 	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList) {
-		//Get Rider Tokens and continue if at least one was found
-		if (pRiderTokenList) {
+		let vRiderTokenList = pRiderTokenList;
+		let vRiderFamiliarList = []; //List of Riders that Ride as familiars
+		
+		if (game.settings.get(cModuleName, "FamiliarRiding")) { 
+		//split riders in familiars and normal riders
+			vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
+			
+			vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.find(vToken))
+		}
+		
+		if (vRiderTokenList) {
 			//calculate positioning data for riders (in y direction)
 			let vbunchedRiders = true;
 			let vxoffset = 0;
@@ -77,18 +88,18 @@ class Ridingmanager {
 				let vRiderWidthSumm = 0;
 				let vlastRiderWidth = 0;
 				
-				for (let i = 0; i < pRiderTokenList.length; i++) {
-					vRiderWidthSumm = vRiderWidthSumm + pRiderTokenList[i].w;
+				for (let i = 0; i < vRiderTokenList.length; i++) {
+					vRiderWidthSumm = vRiderWidthSumm + vRiderTokenList[i].w;
 				}
 				
 				//if Riders have to be bunched
 				if (vRiderWidthSumm > pRiddenToken.w) {
 					vbunchedRiders = true;
 					
-					vxoffset = pRiderTokenList[0].w/2;
+					vxoffset = vRiderTokenList[0].w/2;
 				
-					if (pRiderTokenList.length > 1) {
-						vxdelta = (pRiddenToken.w - pRiderTokenList[pRiderTokenList.length - 1].w)/(pRiderTokenList.length-1);
+					if (vRiderTokenList.length > 1) {
+						vxdelta = (pRiddenToken.w - vRiderTokenList[vRiderTokenList.length - 1].w)/(vRiderTokenList.length-1);
 					}
 				} 
 				//if Riders dont have to be bunched
@@ -101,7 +112,11 @@ class Ridingmanager {
 				}
 			}
 			//place riders			
-			Ridingmanager.placeRiderTokens(pUpdateDocument, pRiderTokenList, vxoffset, vxdelta, vbunchedRiders);
+			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders);
+		}
+		
+		if (vRiderFamiliarList) {
+			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList);
 		}
 	}
 	
@@ -134,6 +149,48 @@ class Ridingmanager {
 				pRiderTokenList[i].document.update({elevation: vTargetz});
 			}
 			
+		}
+	}
+	
+	static placeRiderTokenscorner(priddenToken, pRiderTokenList) {
+		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, 3), pRiderTokenList.length); i++) { //no more then 4 corner places
+			let vxoffset = pRiderTokenList[i].w/2;
+			let vyoffset = pRiderTokenList[i].h/2;
+			
+			let vTargetx = 0;
+			let vTargety = 0;
+			
+			switch (i) {
+				case 0: //tl
+					vTargetx = priddenToken.x - priddenToken.w/2 - vxoffset;
+					vTargety = priddenToken.y - priddenToken.h/2 - vyoffset;
+					break;
+					
+				case 1: //tr
+					vTargetx = priddenToken.x + priddenToken.w/2 - vxoffset;
+					vTargety = priddenToken.y - priddenToken.h/2 - vyoffset;
+					break;
+					
+				case 2: //bl
+					vTargetx = priddenToken.x - priddenToken.w/2 - vxoffset;
+					vTargety = priddenToken.y + priddenToken.h/2 - vyoffset;
+					break;
+					
+				case 3: //br
+					vTargetx = priddenToken.x + priddenToken.w/2 - vxoffset;
+					vTargety = priddenToken.y + priddenToken.h/2 - vyoffset;
+					break;
+			}
+			
+			let vTargetz = pUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight");
+			
+			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
+				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {RidingMovement : true});
+			}
+			
+			if (pRiderTokenList[i].document.elevation != vTargetz) {
+				pRiderTokenList[i].document.update({elevation: vTargetz});
+			}			
 		}
 	}
 	
