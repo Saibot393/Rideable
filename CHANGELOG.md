@@ -1,5 +1,6 @@
 ## v1.1.3
 - fixed riding loops
+- fixed manifest error which caused Foundrys automatic module update to not find the newest version
 
 ## v1.1.2
 - small bug fix regarding pf2e Rideable tag system
