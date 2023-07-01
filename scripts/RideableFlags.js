@@ -30,6 +30,8 @@ class RideableFlags {
 	
 	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
 	
+	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
+	
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
 	
@@ -199,6 +201,25 @@ class RideableFlags {
 	
 	static RiderTokenIDs (pRiddenToken) {
 		return this.#RidersFlag(pRiddenToken);
+	}
+	
+	static RidingLoop(pRider, pRidden) {
+		if (!RideableFlags.isRiddenby(pRider, pRidden)) {
+			//continue if pRider is not ridden by pRidden
+			var vRidingLoop = false;
+			
+			let i = 0;
+			while ((i < RideableFlags.RiderTokenIDs(pRider).length) && (!vRidingLoop)) {
+				//with recursion, check all Riders of pRider for RidingLoop with pRidden
+				vRidingLoop = RideableFlags.RidingLoop(RideableUtils.TokenfromID(RideableFlags.RiderTokenIDs(pRider)[i]), pRidden);
+			
+				i++;
+			}
+			
+			return vRidingLoop;
+		}
+		
+		return true;
 	}
 	
 	//flag setting

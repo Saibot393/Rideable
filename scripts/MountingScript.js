@@ -246,17 +246,22 @@ class MountingManager {
 	//Aditional Informations
 	
 	static TokencanMount (pRider, pRidden) {
-		if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
-			if (game.settings.get(cModuleName, "BorderDistance")) {
-				return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
+			//prevent riding loops
+			if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+				if (game.settings.get(cModuleName, "BorderDistance")) {
+					return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+				}
+				else {
+					return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+				}
 			}
 			else {
-				return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+				return true;
 			}
 		}
-		else {
-			return true;
-		}
+		
+		return false; //default
 	}
 	
 	//Handel Token Deletion
