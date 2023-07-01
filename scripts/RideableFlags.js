@@ -22,7 +22,11 @@ class RideableFlags {
 	
 	static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
 	
+	static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
+	
 	static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
+	
+	static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
 	
 	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
 	
@@ -169,6 +173,10 @@ class RideableFlags {
 		return this.#RidingFlag(pRiderToken);
 	}
 	
+	static isFamiliarRider (pRiderToken) {
+		return (this.isRider(pRiderToken) && this.#FamiliarRidingFlag(pRiderToken));
+	}
+	
 	static isRiderID (pRiderTokenID) {
 		let vToken = RideableUtils.TokenfromID(pRiderTokenID);
 		
@@ -178,6 +186,16 @@ class RideableFlags {
 		
 		return false;
 	}
+	
+	static isFamiliarRiderID (pRiderTokenID) {
+		let vToken = RideableUtils.TokenfromID(pRiderTokenID);
+		
+		if (vToken) {
+			return this.isFamiliarRider(vToken);
+		}
+		
+		return false;
+	} 
 	
 	static RiderTokenIDs (pRiddenToken) {
 		return this.#RidersFlag(pRiddenToken);
