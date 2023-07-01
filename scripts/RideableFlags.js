@@ -3,6 +3,7 @@ import { RideableUtils } from "./RideableUtils.js";
 const cModule = "Rideable";
 
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
+const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags)
@@ -26,7 +27,7 @@ class RideableFlags {
 	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
 	
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
+	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
 	
 	static removeRiderTokens (pRiddenToken, pRiderTokens) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
@@ -68,6 +69,19 @@ class RideableFlags {
 		return false; //default if anything fails
 	} 
 	
+	static #FamiliarRidingFlag (pToken) { 
+	//returns content of Familiar Riding Flag of pToken (if any) (true or false)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.FamiliarRidingFlag) {
+				return vFlag.FamiliarRidingFlag;
+			}
+		}
+		
+		return false; //default if anything fails
+	} 
+	
 	static #RidersFlag (pToken) {
 	//returns content of Riders Flag of pToken (if any) (array of id strings)
 		let vFlag = this.#RideableFlags(pToken);
@@ -84,7 +98,17 @@ class RideableFlags {
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if ((pToken)) {
-			pToken.document.setFlag(cModule, "RidingFlag", Boolean(pContent));
+			pToken.document.setFlag(cModule, cRidingF, Boolean(pContent));
+			
+			return true;
+		}
+		return false;
+	} 
+	
+	static #setFamiliarRidingFlag (pToken, pContent) {
+	//sets content of FamiliarRiddenFlag (must be boolean)
+		if ((pToken)) {
+			pToken.document.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -105,6 +129,7 @@ class RideableFlags {
 	//removes all Flags
 		if (pToken) {
 			pToken.document.unsetFlag(cModule, cRidingF);
+			pToken.document.unsetFlag(cModule, cFamiliarRidingF);
 			pToken.document.unsetFlag(cModule, cRidersF);
 			
 			return true;
@@ -159,7 +184,7 @@ class RideableFlags {
 	}
 	
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens) {
+	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => !this.isRider(vToken) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
@@ -167,6 +192,10 @@ class RideableFlags {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
+						
+						if (pFamiliarRiding) {
+							this.#setFamiliarRidingFlag(vValidTokens[i],true);
+						}
 					}
 				}				
 			}
@@ -183,6 +212,7 @@ class RideableFlags {
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
+				this.#setFamiliarRidingFlag(pRiderTokens[i], false);
 			}
 		}
 	}
@@ -210,6 +240,7 @@ class RideableFlags {
 					}
 					else {
 						this.#setRidingFlag(vRidingToken, false);
+						this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}
 			}
@@ -220,7 +251,7 @@ class RideableFlags {
 	
 	static removeallRiding (pRiddenToken) {
 		if (pRiddenToken) {
-			removeRiderTokens(pRiddenToken, RideableUtils.TokensfromID(RiderTokenIDs(pRiddenToken)));
+			this.removeRiderTokens(pRiddenToken, RideableUtils.TokensfromID(RiderTokenIDs(pRiddenToken)));
 			
 			this.#setRidersFlag(pRiddenToken, []);
 		}
