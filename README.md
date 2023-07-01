@@ -18,6 +18,7 @@ Ridden tokens can themselfve ride other tokens.
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider or stop the movement
 - Apply "Mounted" effect: to apply an appropriate effect to the riding token if the game system supports this
 - Mounts require "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
+- Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 
 ### Compatibility:
 
