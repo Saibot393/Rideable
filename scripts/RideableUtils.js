@@ -4,8 +4,10 @@ const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
 const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
+const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script
+const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
+
 
 export { cPf2eName, cModuleName};
 
@@ -38,6 +40,8 @@ class RideableUtils {
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
 	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
+	
+	static TokenisFamiliarof(pFamiliar, pMaster) {} //returns true of the deffinition of familiar is matched and both are controlled by current owner
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -136,6 +140,18 @@ class RideableUtils {
 		
 		return 0;
 	}
+	
+	static TokenisFamiliarof(pFamiliar, pMaster) {
+		if (pFamiliar.isOwner && pMaster.isOwner) {//check if both are owned
+			if (RideableUtils.isPf2e()) { //Pf2e has familiars
+				return (pFamiliar.actor.type == cFamilarType)//check if pFamiliar is of type familiar 
+			}
+			
+			return ((pFamiliar.h < pMaster.h)||(pFamiliar.w < pMaster.w)); //check if pFamiliar is smaller then pMaster
+		}
+		
+		return false;
+	} 
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {

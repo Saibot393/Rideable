@@ -88,3 +88,5 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
 });
+
+Hooks.once("ready", () => {console.log("Rideable Check")});
