@@ -15,7 +15,7 @@ const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
 const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
 
-export { cPf2eName, cModuleName, cStairwaysname};
+export { cPf2eName, cModuleName};
 
 //a few support functions
 class RideableUtils {
