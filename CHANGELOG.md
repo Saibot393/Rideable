@@ -1,3 +1,6 @@
+## v1.1.3
+- fixed riding loops
+
 ## v1.1.2
 - small bug fix regarding pf2e Rideable tag system
   
