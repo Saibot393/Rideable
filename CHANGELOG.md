@@ -1,3 +1,8 @@
+## v1.2.0
+- added future infrastructure for module compatibility
+- Riders now teleport when the ridden token is teleported
+  - Rideable is now compatibile with in-scene use of the stairways module
+
 ## v1.1.3
 - fixed riding loops
 - fixed manifest error which caused Foundrys automatic module update to not find the newest version

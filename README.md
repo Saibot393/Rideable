@@ -22,7 +22,7 @@ Ridden tokens can themselfve ride other tokens.
 
 ### Compatibility:
 
-The module should be compatible with all game systems on Foundry v10 and v11, though a few features are only available for the Pf2e system. Movement modules such as the Drag Ruler (including routinglib) should work fine with the module. If you encounter any bugs please let me know.
+The module should be compatible with all game systems on Foundry v10 and v11, though a few features are only available for the Pf2e system. Movement modules such as the Drag Ruler (including routinglib) or Stairways (only in-scene use) should work fine with the module. If you encounter any bugs please let me know.
 
 ### Languages:
 
