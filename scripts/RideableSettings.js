@@ -61,6 +61,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "FamiliarRiding", {
+	name: Translate("FamiliarRiding.name"),
+	hint: Translate("FamiliarRiding.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   //Keys
   game.keybindings.register(cModuleName, "Mount", {
     name: Translate("Mount.name"),
@@ -84,6 +93,19 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
       }
     ],
     onDown: () => { UnMountSelected(); },
+    restricted: false,
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+  
+  game.keybindings.register(cModuleName, "MountFamiliar", {
+    name: Translate("MountFamiliar.name"),
+    hint: Translate("MountFamiliar.descrp"),
+    editable: [
+      {
+        key: "KeyJ"
+      }
+    ],
+    onDown: () => {  },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });

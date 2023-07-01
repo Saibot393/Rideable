@@ -4,6 +4,9 @@ const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
 const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
+
+const cNPCType = "npc"; //type of npc tokens
+const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
 const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
@@ -144,7 +147,7 @@ class RideableUtils {
 	static TokenisFamiliarof(pFamiliar, pMaster) {
 		if (pFamiliar.isOwner && pMaster.isOwner) {//check if both are owned
 			if (RideableUtils.isPf2e()) { //Pf2e has familiars
-				return (pFamiliar.actor.type == cFamilarType)//check if pFamiliar is of type familiar 
+				return ((pFamiliar.actor.type == cFamilarType) && ((pMaster.actor.type == cCharacterType) || (pMaster.actor.type == cNPCType))//check if pFamiliar is of type familiar and pMaster is player character or npc
 			}
 			
 			return ((pFamiliar.h < pMaster.h)||(pFamiliar.w < pMaster.w)); //check if pFamiliar is smaller then pMaster

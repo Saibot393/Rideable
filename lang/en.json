@@ -19,11 +19,17 @@
 	"Rideable.RideableTag.name"     				: "Mounts require \"Rideable\" trait",
 	"Rideable.RideableTag.descrp"					: "Allows only tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
 	
+	"Rideable.FamiliarRiding.name"					: "Familiar riding",
+	"Rideable.FamiliarRiding.descrp"				: "Allows for familiars to ride their master, the familairs will be placed at the corners of their master",
+	
 	"Rideable.Mount.name"							: "Mount",
 	"Rideable.Mount.descrp"							: "Mount controlled Tokens to targeted Token (alternative Macro: \"Mount\")",
 	
 	"Rideable.UnMount.name"							: "Unmount",
 	"Rideable.UnMount.descrp"						: "Unmount controlled Tokens from their ridden Token, or unmount targeted Token from controlled Token (alternative Macro: \"Unmount\")",
+	
+	"Rideable.MountFamiliar.name"					: "Mount familiar",
+	"Rideable.MountFamiliar.descrp"					: "Mount controlled familiars to targeted Token if targeted Token is master(alternative Macro: \"MountFamiliar\")",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }

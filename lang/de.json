@@ -19,11 +19,17 @@
 	"Rideable.RideableTag.name"     				: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
 	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
 	
+	"Rideable.FamiliarRiding.name"					: "Vertrauten reiten",
+	"Rideable.FamiliarRiding.descrp"				: "Erlaubt es Vertrauten ihrem Meister zu folgen, die Vertrauten werden hierbei and den Ecken ihres Meister platziert",
+	
 	"Rideable.Mount.name"							: "Aufsteigen",
 	"Rideable.Mount.descrp"							: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")",
 	
 	"Rideable.UnMount.name"							: "Absteigen",
 	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")",
+	
+	"Rideable.MountFamiliar.name"					: "Aufsteigen für Vertraute",
+	"Rideable.MountFamiliar.descrp"					: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\")",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }
