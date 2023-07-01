@@ -29,7 +29,7 @@
 	"Rideable.UnMount.descrp"						: "Unmount controlled Tokens from their ridden Token, or unmount targeted Token from controlled Token (alternative Macro: \"Unmount\")",
 	
 	"Rideable.MountFamiliar.name"					: "Mount familiar",
-	"Rideable.MountFamiliar.descrp"					: "Mount controlled familiars to targeted Token if targeted Token is master(alternative Macro: \"MountFamiliar\")",
+	"Rideable.MountFamiliar.descrp"					: "Mount controlled familiars to targeted Token if targeted Token is master(alternative Macro: \"MountFamiliar\") (only if setting \"Familiar riding\" is activated)",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }

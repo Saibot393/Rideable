@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate} from "./RideableUtils.js";
-import { MountSelected, UnMountSelected } from "./MountingScript.js";
+import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./MountingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
@@ -105,7 +105,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
         key: "KeyJ"
       }
     ],
-    onDown: () => {  },
+    onDown: () => { MountSelectedFamiliar(true); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });

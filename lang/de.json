@@ -29,7 +29,7 @@
 	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")",
 	
 	"Rideable.MountFamiliar.name"					: "Aufsteigen für Vertraute",
-	"Rideable.MountFamiliar.descrp"					: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\")",
+	"Rideable.MountFamiliar.descrp"					: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\") (nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)",
 	
 	"Rideable.RideableTag.str"						: "rideable"
 }

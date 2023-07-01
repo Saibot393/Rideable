@@ -32,11 +32,11 @@ class MountingEffectManager {
 class MountingManager {
 	//DECLARATIONS
 	//Basic Mounting /UnMounting
-	static MountSelectedGM(pTarget, pselectedTokens) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
+	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
-	static MountSelected(pTargetHovered = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	static MountSelected(pTargetHovered = false, pFamiliar = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
-	static MountRequest(pTargetID, pselectedTokensID) {} //Request GM user to execute MountSelectedGM with given parameters
+	static MountRequest(pTargetID, pselectedTokensID, pFamiliar = false) {} //Request GM user to execute MountSelectedGM with given parameters
 	
 	static UnMountSelectedGM(pselectedTokens) {} //remove all riding flags concerning pselectedTokens
 	
@@ -53,7 +53,7 @@ class MountingManager {
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
-	static onMount(pToken) {} //everything that happens upon a token mounting (besides the basics)
+	static onMount(pToken, pFamiliar = false) {} //everything that happens upon a token mounting (besides the basics)
 	
 	static onUnMount(pToken) {} //everything that happens upon a token unmounting (besides the basics)
 	
@@ -65,22 +65,33 @@ class MountingManager {
 	
 	//IMPLEMENTATION
 	//Basic Mounting /UnMounting
-	static MountSelectedGM(pTarget, pselectedTokens) {
+	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false) {
+		console.log(pFamiliar);
 		//only works directly for GMs
 		if (game.user.isGM) {		
-			//make sure ptarget exists			
-			if (pTarget) {
-				if (RideableUtils.TokenisRideable(pTarget)) {
-					let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
-					
-					let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
-					
-					RideableFlags.addRiderTokens(pTarget, vValidTokens);
-					
-					UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
-					
-					for (let i = 0; i < vValidTokens.length; i++) {
-						MountingManager.onMount(vValidTokens[i]);
+			//make sure ptarget exists	
+			if ((!pFamiliar) || (game.settings.get(cModuleName, "FamiliarRiding"))) {
+				//pFamiliar riding can only be handled if setting is activated
+				if (pTarget) {
+					if (RideableUtils.TokenisRideable(pTarget)) {
+						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
+						
+						if (vValidTokens.length) {
+							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
+							
+							if (pFamiliar) {
+								//if a familiar was added only the familiars positions have to be updated
+								vpreviousRiders = vpreviousRiders.filter(vToken => RideableFlags.isFamiliarRider(vToken));
+							}
+							
+							RideableFlags.addRiderTokens(pTarget, vValidTokens, pFamiliar);
+							
+							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pFamiliar);
+							
+							for (let i = 0; i < vValidTokens.length; i++) {
+								MountingManager.onMount(vValidTokens[i], pFamiliar);
+							}
+						}
 					}
 				}
 			}
@@ -89,7 +100,10 @@ class MountingManager {
 		return;
 	}
 	
-	static MountSelected(pTargetHovered = false) {
+	static MountSelected(pTargetHovered = false, pFamiliar = false) {
+		console.log(pFamiliar);
+		
+		let vValidRiders = RideableUtils.selectedTokens();
 		let vTarget = RideableUtils.targetedToken();
 		
 		if (pTargetHovered || !vTarget) {
@@ -100,19 +114,26 @@ class MountingManager {
 			}
 		}
 		
+		console.log(vValidRiders);
+		
+		if (pFamiliar) {
+			//pFamiliar make sure selected are actually familairs of target
+			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
+			console.log(vValidRiders);
+		}
+		
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
 		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(vTarget, RideableUtils.selectedTokens());
+			MountingManager.MountSelectedGM(vTarget, vValidRiders, pFamiliar);
 		}
 		else {
 			if (!game.paused) {
 				//call Hook so GM can give Riding effects
-				if ((vTarget) && (RideableUtils.selectedTokens().length > 0)) {
+				if ((vTarget) && (vValidRiders.length > 0)) {
 					let vcurrentTargetID = vTarget.id;
 					
-					let vselectedTokenIDs = RideableUtils.IDsfromTokens(RideableUtils.selectedTokens());
-					
-					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs}});
+					let vselectedTokenIDs = RideableUtils.IDsfromTokens(vValidRiders);
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pFamiliar : pFamiliar}});
 				}
 			}
 		}
@@ -120,10 +141,10 @@ class MountingManager {
 		return;
 	}
 	
-	static MountRequest({ pTargetID, pselectedTokensID } = {}) { 
+	static MountRequest({ pTargetID, pselectedTokensID, pFamiliar } = {}) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID), RideableUtils.TokensfromIDs(pselectedTokensID));
+			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID), RideableUtils.TokensfromIDs(pselectedTokensID), pFamiliar);
 		}
 		
 		return;
@@ -206,10 +227,14 @@ class MountingManager {
 		}
 	}
 	
-	static onMount(pToken) {
-		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-			if (MountingEffectManager.getSystemMountingEffect()) {
-				pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+	static onMount(pToken, pFamiliar = false) {
+		if (!pFamiliar) {
+			
+			//Aplly mounted effect if turned on
+			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
+				if (MountingEffectManager.getSystemMountingEffect()) {
+					pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+				}
 			}
 		}
 	} 
@@ -269,10 +294,12 @@ Hooks.on("ready", function() { MountingEffectManager.preloadEffects(); });
 
 function MountSelected(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered); }
 
+function MountSelectedFamiliar(pTargetHovered = false) { console.log(true); return MountingManager.MountSelected(pTargetHovered, true); }
+
 function MountRequest({ pTargetID, pselectedTokensID } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID}); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
 function UnMountRequest({ pselectedTokenIDs } = {}) {return MountingManager.UnMountRequest({pselectedTokenIDs}); }
 
-export { MountSelected, MountRequest, UnMountSelected, UnMountRequest };
+export { MountSelected, MountSelectedFamiliar, MountRequest, UnMountSelected, UnMountRequest };

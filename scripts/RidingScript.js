@@ -13,13 +13,13 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pDocument, pchanges, pInfos) {} //Handles atempted movement of Riders
 	
-	static UpdateRidderTokens(priddenToken, vRiderTokenList) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
 	
-	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
+	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
-	static placeRiderTokenscorner(priddenToken, pRiderTokenList) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
 	static UnsetRidingHeight(pRiderTokens) {} //Reduces Tokens Elevation by Riding height
 	
@@ -59,23 +59,28 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, vRiderTokenList) {
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false) {
 		if (priddenToken) {
 			if (RideableUtils.TokenisRideable(priddenToken)) {
-				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, vRiderTokenList);
+				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars);
 			}
 		}
 	} 
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList) {
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars
 		
 		if (game.settings.get(cModuleName, "FamiliarRiding")) { 
 		//split riders in familiars and normal riders
-			vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
-			
-			vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.find(vToken))
+			if (pallFamiliars) {
+				vRiderFamiliarList = vRiderTokenList;
+			}
+			else {
+				vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
+				
+				vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
+			}
 		}
 		
 		if (vRiderTokenList) {
@@ -152,7 +157,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokenscorner(priddenToken, pRiderTokenList) {
+	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList) {
 		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, 3), pRiderTokenList.length); i++) { //no more then 4 corner places
 			let vxoffset = pRiderTokenList[i].w/2;
 			let vyoffset = pRiderTokenList[i].h/2;
@@ -162,23 +167,23 @@ class Ridingmanager {
 			
 			switch (i) {
 				case 0: //tl
-					vTargetx = priddenToken.x - priddenToken.w/2 - vxoffset;
-					vTargety = priddenToken.y - priddenToken.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.x - vxoffset;
+					vTargety = pUpdateDocument.y - vyoffset;
 					break;
 					
 				case 1: //tr
-					vTargetx = priddenToken.x + priddenToken.w/2 - vxoffset;
-					vTargety = priddenToken.y - priddenToken.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.x + pUpdateDocument.object.w - vxoffset;
+					vTargety = pUpdateDocument.y - vyoffset;
 					break;
 					
 				case 2: //bl
-					vTargetx = priddenToken.x - priddenToken.w/2 - vxoffset;
-					vTargety = priddenToken.y + priddenToken.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.x - vxoffset;
+					vTargety = pUpdateDocument.y + pUpdateDocument.object.h - vyoffset;
 					break;
 					
 				case 3: //br
-					vTargetx = priddenToken.x + priddenToken.w/2 - vxoffset;
-					vTargety = priddenToken.y + priddenToken.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.x + pUpdateDocument.object.w - vxoffset;
+					vTargety = pUpdateDocument.y + pUpdateDocument.object.h - vyoffset;
 					break;
 			}
 			
@@ -207,8 +212,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList);
+function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false) {
+	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars);
 }
 function UnsetRidingHeight(pRiderTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens);
