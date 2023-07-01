@@ -147,7 +147,7 @@ class RideableUtils {
 	static TokenisFamiliarof(pFamiliar, pMaster) {
 		if (pFamiliar.isOwner && pMaster.isOwner) {//check if both are owned
 			if (RideableUtils.isPf2e()) { //Pf2e has familiars
-				return ((pFamiliar.actor.type == cFamilarType) && ((pMaster.actor.type == cCharacterType) || (pMaster.actor.type == cNPCType))//check if pFamiliar is of type familiar and pMaster is player character or npc
+				return ((pFamiliar.actor.type == cFamilarType) && ((pMaster.actor.type == cCharacterType) || (pMaster.actor.type == cNPCType)));//check if pFamiliar is of type familiar and pMaster is player character or npc
 			}
 			
 			return ((pFamiliar.h < pMaster.h)||(pFamiliar.w < pMaster.w)); //check if pFamiliar is smaller then pMaster
