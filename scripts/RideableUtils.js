@@ -4,18 +4,20 @@ const cModuleName = "Rideable"; //name of Module
 //System names
 const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
-//Module names
-
+//Riding names
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
 const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
+const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
 
+//type names
 const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
+//limits
+const cCornermaxRiders = 4; //4 corners
 
-export { cPf2eName, cModuleName};
+export { cPf2eName, cModuleName, cCornermaxRiders};
 
 //a few support functions
 class RideableUtils {
@@ -45,6 +47,8 @@ class RideableUtils {
 	static TokenisRideable(pToken) {} //returns if Token is rideable under current settings
 	
 	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens
+	
+	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
 	
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
@@ -134,6 +138,14 @@ class RideableUtils {
 	}
 	
 	static TokencanRide(pToken) {
+		return true;
+	}
+	
+	static TokenhasRidingPlace(pToken, pFamiliars = false) {
+		if (pFamiliars) {
+			return (RideableFlags.RiderFamiliarCount(pToken) < cCornermaxRiders);
+		}
+		
 		return true;
 	}
 	

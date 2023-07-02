@@ -33,6 +33,10 @@ class RideableFlags {
 	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
 	
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
+	
+	static RiderCount(pRidden) {} //returns the number of Riders
+	
+	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
 		
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
@@ -227,6 +231,14 @@ class RideableFlags {
 	static RiddenToken(pRider) {
 		return canvas.tokens.placeables.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 	}
+	
+	static RiderCount(pRidden) {
+		return this.#RidersFlag(pRidden).length;
+	}
+	
+	static RiderFamiliarCount(pRidden) {
+		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
+	} 
 	
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {

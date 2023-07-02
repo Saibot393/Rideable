@@ -1,5 +1,5 @@
 import { RideableFlags } from "./RideableFlags.js";
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { RideableUtils, cModuleName, cCornermaxRiders } from "./RideableUtils.js";
 
 //CONSTANTS
 const cbetterRiderPositioning = true; //for more complex positioning calculations
@@ -82,6 +82,7 @@ class Ridingmanager {
 							delete pchanges.y;
 							delete pchanges.elevation;
 						}
+						//if a rider has no ridden Token something went wrong, better not do anything else
 					}
 					
 					Hooks.call(cModuleName+".IndependentRiderMovement", vToken)
@@ -189,7 +190,7 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {
-		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, 3), pRiderTokenList.length); i++) { //no more then 4 corner places
+		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places
 			let vxoffset = pRiderTokenList[i].w/2;
 			let vyoffset = pRiderTokenList[i].h/2;
 			
