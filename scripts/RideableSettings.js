@@ -38,7 +38,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: String,
 	choices: {
 		"RiderMovement-disallow": Translate("RiderMovement.RiderMovement-disallow"),
-		"RiderMovement-dismount": Translate("RiderMovement.RiderMovement-dismount")
+		"RiderMovement-dismount": Translate("RiderMovement.RiderMovement-dismount"),
+		"RiderMovement-moveridden": Translate("RiderMovement.RiderMovement-moveridden")
 	},
 	default: "RiderMovement-disallow"
   });

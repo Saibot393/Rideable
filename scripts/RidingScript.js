@@ -48,9 +48,40 @@ class Ridingmanager {
 			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation")) {
 				if (!pInfos.RidingMovement) {
 					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
+						//suppress movement
 						delete pchanges.x;
 						delete pchanges.y;
 						delete pchanges.elevation;
+					}
+					
+					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
+						//move ridden and stop own movement
+						let vRidden = RideableFlags.RiddenToken(vToken);
+						
+						if (vRidden) {
+							if (vRidden.isOwner) {
+								let vxtarget = vRidden.x;								
+								if (pchanges.x) {
+									vxtarget = pchanges.x - (vRidden.w - pDocument.object.w)/2;
+								}
+								
+								let vytarget = vRidden.y;
+								if (pchanges.y) {
+									vytarget = pchanges.y - (vRidden.h - pDocument.object.h)/2;
+								}
+								
+								let vztarget = vRidden.document.elevation;		
+								if (pchanges.elevation) {
+									vztarget = pchanges.elevation - game.settings.get(cModuleName, "RidingHeight");
+								}
+								
+								vRidden.document.update({x: vxtarget, y: vytarget, elevation: vztarget}, {animate : pInfos.animate});
+							}
+							
+							delete pchanges.x;
+							delete pchanges.y;
+							delete pchanges.elevation;
+						}
 					}
 					
 					Hooks.call(cModuleName+".IndependentRiderMovement", vToken)

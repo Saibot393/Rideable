@@ -1,38 +1,39 @@
 {
-    "Rideable.RidingHeight.name"     				: "Reithöhe",
-	"Rideable.RidingHeight.descrp"					: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)",
+    "Rideable.RidingHeight.name"     					: "Reithöhe",
+	"Rideable.RidingHeight.descrp"						: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)",
 	
-	"Rideable.MountingDistance.name"     			: "Reitdistanz",
-	"Rideable.MountingDistance.descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)",
+	"Rideable.MountingDistance.name"     				: "Reitdistanz",
+	"Rideable.MountingDistance.descrp"					: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)",
 	
-	"Rideable.BorderDistance.name"     				: "Rand zu Rand Distanz",
-	"Rideable.BorderDistance.descrp"				: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)",
+	"Rideable.BorderDistance.name"     					: "Rand zu Rand Distanz",
+	"Rideable.BorderDistance.descrp"					: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)",
 	
-	"Rideable.RiderMovement.name"     				: "Reiter Bewegung",
-	"Rideable.RiderMovement.descrp"					: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
-	"Rideable.RiderMovement.RiderMovement-disallow"	: "verhindere Bewegung",
-	"Rideable.RiderMovement.RiderMovement-dismount"	: "lasse Reiter absteigen",
+	"Rideable.RiderMovement.name"     					: "Reiter Bewegung",
+	"Rideable.RiderMovement.descrp"						: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
+	"Rideable.RiderMovement.RiderMovement-disallow"		: "verhindere Bewegung",
+	"Rideable.RiderMovement.RiderMovement-dismount"		: "lasse Reiter absteigen",
+	"Rideable.RiderMovement.RiderMovement-moveridden"	: "Bewege gerittene Marke",
 	
-	"Rideable.RidingSystemEffects.name"     		: "\"Reitend\" Effekt anwenden",
-	"Rideable.RidingSystemEffects.descrp"			: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)",
+	"Rideable.RidingSystemEffects.name"     			: "\"Reitend\" Effekt anwenden",
+	"Rideable.RidingSystemEffects.descrp"				: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)",
 	
-	"Rideable.RideableTag.name"     				: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
-	"Rideable.RideableTag.descrp"					: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
+	"Rideable.RideableTag.name"     					: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
+	"Rideable.RideableTag.descrp"						: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)",
 	
-	"Rideable.FamiliarRiding.name"					: "Vertrauten reiten",
-	"Rideable.FamiliarRiding.descrp"				: "Erlaubt es Vertrauten ihrem Meister zu folgen, die Vertrauten werden hierbei and den Ecken ihres Meister platziert",
+	"Rideable.FamiliarRiding.name"						: "Vertrauten reiten",
+	"Rideable.FamiliarRiding.descrp"					: "Erlaubt es Vertrauten ihrem Meister zu folgen, die Vertrauten werden hierbei and den Ecken ihres Meister platziert",
 	
-	"Rideable.PreventEnemyRiding.name"				: "Gegner reiten verhindern",
-	"Rideable.PreventEnemyRiding.descrp"			: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)",
+	"Rideable.PreventEnemyRiding.name"					: "Gegner reiten verhindern",
+	"Rideable.PreventEnemyRiding.descrp"				: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)",
 	
-	"Rideable.Mount.name"							: "Aufsteigen",
-	"Rideable.Mount.descrp"							: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")",
+	"Rideable.Mount.name"								: "Aufsteigen",
+	"Rideable.Mount.descrp"								: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")",
 	
-	"Rideable.UnMount.name"							: "Absteigen",
-	"Rideable.UnMount.descrp"						: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")",
+	"Rideable.UnMount.name"								: "Absteigen",
+	"Rideable.UnMount.descrp"							: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")",
 	
-	"Rideable.MountFamiliar.name"					: "Aufsteigen für Vertraute",
-	"Rideable.MountFamiliar.descrp"					: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\") (nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)",
+	"Rideable.MountFamiliar.name"						: "Aufsteigen für Vertraute",
+	"Rideable.MountFamiliar.descrp"						: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\") (nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)",
 	
-	"Rideable.RideableTag.str"						: "rideable"
+	"Rideable.RideableTag.str"							: "rideable"
 }
