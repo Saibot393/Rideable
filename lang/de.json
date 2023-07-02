@@ -12,7 +12,7 @@
 	"Rideable.RiderMovement.descrp"						: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
 	"Rideable.RiderMovement.RiderMovement-disallow"		: "verhindere Bewegung",
 	"Rideable.RiderMovement.RiderMovement-dismount"		: "lasse Reiter absteigen",
-	"Rideable.RiderMovement.RiderMovement-moveridden"	: "Bewege gerittene Marke",
+	"Rideable.RiderMovement.RiderMovement-moveridden"	: "Bewege gerittene Marke (wens Besitzer)",
 	
 	"Rideable.RidingSystemEffects.name"     			: "\"Reitend\" Effekt anwenden",
 	"Rideable.RidingSystemEffects.descrp"				: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)",

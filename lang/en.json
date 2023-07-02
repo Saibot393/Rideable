@@ -12,7 +12,7 @@
 	"Rideable.RiderMovement.descrp"						: "What should happen if a riding token tries to move on its own",
 	"Rideable.RiderMovement.RiderMovement-disallow"		: "Prevent movement",
 	"Rideable.RiderMovement.RiderMovement-dismount"		: "Unmount rider",
-	"Rideable.RiderMovement.RiderMovement-moveridden"	: "Move ridden Token",
+	"Rideable.RiderMovement.RiderMovement-moveridden"	: "Move ridden Token (if owned)",
 	
 	"Rideable.RidingSystemEffects.name"     			: "Apply \"Mounted\" effect",
 	"Rideable.RidingSystemEffects.descrp"				: "If a token starts riding, a system dependent effect will be applied to the token (only works if the game system has a known \"Mounted\" effect. Compatible systems: Pf2e)",
