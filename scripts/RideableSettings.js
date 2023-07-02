@@ -80,6 +80,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "MessagePopUps", {
+	name: Translate("MessagePopUps.name"),
+	hint: Translate("MessagePopUps.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   //Keys
   game.keybindings.register(cModuleName, "Mount", {
     name: Translate("Mount.name"),

@@ -26,6 +26,9 @@
 	"Rideable.PreventEnemyRiding.name"					: "Prevent enemy riding",
 	"Rideable.PreventEnemyRiding.descrp"				: "Stops tokens from riding enemy tokens (GMs can still override this)",
 	
+	"Rideable.MessagePopUps.name"						: "Message popups",
+	"Rideable.MessagePopUps.descrp"						: "Enables multible popups upon actions such as mounting or dismounting",
+	
 	"Rideable.Mount.name"								: "Mount",
 	"Rideable.Mount.descrp"								: "Mount controlled Tokens to targeted Token (alternative Macro: \"Mount\")",
 	

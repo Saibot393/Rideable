@@ -25,6 +25,9 @@
 	
 	"Rideable.PreventEnemyRiding.name"					: "Gegner reiten verhindern",
 	"Rideable.PreventEnemyRiding.descrp"				: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)",
+
+	"Rideable.MessagePopUps.name"						: "Pop-up Meldungen",
+	"Rideable.MessagePopUps.descrp"						: "Aktiviert mehrere pop-up Meldungen bei aktionen wie dem Auf- oder Absteigen",
 	
 	"Rideable.Mount.name"								: "Aufsteigen",
 	"Rideable.Mount.descrp"								: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")",

@@ -252,17 +252,19 @@ class RideableUtils {
 	//Additional UI
 	
 	static TextPopUp(pToken, pText, pWords = {}) {
-		let vText = pText;
-		
-		for (let vWord of Object.keys(pWords)) {
-			vText = vText.replace("{" + vWord + "}", pWords[vWord]);
+		if (game.settings.get(cModuleName, "MessagePopUps")) {
+			let vText = pText;
+			
+			for (let vWord of Object.keys(pWords)) {
+				vText = vText.replace("{" + vWord + "}", pWords[vWord]);
+			}
+			
+			canvas.interface.createScrollingText(pToken, vText, {x: pToken.x, y: pToken.y, text: vText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
 		}
-		
-		canvas.interface.createScrollingText(pToken, pText, {x: pToken.x, y: pToken.y, text: vText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
 	}
 	
 	static TextPopUpID(pToken, pID, pWords = {}) {
-		RideableUtils.TextPopUp(pToken, Translate(pID+"."+cPopUpID+"."+pID), pWords)
+		RideableUtils.TextPopUp(pToken, Translate(cPopUpID+"."+pID), pWords)
 	} 
 }
 

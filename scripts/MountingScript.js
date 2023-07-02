@@ -150,15 +150,20 @@ class MountingManager {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
 			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));//.filter(vToken => RideableFlags.isRider(vToken));
+			let vRiddenTokens = [];
+			
+			for (let i = 0; i < vRiderTokens.length; i++) {
+				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
+			}
+				
+			RideableFlags.stopRiding(vRiderTokens);
+			
+			UnsetRidingHeight(vRiderTokens);
 			
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
 				
-				RideableFlags.stopRiding([vRiderTokens[i]]);
-			
-				UnsetRidingHeight([vRiderTokens[i]]);
-				
-				MountingManager.onUnMount(vRiderTokens[i]);
+				MountingManager.onUnMount(vRiderTokens[i], vRiddenTokens[i]);
 			}
 		}
 	}
@@ -229,13 +234,13 @@ class MountingManager {
 		if (!pFamiliar) {
 			
 			if (pRidden) {
-				RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //Message Popup
+				RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 			}
 			
 			//Aplly mounted effect if turned on
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
 				if (MountingEffectManager.getSystemMountingEffect()) {
-					pToken.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+					pRider.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
 				}
 			}
 		}
@@ -245,10 +250,15 @@ class MountingManager {
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
-		if (pToken) {
+		if (pRider) {
+			
+			if (pRidden) {
+				RideableUtils.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+			}
+			
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
 				if (MountingEffectManager.getSystemMountingEffect()) {
-					await pToken.actor.deleteEmbeddedDocuments("Item", pToken.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+					await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
 				}
 			}
 		}
@@ -260,7 +270,7 @@ class MountingManager {
 		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
 			//prevent riding loops
 			
-			if RideableUtils.TokenhasRidingPlace(pRidden, pFamiliar) {
+			if (RideableUtils.TokenhasRidingPlace(pRidden, pFamiliar)) {
 			//check if Token has place left to be ridden
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
