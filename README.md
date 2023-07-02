@@ -6,7 +6,7 @@ The module adds functionality for tokens to ride one another.
 
 To mount, select a group of tokens and press 'm' or use the 'Mount' macro while targeting another token. To dismount, select all tokens you wish to dismount and press 'n' or use the "Unmount" macro. While controlling a ridden token and targeting one of its riders 'Unmount' will cause only the targeted token to dismount.
 
-Upon mounting the module will spread the mounted tokens on the ridden token and increase their z-height relative to the ridden token. The mounted tokens will always move with the ridden token. Upon dismount the z-height of the previously mounted tokens will be reduced again.
+Upon mounting the module will spread the mounted tokens on the ridden token and increase their z-height relative to the ridden token. The mounted tokens will always move with the ridden token. Upon dismounting the z-height of the previously mounted tokens will be reduced again.
 
 Ridden tokens can themselfve ride other tokens.
 
