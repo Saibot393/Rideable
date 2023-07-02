@@ -35,5 +35,13 @@
 	"Rideable.MountFamiliar.name"						: "Mount familiar",
 	"Rideable.MountFamiliar.descrp"						: "Mount controlled familiars to targeted Token if targeted Token is master(alternative Macro: \"MountFamiliar\") (only if setting \"Familiar riding\" is activated)",
 	
+	
+	"Rideable.Popup.Mounting"							: "Mounted {pRiddenName}",
+	"Rideable.Popup.UnMounting"							: "Dismounted {pRiddenName}",
+	"Rideable.Popup.MountingFamiliar"					: "Following master {pRiddenName}",
+	"Rideable.Popup.UnMountingFamiliar"					: "Stopped following master {pRiddenName}",
+	"Rideable.Popup.PreventedRiderMove"					: "Still riding {pRiddenName}",
+	
+	
 	"Rideable.RideableTag.str"							: "rideable"
 }
