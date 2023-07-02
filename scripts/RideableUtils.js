@@ -65,7 +65,7 @@ class RideableUtils {
 	
 	//Additional UI
 	
-	static TextPopUp(pToken, pText) {} //show pText over pToken
+	static TextPopUp(pToken, pText, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
 	
 	//IMPLEMENTATIONS
 	
@@ -247,8 +247,14 @@ class RideableUtils {
 
 	//Additional UI
 	
-	static TextPopUp(pToken, pText) {
-		canvas.interface.createScrollingText(pToken, pText, {x: pToken.x, y: pToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
+	static TextPopUp(pToken, pText, pWords = {}) {
+		let vText = pText;
+		
+		for (let vWord of Object.keys(pWords)) {
+			vText = vText.replace("{" + vWord + "}", pWords[vWord]);
+		}
+		
+		canvas.interface.createScrollingText(pToken, pText, {x: pToken.x, y: pToken.y, text: vText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
 	}
 }
 
