@@ -30,6 +30,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 The module contains an English and a German translation
 
 ---
+
 **If you have suggestions, questions, or requests for additional features please let me know.**
 
 *If you have installed the module pre v1.1.3 i recommend uninstalling it and redownloading it. In previous versions an error in the manifest prevented Foundrys automatic module updater to find new versions, so that older versions can not be updated by Foundry directly.*
