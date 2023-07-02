@@ -1,3 +1,6 @@
+## v1.3.0
+- added option to prevent tokens from riding enemy tokens (GM can override this)
+  
 ## v1.2.0
 - added future infrastructure for module compatibility
 - Riders now teleport when the ridden token is teleported
