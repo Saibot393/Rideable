@@ -63,6 +63,10 @@ class RideableUtils {
 		
 	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
 	
+	//Additional UI
+	
+	static TextPopUp(pToken, pText) {} //show pText over pToken
+	
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -239,7 +243,13 @@ class RideableUtils {
 				flags: {}
 			}
 		}
-	} 
+	}
+
+	//Additional UI
+	
+	static TextPopUp(pToken, pText) {
+		canvas.interface.createScrollingText(pToken, pText, {x: pToken.x, y: pToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
+	}
 }
 
 //for easy translation
