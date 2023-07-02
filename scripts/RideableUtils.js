@@ -1,6 +1,8 @@
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
 
+const cPopUpID = "Popup";
+
 //System names
 const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
@@ -66,6 +68,8 @@ class RideableUtils {
 	//Additional UI
 	
 	static TextPopUp(pToken, pText, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
+	
+	static TextPopUpID(pToken, pID, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
 	
 	//IMPLEMENTATIONS
 	
@@ -256,6 +260,10 @@ class RideableUtils {
 		
 		canvas.interface.createScrollingText(pToken, pText, {x: pToken.x, y: pToken.y, text: vText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
 	}
+	
+	static TextPopUpID(pToken, pID, pWords = {}) {
+		RideableUtils.TextPopUp(pToken, Translate(pID+"."+cPopUpID+"."+pID), pWords)
+	} 
 }
 
 //for easy translation

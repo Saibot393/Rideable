@@ -53,9 +53,9 @@ class MountingManager {
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
-	static onMount(pToken, pFamiliar = false) {} //everything that happens upon a token mounting (besides the basics)
+	static onMount(pRider, pRidden, pFamiliar = false) {} //everything that happens upon a token mounting (besides the basics)
 	
-	static onUnMount(pToken) {} //everything that happens upon a token unmounting (besides the basics)
+	static onUnMount(pRider, pRidden, pFamiliar = false) {} //everything that happens upon a token unmounting (besides the basics)
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pFamiliar = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide)
@@ -88,7 +88,7 @@ class MountingManager {
 							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pFamiliar);
 							
 							for (let i = 0; i < vValidTokens.length; i++) {
-								MountingManager.onMount(vValidTokens[i], pFamiliar);
+								MountingManager.onMount(vValidTokens[i], pTarget, pFamiliar);
 							}
 						}
 					}
@@ -151,11 +151,13 @@ class MountingManager {
 		if (pselectedTokens) {
 			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));//.filter(vToken => RideableFlags.isRider(vToken));
 			
-			RideableFlags.stopRiding(vRiderTokens);
-			
-			UnsetRidingHeight(vRiderTokens);
-			
 			for (let i = 0; i < vRiderTokens.length; i++) {
+				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
+				
+				RideableFlags.stopRiding([vRiderTokens[i]]);
+			
+				UnsetRidingHeight([vRiderTokens[i]]);
+				
 				MountingManager.onUnMount(vRiderTokens[i]);
 			}
 		}
@@ -223,8 +225,12 @@ class MountingManager {
 		}
 	}
 	
-	static onMount(pToken, pFamiliar = false) {
+	static onMount(pRider, pRidden, pFamiliar = false) {
 		if (!pFamiliar) {
+			
+			if (pRidden) {
+				RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //Message Popup
+			}
 			
 			//Aplly mounted effect if turned on
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
@@ -233,9 +239,12 @@ class MountingManager {
 				}
 			}
 		}
+		else {
+			
+		}	
 	} 
 	
-	static async onUnMount(pToken) {
+	static async onUnMount(pRider, pRidden, pFamiliar = false) {
 		if (pToken) {
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
 				if (MountingEffectManager.getSystemMountingEffect()) {
