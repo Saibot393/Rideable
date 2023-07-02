@@ -1,3 +1,6 @@
+## v1.4.0 (unreleased)
+- added "Move ridden on rider movement" option, only happens if the owner of the rider is also an owner of the ridden token
+
 ## v1.3.0
 - added option to prevent tokens from riding enemy tokens (GM can override this)
   
