@@ -52,6 +52,8 @@ class RideableUtils {
 	
 	static TokenisFamiliarof(pFamiliar, pMaster) {} //returns true of the deffinition of familiar is matched and both are controlled by current owner
 	
+	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
+	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
 		
@@ -171,6 +173,14 @@ class RideableUtils {
 		
 		return false;
 	} 
+	
+	static areEnemies(pTokenA, pTokenB) {
+		if ((pTokenA) && (pTokenB)) {
+			return ((pTokenA.document.disposition * pTokenB.document.disposition) < 0)
+		}
+		
+		return false;
+	}
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {

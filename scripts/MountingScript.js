@@ -73,7 +73,7 @@ class MountingManager {
 				//pFamiliar riding can only be handled if setting is activated
 				if (pTarget) {
 					if (RideableUtils.TokenisRideable(pTarget) || pFamiliar) {
-						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget) && this.TokencanMount(vToken, pTarget));
+						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget));
 						
 						if (vValidTokens.length) {
 							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
@@ -100,7 +100,6 @@ class MountingManager {
 	}
 	
 	static MountSelected(pTargetHovered = false, pFamiliar = false) {
-		let vValidRiders = RideableUtils.selectedTokens();
 		let vTarget = RideableUtils.targetedToken();
 		
 		if (pTargetHovered || !vTarget) {
@@ -110,6 +109,9 @@ class MountingManager {
 				vTarget = RideableUtils.targetedToken();
 			}
 		}
+		
+		//Make sure all riders can even ride the target
+		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget));
 		
 		if (pFamiliar) {
 			//pFamiliar make sure selected are actually familairs of target
@@ -248,16 +250,20 @@ class MountingManager {
 	static TokencanMount (pRider, pRidden) {
 		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
 			//prevent riding loops
-			if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
-				if (game.settings.get(cModuleName, "BorderDistance")) {
-					return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+			
+			if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
+			//Prevents enemy riding if enabled
+				if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+					if (game.settings.get(cModuleName, "BorderDistance")) {
+						return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+					}
+					else {
+						return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+					}
 				}
 				else {
-					return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+					return true;
 				}
-			}
-			else {
-				return true;
 			}
 		}
 		
