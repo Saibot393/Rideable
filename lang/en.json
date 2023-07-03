@@ -8,6 +8,9 @@
 	"Rideable.BorderDistance.name"     					: "Border to border distance",
 	"Rideable.BorderDistance.descrp"					: "If the mounting distance should be calculated from the tokens border instead of the middle point (only works correctly for circular/square tokens)",
 	
+	"Rideable.MaxRiders.name"     						: "Maximum riders per token",
+	"Rideable.MaxRiders.descrp"							: "The maximum amount of tokens, a token can be ridden by (-1 for unlimited)",	
+	
 	"Rideable.RiderMovement.name"     					: "Rider movement",
 	"Rideable.RiderMovement.descrp"						: "What should happen if a riding token tries to move on its own",
 	"Rideable.RiderMovement.RiderMovement-disallow"		: "Prevent movement",

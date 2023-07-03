@@ -7,6 +7,9 @@
 	
 	"Rideable.BorderDistance.name"     					: "Rand zu Rand Distanz",
 	"Rideable.BorderDistance.descrp"					: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)",
+
+	"Rideable.MaxRiders.name"     						: "Maximale Reiter pro Marke",
+	"Rideable.MaxRiders.descrp"							: "Die maximale Anzahl an Marken von welchen eine Marke gleichzeitig geritten werden kann (-1 für unlimitiert)",	
 	
 	"Rideable.RiderMovement.name"     					: "Reiter Bewegung",
 	"Rideable.RiderMovement.descrp"						: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",

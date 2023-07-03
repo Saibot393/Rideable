@@ -1,5 +1,5 @@
-import { RideableFlags } from "./RideableFlags.js";
-import { RideableUtils, cModuleName, cCornermaxRiders } from "./RideableUtils.js";
+import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
+import { RideableUtils, cModuleName } from "./RideableUtils.js";
 
 //CONSTANTS
 const cbetterRiderPositioning = true; //for more complex positioning calculations
@@ -52,6 +52,8 @@ class Ridingmanager {
 						delete pchanges.x;
 						delete pchanges.y;
 						delete pchanges.elevation;
+						
+						RideableUtils.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
 					}
 					
 					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
@@ -133,7 +135,7 @@ class Ridingmanager {
 				if (vRiderWidthSumm > pRiddenToken.w) {
 					vbunchedRiders = true;
 					
-					vxoffset = vRiderTokenList[0].w/2;
+					vxoffset = 0;
 				
 					if (vRiderTokenList.length > 1) {
 						vxdelta = (pRiddenToken.w - vRiderTokenList[vRiderTokenList.length - 1].w)/(vRiderTokenList.length-1);
@@ -158,16 +160,25 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokens(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
+		let vprex = 0;
+		
 		for (let i = 0; i < pRiderTokenList.length; i++) {
-			
-			//update riders position in x, y and z (only if not already on target position)
-			
+			//update riders position in x, y and z (only if not already on target position)		
 			let vTargetx = 0;
+			
 			if (cbetterRiderPositioning) {
-				vTargetx = pUpdateDocument.x + pxoffset + (i-1)*pxdelta;
-					
-				if ((!pbunchedRiders) && (i > 0)) {
-					vTargetx = vTargetx + (pRiderTokenList[i].w + pRiderTokenList[i-1].w)/2;
+				if (pbunchedRiders) {
+					vTargetx = pUpdateDocument.x + pxoffset + i*pxdelta;
+				}
+				else {
+					if ((!pbunchedRiders) && (i > 0)) {
+						vTargetx = vprex + pRiderTokenList[i-1].w;
+						vprex = vTargetx;
+					}
+					else {
+						vTargetx = pUpdateDocument.x + pxoffset
+						vprex = vTargetx;
+					}
 				}
 			}
 			else {
@@ -233,7 +244,7 @@ class Ridingmanager {
 	
 	static UnsetRidingHeight(pRiderTokens) {
 		for (let i = 0; i < pRiderTokens.length; i++) {
-			if (pRiderTokens[i]) {
+			if (pRiderTokens[i] && pRiderTokens[i].document) {
 				let vTargetz = pRiderTokens[i].document.elevation - game.settings.get(cModuleName, "RidingHeight");
 
 				pRiderTokens[i].document.update({elevation: vTargetz}, {RidingMovement : true});

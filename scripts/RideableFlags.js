@@ -1,10 +1,15 @@
-import { RideableUtils } from "./RideableUtils.js";
+import { RideableUtils, cModuleName } from "./RideableUtils.js";
 
 const cModule = "Rideable";
 
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
+
+//limits
+const cCornermaxRiders = 4; //4 corners
+
+export {cCornermaxRiders};
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags)
 class RideableFlags {
@@ -35,6 +40,10 @@ class RideableFlags {
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
 	
 	static RiderCount(pRidden) {} //returns the number of Riders
+	
+	static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
+	
+	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
 	
 	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
 		
@@ -99,6 +108,7 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
+			//make sure all riders still exist
 			if (vFlag.RidersFlag) {
 				return vFlag.RidersFlag;
 			}
@@ -109,7 +119,7 @@ class RideableFlags {
 	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
-		if ((pToken)) {
+		if ((pToken) && (pToken.document)) {
 			pToken.document.setFlag(cModule, cRidingF, Boolean(pContent));
 			
 			return true;
@@ -119,7 +129,7 @@ class RideableFlags {
 	
 	static #setFamiliarRidingFlag (pToken, pContent) {
 	//sets content of FamiliarRiddenFlag (must be boolean)
-		if ((pToken)) {
+		if ((pToken) && (pToken.document)) {
 			pToken.document.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
@@ -233,7 +243,20 @@ class RideableFlags {
 	}
 	
 	static RiderCount(pRidden) {
-		return this.#RidersFlag(pRidden).length;
+		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
+	}
+	
+	static TokenRidingSpaceleft(pToken, pFamiliars = false) {
+		if (pFamiliars) {
+			return (cCornermaxRiders - RideableFlags.RiderFamiliarCount(pToken));
+		}
+		else {
+			return (RideableUtils.MaxRidingspace(pToken) - RideableFlags.RiderCount(pToken));
+		}
+	} 
+	
+	static TokenhasRidingPlace(pToken, pFamiliars = false) {
+		return (RideableFlags.TokenRidingSpaceleft(pToken, pFamiliars) > 0);
 	}
 	
 	static RiderFamiliarCount(pRidden) {

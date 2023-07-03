@@ -73,7 +73,7 @@ class MountingManager {
 				//pFamiliar riding can only be handled if setting is activated
 				if (pTarget) {
 					if (RideableUtils.TokenisRideable(pTarget) || pFamiliar) {
-						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget));
+						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pFamiliar));
 						
 						if (vValidTokens.length) {
 							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget));
@@ -234,7 +234,12 @@ class MountingManager {
 		if (!pFamiliar) {
 			
 			if (pRidden) {
-				RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				if (pFamiliar) {
+					RideableUtils.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				}
+				else {
+					RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				}
 			}
 			
 			//Aplly mounted effect if turned on
@@ -253,7 +258,12 @@ class MountingManager {
 		if (pRider) {
 			
 			if (pRidden) {
-				RideableUtils.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				if (pFamiliar) {
+					RideableUtils.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				}
+				else {
+					RideableUtils.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				}
 			}
 			
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
@@ -270,7 +280,7 @@ class MountingManager {
 		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
 			//prevent riding loops
 			
-			if (RideableUtils.TokenhasRidingPlace(pRidden, pFamiliar)) {
+			if (RideableFlags.TokenhasRidingPlace(pRidden, pFamiliar)) {
 			//check if Token has place left to be ridden
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
@@ -305,6 +315,10 @@ class MountingManager {
 				
 				if (RideableFlags.isRidden(pToken)) {
 					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken)));
+				}
+				
+				if (RideableFlags.isRider(pToken)) {
+					MountingManager.UnMountSelectedGM([pToken]);
 				}
 			}
 		}

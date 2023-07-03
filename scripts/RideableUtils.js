@@ -16,10 +16,7 @@ const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-//limits
-const cCornermaxRiders = 4; //4 corners
-
-export { cPf2eName, cModuleName, cCornermaxRiders};
+export { cPf2eName, cModuleName };
 
 //a few support functions
 class RideableUtils {
@@ -46,11 +43,9 @@ class RideableUtils {
 	static hoveredToken() {} //get first hovered token
 	
 	//Additional Token Infos
-	static TokenisRideable(pToken) {} //returns if Token is rideable under current settings
+	static TokenisRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
 	
-	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens
-	
-	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
+	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens (related to settings)
 	
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
@@ -59,6 +54,8 @@ class RideableUtils {
 	static TokenisFamiliarof(pFamiliar, pMaster) {} //returns true of the deffinition of familiar is matched and both are controlled by current owner
 	
 	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
+	
+	static MaxRidingspace(pRidden) {} //returns the maximum amount of riders that can fit on pRidden (related to settings)
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -150,14 +147,6 @@ class RideableUtils {
 		return true;
 	}
 	
-	static TokenhasRidingPlace(pToken, pFamiliars = false) {
-		if (pFamiliars) {
-			return (RideableFlags.RiderFamiliarCount(pToken) < cCornermaxRiders);
-		}
-		
-		return true;
-	}
-	
 	static TokenDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
 			return Math.sqrt( (pTokenA.x-pTokenB.x)**2 + (pTokenA.y-pTokenB.y)**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
@@ -202,6 +191,15 @@ class RideableUtils {
 		
 		return false;
 	}
+	
+	static MaxRidingspace(pRidden) {
+		if (game.settings.get(cModuleName, "MaxRiders") >= 0) {
+			return game.settings.get(cModuleName, "MaxRiders");
+		}
+		else {
+			return Infinity;
+		}
+	} 
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {
@@ -275,7 +273,7 @@ class RideableUtils {
 			let vToken = RideableUtils.TokenfromID(pTokenID);
 			
 			if (vToken) {
-				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
+				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
 			}
 		}
 	}

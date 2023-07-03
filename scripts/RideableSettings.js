@@ -30,6 +30,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: true
   });
   
+  game.settings.register(cModuleName, "MaxRiders", {
+	name: Translate("MaxRiders.name"),
+	hint: Translate("MaxRiders.descrp"),
+	scope: "world",
+	config: true,
+	type: Number,
+	default: -1
+  });
+  
   game.settings.register(cModuleName, "RiderMovement", {
 	name: Translate("RiderMovement.name"),
 	hint: Translate("RiderMovement.descrp"),
@@ -129,5 +138,3 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
 });
-
-Hooks.once("ready", () => {console.log("Rideable Check")});
