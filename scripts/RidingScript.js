@@ -21,7 +21,7 @@ class Ridingmanager {
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
-	static UnsetRidingHeight(pRiderTokens) {} //Reduces Tokens Elevation by Riding height
+	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
 	//IMPLEMENTATIONS
 	static OnTokenupdate(pDocument, pchanges, pInfos) {
@@ -244,10 +244,19 @@ class Ridingmanager {
 		}
 	}
 	
-	static UnsetRidingHeight(pRiderTokens) {
+	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 		for (let i = 0; i < pRiderTokens.length; i++) {
 			if (pRiderTokens[i] && pRiderTokens[i].document) {
-				let vTargetz = pRiderTokens[i].document.elevation - game.settings.get(cModuleName, "RidingHeight");
+				let vTargetz = 0;
+				
+				if (pRiddenTokens[i]) {
+					//set to height or previously ridden token
+					vTargetz = pRiddenTokens[i].document.elevation;
+				}
+				else {
+					//reduce height by riding height
+					vTargetz = pRiderTokens[i].document.elevation - game.settings.get(cModuleName, "RidingHeight");
+				} 
 
 				pRiderTokens[i].document.update({elevation: vTargetz}, {RidingMovement : true});
 			}

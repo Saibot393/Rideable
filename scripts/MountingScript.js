@@ -158,7 +158,7 @@ class MountingManager {
 				
 			RideableFlags.stopRiding(vRiderTokens);
 			
-			UnsetRidingHeight(vRiderTokens);
+			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
 			
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
@@ -252,6 +252,8 @@ class MountingManager {
 		else {
 			
 		}	
+		
+		Hooks.callAll("Rideable.mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
@@ -272,6 +274,8 @@ class MountingManager {
 				}
 			}
 		}
+		
+		Hooks.callAll("Rideable.mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	//Aditional Informations
