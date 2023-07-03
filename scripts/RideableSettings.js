@@ -83,7 +83,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   game.settings.register(cModuleName, "MessagePopUps", {
 	name: Translate("MessagePopUps.name"),
 	hint: Translate("MessagePopUps.descrp"),
-	scope: "world",
+	scope: "client",
 	config: true,
 	type: Boolean,
 	default: false

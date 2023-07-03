@@ -71,6 +71,7 @@ class RideableUtils {
 	
 	static TextPopUpID(pToken, pID, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
 	
+	static PopUpRequest(pTokenID, pText) {} //handels socket calls for pop up texts
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -252,20 +253,32 @@ class RideableUtils {
 	//Additional UI
 	
 	static TextPopUp(pToken, pText, pWords = {}) {
-		if (game.settings.get(cModuleName, "MessagePopUps")) {
-			let vText = pText;
-			
-			for (let vWord of Object.keys(pWords)) {
-				vText = vText.replace("{" + vWord + "}", pWords[vWord]);
-			}
-			
-			canvas.interface.createScrollingText(pToken, vText, {x: pToken.x, y: pToken.y, text: vText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
+		let vText = pText;
+		
+		for (let vWord of Object.keys(pWords)) {
+			vText = vText.replace("{" + vWord + "}", pWords[vWord]);
 		}
+		
+		//other clients pop up
+		game.socket.emit("module.Rideable", {pFunction : "PopUpRequest", pData : {pTokenID: pToken.id, pText : vText}});
+		
+		//own pop up
+		RideableUtils.PopUpRequest(pToken.id, vText);
 	}
 	
 	static TextPopUpID(pToken, pID, pWords = {}) {
 		RideableUtils.TextPopUp(pToken, Translate(cPopUpID+"."+pID), pWords)
 	} 
+	
+	static PopUpRequest(pTokenID, pText) {
+		if (game.settings.get(cModuleName, "MessagePopUps")) {
+			let vToken = RideableUtils.TokenfromID(pTokenID);
+			
+			if (vToken) {
+				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#FFFFFF"});
+			}
+		}
+	}
 }
 
 //for easy translation
@@ -274,4 +287,6 @@ function Translate(pName){
 }
 
 //Export RideableFlags Class
-export{ RideableUtils, Translate };
+function PopUpRequest({ pTokenID, pText } = {}) { return RideableUtils.PopUpRequest(pTokenID, pText); }
+
+export{ RideableUtils, PopUpRequest, Translate };

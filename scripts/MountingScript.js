@@ -137,7 +137,7 @@ class MountingManager {
 		return;
 	}
 	
-	static MountRequest({ pTargetID, pselectedTokensID, pFamiliar } = {}) { 
+	static MountRequest(pTargetID, pselectedTokensID, pFamiliar) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
 			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID), RideableUtils.TokensfromIDs(pselectedTokensID), pFamiliar);
@@ -201,7 +201,7 @@ class MountingManager {
 		}
 	} 
 	
-	static UnMountRequest({ pselectedTokenIDs } = {}) { 
+	static UnMountRequest( pselectedTokenIDs ) { 
 		//Handels UnMount request by matching TokenIDs to Tokens and unmounting them
 		if (game.user.isGM) {
 			MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(pselectedTokenIDs));
@@ -324,10 +324,10 @@ function MountSelected(pTargetHovered = false) { return MountingManager.MountSel
 
 function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, true); }
 
-function MountRequest({ pTargetID, pselectedTokensID, pFamiliar } = {}) { return MountingManager.MountRequest({pTargetID, pselectedTokensID, pFamiliar}); }
+function MountRequest({ pTargetID, pselectedTokensID, pFamiliar } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pFamiliar); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
-function UnMountRequest({ pselectedTokenIDs } = {}) {return MountingManager.UnMountRequest({pselectedTokenIDs}); }
+function UnMountRequest({ pselectedTokenIDs } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs); }
 
 export { MountSelected, MountSelectedFamiliar, MountRequest, UnMountSelected, UnMountRequest };
