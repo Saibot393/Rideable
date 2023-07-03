@@ -11,7 +11,7 @@ class Ridingmanager {
 	//DECLARATIONS
 	static OnTokenupdate(pDocument, pchanges, pInfos) {} //calculates which Tokens are Riders of priddenToken und places them on it
 	
-	static OnTokenpreupdate(pDocument, pchanges, pInfos) {} //Handles atempted movement of Riders
+	static OnTokenpreupdate(pDocument, pchanges, pInfos, psendingUser) {} //Handles atempted movement of Riders
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
@@ -41,7 +41,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static OnTokenpreupdate(pDocument, pchanges, pInfos) {
+	static OnTokenpreupdate(pDocument, pchanges, pInfos, psendingUser) {
 		//Check if Token is Rider
 		let vToken = pDocument.object;
 		if (RideableFlags.isRider(vToken)) {
@@ -62,6 +62,8 @@ class Ridingmanager {
 						
 						if (vRidden) {
 							if (vRidden.isOwner) {
+								//can only change if you own vRidden
+								
 								let vxtarget = vRidden.x;								
 								if (pchanges.x) {
 									vxtarget = pchanges.x - (vRidden.w - pDocument.object.w)/2;
