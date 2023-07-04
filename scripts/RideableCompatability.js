@@ -1,11 +1,12 @@
 import { RideableUtils } from "./RideableUtils.js";
 import { RideableFlags } from "./RideableFlags.js";
 import { UpdateRidderTokens } from "./RidingScript.js";
+import { RideableCompUtil } from "./RideableCompUtil.js";
 
-import { cStairwaysname } from "./RideableUtils.js";
+import { cStairwaysname, cTagger } from "./RideableCompUtil.js";
 
-//RideableCompatability will take care of compatibility with other modules, currently explicitly supported:
-//-staiways (only inside the same scene
+//RideableCompatability will take care of compatibility with other modules in regards to calls, currently supported:
+
 class RideableCompatability {
 	//DECLARATIONS
 	static onStairwaysTeleport(pData) {} //called if stairways module is active and teleport is triggered
