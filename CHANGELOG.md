@@ -1,3 +1,8 @@
+## v1.5.0
+- improved localization file structure
+- fixed bug concerning the mounting distance
+- GMs can now force change the riding height of tokens (unless "Move ridden on rider movement" is activated)
+
 ## v1.4.0
 - added "Move ridden on rider movement" option, only happens if the owner of the rider is also an owner of the ridden token
 - added maximum riders option
