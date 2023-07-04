@@ -5,6 +5,7 @@ const cModule = "Rideable";
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
+const caddRiderHeightF = "addRiderHeightFlag"; //Flag name for additional Riderheight set ONYL by a GM
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -46,6 +47,8 @@ class RideableFlags {
 	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
 	
 	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
+	
+	static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
@@ -57,6 +60,8 @@ class RideableFlags {
 	static stopRiding(pRidingTokens) {} //tries to remove pRidingToken from all Riders Flags
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
+	
+	static setRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
 	//IMPLEMENTATIONS
 	
 	//flags handling support
@@ -117,6 +122,20 @@ class RideableFlags {
 		return []; //default if anything fails
 	} 
 	
+	static #RidingHeight (pToken) {
+	//returns value of addRiderHeight Flag of pToken or 0
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			//make sure all riders still exist
+			if (vFlag.addRiderHeightFlag) {
+				return vFlag.addRiderHeightFlag;
+			}
+		}
+		
+		return 0; //default if anything fails
+	}
+	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if ((pToken) && (pToken.document)) {
@@ -138,9 +157,19 @@ class RideableFlags {
 	} 
 	
 	static #setRidersFlag (pToken, pContent) {
-	//sets content of RiddenFlag (must be array of strings)
+	//sets content of addRiderHeight Flag (must number)
 		if ((pToken) && (Array.isArray(pContent))) {
 			pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
+			
+			return true;
+		}
+		return false;
+	}
+	
+	static #setaddRiderHeight (pToken, pContent) {
+	//sets content of RiddenFlag (must be array of strings)
+		if ((pToken) && (typeof pContent === "number")) {
+			pToken.document.setFlag(cModule, caddRiderHeightF, pContent);
 			
 			return true;
 		}
@@ -153,6 +182,7 @@ class RideableFlags {
 			pToken.document.unsetFlag(cModule, cRidingF);
 			pToken.document.unsetFlag(cModule, cFamiliarRidingF);
 			pToken.document.unsetFlag(cModule, cRidersF);
+			pToken.document.unsetFlag(cModule, caddRiderHeight);
 			
 			return true;
 		}
@@ -263,6 +293,10 @@ class RideableFlags {
 		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
 	} 
 	
+	static RiderHeight(pRider) {
+		return this.#RidingHeight(pRider);
+	}
+	
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
 		if (pRiddenToken) {
@@ -293,6 +327,7 @@ class RideableFlags {
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
 				this.#setFamiliarRidingFlag(pRiderTokens[i], false);
+				this.#setaddRiderHeight(pRiderTokens[i], 0);
 			}
 		}
 	}
@@ -338,6 +373,14 @@ class RideableFlags {
 		
 		return this.isRidden(pRiddenToken);
 	}
+	
+	static setRiderHeight(pToken, pHeight) {
+		if (game.user.isGM) {
+			if (pToken) {
+				this.#setaddRiderHeight(pToken, pHeight);
+			}
+		}
+	} 
 }
 
 //Export RideableFlags Class
