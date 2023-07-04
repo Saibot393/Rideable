@@ -53,7 +53,7 @@ class Ridingmanager {
 					
 					if (game.user.isGM) {
 						if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden")) {
-							//if a dm tried to only chnage the elevation while move ridden is off
+							//if a dm tried to only change the elevation while "move ridden" is off
 							vGMoverride = true;
 							
 							RideableFlags.setRiderHeight(pDocument.object, RideableFlags.RiderHeight(pDocument.object) + (pchanges.elevation - pDocument.elevation));
