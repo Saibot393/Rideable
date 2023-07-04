@@ -28,15 +28,12 @@ class Ridingmanager {
 	//IMPLEMENTATIONS
 	static OnTokenupdate(pDocument, pchanges, pInfos) {
 		if (game.user.isGM) {
-			console.log("Check1");
 			let vToken = pDocument.object;
-				
+			
 			//Check if vToken is ridden
 			if (RideableFlags.isRidden(vToken)) {
-				console.log("Check2");
 				//check if token position was actually changed
 				if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation")) {
-					console.log("Check3");
 					//check if ridden Token exists
 					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
 					
@@ -52,54 +49,66 @@ class Ridingmanager {
 		if (RideableFlags.isRider(vToken)) {
 			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation")) {
 				if (!pInfos.RidingMovement) {
-					/*
-					if (pchanges.hasOwnProperty("elevation")) {
-						RideableFlags.setRiderHeight(vToken, pchanges.elevation - vToken.document.elevation);
-					}*/
+					let vGMoverride = false;
 					
-					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
-						//suppress movement
-						delete pchanges.x;
-						delete pchanges.y;
-						delete pchanges.elevation;
-						
-						RideableUtils.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
+					if (game.user.isGM) {
+						if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden")) {
+							//if a dm tried to only chnage the elevation while move ridden is off
+							vGMoverride = true;
+							
+							RideableFlags.setRiderHeight(pDocument.object, RideableFlags.RiderHeight(pDocument.object) + (pchanges.elevation - pDocument.elevation));
+						}
 					}
 					
-					if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
-						//move ridden and stop own movement
-						let vRidden = RideableFlags.RiddenToken(vToken);
+					if (!vGMoverride) {
+						let vdeleteChanges = false;
 						
-						if (vRidden) {
-							if (vRidden.isOwner) {
-								//can only change if you own vRidden
-								
-								let vxtarget = vRidden.x;								
-								if (pchanges.x) {
-									vxtarget = pchanges.x - (vRidden.w - pDocument.object.w)/2;
-								}
-								
-								let vytarget = vRidden.y;
-								if (pchanges.y) {
-									vytarget = pchanges.y - (vRidden.h - pDocument.object.h)/2;
-								}
-								
-								let vztarget = vRidden.document.elevation;		
-								if (pchanges.elevation) {
-									vztarget = pchanges.elevation - game.settings.get(cModuleName, "RidingHeight");
-								}
-								
-								vRidden.document.update({x: vxtarget, y: vytarget, elevation: vztarget}, {animate : pInfos.animate});
-							}
+						if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
+							//suppress movement
+							vdeleteChanges = true;
 							
+							RideableUtils.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
+						}
+						
+						if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
+							//move ridden and stop own movement
+							let vRidden = RideableFlags.RiddenToken(vToken);
+							
+							if (vRidden) {
+								if (vRidden.isOwner) {
+									//can only change if you own vRidden
+									
+									let vxtarget = vRidden.x;								
+									if (pchanges.x) {
+										vxtarget = pchanges.x - (vRidden.w - pDocument.object.w)/2;
+									}
+									
+									let vytarget = vRidden.y;
+									if (pchanges.y) {
+										vytarget = pchanges.y - (vRidden.h - pDocument.object.h)/2;
+									}
+									
+									let vztarget = vRidden.document.elevation;		
+									if (pchanges.elevation) {
+										vztarget = pchanges.elevation - game.settings.get(cModuleName, "RidingHeight") - RideableFlags.RiderHeight(pDocument.object);
+									}
+									
+									vRidden.document.update({x: vxtarget, y: vytarget, elevation: vztarget}, {animate : pInfos.animate});
+								}
+								
+								vdeleteChanges = true;
+							}
+							//if a rider has no ridden Token something went wrong, better not do anything else
+						}
+					
+						if (vdeleteChanges) {
 							delete pchanges.x;
 							delete pchanges.y;
 							delete pchanges.elevation;
 						}
-						//if a rider has no ridden Token something went wrong, better not do anything else
+						
+						Hooks.call(cModuleName+".IndependentRiderMovement", vToken, pchanges)
 					}
-					
-					Hooks.call(cModuleName+".IndependentRiderMovement", vToken)
 				}
 			}
 		}
@@ -176,7 +185,9 @@ class Ridingmanager {
 	
 	static placeRiderHeight(pUpdateDocument, pRiderTokenList) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
-			let vTargetz = pUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight") + RideableFlags.RiderHeight(pRiderTokenList[i]);
+			let vUpdateDocument = pUpdateDocument;
+			
+			let vTargetz = vUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight") + RideableFlags.RiderHeight(pRiderTokenList[i]);
 				
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
 				pRiderTokenList[i].document.update({elevation: vTargetz}, {RidingMovement : true});

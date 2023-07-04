@@ -222,10 +222,12 @@ class MountingManager {
 	
 	//Additional functions
 	
-	static onIndependentRiderMovement(pToken) {
+	static onIndependentRiderMovement(pToken, pChanges) {
 		if (RideableFlags.isRider(pToken)) {
 			if (game.settings.get(cModuleName, "RiderMovement") == "RiderMovement-dismount") {
-				MountingManager.RequestUnmount([pToken]);
+				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation")) {
+					MountingManager.RequestUnmount([pToken]);
+				}
 			}
 		}
 	}

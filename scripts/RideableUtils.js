@@ -149,7 +149,7 @@ class RideableUtils {
 	
 	static TokenDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( (pTokenA.x-pTokenB.x)**2 + (pTokenA.y-pTokenB.y)**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			return Math.sqrt( ((pTokenA.x+pTokenA.w/2)-(pTokenB.x+pTokenB.w/2))**2 + ((pTokenA.y+pTokenA.h/2)-(pTokenB.y+pTokenB.h/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 		}
 		
 		return 0;
