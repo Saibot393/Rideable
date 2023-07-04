@@ -269,8 +269,8 @@ class Ridingmanager {
 function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false, pAnimations = true) {
 	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars, pAnimations);
 }
-function UnsetRidingHeight(pRiderTokens) {
-	Ridingmanager.UnsetRidingHeight(pRiderTokens);
+function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
+	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
 }
 
 export { UpdateRidderTokens, UnsetRidingHeight };
