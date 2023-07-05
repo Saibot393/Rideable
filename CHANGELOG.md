@@ -1,3 +1,12 @@
+## v1.5.0 (unreleased)
+- improved localization file structure
+- fixed bug concerning the border-to-border mounting distance
+- fixed bug concerning the positioning of the ridden token when "Move ridden on rider movement" is used
+- GMs can now force change the riding height of tokens (unless "Move ridden on rider movement" is activated)
+- Added "Link rotations" options to allow ridden tokens to rotate their riders (or vice versa with the "Move ridden on rider movement" option)
+- Added additional popups for cases where tokens cant be mounted
+- Added compatibility for the "Wall-Height" module by adding an option which allows the riding height to be set through the token height (see "Wall-Height" module) of the ridden token
+
 ## v1.4.0
 - added "Move ridden on rider movement" option, only happens if the owner of the rider is also an owner of the ridden token
 - added maximum riders option

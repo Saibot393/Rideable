@@ -58,7 +58,7 @@ class MountingManager {
 	static onUnMount(pRider, pRidden, pFamiliar = false) {} //everything that happens upon a token unmounting (besides the basics)
 	
 	//Aditional Informations
-	static TokencanMount (pRider, pRidden, pFamiliar = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide)
+	static TokencanMount (pRider, pRidden, pFamiliar = false, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
 	
 	//Handel Token Deletion
 	static onTokenDeletion(pToken) {} //Removes pToken from the Rider logic (both in Regards to Ridden and Riders)
@@ -111,7 +111,7 @@ class MountingManager {
 		}
 		
 		//Make sure all riders can even ride the target
-		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pFamiliar));
+		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pFamiliar, true));
 		
 		if (pFamiliar) {
 			//pFamiliar make sure selected are actually familairs of target
@@ -158,7 +158,7 @@ class MountingManager {
 				
 			RideableFlags.stopRiding(vRiderTokens);
 			
-			UnsetRidingHeight(vRiderTokens);
+			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
 			
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
@@ -222,10 +222,12 @@ class MountingManager {
 	
 	//Additional functions
 	
-	static onIndependentRiderMovement(pToken) {
+	static onIndependentRiderMovement(pToken, pChanges) {
 		if (RideableFlags.isRider(pToken)) {
 			if (game.settings.get(cModuleName, "RiderMovement") == "RiderMovement-dismount") {
-				MountingManager.RequestUnmount([pToken]);
+				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation")) {
+					MountingManager.RequestUnmount([pToken]);
+				}
 			}
 		}
 	}
@@ -252,6 +254,8 @@ class MountingManager {
 		else {
 			
 		}	
+		
+		Hooks.callAll("Rideable.Mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
@@ -272,6 +276,8 @@ class MountingManager {
 				}
 			}
 		}
+		
+		Hooks.callAll("Rideable.UnMount", pRider, pRidden, pFamiliar);
 	} 
 	
 	//Aditional Informations
@@ -286,18 +292,35 @@ class MountingManager {
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
 				//Prevents enemy riding if enabled
 					if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+						let vInDistance = true;
+						
 						if (game.settings.get(cModuleName, "BorderDistance")) {
-							return (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
 						}
 						else {
-							return (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
 						}
+						
+						if (!vInDistance) {
+							RideableUtils.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+						}
+						
+						return vInDistance;
 					}
 					else {
 						return true;
 					}
 				}
+				else {
+					RideableUtils.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+				}
 			}
+			else {
+				RideableUtils.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+			}
+		}
+		else {
+			//RideableUtils.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 		}
 		
 		return false; //default

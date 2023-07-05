@@ -1,3 +1,6 @@
+import { RideableCompUtils } from "./RideableCompUtils.js";
+import { cWallHeight } from "./RideableCompUtils.js";
+
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
 
@@ -24,9 +27,6 @@ class RideableUtils {
 	
 	//Identification
 	static isPf2e() {} //used for special Pf2e functions
-	
-	//Modules
-	static isactiveModule(pModule) {};
 	
 	//Token IDs
 	static TokensfromIDs (pIDs) {} //returns an array of Tokens belonging to the pIDs
@@ -57,6 +57,8 @@ class RideableUtils {
 	
 	static MaxRidingspace(pRidden) {} //returns the maximum amount of riders that can fit on pRidden (related to settings)
 	
+	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
+	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
 		
@@ -74,17 +76,7 @@ class RideableUtils {
 	//Identification	
 	static isPf2e() {
 		return game.system.id === cPf2eName;
-	}
-	
-	//Modules
-	static isactiveModule(pModule) {
-		if (game.modules.find(vModule => vModule.id == pModule)) {
-			return game.modules.find(vModule => vModule.id == pModule).active;
-		}
-		
-		return false;
-	};
-	
+	}	
 	
 	//Token IDs
 	static TokensfromIDs (pIDs) {
@@ -149,7 +141,7 @@ class RideableUtils {
 	
 	static TokenDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( (pTokenA.x-pTokenB.x)**2 + (pTokenA.y-pTokenB.y)**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			return Math.sqrt( ((pTokenA.x+pTokenA.w/2)-(pTokenB.x+pTokenB.w/2))**2 + ((pTokenA.y+pTokenA.h/2)-(pTokenB.y+pTokenB.h/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 		}
 		
 		return 0;
@@ -198,6 +190,15 @@ class RideableUtils {
 		}
 		else {
 			return Infinity;
+		}
+	} 
+	
+	static Ridingheight(pRidden) {
+		if (RideableCompUtils.isactiveModule(cWallHeight) && pRidden && game.settings.get(cModuleName, "useRiddenTokenHeight")) {
+			return RideableCompUtils.guessWHTokenHeight(pRidden)
+		}
+		else {
+			return game.settings.get(cModuleName, "RidingHeight");
 		}
 	} 
 	

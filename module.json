@@ -22,19 +22,21 @@
     },
     {
       "lang": "de",
-      "name": "deutsch",
+      "name": "Deutsch",
       "path": "lang/de.json",
       "flags": {}
     }
   ],
   "esmodules": [
+	"scripts/RideableCompUtils.js",
 	"scripts/RideableUtils.js",
 	"scripts/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",
 	"scripts/SocketHandler.js",
 	"scripts/MacroHooks.js",
-	"scripts/RideableSettings.js"
+	"scripts/RideableSettings.js",
+	"scripts/RideableCompatibility.js"
   ],
   "packs": [
 	{
