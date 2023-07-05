@@ -84,7 +84,11 @@
 			"UnMounting"				: "Von {pRiddenName} abgestiegen",
 			"MountingFamiliar"			: "Folgt Meister {pRiddenName}",
 			"UnMountingFamiliar"		: "Folgt Meister {pRiddenName} nicht mehr",
-			"PreventedRiderMove"		: "Reitet noch {pRiddenName}"
+			"PreventedRiderMove"		: "Reitet noch {pRiddenName}",
+			"RidingLoop"				: "{pRiddenName} zu reiten wäre komisch",
+			"NoPlace"					: "{pRiddenName} hat keinen Platz mehr",
+			"EnemyRiding"				: "{pRiddenName} ist mein Gegner",
+			"Toofaraway"				: "{pRiddenName} ist zu weit weg"
 		},	
 		
 		"RideableTag.str"							: "rideable"	

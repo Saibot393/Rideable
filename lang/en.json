@@ -84,7 +84,11 @@
 			"UnMounting"				: "Dismounted {pRiddenName}",
 			"MountingFamiliar"			: "Following master {pRiddenName}",
 			"UnMountingFamiliar"		: "Stopped following master {pRiddenName}",
-			"PreventedRiderMove"		: "Still riding {pRiddenName}"
+			"PreventedRiderMove"		: "Still riding {pRiddenName}",
+			"RidingLoop"				: "Riding {pRiddenName} would be awkward",
+			"NoPlace"					: "{pRiddenName} has no place left",
+			"EnemyRiding"				: "{pRiddenName} is my enemy",
+			"Toofaraway"				: "{pRiddenName} is too far away"
 		},	
 		
 		"RideableTag.str"							: "rideable"	
