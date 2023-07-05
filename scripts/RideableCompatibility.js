@@ -4,6 +4,7 @@ import { UpdateRidderTokens } from "./RidingScript.js";
 
 import { RideableCompUtils } from "./RideableCompUtils.js";
 import { cStairways, cTagger, cWallHeight } from "./RideableCompUtils.js";
+//			SW			TGG		WH
 
 //RideableCompatability will take care of compatibility with other modules in regards to calls, currently supported:
 
@@ -11,13 +12,17 @@ class RideableCompatability {
 	//DECLARATIONS
 	
 	//specific: stairways
-	static onStairwaysTeleport(pData) {} //called if stairways module is active and teleport is triggered
+	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
 	//specific: wall-heights
-	//IMPLEMENTATIONS
-	//basic
+	static onWHTokenupdate(pDocument, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
 	
-	//specific
+	//IMPLEMENTATIONS
+	
+	//specific: wall-heights
+	static onWHTokenupdate(pDocument, pchanges, pInfos) {
+		console.log(RideableCompUtils.guessWHTokenHeight(pDocument.object));
+	}
 }
 
 //Hook into other modules
@@ -27,6 +32,6 @@ Hooks.once("init", () => {
 	}
 	
 	if (RideableCompUtils.isactiveModule(cWallHeight)) {
-		console.log("jup");
+		Hooks.on("updateToken", (...args) => RideableCompatability.onWHTokenupdate(...args));
 	}
 });
