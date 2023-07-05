@@ -151,7 +151,6 @@ class Ridingmanager {
 			
 			if (cbetterRiderPositioning) {
 				let vRiderWidthSumm = 0;
-				let vlastRiderWidth = 0;
 				
 				for (let i = 0; i < vRiderTokenList.length; i++) {
 					vRiderWidthSumm = vRiderWidthSumm + vRiderTokenList[i].w;
@@ -161,17 +160,17 @@ class Ridingmanager {
 				if (vRiderWidthSumm > pRiddenToken.w) {
 					vbunchedRiders = true;
 					
-					vxoffset = 0;
+					vxoffset = -pRiddenToken.w/2 + vRiderTokenList[0].w/2;
 				
 					if (vRiderTokenList.length > 1) {
-						vxdelta = (pRiddenToken.w - vRiderTokenList[vRiderTokenList.length - 1].w)/(vRiderTokenList.length-1);
+						vxdelta = (pRiddenToken.w - (vRiderTokenList[vRiderTokenList.length - 1].w + vRiderTokenList[0].w)/2)/(vRiderTokenList.length-1);
 					}
 				} 
 				//if Riders dont have to be bunched
 				else {
 					vbunchedRiders = false;
 					
-					vxoffset = (pRiddenToken.w - vRiderWidthSumm)/2;
+					vxoffset = -vRiderWidthSumm/2 + vRiderTokenList[0].w/2;
 				
 					vxdelta = 0; //every Rider has a custom delta, set higher for Rider seperation
 				}
@@ -203,19 +202,19 @@ class Ridingmanager {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			//update riders position in x, y and z (only if not already on target position)		
 			let vTargetx = 0;
-			let vTargety = -pRiderTokenList[i].h/2;
+			let vTargety = 0;
 			
 			if (cbetterRiderPositioning) {
 				if (pbunchedRiders) {
-					vTargetx = -pUpdateDocument.object.w/2 + pxoffset + i*pxdelta;
+					vTargetx = pxoffset + i*pxdelta;
 				}
 				else {
-					if ((!pbunchedRiders) && (i > 0)) {
-						vTargetx = vprex + pRiderTokenList[i-1].w;
+					if (i > 0) {
+						vTargetx = vprex + (pRiderTokenList[i-1].w+pRiderTokenList[i].w)/2;
 						vprex = vTargetx;
 					}
 					else {
-						vTargetx = -pUpdateDocument.object.w/2 + pxoffset
+						vTargetx = pxoffset;
 						vprex = vTargetx;
 					}
 				}
@@ -229,32 +228,29 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {
-		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places
-			let vxoffset = pRiderTokenList[i].w/2;
-			let vyoffset = pRiderTokenList[i].h/2;
-			
+		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
 			let vTargetx = 0;
 			let vTargety = 0;
 			
 			switch (i) {
 				case 0: //tl
-					vTargetx = -pUpdateDocument.object.w/2 - vxoffset;
-					vTargety = -pUpdateDocument.object.h/2 - vyoffset;
+					vTargetx = -pUpdateDocument.object.w/2;
+					vTargety = -pUpdateDocument.object.h/2;
 					break;
 					
 				case 1: //tr
-					vTargetx = pUpdateDocument.object.w/2 - vxoffset;
-					vTargety = -pUpdateDocument.object.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.object.w/2;
+					vTargety = -pUpdateDocument.object.h/2;
 					break;
 					
 				case 2: //bl
-					vTargetx = -pUpdateDocument.object.w/2 - vxoffset;
-					vTargety = pUpdateDocument.object.h/2 - vyoffset;
+					vTargetx = -pUpdateDocument.object.w/2;
+					vTargety = pUpdateDocument.object.h/2;
 					break;
 					
 				case 3: //br
-					vTargetx = pUpdateDocument.object.w/2 - vxoffset;
-					vTargety = pUpdateDocument.object.h/2 - vyoffset;
+					vTargetx = pUpdateDocument.object.w/2;
+					vTargety = pUpdateDocument.object.h/2;
 					break;
 			}
 			
@@ -266,8 +262,8 @@ class Ridingmanager {
 		let vTargetx = pTargetx;
 		let vTargety = pTargety;
 		
-		vTargetx = pRiddenDocument.x + pRiddenDocument.object.w/2 + vTargetx;
-		vTargety = pRiddenDocument.y + pRiddenDocument.object.h/2 + vTargety;
+		vTargetx = pRiddenDocument.x + pRiddenDocument.object.w/2 - pRider.w/2 + vTargetx;
+		vTargety = pRiddenDocument.y + pRiddenDocument.object.h/2 - pRider.h/2 + vTargety;
 			
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
 			pRider.document.update({x: vTargetx, y: vTargety}, {animate : pAnimation, RidingMovement : true});
