@@ -12,6 +12,7 @@ Ridden tokens can themselfve ride other tokens.
 
 ### Settings:
 
+#### World:
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border: distance to change the way the distance for the above option is calculated
@@ -21,7 +22,8 @@ Ridden tokens can themselfve ride other tokens.
 - Mounts require "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
-- Message popups: to activate some pop ups on certain actions *(client side)*
+#### Client
+- Message popups: to activate some pop ups on certain actions
 
 ### Compatibility:
 
