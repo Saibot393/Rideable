@@ -34,7 +34,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
   - Additional setting "Use token height": to use the the ridden tokens height instead of the "Riding Height" setting
-  - If the above setting is activated the ridden tokens elevation will automatically should the ridden tokens height change
+  - If the above setting is activated the ridden tokens elevation will automatically be updated should the ridden tokens height change
 
 ### Languages:
 
