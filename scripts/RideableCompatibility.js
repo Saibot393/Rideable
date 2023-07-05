@@ -1,24 +1,32 @@
 import { RideableUtils } from "./RideableUtils.js";
 import { RideableFlags } from "./RideableFlags.js";
 import { UpdateRidderTokens } from "./RidingScript.js";
-import { RideableCompUtil } from "./RideableCompUtil.js";
 
-import { cStairwaysname, cTagger } from "./RideableCompUtil.js";
+import { RideableCompUtils } from "./RideableCompUtils.js";
+import { cStairways, cTagger, cWallHeight } from "./RideableCompUtils.js";
 
 //RideableCompatability will take care of compatibility with other modules in regards to calls, currently supported:
 
 class RideableCompatability {
 	//DECLARATIONS
+	
+	//specific: stairways
 	static onStairwaysTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
+	//specific: wall-heights
 	//IMPLEMENTATIONS
-	static onStairwaysTeleport(pData) {
-	}
+	//basic
+	
+	//specific
 }
 
 //Hook into other modules
-Hooks.once("ready", () => {
-	if (RideableUtils.isactiveModule(cStairwaysname)) {
+Hooks.once("init", () => {
+	if (RideableCompUtils.isactiveModule(cStairways)) {
 		//Hooks.on("StairwayTeleport", (...args) => RideableCompatability.onStairwaysTeleport(...args));
+	}
+	
+	if (RideableCompUtils.isactiveModule(cWallHeight)) {
+		console.log("jup");
 	}
 });

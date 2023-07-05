@@ -25,9 +25,6 @@ class RideableUtils {
 	//Identification
 	static isPf2e() {} //used for special Pf2e functions
 	
-	//Modules
-	static isactiveModule(pModule) {};
-	
 	//Token IDs
 	static TokensfromIDs (pIDs) {} //returns an array of Tokens belonging to the pIDs
 	
@@ -74,17 +71,7 @@ class RideableUtils {
 	//Identification	
 	static isPf2e() {
 		return game.system.id === cPf2eName;
-	}
-	
-	//Modules
-	static isactiveModule(pModule) {
-		if (game.modules.find(vModule => vModule.id == pModule)) {
-			return game.modules.find(vModule => vModule.id == pModule).active;
-		}
-		
-		return false;
-	};
-	
+	}	
 	
 	//Token IDs
 	static TokensfromIDs (pIDs) {

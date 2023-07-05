@@ -255,7 +255,7 @@ class MountingManager {
 			
 		}	
 		
-		Hooks.callAll("Rideable.mount", pRider, pRidden, pFamiliar);
+		Hooks.callAll("Rideable.Mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
@@ -277,7 +277,7 @@ class MountingManager {
 			}
 		}
 		
-		Hooks.callAll("Rideable.mount", pRider, pRidden, pFamiliar);
+		Hooks.callAll("Rideable.UnMount", pRider, pRidden, pFamiliar);
 	} 
 	
 	//Aditional Informations
