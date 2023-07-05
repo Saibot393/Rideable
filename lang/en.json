@@ -30,6 +30,11 @@
 					"moveridden"		: "Move ridden Token (if owned)"
 				}
 			},
+			
+			"RiderRotation" : {
+				"name" 					: "Link rotations",
+				"descrp"				: "Rotates alls riders if a ridden token is rotated (also works with \"Move ridden Token\" option)"				
+			},
 		
 			"RidingSystemEffects" : {
 				"name" 					: "Apply \"Mounted\" effect",

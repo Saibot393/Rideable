@@ -30,6 +30,11 @@
 					"moveridden"		: "Bewege gerittene Marke (wenn Besitzer)"
 				}
 			},
+			
+			"RiderRotation" : {
+				"name" 					: "Rotations Verbindung",
+				"descrp"				: "Rotiert alle reitenden Marken wenn die gerittene Marke rotiert wird (funktioniert auch mit der \"Bewege gerittene Marke\" option)"				
+			},
 		
 			"RidingSystemEffects" : {
 				"name" 					: "\"Reitend\" Effekt anwenden",
