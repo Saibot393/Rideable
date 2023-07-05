@@ -1,6 +1,7 @@
 //Module Names
 cStairwaysname = "Stairways";
 cTagger = "tagger";
+cWallHeight = "wall-height";
 
 export { cStairwaysname, cTagger }
 
