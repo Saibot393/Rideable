@@ -90,7 +90,7 @@ class Ridingmanager {
 									
 									let vztarget = vRidden.document.elevation;		
 									if (pchanges.hasOwnProperty("elevation")) {
-										vztarget = pchanges.elevation - game.settings.get(cModuleName, "RidingHeight") - RideableFlags.RiderHeight(pDocument.object);
+										vztarget = pchanges.elevation - RideableUtils.Ridingheight(vRidden) - RideableFlags.RiderHeight(pDocument.object);
 									}
 									
 									let vrotationtarget = vRidden.document.rotation;	
@@ -121,7 +121,6 @@ class Ridingmanager {
 	}
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
-		
 		if (priddenToken) {
 			if (RideableUtils.TokenisRideable(priddenToken) || pallFamiliars) {
 				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
@@ -190,7 +189,7 @@ class Ridingmanager {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			let vUpdateDocument = pUpdateDocument;
 			
-			let vTargetz = vUpdateDocument.elevation + game.settings.get(cModuleName, "RidingHeight") + RideableFlags.RiderHeight(pRiderTokenList[i]);
+			let vTargetz = vUpdateDocument.elevation + RideableUtils.Ridingheight(vUpdateDocument)/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.RiderHeight(pRiderTokenList[i]);
 				
 			if (pRiderTokenList[i].document.elevation != vTargetz) {
 				pRiderTokenList[i].document.update({elevation: vTargetz}, {RidingMovement : true});
@@ -286,7 +285,7 @@ class Ridingmanager {
 				}
 				else {
 					//reduce height by riding height
-					vTargetz = pRiderTokens[i].document.elevation - game.settings.get(cModuleName, "RidingHeight");
+					vTargetz = pRiderTokens[i].document.elevation - RideableUtils.Ridingheight();
 				} 
 
 				pRiderTokens[i].document.update({elevation: vTargetz}, {RidingMovement : true});

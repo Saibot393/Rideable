@@ -1,3 +1,6 @@
+import { RideableCompUtils } from "./RideableCompUtils.js";
+import { cWallHeight } from "./RideableCompUtils.js";
+
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
 
@@ -53,6 +56,8 @@ class RideableUtils {
 	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
 	
 	static MaxRidingspace(pRidden) {} //returns the maximum amount of riders that can fit on pRidden (related to settings)
+	
+	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -185,6 +190,15 @@ class RideableUtils {
 		}
 		else {
 			return Infinity;
+		}
+	} 
+	
+	static Ridingheight(pRidden) {
+		if (RideableCompUtils.isactiveModule(cWallHeight) && pRidden && game.settings.get(cModuleName, "useRiddenTokenHeight")) {
+			return RideableCompUtils.guessWHTokenHeight(pRidden)
+		}
+		else {
+			return game.settings.get(cModuleName, "RidingHeight");
 		}
 	} 
 	

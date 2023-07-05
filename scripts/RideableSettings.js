@@ -1,3 +1,4 @@
+import { RideableCompUtils, cWallHeight } from "./RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "./RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./MountingScript.js";
 
@@ -10,6 +11,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	config: true,
 	type: Number,
 	default: "5"
+  });
+  
+  game.settings.register(cModuleName, "useRiddenTokenHeight", {
+	name: Translate("Settings.useRiddenTokenHeight.name"),
+	hint: Translate("Settings.useRiddenTokenHeight.descrp"),
+	scope: "world",
+	config: RideableCompUtils.isactiveModule(cWallHeight),
+	type: Boolean,
+	default: true
   });
 
   game.settings.register(cModuleName, "MountingDistance", {

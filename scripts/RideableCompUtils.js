@@ -17,7 +17,7 @@ class RideableCompUtils {
 	static TokenHasTag(pToken, pTag) {};//[Tagger] looks up Tags of pToken and returns true if tags contain pTag
 	
 	//specific: wall-heights
-	static guessWHTokenHeight(pToken) {} //guesses the Height the Wall-Height module assigns pToken
+	static guessWHTokenHeight(pToken, pWithElevation = false) {} //guesses the Height the Wall-Height module assigns pToken
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -30,33 +30,45 @@ class RideableCompUtils {
 	};
 	
 	//specific: wall-heights
-	static guessWHTokenHeight(pToken) {
-		if (RideableCompUtils.isactiveModule(cWallHeight)) { //based on wall-height>utils>getTokenLOSheight (no longer ugly)
+	static guessWHTokenHeight(pToken, pWithElevation = false) {
+		if (RideableCompUtils.isactiveModule(cWallHeight)) { //based on wall-height(by theripper93)>utils>getTokenLOSheight (reorderd and polished)
 			if (pToken) {
+				let vTokenDocument = pToken;
+				
+				//allow either a token document or a token
+				if (pToken.document) {
+					vTokenDocument = pToken.document;
+				}
+				
 				let vHeightdiff;
 				let vdivider = 1;
 				  
 				if (RideableCompUtils.isactiveModule(cLevelsautocover)) {
-					if (pToken.document.flags[cLevelsautocover]) {
-						if (pToken.document.flags[cLevelsautocover].ducking) {
+					if (vTokenDocument.flags[cLevelsautocover]) {
+						if (vTokenDocument.flags[cLevelsautocover].ducking) {
 							vdivider = 3;
 						}
 					}
 				}
 				  
-				if (pToken.document.flags[cWallHeight] && pToken.document.flags[cWallHeight].tokenHeight) {
-					vHeightdiff = pToken.document.flags[cWallHeight].tokenHeight;
+				if (vTokenDocument.flags[cWallHeight] && vTokenDocument.flags[cWallHeight].tokenHeight) {
+					vHeightdiff = vTokenDocument.flags[cWallHeight].tokenHeight;
 				}
 				else {
 					if (game.settings.get(cWallHeight, 'autoLOSHeight')) {
-						vHeightdiff = canvas.scene.dimensions.distance * Math.max(pToken.document.width, pToken.document.height) * ((Math.abs(pToken.document.texture.scaleX) + Math.abs(pToken.document.texture.scaleY)) / 2);
+						vHeightdiff = canvas.scene.dimensions.distance * Math.max(vTokenDocument.width, vTokenDocument.height) * ((Math.abs(vTokenDocument.texture.scaleX) + Math.abs(vTokenDocument.texture.scaleY)) / 2);
 					}
 					else {
 						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');
 					}
 				}
-
-				return pToken.document.elevation + vHeightdiff / vdivider;
+				
+				if (pWithElevation) {
+					return vTokenDocument.elevation + vHeightdiff / vdivider;
+				}
+				else {
+					return vHeightdiff / vdivider;
+				}
 			}
 		}
 	}

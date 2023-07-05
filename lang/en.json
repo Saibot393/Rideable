@@ -2,8 +2,13 @@
 	"Rideable" : {
 		"Settings" : {
 			"RidingHeight" : {
-				"name" 					: "Riding Height",
+				"name" 					: "Riding height",
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
+			},
+			
+			"useRiddenTokenHeight" : {
+				"name" 					: "Use token height",
+				"descrp"				: "Uses a the riddens token height (added through the \"Wall-Height\" module) instead of the set \"Riding height\""
 			},
 			
 			"MountingDistance" : {

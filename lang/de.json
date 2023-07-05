@@ -6,6 +6,11 @@
 				"descrp"				: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)"
 			},
 			
+			"useRiddenTokenHeight" : {
+				"name" 					: "Nutze Marken höhe",
+				"descrp"				: "Nutzt die Höhe der gerittenen Marke (hinzugefügt durch das Modul \"Wall-Height\") anstatt der eingestellten \"Reithöhe\""
+			},
+			
 			"MountingDistance" : {
 				"name" 					: "Reitdistanz",
 				"descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)"
