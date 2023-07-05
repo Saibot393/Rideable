@@ -1,4 +1,4 @@
-## v1.5.0 (unreleased)
+## v1.5.0
 - improved localization file structure
 - fixed bug concerning the border-to-border mounting distance
 - fixed bug concerning the positioning of the ridden token when "Move ridden on rider movement" is used
