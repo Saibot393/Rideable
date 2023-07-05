@@ -23,6 +23,8 @@ class Ridingmanager {
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
+	static placeTokenrotated(pRiddenDocument, pRider, pTargetx, pTargety, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
+	
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
 	//IMPLEMENTATIONS
@@ -201,10 +203,11 @@ class Ridingmanager {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			//update riders position in x, y and z (only if not already on target position)		
 			let vTargetx = 0;
+			let vTargety = -pRiderTokenList[i].h/2;
 			
 			if (cbetterRiderPositioning) {
 				if (pbunchedRiders) {
-					vTargetx = pUpdateDocument.x + pxoffset + i*pxdelta;
+					vTargetx = -pUpdateDocument.object.w/2 + pxoffset + i*pxdelta;
 				}
 				else {
 					if ((!pbunchedRiders) && (i > 0)) {
@@ -212,20 +215,16 @@ class Ridingmanager {
 						vprex = vTargetx;
 					}
 					else {
-						vTargetx = pUpdateDocument.x + pxoffset
+						vTargetx = -pUpdateDocument.object.w/2 + pxoffset
 						vprex = vTargetx;
 					}
 				}
 			}
 			else {
-				vTargetx = pUpdateDocument.x + pUpdateDocument.object.w/2 - pRiderTokenList[i].w/2;
+				vTargetx = -pRiderTokenList[i].w/2;
 			}
 			
-			let vTargety = pUpdateDocument.y + pUpdateDocument.object.h/2 - pRiderTokenList[i].h/2;
-			
-			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
-				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {animate : pAnimations, RidingMovement : true});
-			}		
+			Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
 		}
 	}
 	
@@ -239,29 +238,39 @@ class Ridingmanager {
 			
 			switch (i) {
 				case 0: //tl
-					vTargetx = pUpdateDocument.x - vxoffset;
-					vTargety = pUpdateDocument.y - vyoffset;
+					vTargetx = -pUpdateDocument.object.w/2 - vxoffset;
+					vTargety = -pUpdateDocument.object.h/2 - vyoffset;
 					break;
 					
 				case 1: //tr
-					vTargetx = pUpdateDocument.x + pUpdateDocument.object.w - vxoffset;
-					vTargety = pUpdateDocument.y - vyoffset;
+					vTargetx = pUpdateDocument.object.w/2 - vxoffset;
+					vTargety = -pUpdateDocument.object.h/2 - vyoffset;
 					break;
 					
 				case 2: //bl
-					vTargetx = pUpdateDocument.x - vxoffset;
-					vTargety = pUpdateDocument.y + pUpdateDocument.object.h - vyoffset;
+					vTargetx = -pUpdateDocument.object.w/2 - vxoffset;
+					vTargety = pUpdateDocument.object.h/2 - vyoffset;
 					break;
 					
 				case 3: //br
-					vTargetx = pUpdateDocument.x + pUpdateDocument.object.w - vxoffset;
-					vTargety = pUpdateDocument.y + pUpdateDocument.object.h - vyoffset;
+					vTargetx = pUpdateDocument.object.w/2 - vxoffset;
+					vTargety = pUpdateDocument.object.h/2 - vyoffset;
 					break;
 			}
 			
-			if ((pRiderTokenList[i].x != vTargetx) || (pRiderTokenList[i].y != vTargety)) {
-				pRiderTokenList[i].document.update({x: vTargetx, y: vTargety}, {animate : pAnimations, RidingMovement : true});
-			}		
+			Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
+		}
+	}
+	
+	static placeTokenrotated(pRiddenDocument, pRider, pTargetx, pTargety, pAnimation = true) {	
+		let vTargetx = pTargetx;
+		let vTargety = pTargety;
+		
+		vTargetx = pRiddenDocument.x + pRiddenDocument.object.w/2 + vTargetx;
+		vTargety = pRiddenDocument.y + pRiddenDocument.object.h/2 + vTargety;
+			
+		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
+			pRider.document.update({x: vTargetx, y: vTargety}, {animate : pAnimation, RidingMovement : true});
 		}
 	}
 	
