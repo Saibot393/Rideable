@@ -53,6 +53,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "RiderMovement-disallow"
   });
   
+  game.settings.register(cModuleName, "RiderRotation", {
+	name: Translate("Settings.RiderRotation.name"),
+	hint: Translate("Settings.RiderRotation.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });   
+  
   game.settings.register(cModuleName, "RidingSystemEffects", {
 	name: Translate("Settings.RidingSystemEffects.name"),
 	hint: Translate("Settings.RidingSystemEffects.descrp"),
