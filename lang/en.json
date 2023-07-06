@@ -16,6 +16,11 @@
 				"descrp"				: "The maximum distance a token can have to its mounting target (-1 for an unlimited range)"
 			},
 			
+			"UseArmReachDistance": {
+				"name" 					: "Use \"Arms Reach\" distance",
+				"descrp"				: "Uses the distance set in the \"Arms Reach\" for the mounting distance"	
+			},
+			
 			"BorderDistance" : {
 				"name" 					: "Border to border distance",
 				"descrp"				: "If the mounting distance should be calculated from the tokens border instead of the middle point (only works correctly for circular/square tokens)"

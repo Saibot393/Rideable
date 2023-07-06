@@ -1,4 +1,4 @@
-import { RideableCompUtils } from "./RideableCompUtils.js";
+import { RideableCompUtils, cArmReach } from "./RideableCompUtils.js";
 import { cWallHeight } from "./RideableCompUtils.js";
 
 //CONSTANTS
@@ -56,6 +56,8 @@ class RideableUtils {
 	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
 	
 	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
+	
+	static MountingDistance(pRider, pRidden) {} //returns the maximal Riding distance for pRider to mount pRidden
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -183,6 +185,20 @@ class RideableUtils {
 			return game.settings.get(cModuleName, "RidingHeight");
 		}
 	} 
+	
+	static MountingDistance(pRider, pRidden) {
+		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+			return game.settings.get(cArmReach, "globalInteractionMeasurement");
+		}
+		else {
+			if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+				return game.settings.get(cModuleName, "MountingDistance");
+			}
+			else {
+				return Infinity;
+			}
+		}
+	}
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {

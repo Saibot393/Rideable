@@ -16,6 +16,11 @@
 				"descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)"
 			},
 			
+			"UseArmReachDistance": {
+				"name" 					: "Nutze \"Arms Reach\"-Distanz",
+				"descrp"				: "Nutzt die Distanz welche in \"Arms Reach\" eingestellt ist für die Reitdistanz"	
+			},
+			
 			"BorderDistance" : {
 				"name" 					: "Rand zu Rand Distanz",
 				"descrp"				: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)"

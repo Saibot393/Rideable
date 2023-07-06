@@ -292,14 +292,14 @@ class MountingManager {
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
 				//Prevents enemy riding if enabled
-					if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+					if (RideableUtils.MountingDistance(pRider, pRidden) >= 0) {
 						let vInDistance = true;
 						
 						if (game.settings.get(cModuleName, "BorderDistance")) {
-							vInDistance = (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (RideableUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						else {
-							vInDistance = (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (RideableUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						
 						if (!vInDistance) {

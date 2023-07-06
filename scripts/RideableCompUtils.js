@@ -3,21 +3,26 @@ const cStairways = "Stairways";
 const cTagger = "tagger";
 const cWallHeight = "wall-height";
 const cLevelsautocover = "levelsautocover";
+const cArmReach = "foundryvtt-arms-reach";
 
-export { cStairways, cTagger, cWallHeight }
+export { cStairways, cTagger, cWallHeight, cArmReach }
 
+//should only be imported by RideableUtils and Rideablesettings
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
-
+//-WallHeight
 class RideableCompUtils {
 	//DECLARATIONS
 	//basic
-	static isactiveModule(pModule) {}; //determines if module with id pModule is active
+	static isactiveModule(pModule) {} //determines if module with id pModule is active
 	
 	//specific: Tagger
-	static TokenHasTag(pToken, pTag) {};//[Tagger] looks up Tags of pToken and returns true if tags contain pTag
+	static TokenHasTag(pToken, pTag) {}//[Tagger] looks up Tags of pToken and returns true if tags contain pTag
+	
+	//specific: Foundry ArmsReach
+	static ARReachDistance() {} //[ArmsReach] gives the current arms reach distance
 	
 	//specific: wall-heights
-	static WHTokenHeight(pToken, pWithElevation = false) {} //guesses the Height the Wall-Height module assigns pToken
+	static WHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -28,6 +33,13 @@ class RideableCompUtils {
 		
 		return false;
 	};
+	
+	//specific: Foundry ArmsReach
+	static ARReachDistance() {
+		if (RideableCompUtils.isactiveModule(cArmReach)) {
+			return game.settings.get(cArmReach, "globalInteractionMeasurement")
+		}
+	}
 	
 	//specific: wall-heights
 	static WHTokenHeight(pToken, pWithElevation = false) {
