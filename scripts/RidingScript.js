@@ -146,7 +146,7 @@ class Ridingmanager {
 			}
 		}
 		
-		if (vRiderTokenList) {
+		if (vRiderTokenList.length) {
 			//calculate positioning data for riders (in y direction)
 			let vbunchedRiders = true;
 			let vxoffset = 0;
@@ -180,7 +180,7 @@ class Ridingmanager {
 			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
 		}
 		
-		if (vRiderFamiliarList) {
+		if (vRiderFamiliarList.length) {
 			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
 		}
 	}
