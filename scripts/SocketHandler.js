@@ -1,5 +1,5 @@
 import { MountRequest, UnMountRequest } from "./MountingScript.js";
-import { PopUpRequest } from "./RideableUtils.js";
+import { PopUpRequest } from "./RideablePopups.js";
 
 //execute functions with pData depending on pFunction
 function organiseSocketEvents({pFunction, pData} = {}) {

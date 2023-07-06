@@ -1,5 +1,6 @@
 import { RideableFlags } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { RideablePopups } from "./RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 
 var vSystemRidingEffect = null; //saves the systems mounting effects (if any)
@@ -237,10 +238,10 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pFamiliar) {
-					RideableUtils.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 			}
 			
@@ -263,10 +264,10 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pFamiliar) {
-					RideableUtils.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 			}
 			
@@ -302,7 +303,7 @@ class MountingManager {
 						}
 						
 						if (!vInDistance) {
-							RideableUtils.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+							RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
 						}
 						
 						return vInDistance;
@@ -312,15 +313,15 @@ class MountingManager {
 					}
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
 				}
 			}
 			else {
-				RideableUtils.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 			}
 		}
 		else {
-			//RideableUtils.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+			//RideablePopups.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 		}
 		
 		return false; //default

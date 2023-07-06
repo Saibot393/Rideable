@@ -30,6 +30,7 @@
   "esmodules": [
 	"scripts/RideableCompUtils.js",
 	"scripts/RideableUtils.js",
+	"scripts/RideablePopups.js",
 	"scripts/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",

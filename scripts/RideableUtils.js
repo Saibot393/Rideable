@@ -19,7 +19,7 @@ const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-export { cPf2eName, cModuleName };
+export { cPf2eName, cModuleName, cPopUpID };
 
 //a few support functions
 class RideableUtils {
@@ -62,13 +62,6 @@ class RideableUtils {
 		
 	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
 	
-	//Additional UI
-	
-	static TextPopUp(pToken, pText, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
-	
-	static TextPopUpID(pToken, pID, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
-	
-	static PopUpRequest(pTokenID, pText) {} //handels socket calls for pop up texts
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -237,36 +230,6 @@ class RideableUtils {
 			}
 		}
 	}
-
-	//Additional UI
-	
-	static TextPopUp(pToken, pText, pWords = {}) {
-		let vText = pText;
-		
-		for (let vWord of Object.keys(pWords)) {
-			vText = vText.replace("{" + vWord + "}", pWords[vWord]);
-		}
-		
-		//other clients pop up
-		game.socket.emit("module.Rideable", {pFunction : "PopUpRequest", pData : {pTokenID: pToken.id, pText : vText}});
-		
-		//own pop up
-		RideableUtils.PopUpRequest(pToken.id, vText);
-	}
-	
-	static TextPopUpID(pToken, pID, pWords = {}) {
-		RideableUtils.TextPopUp(pToken, Translate(cPopUpID+"."+pID), pWords)
-	} 
-	
-	static PopUpRequest(pTokenID, pText) {
-		if (game.settings.get(cModuleName, "MessagePopUps")) {
-			let vToken = RideableUtils.TokenfromID(pTokenID);
-			
-			if (vToken) {
-				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
-			}
-		}
-	}
 }
 
 //for easy translation
@@ -275,6 +238,4 @@ function Translate(pName){
 }
 
 //Export RideableFlags Class
-function PopUpRequest({ pTokenID, pText } = {}) { return RideableUtils.PopUpRequest(pTokenID, pText); }
-
-export{ RideableUtils, PopUpRequest, Translate };
+export{ RideableUtils, Translate };
