@@ -29,6 +29,7 @@
   ],
   "esmodules": [
 	"scripts/RideableCompUtils.js",
+	"scripts/RideableTokenSettings.js",
 	"scripts/RideableUtils.js",
 	"scripts/RideableFlags.js",
 	"scripts/RidingScript.js",
