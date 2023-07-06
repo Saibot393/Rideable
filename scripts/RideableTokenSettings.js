@@ -1,3 +1,6 @@
+import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
+import { RideableFlags , cMaxRiderF} from "./RideableFlags.js";
+
 class RideableTokenSettings {
 	//DECLARATIONS
 	static TestSetting(vApp, vHTML, vData) {} //just for test purposes
@@ -7,25 +10,15 @@ class RideableTokenSettings {
 	//IMPLEMENTATIONS
 	
 	static TestSetting(vApp, vHTML, vData) {
-		console.log(vApp);
-		console.log(vData);
-		/*
-		const vvalue = 4;
-		const vlabel = "test";
-		const vhint = "i am a hint";
-		const vunits = "units";
-		let vnewHTML = `
-			<div class="form-group slim">
-				<label>${vlabel} <span class="units">(${vunits})</span></label>
-			<div class="form-fields">
-			<input type="number" step="any" name="flags.Rideable.test" placeholder="units" value="${vvalue}">
-			</div>
-				<p class="hint">${vhint}</p>         
-			</div>
-		`;
-		vHTML.find('input[name="lockRotation"]').closest(".form-group").before(vnewHTML);
-		*/
-		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : "test"});
+		//Max Riders Setting
+		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
+													vhint : Translate("TokenSettings.MaxRiders.descrp"), 
+													vtype : "number", 
+													vvalue : RideableFlags.MaxRiders(vApp.Token), 
+													vflagname : cMaxRiderF
+													});
+													
+		
 		vApp.setPosition({ height: "auto" });
 	} 
 	
@@ -45,6 +38,11 @@ class RideableTokenSettings {
 			vvalue = pInfos.vvalue;
 		}
 		
+		let vflagname = "";	
+		if (pInfos.hasOwnProperty("vflagname")) {
+			vflagname = pInfos.vflagname;
+		}
+		
 		let vhint = "";	
 		if (pInfos.hasOwnProperty("vhint")) {
 			vhint = pInfos.vhint;
@@ -53,19 +51,19 @@ class RideableTokenSettings {
 		let vunits = "";	
 		if (pInfos.hasOwnProperty("vunits")) {
 			vunits = pInfos.vunits;
-		}
+		} //<span class="units">(${vunits})</span> in label
 		
 		let vnewHTML = `
 			<div class="form-group slim">
-				<label>${vlabel} <span class="units">(${vunits})</span></label>
+				<label>${vlabel}</label>
 			<div class="form-fields">
-			<input type=${vtype} step="any" name="flags.Rideable.test" placeholder="units" value="${vvalue}">
+			<input type=${vtype} step="any" name="flags.${cModuleName}.${vflagname}" value="${vvalue}">
 			</div>
 				<p class="hint">${vhint}</p>         
 			</div>
 		`;
 		
-		pHTML.find('input[name="lockRotation"]').closest(".form-group").before(vnewHTML);
+		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vnewHTML);
 	}
 }
 

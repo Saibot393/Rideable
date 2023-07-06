@@ -6,11 +6,13 @@ const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Rid
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
 const caddRiderHeightF = "addRiderHeightFlag"; //Flag name for additional Riderheight set ONYL by a GM
+const cMaxRiderF = "MaxRiderFlag"; //Flag name for the maximum amount of Riders on this Token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags)
 class RideableFlags {
@@ -18,37 +20,42 @@ class RideableFlags {
 	
 	//flag handling	
 	//flag information
-	static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
+		//basic Rider Info
+		static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
+		
+		static isRiddenID (pRiddenTokenID) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
+		
+		static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
+		
+		static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
+		
+		static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
+		
+		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
+		
+		static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
+		
+		static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
+		
+		static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
+		
+		static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
+		
+		static RiddenToken(pRider) {} //returns the token pRider rides (if any)
 	
-	static isRiddenID (pRiddenTokenID) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
+		//Rider count infos
+		static RiderCount(pRidden) {} //returns the number of Riders
+		
+		static MaxRiders(pRidden) {} //returns the maximum amount of riders this pRidden can can take
+		
+		static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
+		
+		static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
+		
+		static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
 	
-	static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
-	
-	static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
-	
-	static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
-	
-	static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
-	
-	static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
-	
-	static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
-	
-	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
-	
-	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
-	
-	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
-	
-	static RiderCount(pRidden) {} //returns the number of Riders
-	
-	static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
-	
-	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
-	
-	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
-	
-	static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
+		//Riding height info
+		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
@@ -113,7 +120,6 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			//make sure all riders still exist
 			if (vFlag.RidersFlag) {
 				return vFlag.RidersFlag;
 			}
@@ -127,13 +133,24 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			//make sure all riders still exist
 			if (vFlag.addRiderHeightFlag) {
 				return vFlag.addRiderHeightFlag;
 			}
 		}
 		
 		return 0; //default if anything fails
+	}
+	
+	static #MaxRiderFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (typeof vFlag.MaxRiderFlag == "number") {
+				return vFlag.MaxRiderFlag;
+			}
+		}
+		
+		return game.settings.get(cModuleName, "MaxRiders"); //default if anything fails
 	}
 	
 	static #setRidingFlag (pToken, pContent) {
@@ -276,12 +293,21 @@ class RideableFlags {
 		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
 	}
 	
+	static MaxRiders(pRidden) {
+		if (RideableFlags.#MaxRiderFlag(pRidden) >= 0) {
+			return RideableFlags.#MaxRiderFlag(pRidden);
+		}
+		else {
+			return Infinity;
+		}
+	}
+	
 	static TokenRidingSpaceleft(pToken, pFamiliars = false) {
 		if (pFamiliars) {
 			return (cCornermaxRiders - RideableFlags.RiderFamiliarCount(pToken));
 		}
 		else {
-			return (RideableUtils.MaxRidingspace(pToken) - RideableFlags.RiderCount(pToken));
+			return (RideableFlags.MaxRiders(pToken) - RideableFlags.RiderCount(pToken));
 		}
 	} 
 	

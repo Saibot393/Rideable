@@ -96,6 +96,13 @@
 			"Toofaraway"				: "{pRiddenName} is too far away"
 		},	
 		
+		"TokenSettings" : {
+			"MaxRiders" : {
+				"name"					: "Maximum riders",
+				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
+			}
+		},
+		
 		"RideableTag.str"							: "rideable"	
 	}
 }

@@ -96,6 +96,13 @@
 			"Toofaraway"				: "{pRiddenName} ist zu weit weg"
 		},	
 		
+		"TokenSettings" : {
+			"MaxRiders" : {
+				"name"					: "Maximale Reiter",
+				"descrp"				: "Überschreibt die Welt Einstellung für diese Marke (-1 für unlimitiert, leer lassen um zur Welt Einstellung zurück zu kehren)"
+			}
+		},
+		
 		"RideableTag.str"							: "rideable"	
 	}
 }

@@ -29,7 +29,6 @@
   ],
   "esmodules": [
 	"scripts/RideableCompUtils.js",
-	"scripts/RideableTokenSettings.js",
 	"scripts/RideableUtils.js",
 	"scripts/RideableFlags.js",
 	"scripts/RidingScript.js",
@@ -37,6 +36,7 @@
 	"scripts/SocketHandler.js",
 	"scripts/MacroHooks.js",
 	"scripts/RideableSettings.js",
+	"scripts/RideableTokenSettings.js",
 	"scripts/RideableCompatibility.js"
   ],
   "packs": [
