@@ -10,12 +10,22 @@ class RideableTokenSettings {
 	//IMPLEMENTATIONS
 	
 	static TestSetting(vApp, vHTML, vData) {
+		//create settings in reversed order
+		
 		//Max Riders Setting
 		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
 													vhint : Translate("TokenSettings.MaxRiders.descrp"), 
 													vtype : "number", 
 													vvalue : RideableFlags.MaxRiders(vApp.Token), 
 													vflagname : cMaxRiderF
+													});
+													
+		//Token is Rideable Setting
+		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.TokenisRideable.name"), 
+													vhint : Translate("TokenSettings.TokenisRideable.descrp"), 
+													vtype : "checkbox", 
+													vvalue : true//, 
+													//vflagname : cMaxRiderF
 													});
 													
 		
