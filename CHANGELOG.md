@@ -1,5 +1,7 @@
 ## v1.6.0
 - added on-token setting for maximum riders (overrides world setting)
+- added support for arms reach
+  - added an option which overrides the mounting distance with the arms-reach distance
 
 ## v1.5.0
 - improved localization file structure
