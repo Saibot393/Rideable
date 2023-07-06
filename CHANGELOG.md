@@ -1,3 +1,6 @@
+## v1.6.0
+- added on-token setting for maximum riders (overrides world setting)
+
 ## v1.5.0
 - improved localization file structure
 - fixed bug concerning the border-to-border mounting distance
