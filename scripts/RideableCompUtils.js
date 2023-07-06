@@ -17,7 +17,7 @@ class RideableCompUtils {
 	static TokenHasTag(pToken, pTag) {};//[Tagger] looks up Tags of pToken and returns true if tags contain pTag
 	
 	//specific: wall-heights
-	static guessWHTokenHeight(pToken, pWithElevation = false) {} //guesses the Height the Wall-Height module assigns pToken
+	static WHTokenHeight(pToken, pWithElevation = false) {} //guesses the Height the Wall-Height module assigns pToken
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -30,46 +30,24 @@ class RideableCompUtils {
 	};
 	
 	//specific: wall-heights
-	static guessWHTokenHeight(pToken, pWithElevation = false) {
-		if (RideableCompUtils.isactiveModule(cWallHeight)) { //based on wall-height(by theripper93)>utils>getTokenLOSheight (reorderd and polished)
-			if (pToken) {
-				let vTokenDocument = pToken;
+	static WHTokenHeight(pToken, pWithElevation = false) {
+		if (RideableCompUtils.isactiveModule(cWallHeight)) {
+			let vToken = pToken;
 				
-				//allow either a token document or a token
-				if (pToken.document) {
-					vTokenDocument = pToken.document;
-				}
-				
-				let vHeightdiff;
-				let vdivider = 1;
-				  
-				if (RideableCompUtils.isactiveModule(cLevelsautocover)) {
-					if (vTokenDocument.flags[cLevelsautocover]) {
-						if (vTokenDocument.flags[cLevelsautocover].ducking) {
-							vdivider = 3;
-						}
-					}
-				}
-				  
-				if (vTokenDocument.flags[cWallHeight] && vTokenDocument.flags[cWallHeight].tokenHeight) {
-					vHeightdiff = vTokenDocument.flags[cWallHeight].tokenHeight;
-				}
-				else {
-					if (game.settings.get(cWallHeight, 'autoLOSHeight')) {
-						vHeightdiff = canvas.scene.dimensions.distance * Math.max(vTokenDocument.width, vTokenDocument.height) * ((Math.abs(vTokenDocument.texture.scaleX) + Math.abs(vTokenDocument.texture.scaleY)) / 2);
-					}
-					else {
-						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');
-					}
-				}
-				
-				if (pWithElevation) {
-					return vTokenDocument.elevation + vHeightdiff / vdivider;
-				}
-				else {
-					return vHeightdiff / vdivider;
-				}
+			//allow either a token document or a token
+			if (pToken.object) {
+				vToken = pToken.object;
 			}
+			
+			if (pWithElevation) {
+				return vToken.losHeight
+			}
+			else {
+				return vToken.losHeight - vToken.document.elevation;
+			}
+		}
+		else {
+			return 0;
 		}
 	}
 }
