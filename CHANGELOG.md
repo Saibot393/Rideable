@@ -2,7 +2,10 @@
 - added on-token setting for maximum riders (overrides world setting)
 - added support for arms reach
   - added an option which overrides the mounting distance with the arms-reach distance
-
+    
+## v1.5.1
+- fixed a bug that appeared when only a familiar was riding a token
+  
 ## v1.5.0
 - improved localization file structure
 - fixed bug concerning the border-to-border mounting distance
