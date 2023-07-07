@@ -74,8 +74,6 @@ class RideableCompUtils {
 	}
 	
 	static TokenwithpreviousID(pID, pScene) {
-		//let a = pScene.tokens.map(vDocument => vDocument.object).map(vtoken => vtoken.document.flags);	
-		//console.log(a.filter(va => va.Rideable).map(va => va.Rideable));
 		let vTokens = pScene.tokens.map(vDocument => vDocument.object);
 		
 		console.log(vTokens);
