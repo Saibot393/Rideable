@@ -1,4 +1,4 @@
-import { RideableUtils } from "./RideableUtils.js";
+import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideableFlags } from "./RideableFlags.js";
 import { UpdateRidderTokens } from "./RidingScript.js";
 
@@ -14,12 +14,63 @@ class RideableCompatability {
 	//specific: stairways
 	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
+	static SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
+	
 	//specific: wall-heights
 	static onWHTokenupdate(pDocument, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
 	//IMPLEMENTATIONS
 	
-	//specific: wall-heights
+	//specific: stairways
+	static async onSWTeleport(pData) {
+		if (pData.sourceSceneId != pData.targetSceneId) {
+			//only necessary for cross scene teleport
+			
+			let vTokenIDs = pData.selectedTokenIds;
+			let vTarget = pData.targetData;
+			
+			let vSourceScene = game.scenes.get(pData.sourceSceneId);
+			let vTargetScene = game.scenes.get(pData.targetSceneId);
+			
+			if (vSourceScene && vTargetScene) {
+				for (let i = 0; i < vTokenIDs.length; i++) {
+					let vToken = RideableCompUtils.TokenwithpreviousID(vTokenIDs[i]);
+					
+					if (vToken) {
+						if (RideableFlags.isRidden(vToken)) {
+							
+							await RideableCompatability.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), vSourceScene, vTargetScene, vTarget);
+							
+							RideableCompUtils.UpdateRiderIDs(vToken);
+							
+							RideableCompUtils.UpdatePreviousID(vToken);
+						}
+					}
+				}
+			}
+		}
+	}
 	
+	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) { 
+		//adapted from staiways(by SWW13)>teleport.js>handleTeleportRequestGM:
+		if (pSourceScene && pTargetScene) {
+			// get selected tokens data
+			const selectedTokensData = foundry.utils.duplicate(pSourceScene.tokens.filter((vToken) => pTokenIDs.includes(vToken.id)))
+
+			// set new token positions
+			for (let vToken of selectedTokensData) {
+				vToken.x = Math.roundFast(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
+				vToken.y = Math.roundFast(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
+			}
+
+			// remove selected tokens from current scene (keep remaining tokens)
+			await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, pTokenIDs, { isUndo: true });
+
+			// add selected tokens to target scene
+			await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
+		}
+	} 
+	
+	//specific: wall-heights	
 	static onWHTokenupdate(pDocument, pchanges, pInfos) {
 		if (game.user.isGM) {
 			let vToken = pDocument.object;
@@ -43,7 +94,12 @@ class RideableCompatability {
 //Hook into other modules
 Hooks.once("init", () => {
 	if (RideableCompUtils.isactiveModule(cStairways)) {
-		//Hooks.on("StairwayTeleport", (...args) => RideableCompatability.onStairwaysTeleport(...args));
+		Hooks.on("StairwayTeleport", (...args) => RideableCompatability.onSWTeleport(...args));
+		
+		Hooks.on(cModuleName + "." + "Mount", (pRider, pRidden) => {
+																	RideableCompUtils.UpdatePreviousID(pRider)
+																	RideableCompUtils.UpdatePreviousID(pRidden)
+																	}); //so after Teleport Token can still be found through the old id
 	}
 	
 	if (RideableCompUtils.isactiveModule(cWallHeight)) {

@@ -132,6 +132,7 @@ class Ridingmanager {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		
+		//Take care of ridr height
 		Ridingmanager.placeRiderHeight(pUpdateDocument, pRiderTokenList);
 		
 		if (game.settings.get(cModuleName, "FamiliarRiding")) { 

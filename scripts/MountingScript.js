@@ -39,7 +39,7 @@ class MountingManager {
 	
 	static MountRequest(pTargetID, pselectedTokensID, pFamiliar = false) {} //Request GM user to execute MountSelectedGM with given parameters
 	
-	static UnMountSelectedGM(pselectedTokens) {} //remove all riding flags concerning pselectedTokens
+	static UnMountSelectedGM(pselectedTokens, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
 	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
 	
@@ -147,7 +147,7 @@ class MountingManager {
 		return;
 	}
 	
-	static UnMountSelectedGM(pselectedTokens) {
+	static UnMountSelectedGM(pselectedTokens, pRemoveRiddenreference = true) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
 			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));//.filter(vToken => RideableFlags.isRider(vToken));
@@ -157,7 +157,7 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			RideableFlags.stopRiding(vRiderTokens);
+			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
 			
@@ -256,7 +256,7 @@ class MountingManager {
 			
 		}	
 		
-		Hooks.callAll("Rideable.Mount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
@@ -278,7 +278,7 @@ class MountingManager {
 			}
 		}
 		
-		Hooks.callAll("Rideable.UnMount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pFamiliar);
 	} 
 	
 	//Aditional Informations
@@ -338,7 +338,7 @@ class MountingManager {
 				}*/
 				
 				if (RideableFlags.isRidden(pToken)) {
-					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken)));
+					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken)), false);
 				}
 				
 				if (RideableFlags.isRider(pToken)) {

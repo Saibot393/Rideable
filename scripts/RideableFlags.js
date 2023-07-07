@@ -14,7 +14,7 @@ const cCornermaxRiders = 4; //4 corners
 export {cCornermaxRiders};
 export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF}
 
-//handels all reading and writing of flags (other scripts should not touch Rideable Flags)
+//handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
 	//DECLARATIONS
 	
@@ -60,11 +60,13 @@ class RideableFlags {
 	//flag setting
 	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
+	static cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
+	
+	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
 	static recheckRiding (pRiderTokens) {} //rechecks to see of Ridden Token still exists
 	
-	static stopRiding(pRidingTokens) {} //tries to remove pRidingToken from all Riders Flags
+	static stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
@@ -329,6 +331,7 @@ class RideableFlags {
 			let vValidTokens = pRiderTokens.filter(vToken => !this.isRider(vToken) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
 			if (this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
+				console.log("new riders set");
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
@@ -342,13 +345,21 @@ class RideableFlags {
 		}
 	}
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens) {
+	static cleanRiderIDs (pRiddenToken) {
+		//will only keep ids for which a token exists that has the Rider flag
+		console.log(this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
+		this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
+	} 
+	
+	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => this.isRiddenby(pRiddenToken, vToken)); //only Tokens riding pRiddenToken can be removed
 			
-			let vnewRiderIDs = this.#RidersFlag(pRiddenToken).filter(vID => !(RideableUtils.IDsfromTokens(vValidTokens).includes(vID)));
-			
-			this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
+			if (pRemoveRiddenreference) {
+				let vnewRiderIDs = this.#RidersFlag(pRiddenToken).filter(vID => !(RideableUtils.IDsfromTokens(vValidTokens).includes(vID)));
+				
+				this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
+			}
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
@@ -366,7 +377,7 @@ class RideableFlags {
 		}
 	}
 	
-	static stopRiding (pRidingTokens) {
+	static stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
 		if (pRidingTokens) {
 			for (let i = 0; i < pRidingTokens.length; i++) {
 				if (pRidingTokens[i]) {
@@ -376,7 +387,7 @@ class RideableFlags {
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {
-							this.removeRiderTokens(vRiddenTokens[j], pRidingTokens);
+							this.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
 						}
 					}
 					else {
