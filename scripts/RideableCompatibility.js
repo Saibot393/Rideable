@@ -14,7 +14,7 @@ class RideableCompatibility {
 	//specific: stairways
 	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
-	static onRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {} //called if Rideable Teleports Tokens
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {} //called if Rideable Teleports Tokens
 	
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //Organises the teleport of all Riders of pTokenID
 	
@@ -27,16 +27,18 @@ class RideableCompatibility {
 	//specific: stairways
 	static onSWTeleport(pData) {
 		if (game.user.isGM) {
-			RideableCompatibility.onRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id);
+			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id);
 		}
 		else {
-			game.socket.emit("module.Rideable", {pFunction : "onRideableTeleport", pData : {pTokenIDs :  pData.selectedTokenIds, pSourceScene : game.scenes.get(pData.sourceSceneId), pTargetScene : vTargetScene = game.scenes.get(pData.targetSceneId), pSWTarget : pData.targetData}});
+			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id}});
 		}
 	}
 	
-	static onRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {
 		if (game.user.isGM) {
+			console.log("Check0.1");
 			if (pSourceSceneID != pTargetSceneID) {
+				console.log("Check0.2");
 				//only necessary for cross scene teleport
 				
 				let vSourceScene = game.scenes.get(pSourceSceneID);
@@ -44,6 +46,7 @@ class RideableCompatibility {
 				
 				let vTarget = vTargetScene.stairways.get(pSWTargetID);	
 				
+				console.log("Check0.3");
 				RideableCompatibility.OrganiseTeleport(pTokenIDs, vSourceScene, vTargetScene, vTarget);
 			}
 		}
@@ -51,18 +54,27 @@ class RideableCompatibility {
 		
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
 		if (game.user.isGM) {
+			console.log("check1");
 			if (pSourceScene != pTargetScene) {
+				console.log("check2");
 				if (pSourceScene && pTargetScene) {
+					console.log("check3");
 					for (let i = 0; i < pTokenIDs.length; i++) {
-						let vToken = RideableCompUtils.TokenwithpreviousID(pTokenIDs[i]);
+						console.log("check4");
+						let vToken = RideableCompUtils.TokenwithpreviousID(pTokenIDs[i], pTargetScene);
+						
+						console.log(vToken);
 						if (vToken) {
+							console.log("check5");
 							if (RideableFlags.isRidden(vToken)) {
 								//teleport
 								await RideableCompatibility.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget);
+								
 								//update flags
 								await RideableCompUtils.UpdateRiderIDs(vToken);
 								
 								RideableCompUtils.UpdatePreviousID(vToken);
+								
 								//order riders
 								let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
 						
@@ -78,20 +90,25 @@ class RideableCompatibility {
 	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) { 
 		//adapted from staiways(by SWW13)>teleport.js>handleTeleportRequestGM:
 		if (pSourceScene && pTargetScene) {
+			//filter pTokenIDs
+			let vValidTokenIDs = await pTokenIDs.filter(vID => pSourceScene.tokens.get(vID));
+			
 			// get selected tokens data
-			const selectedTokensData = foundry.utils.duplicate(pSourceScene.tokens.filter((vToken) => pTokenIDs.includes(vToken.id)))
+			if (vValidTokenIDs.length) {
+				const selectedTokensData = foundry.utils.duplicate(pSourceScene.tokens.filter((vToken) => vValidTokenIDs.includes(vToken.id)))
 
-			// set new token positions
-			for (let vToken of selectedTokensData) {
-				vToken.x = Math.round(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
-				vToken.y = Math.round(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
+				// set new token positions
+				for (let vToken of selectedTokensData) {
+					vToken.x = Math.round(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
+					vToken.y = Math.round(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
+				}
+
+
+				// remove selected tokens from current scene (keep remaining tokens)
+				await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, vValidTokenIDs, { isUndo: true });
+				// add selected tokens to target scene
+				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
 			}
-
-			// remove selected tokens from current scene (keep remaining tokens)
-			await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, pTokenIDs, { isUndo: true });
-
-			// add selected tokens to target scene
-			await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
 		}
 		
 		//RideableCompatibility.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
@@ -118,7 +135,11 @@ class RideableCompatibility {
 	
 }
 
-export { RideableCompatibility };
+
+//exports
+function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID } = {}) { return RideableCompatibility.RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID); }
+
+export { RequestRideableTeleport };
 
 //Hook into other modules
 Hooks.once("init", () => {

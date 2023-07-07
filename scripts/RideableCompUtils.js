@@ -29,7 +29,7 @@ class RideableCompUtils {
 	
 	static PreviousID(pToken) {} //gives the previous ID
 	
-	static TokenwithpreviousID(pID) {} //gives the token in the current scene which has the previous id pID (if any)
+	static TokenwithpreviousID(pID, pScene) {} //gives the token in pScene which has the previous id pID (if any)
 	
 	static UpdateRiderIDs(pRidden) {} //tries to fiend the current riders in the currrent scene based on their previous ids
 	
@@ -61,11 +61,29 @@ class RideableCompUtils {
 	}
 	
 	static PreviousID(pToken) {
-		return pToken.document.getFlag(cModuleName, cPreviousIDF);
+		if (pToken) {
+			if (pToken.document) {
+				if (pToken.document.flags.Rideable) {
+					if (pToken.document.flags.Rideable.PreviousIDFlag) {
+						return pToken.document.flags.Rideable.PreviousIDFlag;
+					}
+				}
+			}
+		}
+		return "";
 	}
 	
-	static TokenwithpreviousID(pID) {
-		return canvas.tokens.placeables.find(vToken => RideableCompUtils.PreviousID(vToken) == pID);
+	static TokenwithpreviousID(pID, pScene) {
+		//let a = pScene.tokens.map(vDocument => vDocument.object).map(vtoken => vtoken.document.flags);	
+		//console.log(a.filter(va => va.Rideable).map(va => va.Rideable));
+		let vTokens = pScene.tokens.map(vDocument => vDocument.object);
+		
+		console.log(vTokens);
+		
+		console.log(pID);
+		console.log(vTokens.map(vToken => RideableCompUtils.PreviousID(vToken)));
+		
+		return vTokens.filter(vToken => RideableCompUtils.PreviousID(vToken) == pID)[0];
 	}
 	
 	static async UpdateRiderIDs(pRidden) {
