@@ -1,6 +1,11 @@
 {
 	"Rideable" : {
 		"Settings" : {
+			"defaultRideable" : {
+				"name" 					: "Tokens rideable by default",
+				"descrp"				: "Wether all tokens should be rideable by default (can be changed for each token in the token settings)"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Riding height",
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
@@ -52,8 +57,8 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "Mounts require \"Rideable\" trait",
-				"descrp"				: "Allows only tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
+				"name" 					: "Tokens with \"Rideable\" trait can be ridden",
+				"descrp"				: "Allows tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
 			"FamiliarRiding" : {
@@ -105,6 +110,11 @@
 			"MaxRiders" : {
 				"name"					: "Maximum riders",
 				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
+			},
+			
+			"TokenisRideable" : {
+				"name"					: "Token is Rideable",
+				"descrp"				: "Overrides the global default setting"
 			}
 		},
 		

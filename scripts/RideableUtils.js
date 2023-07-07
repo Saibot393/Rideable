@@ -43,7 +43,7 @@ class RideableUtils {
 	static hoveredToken() {} //get first hovered token
 	
 	//Additional Token Infos
-	static TokenisRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
+	static TokenissettingRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
 	
 	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens (related to settings)
 	
@@ -108,20 +108,19 @@ class RideableUtils {
 	}
 		
 	//Additional Token Infos
-	static TokenisRideable(pToken) {
+	static TokenissettingRideable(pToken) {
 		if (pToken) {
-			switch (game.system.id) {
-				case cPf2eName:
-					if (game.settings.get(cModuleName, "RideableTag")) {
-						if (pToken.actor.system.traits) {				
-							return pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag));
+			if (game.settings.get(cModuleName, "RideableTag")) {
+				switch (game.system.id) {
+					case cPf2eName:
+						if (pToken.actor.system.traits) {						
+							return Boolean(pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag)));
 						}
-					}
-					return true;
-					
-					break;
-				default:
-					return true;
+						
+						break;
+					default:
+						return false;
+				}
 			}
 		}
 		

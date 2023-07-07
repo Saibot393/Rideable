@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
-import { RideableFlags , cMaxRiderF} from "./RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF} from "./RideableFlags.js";
 
 class RideableTokenSettings {
 	//DECLARATIONS
@@ -13,10 +13,11 @@ class RideableTokenSettings {
 		//create settings in reversed order
 		
 		//Max Riders Setting
+		console.log((vApp.token));
 		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
 													vhint : Translate("TokenSettings.MaxRiders.descrp"), 
 													vtype : "number", 
-													vvalue : RideableFlags.MaxRiders(vApp.Token), 
+													vvalue : RideableFlags.MaxRiders(vApp.token), 
 													vflagname : cMaxRiderF
 													});
 													
@@ -24,12 +25,13 @@ class RideableTokenSettings {
 		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.TokenisRideable.name"), 
 													vhint : Translate("TokenSettings.TokenisRideable.descrp"), 
 													vtype : "checkbox", 
-													vvalue : true//, 
-													//vflagname : cMaxRiderF
+													vvalue : RideableFlags.TokenissetRideable(vApp.token),
+													vflagname : cissetRideableF
 													});
 													
 		
 		vApp.setPosition({ height: "auto" });
+		
 	} 
 	
 	static AddHTMLOption(pHTML, pInfos) {
@@ -67,7 +69,24 @@ class RideableTokenSettings {
 			<div class="form-group slim">
 				<label>${vlabel}</label>
 			<div class="form-fields">
-			<input type=${vtype} step="any" name="flags.${cModuleName}.${vflagname}" value="${vvalue}">
+		`;
+		
+		switch (vtype){
+			case "number":
+				vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}" value="${vvalue}">`;
+				break;
+				
+			case "checkbox":
+				if (vvalue) {
+					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}" checked>`;
+				}
+				else {
+					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}">`;
+				}
+				break;
+		}
+			
+		vnewHTML = vnewHTML + `
 			</div>
 				<p class="hint">${vhint}</p>         
 			</div>

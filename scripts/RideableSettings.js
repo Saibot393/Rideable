@@ -4,6 +4,15 @@ import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./Mountin
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
+   game.settings.register(cModuleName, "defaultRideable", {
+	name: Translate("Settings.defaultRideable.name"),
+	hint: Translate("Settings.defaultRideable.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: true
+  }); 
+  
   game.settings.register(cModuleName, "RidingHeight", {
 	name: Translate("Settings.RidingHeight.name"),
 	hint: Translate("Settings.RidingHeight.descrp"),

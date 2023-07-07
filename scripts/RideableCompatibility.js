@@ -143,6 +143,7 @@ export { RequestRideableTeleport };
 
 //Hook into other modules
 Hooks.once("init", () => {
+	/*
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
 		
@@ -153,6 +154,7 @@ Hooks.once("init", () => {
 																	RideableCompUtils.UpdatePreviousID(pRidden)
 																	}); //so after Teleport Token can still be found through the old id
 	}
+	*/
 	
 	if (RideableCompUtils.isactiveModule(cWallHeight)) {
 		Hooks.on("updateToken", (...args) => RideableCompatibility.onWHTokenupdate(...args));
