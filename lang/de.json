@@ -57,7 +57,7 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "Marken mit der \"Rideable\" Eigenschaft können geritten werden",
+				"name" 					: "\"Rideable\" Eigenschaft",
 				"descrp"				: "Erlaube es Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			

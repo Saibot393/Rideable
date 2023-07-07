@@ -57,7 +57,7 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "Tokens with \"Rideable\" trait can be ridden",
+				"name" 					: "\"Rideable\" trait",
 				"descrp"				: "Allows tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
