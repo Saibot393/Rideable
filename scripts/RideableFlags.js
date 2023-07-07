@@ -58,9 +58,9 @@ class RideableFlags {
 		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
 	
-	static cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
+	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
 	
 	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
@@ -175,10 +175,10 @@ class RideableFlags {
 		return false;
 	} 
 	
-	static #setRidersFlag (pToken, pContent) {
+	static async #setRidersFlag (pToken, pContent) {
 	//sets content of addRiderHeight Flag (must number)
 		if ((pToken) && (Array.isArray(pContent))) {
-			pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
+			await pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
 			
 			return true;
 		}
@@ -326,12 +326,11 @@ class RideableFlags {
 	}
 	
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => !this.isRider(vToken) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
-			if (this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
-				console.log("new riders set");
+			if (await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
@@ -345,10 +344,9 @@ class RideableFlags {
 		}
 	}
 	
-	static cleanRiderIDs (pRiddenToken) {
+	static async cleanRiderIDs (pRiddenToken) {
 		//will only keep ids for which a token exists that has the Rider flag
-		console.log(this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
-		this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
+		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
 	} 
 	
 	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {

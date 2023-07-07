@@ -12,9 +12,9 @@ class RideableCompatability {
 	//DECLARATIONS
 	
 	//specific: stairways
-	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
+	static async onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
-	static SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
+	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
 	
 	//specific: wall-heights
 	static onWHTokenupdate(pDocument, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
@@ -37,12 +37,16 @@ class RideableCompatability {
 					
 					if (vToken) {
 						if (RideableFlags.isRidden(vToken)) {
-							
+							//teleport
 							await RideableCompatability.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), vSourceScene, vTargetScene, vTarget);
-							
-							RideableCompUtils.UpdateRiderIDs(vToken);
+							//update flags
+							await RideableCompUtils.UpdateRiderIDs(vToken);
 							
 							RideableCompUtils.UpdatePreviousID(vToken);
+							//order riders
+							let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
+					
+							UpdateRidderTokens(vToken, vRiderTokenList, false, false);
 						}
 					}
 				}
@@ -58,8 +62,8 @@ class RideableCompatability {
 
 			// set new token positions
 			for (let vToken of selectedTokensData) {
-				vToken.x = Math.roundFast(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
-				vToken.y = Math.roundFast(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
+				vToken.x = Math.round(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
+				vToken.y = Math.round(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
 			}
 
 			// remove selected tokens from current scene (keep remaining tokens)

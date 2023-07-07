@@ -68,15 +68,15 @@ class RideableCompUtils {
 		return canvas.tokens.placeables.find(vToken => RideableCompUtils.PreviousID(vToken) == pID);
 	}
 	
-	static UpdateRiderIDs(pRidden) {
+	static async UpdateRiderIDs(pRidden) {
 		let vPreviousRiderIDs = RideableFlags.RiderTokenIDs(pRidden);
 		
-		let vNewRiders = canvas.tokens.placeables.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
+		let vNewRiders = await canvas.tokens.placeables.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
 		
-		RideableFlags.cleanRiderIDs(pRidden);
+		await RideableFlags.cleanRiderIDs(pRidden);
 		
 		for (let i = 0; i < vNewRiders.length; i++) {
-			RideableFlags.addRiderTokens(pRidden, [vNewRiders[i]], RideableFlags.isFamiliarRider(vNewRiders[i]) );
+			await RideableFlags.addRiderTokens(pRidden, [vNewRiders[i]], RideableFlags.isFamiliarRider(vNewRiders[i]) );
 			
 			RideableCompUtils.UpdatePreviousID(vNewRiders[i]);
 		}
