@@ -40,7 +40,11 @@ class RideableCompatability {
 	}
 	
 	static onRideableTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
-		
+		if (pSourceScene != pTargetScene) {
+			//only necessary for cross scene teleport
+			
+			RideableCompatability.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
+		}
 	} 	
 		
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
@@ -86,6 +90,8 @@ class RideableCompatability {
 			// add selected tokens to target scene
 			await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
 		}
+		
+		Hooks.callAll(cModuleName + "." + "Teleport", pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
 	} 
 	
 	//specific: wall-heights	
@@ -113,6 +119,8 @@ class RideableCompatability {
 Hooks.once("init", () => {
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatability.onSWTeleport(...args));
+		
+		Hooks.on(cModuleName + "." + "Teleport", (...args) => RideableCompatability.onRideableTeleport(...args))
 		
 		Hooks.on(cModuleName + "." + "Mount", (pRider, pRidden) => {
 																	RideableCompUtils.UpdatePreviousID(pRider)
