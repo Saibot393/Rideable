@@ -12,7 +12,11 @@ class RideableCompatability {
 	//DECLARATIONS
 	
 	//specific: stairways
-	static async onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
+	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
+	
+	static onRideableTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //called if Rideable Teleports Tokens
+	
+	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //Organises the teleport of all Riders of pTokenID
 	
 	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
 	
@@ -21,7 +25,7 @@ class RideableCompatability {
 	//IMPLEMENTATIONS
 	
 	//specific: stairways
-	static async onSWTeleport(pData) {
+	static onSWTeleport(pData) {
 		if (pData.sourceSceneId != pData.targetSceneId) {
 			//only necessary for cross scene teleport
 			
@@ -31,14 +35,24 @@ class RideableCompatability {
 			let vSourceScene = game.scenes.get(pData.sourceSceneId);
 			let vTargetScene = game.scenes.get(pData.targetSceneId);
 			
-			if (vSourceScene && vTargetScene) {
-				for (let i = 0; i < vTokenIDs.length; i++) {
-					let vToken = RideableCompUtils.TokenwithpreviousID(vTokenIDs[i]);
+			RideableCompatability.OrganiseTeleport(vTokenIDs, vSourceScene, vTargetScene, vTarget);
+		}
+	}
+	
+	static onRideableTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
+		
+	} 	
+		
+	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
+		if (pSourceScene != pTargetScene) {
+			if (pSourceScene && pTargetScene) {
+				for (let i = 0; i < pTokenIDs.length; i++) {
+					let vToken = RideableCompUtils.TokenwithpreviousID(pTokenIDs[i]);
 					
 					if (vToken) {
 						if (RideableFlags.isRidden(vToken)) {
 							//teleport
-							await RideableCompatability.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), vSourceScene, vTargetScene, vTarget);
+							await RideableCompatability.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget);
 							//update flags
 							await RideableCompUtils.UpdateRiderIDs(vToken);
 							

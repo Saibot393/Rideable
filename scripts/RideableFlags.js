@@ -33,6 +33,8 @@ class RideableFlags {
 		
 		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
 		
+		static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
+		
 		static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
 		
 		static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
@@ -244,6 +246,10 @@ class RideableFlags {
 		return (this.isRider(pRiderToken) && this.#FamiliarRidingFlag(pRiderToken));
 	}
 	
+	static wasFamiliarRider (pRiderToken) {
+		return this.#FamiliarRidingFlag(pRiderToken);
+	} 
+	
 	static isRiderID (pRiderTokenID) {
 		let vToken = RideableUtils.TokenfromID(pRiderTokenID);
 		
@@ -334,10 +340,7 @@ class RideableFlags {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
-						
-						if (pFamiliarRiding) {
-							this.#setFamiliarRidingFlag(vValidTokens[i],true);
-						}
+						this.#setFamiliarRidingFlag(vValidTokens[i],pFamiliarRiding);
 					}
 				}				
 			}
@@ -361,7 +364,7 @@ class RideableFlags {
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
-				this.#setFamiliarRidingFlag(pRiderTokens[i], false);
+				//this.#setFamiliarRidingFlag(pRiderTokens[i], false);
 				this.#setaddRiderHeight(pRiderTokens[i], 0);
 			}
 		}
@@ -390,7 +393,7 @@ class RideableFlags {
 					}
 					else {
 						this.#setRidingFlag(vRidingToken, false);
-						this.#setFamiliarRidingFlag(vRidingToken, false);
+						//this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}
 			}

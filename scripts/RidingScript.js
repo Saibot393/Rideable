@@ -122,9 +122,7 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		if (priddenToken) {
-			if (RideableUtils.TokenisRideable(priddenToken) || pallFamiliars) {
-				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
-			}
+			Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
 		}
 	} 
 	
@@ -297,8 +295,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false, pAnimations = true) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars, pAnimations);
+function UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations = true) {
+	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations);
 }
 function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
