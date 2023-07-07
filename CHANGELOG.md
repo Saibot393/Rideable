@@ -2,6 +2,10 @@
 - added on-token setting for maximum riders (overrides world setting)
 - added support for arms reach
   - added an option which overrides the mounting distance with the arms-reach distance
+- added global default rideable setting
+  - added on-token setting to override world rideable setting
+- added on-token setting for maximum riders to override world setting
+- for PF2e: changed name of "Rideable" trait setting to clarify that it is now only one optional way to make tokens rideable
     
 ## v1.5.1
 - fixed a bug that appeared when only a familiar was riding a token
