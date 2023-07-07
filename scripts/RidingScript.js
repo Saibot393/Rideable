@@ -1,5 +1,6 @@
 import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { RideablePopups } from "./RideablePopups.js";
 
 //CONSTANTS
 const cGradtoRad = Math.PI/180;
@@ -67,7 +68,7 @@ class Ridingmanager {
 							//suppress movement
 							vdeleteChanges = true;
 							
-							RideableUtils.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
+							RideablePopups.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
 						}
 						
 						if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
