@@ -57,7 +57,7 @@ class Ridingmanager {
 					let vRidden = RideableFlags.RiddenToken(vToken);
 					let vRiderLeft = true;
 					
-					if (RideableFlags.RiderscanMoveWithin(vRidden)) {
+					if (RideableFlags.RiderscanMoveWithin(vRidden) && !RideableFlags.isFamiliarRider(vToken)) {
 						let vNewPosition = GeometricUtils.NewCenterPosition(pDocument, pchanges);
 						
 						if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
