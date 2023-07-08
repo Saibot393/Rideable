@@ -67,20 +67,6 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: -1
   });
   
-  game.settings.register(cModuleName, "RiderMovement", {
-	name: Translate("Settings.RiderMovement.name"),
-	hint: Translate("Settings.RiderMovement.descrp"),
-	scope: "world",
-	config: true,
-	type: String,
-	choices: {
-		"RiderMovement-disallow": Translate("Settings.RiderMovement.options.disallow"),
-		"RiderMovement-dismount": Translate("Settings.RiderMovement.options.dismount"),
-		"RiderMovement-moveridden": Translate("Settings.RiderMovement.options.moveridden")
-	},
-	default: "RiderMovement-disallow"
-  });
-  
   game.settings.register(cModuleName, "RiderRotation", {
 	name: Translate("Settings.RiderRotation.name"),
 	hint: Translate("Settings.RiderRotation.descrp"),
@@ -125,6 +111,22 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: Boolean,
 	default: false
   });  
+  
+  //client settings
+  
+  game.settings.register(cModuleName, "RiderMovement", {
+	name: Translate("Settings.RiderMovement.name"),
+	hint: Translate("Settings.RiderMovement.descrp"),
+	scope: "client",
+	config: true,
+	type: String,
+	choices: {
+		"RiderMovement-disallow": Translate("Settings.RiderMovement.options.disallow"),
+		"RiderMovement-dismount": Translate("Settings.RiderMovement.options.dismount"),
+		"RiderMovement-moveridden": Translate("Settings.RiderMovement.options.moveridden")
+	},
+	default: "RiderMovement-disallow"
+  });
   
   game.settings.register(cModuleName, "MessagePopUps", {
 	name: Translate("Settings.MessagePopUps.name"),
@@ -174,4 +176,19 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
+});
+
+//Hooks
+Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
+	//add a few subtitles	
+	let vnewHTML;
+	//first world setting
+	vnewHTML = `<h3 class="border">${Translate("Title.WorldSettings")}</h3>`;
+	 
+	pHTML.find('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
+	
+	//first client setting
+	vnewHTML = `<h3 class="border">${Translate("Title.ClientSettings")}</h3>`;
+	 
+	pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
 });

@@ -8,6 +8,8 @@ const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of 
 const caddRiderHeightF = "addRiderHeightFlag"; //Flag name for additional Riderheight set ONYL by a GM
 const cMaxRiderF = "MaxRiderFlag"; //Flag name for the maximum amount of Riders on this Token
 const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or not a token is Rideable
+const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
+const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
 
 //limits
 const cCornermaxRiders = 4; //4 corners

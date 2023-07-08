@@ -19,6 +19,9 @@ const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
+const cTokenFormC = "TokenFormCircle";
+const cTokenFormR = "TokenFormRectangle";
+
 export { cPf2eName, cModuleName, cPopUpID };
 
 //a few support functions
