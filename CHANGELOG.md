@@ -5,6 +5,8 @@
 - added global default rideable setting
   - added on-token setting to override world rideable setting
 - for PF2e: changed name of "Rideable" trait setting to clarify that it is now only one optional way to make tokens rideable
+- Moved the "Rider movement" option to client settings
+- Added titles to settings 
     
 ## v1.5.1
 - fixed a bug that appeared when only a familiar was riding a token
