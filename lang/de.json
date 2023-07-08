@@ -1,5 +1,11 @@
 {
 	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "Welt Einstellungen (nur SL)",
+			"ClientSettings"			: "Nutzer Einstellungen"
+		},
+		
 		"Settings" : {
 			"defaultRideable" : {
 				"name" 					: "Marken standardmäßig reitbar",

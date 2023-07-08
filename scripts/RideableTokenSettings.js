@@ -10,12 +10,12 @@ class RideableTokenSettings {
 	//IMPLEMENTATIONS
 	
 	static TestSetting(pApp, pHTML, pData) {
-		//create settings in reversed order
-		
-		let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Title.Rideable")}</h3>`;
+		//create title (under which all settings are placed)
+		let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Titles.Rideable")}</h3>`;
 	 
 		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 		
+		//create settings in reversed order
 		//Max Riders Setting
 		console.log((pApp.token));
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 

@@ -182,13 +182,16 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
 	//add a few subtitles	
 	let vnewHTML;
-	//first world setting
-	vnewHTML = `<h3 class="border">${Translate("Title.WorldSettings")}</h3>`;
-	 
-	pHTML.find('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
 	
-	//first client setting
-	vnewHTML = `<h3 class="border">${Translate("Title.ClientSettings")}</h3>`;
-	 
-	pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
+	if (game.user.isGM) {
+		//first world setting
+		vnewHTML = `<h3 class="border">${Translate("Titles.WorldSettings")}</h3>`;
+		 
+		pHTML.find('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
+		
+		//first client setting
+		vnewHTML = `<h3 class="border">${Translate("Titles.ClientSettings")}</h3>`;
+		 
+		pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
+	}
 });

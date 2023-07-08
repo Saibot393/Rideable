@@ -1,5 +1,11 @@
 {
 	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "World settings (GM only)",
+			"ClientSettings"			: "Client settings"
+		},
+		
 		"Settings" : {
 			"defaultRideable" : {
 				"name" 					: "Tokens rideable by default",
