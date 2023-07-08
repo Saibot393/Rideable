@@ -34,7 +34,7 @@ class RideableCompUtils {
 	static UpdateRiderIDs(pRidden) {} //tries to fiend the current riders in the currrent scene based on their previous ids
 	
 	//specific: wall-heights
-	static WHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
+	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -99,20 +99,33 @@ class RideableCompUtils {
 	} 
 	
 	//specific: wall-heights
-	static WHTokenHeight(pToken, pWithElevation = false) {
-		if (RideableCompUtils.isactiveModule(cWallHeight)) {
-			let vToken = pToken;
-				
-			//allow either a token document or a token
-			if (pToken.object) {
-				vToken = pToken.object;
-			}
-			
-			if (pWithElevation) {
-				return vToken.losHeight
-			}
-			else {
-				return vToken.losHeight - vToken.document.elevation;
+	static guessWHTokenHeight(pToken, pWithElevation = false) {
+		if (RideableCompUtils.isactiveModule(cWallHeight)) {  //based on wall-height>utils>getTokenLOSheight (no longer ugly)
+			if (pToken) {
+				let vHeightdiff;
+				let vdivider = 1;
+				  
+				if (RideableCompUtils.isactiveModule(cLevelsautocover)) {
+					if (pToken.flags[cLevelsautocover]) {
+						if (pToken.flags[cLevelsautocover].ducking) {
+							vdivider = 3;
+						}
+					}
+				}
+				  
+				if (pToken.flags[cWallHeight] && pToken.flags[cWallHeight].tokenHeight) {
+					vHeightdiff = pToken.flags[cWallHeight].tokenHeight;
+				}
+				else {
+					if (game.settings.get(cWallHeight, 'autoLOSHeight')) {
+						vHeightdiff = canvas.scene.dimensions.distance * Math.max(pToken.width, pToken.height) * ((Math.abs(pToken.texture.scaleX) + Math.abs(pToken.texture.scaleY)) / 2);
+					}
+					else {
+						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');
+					}
+				}
+
+				return pToken.elevation + vHeightdiff / vdivider;
 			}
 		}
 		else {
