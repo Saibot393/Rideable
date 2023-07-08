@@ -64,8 +64,6 @@ class Ridingmanager {
 							vRiderLeft = false;
 							
 							//update relativ position of Rider
-							console.log(GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.document.rotation));
-							console.log(GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), 0));
 							RideableFlags.setRelativPosition(vToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.document.rotation));
 						}
 					}
@@ -80,7 +78,6 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		if (priddenToken) {
-			console.log(priddenToken.document.flags.Rideable);
 			Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
 		}
 	} 
