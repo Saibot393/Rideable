@@ -32,6 +32,7 @@ class RideablePopups {
 			let vToken = RideableUtils.TokenfromID(pTokenID);
 			
 			if (vToken) {
+				if (vToken.isOwner || !game.settings.get(cModuleName, "OnlyownedMessagePopUps"))
 				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
 			}
 		}

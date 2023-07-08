@@ -80,7 +80,12 @@
 			"MessagePopUps" : {
 				"name" 					: "Message popups",
 				"descrp"				: "Enables multible popups upon actions such as mounting or dismounting"				
-			}		
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Own message popups only",
+				"descrp"				: "Only shows the message pop ups from tokens you control"				
+			}
 		},
 		
 		"Keys" : {

@@ -80,6 +80,11 @@
 			"MessagePopUps" : {
 				"name" 					: "Pop-up Meldungen",
 				"descrp"				: "Aktiviert mehrere pop-up Meldungen bei aktionen wie dem Auf- oder Absteigen"				
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Nur eigene Pop-up Meldungen",
+				"descrp"				: "Zeigt nur die Pop-up Meldungen der Marken unter eigener Kontrolle"				
 			}		
 		},
 		

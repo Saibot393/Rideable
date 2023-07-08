@@ -137,6 +137,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+   game.settings.register(cModuleName, "OnlyownedMessagePopUps", {
+	name: Translate("Settings.OnlyownedMessagePopUps.name"),
+	hint: Translate("Settings.OnlyownedMessagePopUps.descrp"),
+	scope: "client",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   //Keys
   game.keybindings.register(cModuleName, "Mount", {
     name: Translate("Keys.Mount.name"),
