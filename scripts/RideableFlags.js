@@ -101,9 +101,9 @@ class RideableFlags {
 	static #RideableFlags (pToken) {	
 	//returns all Module Flags of pToken (if any) (can contain Riding and Riders Flags)
 		if (pToken) {
-			if (pToken.document) {
-				if (pToken.document.flags.hasOwnProperty(cModuleName)) {
-					return pToken.document.flags.Rideable;
+			if (pToken) {
+				if (pToken.flags.hasOwnProperty(cModuleName)) {
+					return pToken.flags.Rideable;
 				}
 			}
 			else if (pToken.flags.hasOwnProperty(cModuleName)) { //in case pToken is a document (necessary for token deletion)
@@ -228,8 +228,8 @@ class RideableFlags {
 	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
-		if ((pToken) && (pToken.document)) {
-			pToken.document.setFlag(cModule, cRidingF, Boolean(pContent));
+		if ((pToken) && (pToken)) {
+			pToken.setFlag(cModule, cRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -238,8 +238,8 @@ class RideableFlags {
 	
 	static #setFamiliarRidingFlag (pToken, pContent) {
 	//sets content of FamiliarRiddenFlag (must be boolean)
-		if ((pToken) && (pToken.document)) {
-			pToken.document.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
+		if ((pToken) && (pToken)) {
+			pToken.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -249,7 +249,7 @@ class RideableFlags {
 	static async #setRidersFlag (pToken, pContent) {
 	//sets content of addRiderHeight Flag (must number)
 		if ((pToken) && (Array.isArray(pContent))) {
-			await pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
+			await pToken.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
 			
 			return true;
 		}
@@ -259,7 +259,7 @@ class RideableFlags {
 	static #setaddRiderHeightFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be array of strings)
 		if ((pToken) && (typeof pContent === "number")) {
-			pToken.document.setFlag(cModule, caddRiderHeightF, pContent);
+			pToken.setFlag(cModule, caddRiderHeightF, pContent);
 			
 			return true;
 		}
@@ -269,7 +269,7 @@ class RideableFlags {
 	static #setRelativPositionFlag (pToken, pContent) {
 	//sets content of RelativPosition (must be array of two numbers)
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.document.setFlag(cModule, cRelativPositionF, pContent);
+			pToken.setFlag(cModule, cRelativPositionF, pContent);
 			
 			return true;
 		}
@@ -279,12 +279,12 @@ class RideableFlags {
 	static #resetFlags (pToken) {
 	//removes all Flags
 		if (pToken) {
-			pToken.document.unsetFlag(cModule, cRidingF);
-			pToken.document.unsetFlag(cModule, cFamiliarRidingF);
-			pToken.document.unsetFlag(cModule, cRidersF);
-			pToken.document.unsetFlag(cModule, caddRiderHeight);
-			pToken.document.unsetFlag(cModule, cMaxRiderF);
-			pToken.document.unsetFlag(cModule, cissetRideableF);
+			pToken.unsetFlag(cModule, cRidingF);
+			pToken.unsetFlag(cModule, cFamiliarRidingF);
+			pToken.unsetFlag(cModule, cRidersF);
+			pToken.unsetFlag(cModule, caddRiderHeight);
+			pToken.unsetFlag(cModule, cMaxRiderF);
+			pToken.unsetFlag(cModule, cissetRideableF);
 			
 			return true;
 		}
@@ -383,7 +383,7 @@ class RideableFlags {
 	}
 	
 	static RiddenToken(pRider) {
-		return pRider.scene.tokens.map(vDocument => vDocument.object).find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		return pRider.scene.tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 	}
 	
 	//additional infos
@@ -493,7 +493,7 @@ class RideableFlags {
 	static recheckRiding (pRiderTokens) {
 		if (pRiderTokens) {
 			for (let i = 0; i < pRiderTokens.length; i++) {
-				this.#setRidingFlag(pRiderTokens[i], Boolean(pRiderTokens[i].scene.tokens.map(vDocument => vDocument.object).find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i]))));
+				this.#setRidingFlag(pRiderTokens[i], Boolean(pRiderTokens[i].scene.tokens.find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i]))));
 			}
 		}
 	}
@@ -504,7 +504,7 @@ class RideableFlags {
 				if (pRidingTokens[i]) {
 					let vRidingToken = pRidingTokens[i];
 					
-					let vRiddenTokens = pRidingTokens[i].scene.tokens.map(vDocument => vDocument.object).filter(vToken => this.isRiddenby(vToken, vRidingToken));
+					let vRiddenTokens = pRidingTokens[i].scene.tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {

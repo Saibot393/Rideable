@@ -35,6 +35,10 @@ class GeometricUtils {
 	
 	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
 	
+	static insceneWidth(pToken) {} //returns the tokens width in its scene
+	
+	static insceneHeight(pToken) {} //returns the tokens width in its scene
+	
 	//advanced
 	static closestrelativBorderposition(pToken, pTokenForm, pDirection) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
 	
@@ -47,11 +51,11 @@ class GeometricUtils {
 	}
 	
 	static CenterPosition(pToken) {
-		return [pToken.x + pToken.w/2, pToken.y + pToken.h/2];
+		return [pToken.x + GeometricUtils.insceneWidth(pToken)/2, pToken.y + GeometricUtils.insceneHeight(pToken)/2];
 	} 
 	
 	static NewCenterPosition(pDocument, pChanges) {
-		let vPosition = [pDocument.object.w/2, pDocument.object.h/2];
+		let vPosition = [GeometricUtils.insceneWidth(pDocument)/2, GeometricUtils.insceneHeight(pDocument)/2];
 		
 		if (pChanges.hasOwnProperty("x")) {
 			vPosition[0] = vPosition[0] + pChanges.x;
@@ -106,7 +110,7 @@ class GeometricUtils {
 	
 	static TokenDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( ((pTokenA.x+pTokenA.w/2)-(pTokenB.x+pTokenB.w/2))**2 + ((pTokenA.y+pTokenA.h/2)-(pTokenB.y+pTokenB.h/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			return Math.sqrt( ((pTokenA.x+GeometricUtils.insceneWidth(pTokenA)/2)-(pTokenB.x+GeometricUtils.insceneWidth(pTokenB)/2))**2 + ((pTokenA.y+GeometricUtils.insceneHeight(pTokenA)/2)-(pTokenB.y+GeometricUtils.insceneHeight(pTokenB)/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 		}
 		
 		return 0;
@@ -114,7 +118,7 @@ class GeometricUtils {
 	
 	static TokenBorderDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
-			let vDistance = GeometricUtils.TokenDistance(pTokenA, pTokenB) - (Math.max((pTokenA.w+pTokenB.w), (pTokenA.h+pTokenB.h))/2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			let vDistance = GeometricUtils.TokenDistance(pTokenA, pTokenB) - (Math.max((GeometricUtils.insceneWidth(pTokenA)+GeometricUtils.insceneWidth(pTokenB)), (GeometricUtils.insceneHeight(pTokenA)+GeometricUtils.insceneHeight(pTokenB)))/2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 			
 			if (vDistance < 0) {
 				return 0;
@@ -127,6 +131,24 @@ class GeometricUtils {
 		return 0;
 	}
 	
+	static insceneWidth(pToken) {
+		if (pToken.object) {
+			return pToken.object.w;
+		}
+		else {
+			return pToken.width * pToken.scene.dimensions.size;
+		}
+	}
+	
+	static insceneHeight(pToken) {
+		if (pToken.object) {
+			return pToken.object.h;
+		}
+		else {
+			return pToken.height * pToken.scene.dimensions.size;
+		}
+	}
+	
 	//advanced
 	static closestBorderposition(pToken, pTokenForm, pDirection) {
 		//unrotate direction to calculate relative position
@@ -135,7 +157,7 @@ class GeometricUtils {
 		switch (pTokenForm) {
 			case cTokenFormCircle:
 				
-				return (GeometricUtils.scaleto(vDirection, Math.max(pToken.w, pToken.h)/2));
+				return (GeometricUtils.scaleto(vDirection, Math.max(GeometricUtils.insceneWidth(pToken), GeometricUtils.insceneHeight(pToken))/2));
 				
 				break;
 			
@@ -143,15 +165,15 @@ class GeometricUtils {
 				let vTarget = [0, 0];
 				
 				//calculate if position is on x or y border (x-Border : Left/Right, y-Border:Top/Bottom
-				let vxBorder = (Math.abs(vDirection[0]) / pToken.w > Math.abs(vDirection[1]) / pToken.h);
+				let vxBorder = (Math.abs(vDirection[0]) / GeometricUtils.insceneWidth(pToken) > Math.abs(vDirection[1]) / GeometricUtils.insceneHeight(pToken));
 				
 				if (vxBorder) {
-					vTarget[0] = Math.sign(vDirection[0]) * pToken.w/2;
+					vTarget[0] = Math.sign(vDirection[0]) * GeometricUtils.insceneWidth(pToken)/2;
 
 					vTarget[1] = vDirection[1]/vDirection[0] * vTarget[0];
 				}
 				else {
-					vTarget[1] = Math.sign(vDirection[1]) * pToken.h/2;
+					vTarget[1] = Math.sign(vDirection[1]) * GeometricUtils.insceneHeight(pToken)/2;
 					
 					vTarget[0] = vDirection[0]/vDirection[1] * vTarget[1];
 				}
@@ -169,7 +191,7 @@ class GeometricUtils {
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
-				return (GeometricUtils.Distance(GeometricUtils.CenterPosition(pToken), pPosition) <= Math.max(pToken.w, pToken.h)/2);
+				return (GeometricUtils.Distance(GeometricUtils.CenterPosition(pToken), pPosition) <= Math.max(GeometricUtils.insceneWidth(pToken), GeometricUtils.insceneHeight(pToken))/2);
 				
 				break;
 			
@@ -178,7 +200,7 @@ class GeometricUtils {
 				
 				vDifference = GeometricUtils.Rotated(vDifference, -pToken.document.rotation);
 				
-				return ((Math.abs(vDifference[0]) <= pToken.w/2) && (Math.abs(vDifference[1]) <= pToken.h/2));
+				return ((Math.abs(vDifference[0]) <= GeometricUtils.insceneWidth(pToken)/2) && (Math.abs(vDifference[1]) <= GeometricUtils.insceneHeight(pToken)/2));
 			
 				break;
 				

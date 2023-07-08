@@ -70,7 +70,7 @@ class RideableUtils {
 	//Token IDs
 	static TokensfromIDs (pIDs, pScene = null) {
 		if (pScene) {
-			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id)).map(vDocument => vDocument.object);
+			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id));
 		}
 		else {
 			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id));
@@ -96,7 +96,7 @@ class RideableUtils {
 			let vDocument = pScene.tokens.find(vDocument => vDocument.id === pID);
 			
 			if (vDocument) {
-				return vDocument.object;
+				return vDocument;
 			}
 			else {
 				return null;
@@ -110,15 +110,25 @@ class RideableUtils {
 	
 	//Token Controls
 	static selectedTokens() {
-		return canvas.tokens.controlled;
+		return canvas.tokens.controlled.map(pToken => pToken.document);
 	}
 	
 	static targetedToken() {
-		return canvas.tokens.placeables.find(velement => velement.id === game.user.targets.ids[0]);
+		if (game.user.targets.ids.length) {
+			return canvas.tokens.placeables.find(velement => velement.id === game.user.targets.ids[0]).document;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	static hoveredToken() {
-		return canvas.tokens.hover;
+		if (canvas.tokens.hover) {
+			return canvas.tokens.hover.document;
+		}
+		else {
+			return null;
+		}
 	}
 		
 	//Additional Token Infos
@@ -161,7 +171,7 @@ class RideableUtils {
 	
 	static areEnemies(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
-			return ((pTokenA.document.disposition * pTokenB.document.disposition) < 0)
+			return ((pTokenA.disposition * pTokenB.disposition) < 0)
 		}
 		
 		return false;
