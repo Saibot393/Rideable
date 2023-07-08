@@ -21,7 +21,7 @@ class RideableTokenSettings {
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
 													vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
 													vtype : "checkbox", 
-													vvalue : RideableFlags.RiderscanMoveWithing(pApp.token), 
+													vvalue : RideableFlags.RiderscanMoveWithin(pApp.token), 
 													vflagname : cInsideMovementF
 													});
 													

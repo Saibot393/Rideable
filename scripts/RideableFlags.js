@@ -57,7 +57,7 @@ class RideableFlags {
 		//additional infos
 		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
 		
-		static RiderscanMoveWithing(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
+		static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
 		
 		//relativ Position handling
 		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -391,7 +391,7 @@ class RideableFlags {
 		return(this.#TokenFormFlag(pToken));
 	}
 	
-	static RiderscanMoveWithing(pRidden) {
+	static RiderscanMoveWithin(pRidden) {
 		return(this.#InsideMovementFlag(pRidden));
 	}
 	

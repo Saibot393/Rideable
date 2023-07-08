@@ -1,4 +1,5 @@
 import { RideableFlags } from "./RideableFlags.js";
+import { GeometricUtils } from "./GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideablePopups } from "./RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
@@ -296,10 +297,10 @@ class MountingManager {
 						let vInDistance = true;
 						
 						if (game.settings.get(cModuleName, "BorderDistance")) {
-							vInDistance = (RideableUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
+							vInDistance = (GeometricUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						else {
-							vInDistance = (RideableUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
+							vInDistance = (GeometricUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						
 						if (!vInDistance) {
