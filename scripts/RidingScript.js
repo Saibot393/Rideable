@@ -168,7 +168,7 @@ class Ridingmanager {
 				vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
 			}
 		}
-		
+    
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
 			Ridingmanager.planRelativRiderTokens(pRiddenToken, pUpdateDocument, vRiderTokenList, pAnimations);
 		}
