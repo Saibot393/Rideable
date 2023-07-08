@@ -84,7 +84,7 @@
 			
 			"OnlyownedMessagePopUps" : {
 				"name" 					: "Own message popups only",
-				"descrp"				: "Only shows the message pop ups from tokens you control"				
+				"descrp"				: "Only shows the message popups from tokens you control"				
 			}
 		},
 		
