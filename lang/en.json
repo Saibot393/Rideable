@@ -1,6 +1,17 @@
 {
 	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "World settings (GM only)",
+			"ClientSettings"			: "Client settings"
+		},
+		
 		"Settings" : {
+			"defaultRideable" : {
+				"name" 					: "Tokens rideable by default",
+				"descrp"				: "Wether all tokens should be rideable by default (can be changed for each token in the token settings)"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Riding height",
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
@@ -14,6 +25,11 @@
 			"MountingDistance" : {
 				"name" 					: "Mounting distance",
 				"descrp"				: "The maximum distance a token can have to its mounting target (-1 for an unlimited range)"
+			},
+			
+			"UseArmReachDistance": {
+				"name" 					: "Use \"Arms Reach\" distance",
+				"descrp"				: "Uses the distance set in the \"Arms Reach\" for the mounting distance"	
 			},
 			
 			"BorderDistance" : {
@@ -47,8 +63,8 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "Mounts require \"Rideable\" trait",
-				"descrp"				: "Allows only tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
+				"name" 					: "\"Rideable\" trait",
+				"descrp"				: "Allows tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
 			"FamiliarRiding" : {
@@ -64,7 +80,12 @@
 			"MessagePopUps" : {
 				"name" 					: "Message popups",
 				"descrp"				: "Enables multible popups upon actions such as mounting or dismounting"				
-			}		
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Own message popups only",
+				"descrp"				: "Only shows the message popups from tokens you control"				
+			}
 		},
 		
 		"Keys" : {
@@ -96,6 +117,32 @@
 			"Toofaraway"				: "{pRiddenName} is too far away"
 		},	
 		
-		"RideableTag.str"							: "rideable"	
+		"TokenSettings" : {
+			"MaxRiderFlag" : {
+				"name"					: "Maximum riders",
+				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
+			},
+			
+			"issetRideableFlag" : {
+				"name"					: "Token is Rideable",
+				"descrp"				: "Overrides the global default setting"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Token form",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Circle",
+					"TokenFormRectangle": "Rectangle"
+				}
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Riders can move freely",
+				"descrp"				: "If riders can move freely within the boundaries of this token"
+			}
+		},
+		
+		"RideableTag.str"				: "rideable"	
 	}
 }

@@ -1,5 +1,7 @@
 import { RideableFlags } from "./RideableFlags.js";
+import { GeometricUtils } from "./GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { RideablePopups } from "./RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 
 var vSystemRidingEffect = null; //saves the systems mounting effects (if any)
@@ -38,7 +40,7 @@ class MountingManager {
 	
 	static MountRequest(pTargetID, pselectedTokensID, pFamiliar = false) {} //Request GM user to execute MountSelectedGM with given parameters
 	
-	static UnMountSelectedGM(pselectedTokens) {} //remove all riding flags concerning pselectedTokens
+	static UnMountSelectedGM(pselectedTokens, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
 	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
 	
@@ -72,7 +74,7 @@ class MountingManager {
 			if ((!pFamiliar) || (game.settings.get(cModuleName, "FamiliarRiding"))) {
 				//pFamiliar riding can only be handled if setting is activated
 				if (pTarget) {
-					if (RideableUtils.TokenisRideable(pTarget) || pFamiliar) {
+					if (RideableFlags.TokenisRideable(pTarget) || pFamiliar) {
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pFamiliar));
 						
 						if (vValidTokens.length) {
@@ -146,7 +148,7 @@ class MountingManager {
 		return;
 	}
 	
-	static UnMountSelectedGM(pselectedTokens) {
+	static UnMountSelectedGM(pselectedTokens, pRemoveRiddenreference = true) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
 			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken));//.filter(vToken => RideableFlags.isRider(vToken));
@@ -156,7 +158,7 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			RideableFlags.stopRiding(vRiderTokens);
+			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
 			
@@ -237,10 +239,10 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pFamiliar) {
-					RideableUtils.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 			}
 			
@@ -255,7 +257,7 @@ class MountingManager {
 			
 		}	
 		
-		Hooks.callAll("Rideable.Mount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pFamiliar);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pFamiliar = false) {
@@ -263,10 +265,10 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pFamiliar) {
-					RideableUtils.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 			}
 			
@@ -277,7 +279,7 @@ class MountingManager {
 			}
 		}
 		
-		Hooks.callAll("Rideable.UnMount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pFamiliar);
 	} 
 	
 	//Aditional Informations
@@ -291,18 +293,18 @@ class MountingManager {
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
 				//Prevents enemy riding if enabled
-					if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+					if (RideableUtils.MountingDistance(pRider, pRidden) >= 0) {
 						let vInDistance = true;
 						
 						if (game.settings.get(cModuleName, "BorderDistance")) {
-							vInDistance = (RideableUtils.TokenBorderDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (GeometricUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						else {
-							vInDistance = (RideableUtils.TokenDistance(pRidden, pRider) <= game.settings.get(cModuleName, "MountingDistance"));
+							vInDistance = (GeometricUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
 						}
 						
 						if (!vInDistance) {
-							RideableUtils.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+							RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
 						}
 						
 						return vInDistance;
@@ -312,15 +314,15 @@ class MountingManager {
 					}
 				}
 				else {
-					RideableUtils.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
 				}
 			}
 			else {
-				RideableUtils.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 			}
 		}
 		else {
-			//RideableUtils.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+			//RideablePopups.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 		}
 		
 		return false; //default
@@ -337,7 +339,7 @@ class MountingManager {
 				}*/
 				
 				if (RideableFlags.isRidden(pToken)) {
-					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken)));
+					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken)), false);
 				}
 				
 				if (RideableFlags.isRider(pToken)) {

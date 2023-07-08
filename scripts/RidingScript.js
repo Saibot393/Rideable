@@ -1,23 +1,28 @@
 import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
-
-//CONSTANTS
-const cGradtoRad = Math.PI/180;
+import { RideablePopups } from "./RideablePopups.js";
+import { GeometricUtils } from "./GeometricUtils.js";
 
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
 	static OnTokenupdate(pDocument, pchanges, pInfos) {} //calculates which Tokens are Riders of priddenToken und places them on it
 	
-	static OnTokenpreupdate(pDocument, pchanges, pInfos, psendingUser) {} //Handles atempted movement of Riders
+	static OnTokenpreupdate(pDocument, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
+	static OnIndependentRidermovement(pDocument, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
+	
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument
+	
+	static planPatternRidersTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pUpdateDocument, pRiderTokenList) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pUpdateDocument
 	
-	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
+	static placeRelativRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
+	
+	static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
@@ -49,71 +54,22 @@ class Ridingmanager {
 		if (RideableFlags.isRider(vToken)) {
 			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
 				if (!pInfos.RidingMovement) {
-					let vGMoverride = false;
+					let vRidden = RideableFlags.RiddenToken(vToken);
+					let vRiderLeft = true;
 					
-					if (game.user.isGM) {
-						if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden")) {
-							//if a dm tried to only change the elevation while "move ridden" is off
-							vGMoverride = true;
+					if (RideableFlags.RiderscanMoveWithin(vRidden)) {
+						let vNewPosition = GeometricUtils.NewCenterPosition(pDocument, pchanges);
+						
+						if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
+							vRiderLeft = false;
 							
-							RideableFlags.setRiderHeight(pDocument.object, RideableFlags.RiderHeight(pDocument.object) + (pchanges.elevation - pDocument.elevation));
+							//update relativ position of Rider
+							RideableFlags.setRelativPosition(vToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.document.rotation));
 						}
 					}
 					
-					if (!vGMoverride) {
-						let vdeleteChanges = false;
-						
-						if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
-							//suppress movement
-							vdeleteChanges = true;
-							
-							RideableUtils.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
-						}
-						
-						if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
-							//move ridden and stop own movement
-							let vRidden = RideableFlags.RiddenToken(vToken);
-							
-							if (vRidden) {
-								if (vRidden.isOwner) {
-									//can only change if you own vRidden
-									
-									let vxtarget = vRidden.x;								
-									if (pchanges.hasOwnProperty("x")) {
-										vxtarget = vRidden.x + (pchanges.x - pDocument.object.x);
-									}
-									
-									let vytarget = vRidden.y;
-									if (pchanges.hasOwnProperty("y")) {
-										vytarget = vRidden.y + (pchanges.y - pDocument.object.y);
-									}
-									
-									let vztarget = vRidden.document.elevation;		
-									if (pchanges.hasOwnProperty("elevation")) {
-										vztarget = pchanges.elevation - RideableUtils.Ridingheight(vRidden) - RideableFlags.RiderHeight(pDocument.object);
-									}
-									
-									let vrotationtarget = vRidden.document.rotation;	
-									if (game.settings.get(cModuleName, "RiderRotation")) {
-										vrotationtarget = pchanges.rotation;
-									}
-									
-									vRidden.document.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget}, {animate : pInfos.animate});
-								}
-								
-								vdeleteChanges = true;
-							}
-							//if a rider has no ridden Token something went wrong, better not do anything else
-						}
-					
-						if (vdeleteChanges) {
-							delete pchanges.x;
-							delete pchanges.y;
-							delete pchanges.elevation;
-							delete pchanges.rotation;
-						}
-						
-						Hooks.call(cModuleName+".IndependentRiderMovement", vToken, pchanges)
+					if (vRiderLeft) {
+						Ridingmanager.OnIndependentRidermovement(pDocument, pchanges, pInfos, vRidden, psendingUser);
 					}
 				}
 			}
@@ -122,16 +78,83 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		if (priddenToken) {
-			if (RideableUtils.TokenisRideable(priddenToken) || pallFamiliars) {
-				Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
-			}
+			Ridingmanager.planRiderTokens(priddenToken, priddenToken.document, pRiderTokenList, pallFamiliars, pAnimations);
 		}
 	} 
+	
+	static OnIndependentRidermovement(pDocument, pchanges, pInfos, pRidden, psendingUser) {
+		let vGMoverride = false;
+					
+		if (psendingUser.isGM) {
+			if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden")) {
+				//if a dm tried to only change the elevation while "move ridden" is off
+				vGMoverride = true;
+				
+				RideableFlags.setRiderHeight(pDocument.object, RideableFlags.RiderHeight(pDocument.object) + (pchanges.elevation - pDocument.elevation));
+			}
+		}
+		
+		if (!vGMoverride) {
+			let vToken = pDocument.object;
+			let vdeleteChanges = false;
+			
+			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {	
+				//suppress movement
+				vdeleteChanges = true;
+				
+				RideablePopups.TextPopUpID(pDocument.object ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pDocument.object).name}); //MESSAGE POPUP
+			}
+			
+			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
+				//move ridden and stop own movement		
+				if (pRidden) {
+					if (pRidden.isOwner) {
+						//can only change if you own vRidden
+						
+						let vxtarget = pRidden.x;								
+						if (pchanges.hasOwnProperty("x")) {
+							vxtarget = pRidden.x + (pchanges.x - pDocument.object.x);
+						}
+						
+						let vytarget = pRidden.y;
+						if (pchanges.hasOwnProperty("y")) {
+							vytarget = pRidden.y + (pchanges.y - pDocument.object.y);
+						}
+						
+						let vztarget = pRidden.document.elevation;		
+						if (pchanges.hasOwnProperty("elevation")) {
+							vztarget = pchanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.RiderHeight(pDocument.object);
+						}
+						
+						let vrotationtarget = pRidden.document.rotation;	
+						if (game.settings.get(cModuleName, "RiderRotation")) {
+							vrotationtarget = pchanges.rotation;
+						}
+						
+						pRidden.document.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget}, {animate : pInfos.animate});
+					}
+					
+					vdeleteChanges = true;
+				}
+				//if a rider has no ridden Token something went wrong, better not do anything else
+			}
+		
+			if (vdeleteChanges) {
+				delete pchanges.x;
+				delete pchanges.y;
+				delete pchanges.elevation;
+				delete pchanges.rotation;
+			}
+			
+			Hooks.call(cModuleName+".IndependentRiderMovement", vToken, pchanges)
+		}
+	}
 	
 	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		
+		//Take care of ridr height
 		Ridingmanager.placeRiderHeight(pUpdateDocument, pRiderTokenList);
 		
 		if (game.settings.get(cModuleName, "FamiliarRiding")) { 
@@ -145,45 +168,51 @@ class Ridingmanager {
 				vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
 			}
 		}
+    
+		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
+			Ridingmanager.planRelativRiderTokens(pRiddenToken, pUpdateDocument, vRiderTokenList, pAnimations);
+		}
+		else {
+			Ridingmanager.planPatternRidersTokens(pRiddenToken, pUpdateDocument, vRiderTokenList, pAnimations);
+		}
 		
-		if (vRiderTokenList.length) {
-			//calculate positioning data for riders (in y direction)
+		Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
+	}
+	
+	static planPatternRidersTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pAnimations = true) {
+		if (pRiderTokenList.length) {
 			let vbunchedRiders = true;
 			let vxoffset = 0;
 			let vxdelta = 0;
 			
 			let vRiderWidthSumm = 0;
 			
-			for (let i = 0; i < vRiderTokenList.length; i++) {
-				vRiderWidthSumm = vRiderWidthSumm + vRiderTokenList[i].w;
+			for (let i = 0; i < pRiderTokenList.length; i++) {
+				vRiderWidthSumm = vRiderWidthSumm + pRiderTokenList[i].w;
 			}
 			
 			//if Riders have to be bunched
 			if (vRiderWidthSumm > pRiddenToken.w) {
 				vbunchedRiders = true;
 				
-				vxoffset = -pRiddenToken.w/2 + vRiderTokenList[0].w/2;
+				vxoffset = -pRiddenToken.w/2 + pRiderTokenList[0].w/2;
 			
-				if (vRiderTokenList.length > 1) {
-					vxdelta = (pRiddenToken.w - (vRiderTokenList[vRiderTokenList.length - 1].w + vRiderTokenList[0].w)/2)/(vRiderTokenList.length-1);
+				if (pRiderTokenList.length > 1) {
+					vxdelta = (pRiddenToken.w - (pRiderTokenList[vRiderTokenList.length - 1].w + pRiderTokenList[0].w)/2)/(pRiderTokenList.length-1);
 				}
 			} 
 			//if Riders dont have to be bunched
 			else {
 				vbunchedRiders = false;
 				
-				vxoffset = -vRiderWidthSumm/2 + vRiderTokenList[0].w/2;
+				vxoffset = -vRiderWidthSumm/2 + pRiderTokenList[0].w/2;
 			
 				vxdelta = 0; //every Rider has a custom delta, set higher for Rider seperation
 			}
 			//place riders				
-			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
+			Ridingmanager.placeRiderTokensPattern(pUpdateDocument, pRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
 		}
-		
-		if (vRiderFamiliarList.length) {
-			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
-		}
-	}
+	} 
 	
 	static placeRiderHeight(pUpdateDocument, pRiderTokenList) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
@@ -197,7 +226,24 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokens(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
+	static planRelativRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pAnimations = true) {
+		let vRiddenForm = RideableFlags.TokenForm(pRiddenToken);
+		
+		for (let i = 0; i < pRiderTokenList.length; i++) {
+			let vTargetPosition = RideableFlags.RelativPosition(pRiderTokenList[i]);
+			
+			
+			if (!RideableFlags.HasrelativPosition(pRiderTokenList[i])) {
+				//if first time Rider give Border position
+				vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken));
+				RideableFlags.setRelativPosition(pRiderTokenList[i], vTargetPosition);
+			}
+			
+			Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetPosition[0], vTargetPosition[1], pAnimations);		
+		}
+	}
+	
+	static placeRiderTokensPattern(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
 		let vprex = 0;
 		
 		for (let i = 0; i < pRiderTokenList.length; i++) {
@@ -224,33 +270,35 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {
-		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
-			let vTargetx = 0;
-			let vTargety = 0;
-			
-			switch (i) {
-				case 0: //tl
-					vTargetx = -pUpdateDocument.object.w/2;
-					vTargety = -pUpdateDocument.object.h/2;
-					break;
-					
-				case 1: //tr
-					vTargetx = pUpdateDocument.object.w/2;
-					vTargety = -pUpdateDocument.object.h/2;
-					break;
-					
-				case 2: //bl
-					vTargetx = -pUpdateDocument.object.w/2;
-					vTargety = pUpdateDocument.object.h/2;
-					break;
-					
-				case 3: //br
-					vTargetx = pUpdateDocument.object.w/2;
-					vTargety = pUpdateDocument.object.h/2;
-					break;
+		if (pRiderTokenList.length) {
+			for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
+				let vTargetx = 0;
+				let vTargety = 0;
+				
+				switch (i) {
+					case 0: //tl
+						vTargetx = -pUpdateDocument.object.w/2;
+						vTargety = -pUpdateDocument.object.h/2;
+						break;
+						
+					case 1: //tr
+						vTargetx = pUpdateDocument.object.w/2;
+						vTargety = -pUpdateDocument.object.h/2;
+						break;
+						
+					case 2: //bl
+						vTargetx = -pUpdateDocument.object.w/2;
+						vTargety = pUpdateDocument.object.h/2;
+						break;
+						
+					case 3: //br
+						vTargetx = pUpdateDocument.object.w/2;
+						vTargety = pUpdateDocument.object.h/2;
+						break;
+				}
+				
+				Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
 			}
-			
-			Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
 		}
 	}
 	
@@ -260,8 +308,7 @@ class Ridingmanager {
 		
 		if (game.settings.get(cModuleName, "RiderRotation")) {
 			//rotation
-			vTargetx = Math.cos(cGradtoRad * pRiddenDocument.rotation) * pTargetx - Math.sin(cGradtoRad * pRiddenDocument.rotation) * pTargety;
-			vTargety = Math.sin(cGradtoRad * pRiddenDocument.rotation) * pTargetx + Math.cos(cGradtoRad * pRiddenDocument.rotation) * pTargety;
+			[vTargetx, vTargety] = GeometricUtils.Rotated([pTargetx, pTargety], pRiddenDocument.rotation);
 			
 			pRider.document.update({rotation: pRiddenDocument.rotation}, {animate : pAnimation, RidingMovement : true});
 		}

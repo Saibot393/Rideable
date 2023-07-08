@@ -1,5 +1,6 @@
 import { MountRequest, UnMountRequest } from "./MountingScript.js";
-import { PopUpRequest } from "./RideableUtils.js";
+import { PopUpRequest } from "./RideablePopups.js";
+import { RequestRideableTeleport } from "./RideableCompatibility.js";
 
 //execute functions with pData depending on pFunction
 function organiseSocketEvents({pFunction, pData} = {}) {
@@ -12,8 +13,10 @@ function organiseSocketEvents({pFunction, pData} = {}) {
 			UnMountRequest(pData);
 			break;
 		case "PopUpRequest":
-		console.log("Check1.2");
 			PopUpRequest(pData);
+			break;
+		case  "RequestRideableTeleport":
+			RequestRideableTeleport(pData);
 			break;
 	}
 }

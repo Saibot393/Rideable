@@ -1,4 +1,5 @@
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { cTokenFormCircle, cTokenFormRectangle } from "./GeometricUtils.js";
 
 const cModule = "Rideable";
 
@@ -6,58 +7,89 @@ const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Rid
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
 const caddRiderHeightF = "addRiderHeightFlag"; //Flag name for additional Riderheight set ONYL by a GM
+const cMaxRiderF = "MaxRiderFlag"; //Flag name for the maximum amount of Riders on this Token
+const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or not a token is Rideable
+const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
+const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
+const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF}
 
-//handels all reading and writing of flags (other scripts should not touch Rideable Flags)
+//handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
 	//DECLARATIONS
 	
 	//flag handling	
 	//flag information
-	static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
+		//basic Rider Info
+		static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
+		
+		static TokenissetRideable(pToken) {} //if token is set to Rideable
+		
+		static TokenisRideable(pToken) {} //returns if token is Rideable trough flags and through settings
+		
+		static isRiddenID (pRiddenTokenID) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
+		
+		static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
+		
+		static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
+		
+		static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
+		
+		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
+		
+		static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
+		
+		static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
+		
+		static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
+		
+		static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
+		
+		static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
+		
+		static RiddenToken(pRider) {} //returns the token pRider rides (if any)
+		
+		//additional infos
+		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
+		
+		static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
+		
+		//relativ Position handling
+		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
+		
+		static RelativPosition(pToken) {} //the current relativ Position
+		
+		static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
 	
-	static isRiddenID (pRiddenTokenID) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
+		//Rider count infos
+		static RiderCount(pRidden) {} //returns the number of Riders
+		
+		static MaxRiders(pRidden) {} //returns the maximum amount of riders this pRidden can can take
+		
+		static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
+		
+		static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
+		
+		static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
 	
-	static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
-	
-	static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
-	
-	static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
-	
-	static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
-	
-	static isRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag true
-	
-	static isFamiliarRiderID (pRiderTokenID) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
-	
-	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
-	
-	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
-	
-	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
-	
-	static RiderCount(pRidden) {} //returns the number of Riders
-	
-	static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
-	
-	static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
-	
-	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
-	
-	static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
+		//Riding height info
+		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
+	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
+	
+	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
 	static recheckRiding (pRiderTokens) {} //rechecks to see of Ridden Token still exists
 	
-	static stopRiding(pRidingTokens) {} //tries to remove pRidingToken from all Riders Flags
+	static stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
@@ -70,11 +102,11 @@ class RideableFlags {
 	//returns all Module Flags of pToken (if any) (can contain Riding and Riders Flags)
 		if (pToken) {
 			if (pToken.document) {
-				if (pToken.document.flags.Rideable) {
+				if (pToken.document.flags.hasOwnProperty(cModuleName)) {
 					return pToken.document.flags.Rideable;
 				}
 			}
-			else if (pToken.flags.Rideable) { //in case pToken is a document (necessary for token deletion)
+			else if (pToken.flags.hasOwnProperty(cModuleName)) { //in case pToken is a document (necessary for token deletion)
 				return pToken.flags.Rideable;
 			}
 		}
@@ -87,7 +119,7 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			if (vFlag.RidingFlag) {
+			if (vFlag.hasOwnProperty(cRidingF)) {
 				return vFlag.RidingFlag;
 			}
 		}
@@ -100,7 +132,7 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			if (vFlag.FamiliarRidingFlag) {
+			if (vFlag.hasOwnProperty(cFamiliarRidingF)) {
 				return vFlag.FamiliarRidingFlag;
 			}
 		}
@@ -113,8 +145,7 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			//make sure all riders still exist
-			if (vFlag.RidersFlag) {
+			if (vFlag.hasOwnProperty(cRidersF)) {
 				return vFlag.RidersFlag;
 			}
 		}
@@ -122,18 +153,77 @@ class RideableFlags {
 		return []; //default if anything fails
 	} 
 	
-	static #RidingHeight (pToken) {
+	static #RidingHeightFlag (pToken) {
 	//returns value of addRiderHeight Flag of pToken or 0
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			//make sure all riders still exist
-			if (vFlag.addRiderHeightFlag) {
+			if (vFlag.hasOwnProperty(caddRiderHeightF)) {
 				return vFlag.addRiderHeightFlag;
 			}
 		}
 		
 		return 0; //default if anything fails
+	}
+	
+	static #MaxRiderFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cMaxRiderF) && (typeof vFlag.MaxRiderFlag == "number")) {
+				return vFlag.MaxRiderFlag;
+			}
+		}
+		
+		return game.settings.get(cModuleName, "MaxRiders"); //default if anything fails
+	}
+	
+	static #issetRideableFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cissetRideableF)) {
+				return vFlag.issetRideableFlag;
+			}
+		}
+		
+		return game.settings.get(cModuleName, "defaultRideable"); //default if anything fails		
+	}
+	
+	static #TokenFormFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cTokenFormF)) {
+				return vFlag.TokenFormFlag;
+			}
+		}
+		
+		return cTokenFormCircle; //default if anything fails		
+	}
+	
+	static #InsideMovementFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cInsideMovementF)) {
+				return vFlag.InsideMovementFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
+	}
+	
+	static #RelativPositionFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRelativPositionF)) {
+				return vFlag.RelativPositionFlag;
+			}
+		}
+		
+		return []; //default if anything fails			
 	}
 	
 	static #setRidingFlag (pToken, pContent) {
@@ -156,17 +246,17 @@ class RideableFlags {
 		return false;
 	} 
 	
-	static #setRidersFlag (pToken, pContent) {
+	static async #setRidersFlag (pToken, pContent) {
 	//sets content of addRiderHeight Flag (must number)
 		if ((pToken) && (Array.isArray(pContent))) {
-			pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
+			await pToken.document.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
 			
 			return true;
 		}
 		return false;
 	}
 	
-	static #setaddRiderHeight (pToken, pContent) {
+	static #setaddRiderHeightFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be array of strings)
 		if ((pToken) && (typeof pContent === "number")) {
 			pToken.document.setFlag(cModule, caddRiderHeightF, pContent);
@@ -176,6 +266,16 @@ class RideableFlags {
 		return false;
 	}
 	
+	static #setRelativPositionFlag (pToken, pContent) {
+	//sets content of RelativPosition (must be array of two numbers)
+		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
+			pToken.document.setFlag(cModule, cRelativPositionF, pContent);
+			
+			return true;
+		}
+		return false;		
+	}
+	
 	static #resetFlags (pToken) {
 	//removes all Flags
 		if (pToken) {
@@ -183,6 +283,8 @@ class RideableFlags {
 			pToken.document.unsetFlag(cModule, cFamiliarRidingF);
 			pToken.document.unsetFlag(cModule, cRidersF);
 			pToken.document.unsetFlag(cModule, caddRiderHeight);
+			pToken.document.unsetFlag(cModule, cMaxRiderF);
+			pToken.document.unsetFlag(cModule, cissetRideableF);
 			
 			return true;
 		}
@@ -193,6 +295,14 @@ class RideableFlags {
 	//flag information
 	static isRidden (pRiddenToken) {	
 		return (this.#RidersFlag(pRiddenToken).length > 0);
+	}
+	
+	static TokenissetRideable(pToken) {
+		return this.#issetRideableFlag(pToken);
+	}
+	
+	static TokenisRideable (pToken) {
+		return (RideableFlags.TokenissetRideable(pToken) || RideableUtils.TokenissettingRideable(pToken));
 	}
 	
 	static isRiddenID (pRiddenTokenID) {
@@ -224,6 +334,10 @@ class RideableFlags {
 	static isFamiliarRider (pRiderToken) {
 		return (this.isRider(pRiderToken) && this.#FamiliarRidingFlag(pRiderToken));
 	}
+	
+	static wasFamiliarRider (pRiderToken) {
+		return this.#FamiliarRidingFlag(pRiderToken);
+	} 
 	
 	static isRiderID (pRiderTokenID) {
 		let vToken = RideableUtils.TokenfromID(pRiderTokenID);
@@ -272,8 +386,47 @@ class RideableFlags {
 		return canvas.tokens.placeables.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 	}
 	
+	//additional infos
+	static TokenForm(pToken) {
+		return(this.#TokenFormFlag(pToken));
+	}
+	
+	static RiderscanMoveWithin(pRidden) {
+		return(this.#InsideMovementFlag(pRidden));
+	}
+	
+	//relativ Position handling
+	static HasrelativPosition(pToken) {
+		return (this.#RelativPositionFlag(pToken).length == 2);
+	} 
+	
+	static RelativPosition(pToken) {
+		if (RideableFlags.HasrelativPosition(pToken)) {
+			return this.#RelativPositionFlag(pToken);
+		}
+		else {
+			return [0,0];
+		}
+	}
+	
+	static setRelativPosition(pToken, pPosition) {
+		if (pPosition.length == 2) {
+			this.#setRelativPositionFlag(pToken, pPosition);
+		}
+	} 
+	
+	//Rider count infos
 	static RiderCount(pRidden) {
 		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
+	}
+	
+	static MaxRiders(pRidden) {
+		if (RideableFlags.#MaxRiderFlag(pRidden) >= 0) {
+			return RideableFlags.#MaxRiderFlag(pRidden);
+		}
+		else {
+			return Infinity;
+		}
 	}
 	
 	static TokenRidingSpaceleft(pToken, pFamiliars = false) {
@@ -281,7 +434,7 @@ class RideableFlags {
 			return (cCornermaxRiders - RideableFlags.RiderFamiliarCount(pToken));
 		}
 		else {
-			return (RideableUtils.MaxRidingspace(pToken) - RideableFlags.RiderCount(pToken));
+			return (RideableFlags.MaxRiders(pToken) - RideableFlags.RiderCount(pToken));
 		}
 	} 
 	
@@ -294,40 +447,45 @@ class RideableFlags {
 	} 
 	
 	static RiderHeight(pRider) {
-		return this.#RidingHeight(pRider);
+		return this.#RidingHeightFlag(pRider);
 	}
 	
 	//flag setting
-	static addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => !this.isRider(vToken) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
-			if (this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
+			if (await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
-						
-						if (pFamiliarRiding) {
-							this.#setFamiliarRidingFlag(vValidTokens[i],true);
-						}
+						this.#setFamiliarRidingFlag(vValidTokens[i],pFamiliarRiding);
 					}
 				}				
 			}
 		}
 	}
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens) {
+	static async cleanRiderIDs (pRiddenToken) {
+		//will only keep ids for which a token exists that has the Rider flag
+		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID))));
+	} 
+	
+	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => this.isRiddenby(pRiddenToken, vToken)); //only Tokens riding pRiddenToken can be removed
 			
-			let vnewRiderIDs = this.#RidersFlag(pRiddenToken).filter(vID => !(RideableUtils.IDsfromTokens(vValidTokens).includes(vID)));
-			
-			this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
+			if (pRemoveRiddenreference) {
+				let vnewRiderIDs = this.#RidersFlag(pRiddenToken).filter(vID => !(RideableUtils.IDsfromTokens(vValidTokens).includes(vID)));
+				
+				this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
+			}
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
-				this.#setFamiliarRidingFlag(pRiderTokens[i], false);
-				this.#setaddRiderHeight(pRiderTokens[i], 0);
+				this.#setRelativPositionFlag(pRiderTokens[i], []);
+				//this.#setFamiliarRidingFlag(pRiderTokens[i], false);
+				this.#setaddRiderHeightFlag(pRiderTokens[i], 0);
 			}
 		}
 	}
@@ -340,7 +498,7 @@ class RideableFlags {
 		}
 	}
 	
-	static stopRiding (pRidingTokens) {
+	static stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
 		if (pRidingTokens) {
 			for (let i = 0; i < pRidingTokens.length; i++) {
 				if (pRidingTokens[i]) {
@@ -350,12 +508,13 @@ class RideableFlags {
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {
-							this.removeRiderTokens(vRiddenTokens[j], pRidingTokens);
+							this.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
 						}
 					}
 					else {
 						this.#setRidingFlag(vRidingToken, false);
-						this.#setFamiliarRidingFlag(vRidingToken, false);
+						this.#setRelativPositionFlag(vRidingToken, []);
+						//this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}
 			}
@@ -377,7 +536,7 @@ class RideableFlags {
 	static setRiderHeight(pToken, pHeight) {
 		if (game.user.isGM) {
 			if (pToken) {
-				this.#setaddRiderHeight(pToken, pHeight);
+				this.#setaddRiderHeightFlag(pToken, pHeight);
 			}
 		}
 	} 

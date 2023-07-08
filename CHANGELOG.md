@@ -1,3 +1,17 @@
+## v1.6.0
+- Added titles to settings
+- Added on-token setting Token form which determines how the border is defined
+- Added on-token setting Riders can move freely
+  - If this option is toggled on all riders this token can move freely within its borders and keep their relative position should the token be moved
+- Added global default rideable setting
+  - Added on-token rideable setting (overrides world rideable setting)
+- Added client setting to only show popup messages from own tokens
+- Added on-token setting for maximum riders (overrides world setting)
+- Moved the "Rider movement" option to client settings
+- For PF2e: changed name of "Rideable" trait setting to clarify that it is now only one optional way to make tokens rideable
+- Added support for arms reach
+  - Added an option which overrides the mounting distance with the arms-reach distance
+    
 ## v1.5.1
 - fixed a bug that appeared when only a familiar was riding a token
 

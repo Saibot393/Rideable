@@ -1,4 +1,4 @@
-import { RideableCompUtils } from "./RideableCompUtils.js";
+import { RideableCompUtils, cArmReach } from "./RideableCompUtils.js";
 import { cWallHeight } from "./RideableCompUtils.js";
 
 //CONSTANTS
@@ -19,7 +19,7 @@ const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-export { cPf2eName, cModuleName };
+export { cPf2eName, cModuleName, cPopUpID };
 
 //a few support functions
 class RideableUtils {
@@ -43,34 +43,23 @@ class RideableUtils {
 	static hoveredToken() {} //get first hovered token
 	
 	//Additional Token Infos
-	static TokenisRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
+	static TokenissettingRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
 	
 	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens (related to settings)
-	
-	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
-	
-	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
 	
 	static TokenisFamiliarof(pFamiliar, pMaster) {} //returns true of the deffinition of familiar is matched and both are controlled by current owner
 	
 	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
 	
-	static MaxRidingspace(pRidden) {} //returns the maximum amount of riders that can fit on pRidden (related to settings)
-	
 	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
+	
+	static MountingDistance(pRider, pRidden) {} //returns the maximal Riding distance for pRider to mount pRidden
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
 		
 	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
 	
-	//Additional UI
-	
-	static TextPopUp(pToken, pText, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
-	
-	static TextPopUpID(pToken, pID, pWords = {}) {} //show pText over pToken and replaces {pWord} with matching vWord in pWords
-	
-	static PopUpRequest(pTokenID, pText) {} //handels socket calls for pop up texts
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -115,20 +104,19 @@ class RideableUtils {
 	}
 		
 	//Additional Token Infos
-	static TokenisRideable(pToken) {
+	static TokenissettingRideable(pToken) {
 		if (pToken) {
-			switch (game.system.id) {
-				case cPf2eName:
-					if (game.settings.get(cModuleName, "RideableTag")) {
-						if (pToken.actor.system.traits) {				
-							return pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag));
+			if (game.settings.get(cModuleName, "RideableTag")) {
+				switch (game.system.id) {
+					case cPf2eName:
+						if (pToken.actor.system.traits) {						
+							return Boolean(pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag)));
 						}
-					}
-					return true;
-					
-					break;
-				default:
-					return true;
+						
+						break;
+					default:
+						return false;
+				}
 			}
 		}
 		
@@ -137,29 +125,6 @@ class RideableUtils {
 	
 	static TokencanRide(pToken) {
 		return true;
-	}
-	
-	static TokenDistance(pTokenA, pTokenB) {
-		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( ((pTokenA.x+pTokenA.w/2)-(pTokenB.x+pTokenB.w/2))**2 + ((pTokenA.y+pTokenA.h/2)-(pTokenB.y+pTokenB.h/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
-		}
-		
-		return 0;
-	}
-	
-	static TokenBorderDistance(pTokenA, pTokenB) {
-		if ((pTokenA) && (pTokenB)) {
-			let vDistance = RideableUtils.TokenDistance(pTokenA, pTokenB) - (Math.max((pTokenA.w+pTokenB.w), (pTokenA.h+pTokenB.h))/2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
-			
-			if (vDistance < 0) {
-				return 0;
-			}
-			else {
-				return vDistance;
-			}
-		}
-		
-		return 0;
 	}
 	
 	static TokenisFamiliarof(pFamiliar, pMaster) {
@@ -184,23 +149,28 @@ class RideableUtils {
 		return false;
 	}
 	
-	static MaxRidingspace(pRidden) {
-		if (game.settings.get(cModuleName, "MaxRiders") >= 0) {
-			return game.settings.get(cModuleName, "MaxRiders");
-		}
-		else {
-			return Infinity;
-		}
-	} 
-	
 	static Ridingheight(pRidden) {
 		if (RideableCompUtils.isactiveModule(cWallHeight) && pRidden && game.settings.get(cModuleName, "useRiddenTokenHeight")) {
-			return RideableCompUtils.guessWHTokenHeight(pRidden)
+			return RideableCompUtils.WHTokenHeight(pRidden)
 		}
 		else {
 			return game.settings.get(cModuleName, "RidingHeight");
 		}
 	} 
+	
+	static MountingDistance(pRider, pRidden) {
+		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+			return game.settings.get(cArmReach, "globalInteractionMeasurement");
+		}
+		else {
+			if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+				return game.settings.get(cModuleName, "MountingDistance");
+			}
+			else {
+				return Infinity;
+			}
+		}
+	}
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {
@@ -248,36 +218,6 @@ class RideableUtils {
 			}
 		}
 	}
-
-	//Additional UI
-	
-	static TextPopUp(pToken, pText, pWords = {}) {
-		let vText = pText;
-		
-		for (let vWord of Object.keys(pWords)) {
-			vText = vText.replace("{" + vWord + "}", pWords[vWord]);
-		}
-		
-		//other clients pop up
-		game.socket.emit("module.Rideable", {pFunction : "PopUpRequest", pData : {pTokenID: pToken.id, pText : vText}});
-		
-		//own pop up
-		RideableUtils.PopUpRequest(pToken.id, vText);
-	}
-	
-	static TextPopUpID(pToken, pID, pWords = {}) {
-		RideableUtils.TextPopUp(pToken, Translate(cPopUpID+"."+pID), pWords)
-	} 
-	
-	static PopUpRequest(pTokenID, pText) {
-		if (game.settings.get(cModuleName, "MessagePopUps")) {
-			let vToken = RideableUtils.TokenfromID(pTokenID);
-			
-			if (vToken) {
-				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
-			}
-		}
-	}
 }
 
 //for easy translation
@@ -286,6 +226,4 @@ function Translate(pName){
 }
 
 //Export RideableFlags Class
-function PopUpRequest({ pTokenID, pText } = {}) { return RideableUtils.PopUpRequest(pTokenID, pText); }
-
-export{ RideableUtils, PopUpRequest, Translate };
+export{ RideableUtils, Translate };

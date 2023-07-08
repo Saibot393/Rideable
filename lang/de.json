@@ -1,6 +1,17 @@
 {
 	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "Welt Einstellungen (nur SL)",
+			"ClientSettings"			: "Nutzer Einstellungen"
+		},
+		
 		"Settings" : {
+			"defaultRideable" : {
+				"name" 					: "Marken standardmäßig reitbar",
+				"descrp"				: "Ob marken standardmäßig reitbar sein sollen(kann für jede Marke in den Markeneinstellungen geändert werden)"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Reithöhe",
 				"descrp"				: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)"
@@ -14,6 +25,11 @@
 			"MountingDistance" : {
 				"name" 					: "Reitdistanz",
 				"descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)"
+			},
+			
+			"UseArmReachDistance": {
+				"name" 					: "Nutze \"Arms Reach\"-Distanz",
+				"descrp"				: "Nutzt die Distanz welche in \"Arms Reach\" eingestellt ist für die Reitdistanz"	
 			},
 			
 			"BorderDistance" : {
@@ -47,8 +63,8 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "Gerittene Marken benötigen die \"Rideable\" Eigenschaft",
-				"descrp"				: "Erlaube nur Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
+				"name" 					: "\"Rideable\" Eigenschaft",
+				"descrp"				: "Erlaube es Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
 			"FamiliarRiding" : {
@@ -64,6 +80,11 @@
 			"MessagePopUps" : {
 				"name" 					: "Pop-up Meldungen",
 				"descrp"				: "Aktiviert mehrere pop-up Meldungen bei aktionen wie dem Auf- oder Absteigen"				
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Nur eigene Pop-up Meldungen",
+				"descrp"				: "Zeigt nur die Pop-up Meldungen der Marken unter eigener Kontrolle"				
 			}		
 		},
 		
@@ -96,6 +117,32 @@
 			"Toofaraway"				: "{pRiddenName} ist zu weit weg"
 		},	
 		
-		"RideableTag.str"							: "rideable"	
+		"TokenSettings" : {
+			"MaxRiderFlag" : {
+				"name"					: "Maximale Reiter",
+				"descrp"				: "Überschreibt die Welt Einstellung für diese Marke (-1 für unlimitiert, leer lassen um zur Welt Einstellung zurück zu kehren)"
+			},
+			
+			"issetRideableFlag" : {
+				"name"					: "Marke ist Reitbar",
+				"descrp"				: "Überschreibt den Globalen standard"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Markenform",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Kreis",
+					"TokenFormRectangle": "Rechteck"
+				}
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Reiter können sich frei bewegen",
+				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Marke bewegen können"
+			}
+		},
+		
+		"RideableTag.str"				: "rideable"	
 	}
 }
