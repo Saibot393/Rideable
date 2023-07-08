@@ -14,11 +14,15 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument and executes placeRiderTokens
+	static planRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenDocument
+	
+	static planPatternRidersTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
+	
+	static planRelativRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
 	static placeRiderHeight(pUpdateDocument, pRiderTokenList) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pUpdateDocument
 	
-	static placeRiderTokens(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
+	static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
@@ -146,44 +150,49 @@ class Ridingmanager {
 			}
 		}
 		
-		if (vRiderTokenList.length) {
-			//calculate positioning data for riders (in y direction)
+		Ridingmanager.planPatternRidersTokens(pRiddenToken, pUpdateDocument, vRiderTokenList, pAnimations)
+		
+		Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
+	}
+	
+	static planPatternRidersTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pAnimations = true) {
+		if (pRiderTokenList.length) {
 			let vbunchedRiders = true;
 			let vxoffset = 0;
 			let vxdelta = 0;
 			
 			let vRiderWidthSumm = 0;
 			
-			for (let i = 0; i < vRiderTokenList.length; i++) {
-				vRiderWidthSumm = vRiderWidthSumm + vRiderTokenList[i].w;
+			for (let i = 0; i < pRiderTokenList.length; i++) {
+				vRiderWidthSumm = vRiderWidthSumm + pRiderTokenList[i].w;
 			}
 			
 			//if Riders have to be bunched
 			if (vRiderWidthSumm > pRiddenToken.w) {
 				vbunchedRiders = true;
 				
-				vxoffset = -pRiddenToken.w/2 + vRiderTokenList[0].w/2;
+				vxoffset = -pRiddenToken.w/2 + pRiderTokenList[0].w/2;
 			
-				if (vRiderTokenList.length > 1) {
-					vxdelta = (pRiddenToken.w - (vRiderTokenList[vRiderTokenList.length - 1].w + vRiderTokenList[0].w)/2)/(vRiderTokenList.length-1);
+				if (pRiderTokenList.length > 1) {
+					vxdelta = (pRiddenToken.w - (pRiderTokenList[vRiderTokenList.length - 1].w + pRiderTokenList[0].w)/2)/(pRiderTokenList.length-1);
 				}
 			} 
 			//if Riders dont have to be bunched
 			else {
 				vbunchedRiders = false;
 				
-				vxoffset = -vRiderWidthSumm/2 + vRiderTokenList[0].w/2;
+				vxoffset = -vRiderWidthSumm/2 + pRiderTokenList[0].w/2;
 			
 				vxdelta = 0; //every Rider has a custom delta, set higher for Rider seperation
 			}
 			//place riders				
-			Ridingmanager.placeRiderTokens(pUpdateDocument, vRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
+			Ridingmanager.placeRiderTokensPattern(pUpdateDocument, pRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
 		}
+	} 
+	
+	static planRelativRiderTokens(pRiddenToken, pUpdateDocument, pRiderTokenList, pAnimations = true) {
 		
-		if (vRiderFamiliarList.length) {
-			Ridingmanager.placeRiderTokenscorner(pUpdateDocument, vRiderFamiliarList, pAnimations);
-		}
-	}
+	}	//works out the position of tokens if they can move freely on pRiddenToken
 	
 	static placeRiderHeight(pUpdateDocument, pRiderTokenList) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
@@ -197,7 +206,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokens(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
+	static placeRiderTokensPattern(pUpdateDocument, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
 		let vprex = 0;
 		
 		for (let i = 0; i < pRiderTokenList.length; i++) {
@@ -224,33 +233,35 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokenscorner(pUpdateDocument, pRiderTokenList, pAnimations = true) {
-		for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
-			let vTargetx = 0;
-			let vTargety = 0;
-			
-			switch (i) {
-				case 0: //tl
-					vTargetx = -pUpdateDocument.object.w/2;
-					vTargety = -pUpdateDocument.object.h/2;
-					break;
-					
-				case 1: //tr
-					vTargetx = pUpdateDocument.object.w/2;
-					vTargety = -pUpdateDocument.object.h/2;
-					break;
-					
-				case 2: //bl
-					vTargetx = -pUpdateDocument.object.w/2;
-					vTargety = pUpdateDocument.object.h/2;
-					break;
-					
-				case 3: //br
-					vTargetx = pUpdateDocument.object.w/2;
-					vTargety = pUpdateDocument.object.h/2;
-					break;
+		if (pRiderTokenList.length) {
+			for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
+				let vTargetx = 0;
+				let vTargety = 0;
+				
+				switch (i) {
+					case 0: //tl
+						vTargetx = -pUpdateDocument.object.w/2;
+						vTargety = -pUpdateDocument.object.h/2;
+						break;
+						
+					case 1: //tr
+						vTargetx = pUpdateDocument.object.w/2;
+						vTargety = -pUpdateDocument.object.h/2;
+						break;
+						
+					case 2: //bl
+						vTargetx = -pUpdateDocument.object.w/2;
+						vTargety = pUpdateDocument.object.h/2;
+						break;
+						
+					case 3: //br
+						vTargetx = pUpdateDocument.object.w/2;
+						vTargety = pUpdateDocument.object.h/2;
+						break;
+				}
+				
+				Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
 			}
-			
-			Ridingmanager.placeTokenrotated(pUpdateDocument, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
 		}
 	}
 	

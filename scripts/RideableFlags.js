@@ -11,6 +11,7 @@ const cMaxRiderF = "MaxRiderFlag"; //Flag name for the maximum amount of Riders 
 const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or not a token is Rideable
 const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
 const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
+const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -57,6 +58,13 @@ class RideableFlags {
 		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
 		
 		static RiderscanMoveWithing(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
+		
+		//relativ Position handling
+		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
+		
+		static RelativPosition(pToken) {} //the current relativ Position
+		
+		static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
 	
 		//Rider count infos
 		static RiderCount(pRidden) {} //returns the number of Riders
@@ -206,6 +214,18 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
+	static #RelativPositionFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRelativPositionF)) {
+				return vFlag.RelativPositionFlag;
+			}
+		}
+		
+		return []; //default if anything fails			
+	}
+	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if ((pToken) && (pToken.document)) {
@@ -244,6 +264,16 @@ class RideableFlags {
 			return true;
 		}
 		return false;
+	}
+	
+	static #setRelativPosition (pToken, pContent) {
+	//sets content of RelativPosition (must be array of two numbers)
+		if ((pToken) && (pContent.length == 2)) {
+			pToken.document.setFlag(cModule, cRelativPositionF, pContent);
+			
+			return true;
+		}
+		return false;		
 	}
 	
 	static #resetFlags (pToken) {
@@ -364,6 +394,24 @@ class RideableFlags {
 	static RiderscanMoveWithing(pRidden) {
 		return(this.#InsideMovementFlag(pRidden));
 	}
+	
+	//relativ Position handling
+	static HasrelativPosition(pToken) {
+		return (this.#RelativPositionFlag(pToken).length == 2);
+	} 
+	
+	static RelativPosition(pToken) {
+		if (RideableFlags.HasrelativPosition(pToken)) {
+			return this.#RelativPositionFlag(pToken);
+		}
+		else {
+			return [0,0];
+		}
+	}
+	
+	static setRelativPosition(pToken, pPosition) {
+		this.#setRelativPosition(pToken, pPosition);
+	} 
 	
 	//Rider count infos
 	static RiderCount(pRidden) {
