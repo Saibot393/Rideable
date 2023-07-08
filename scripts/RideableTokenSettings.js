@@ -9,28 +9,32 @@ class RideableTokenSettings {
 	
 	//IMPLEMENTATIONS
 	
-	static TestSetting(vApp, vHTML, vData) {
+	static TestSetting(pApp, pHTML, pData) {
 		//create settings in reversed order
 		
+		let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Title.Rideable")}</h3>`;
+	 
+		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
+		
 		//Max Riders Setting
-		console.log((vApp.token));
-		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
+		console.log((pApp.token));
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
 													vhint : Translate("TokenSettings.MaxRiders.descrp"), 
 													vtype : "number", 
-													vvalue : RideableFlags.MaxRiders(vApp.token), 
+													vvalue : RideableFlags.MaxRiders(pApp.token), 
 													vflagname : cMaxRiderF
 													});
 													
 		//Token is Rideable Setting
-		RideableTokenSettings.AddHTMLOption(vHTML, {vlabel : Translate("TokenSettings.TokenisRideable.name"), 
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings.TokenisRideable.name"), 
 													vhint : Translate("TokenSettings.TokenisRideable.descrp"), 
 													vtype : "checkbox", 
-													vvalue : RideableFlags.TokenissetRideable(vApp.token),
+													vvalue : RideableFlags.TokenissetRideable(pApp.token),
 													vflagname : cissetRideableF
 													});
 													
 		
-		vApp.setPosition({ height: "auto" });
+		pApp.setPosition({ height: "auto" });
 		
 	} 
 	
@@ -92,7 +96,7 @@ class RideableTokenSettings {
 			</div>
 		`;
 		
-		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vnewHTML);
+		pHTML.find('[name="RideableTitle"]').after(vnewHTML);
 	}
 }
 
