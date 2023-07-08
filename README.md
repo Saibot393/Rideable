@@ -23,11 +23,15 @@ Ridden tokens can themselfve ride other tokens.
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
-#### Client
+#### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider or stop the movement
 - Message popups: to activate some pop ups on certain actions
 - Own message popups only: to only show message popups from tokens you control
-#### Tokens
+#### Tokens:
+- Token is Rideable: to override world default for this token
+- Maximum riders: to override world default for this token
+- Token form: to set the form used to define this tokens border
+- Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 
 ### Compatibility:
 
