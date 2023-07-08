@@ -113,14 +113,28 @@
 		},	
 		
 		"TokenSettings" : {
-			"MaxRiders" : {
+			"MaxRiderFlag" : {
 				"name"					: "Maximale Reiter",
 				"descrp"				: "Überschreibt die Welt Einstellung für diese Marke (-1 für unlimitiert, leer lassen um zur Welt Einstellung zurück zu kehren)"
 			},
 			
-			"TokenisRideable" : {
+			"issetRideableFlag" : {
 				"name"					: "Marke ist Reitbar",
 				"descrp"				: "Überschreibt den Globalen standard"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Markenform",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Kreis",
+					"TokenFormRectangle": "Rechteck"
+				}
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Reiter können sich frei bewegen",
+				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Marke bewegen können"
 			}
 		},
 		

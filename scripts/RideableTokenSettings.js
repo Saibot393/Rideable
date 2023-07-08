@@ -20,7 +20,7 @@ class RideableTokenSettings {
 		//Riders can move within Setting
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
 													vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
-													vtype : "number", 
+													vtype : "checkbox", 
 													vvalue : RideableFlags.RiderscanMoveWithing(pApp.token), 
 													vflagname : cInsideMovementF
 													});
@@ -116,10 +116,10 @@ class RideableTokenSettings {
 				
 				for (let i = 0; i < voptions.length; i++) {
 					if (voptions[i] == vvalue) {
-						vnewHTML = vnewHTML + `<option value="${voptions[i]}" selected>${Translate(cModuleName + "." + vflagname + "." + voptions[i])}</option>`;
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}" selected>${Translate("TokenSettings." + vflagname+ ".options." + voptions[i])}</option>`;
 					}
 					else {
-						vnewHTML = vnewHTML + `<option value="${voptions[i]}">${Translate(cModuleName + "." + vflagname + "." + voptions[i])}</option>`;
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}">${Translate("TokenSettings." + vflagname+ ".options." + voptions[i])}</option>`;
 					}
 				}
 				
@@ -127,11 +127,13 @@ class RideableTokenSettings {
 				break;
 		}
 			
-		vnewHTML = vnewHTML + `
-			</div>
-				<p class="hint">${vhint}</p>         
-			</div>
-		`;
+		if (vhint != "") {
+			vnewHTML = vnewHTML + `
+				</div>
+					<p class="hint">${vhint}</p>         
+				</div>
+			`;
+		}
 		
 		pHTML.find('[name="RideableTitle"]').after(vnewHTML);
 	}

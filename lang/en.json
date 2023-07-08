@@ -113,14 +113,28 @@
 		},	
 		
 		"TokenSettings" : {
-			"MaxRiders" : {
+			"MaxRiderFlag" : {
 				"name"					: "Maximum riders",
 				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
 			},
 			
-			"TokenisRideable" : {
+			"issetRideableFlag" : {
 				"name"					: "Token is Rideable",
 				"descrp"				: "Overrides the global default setting"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Token form",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Circle",
+					"TokenFormRectangle": "Rectangle"
+				}
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Riders can move freely",
+				"descrp"				: "If riders can move freely within the boundaries of this token"
 			}
 		},
 		
