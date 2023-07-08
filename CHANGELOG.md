@@ -3,7 +3,7 @@
 - added support for arms reach
   - added an option which overrides the mounting distance with the arms-reach distance
 - added global default rideable setting
-  - added on-token setting to override world rideable setting
+  - added on-token rideable setting (overrides world rideable setting)
 - for PF2e: changed name of "Rideable" trait setting to clarify that it is now only one optional way to make tokens rideable
 - Moved the "Rider movement" option to client settings
 - Added titles to settings 
