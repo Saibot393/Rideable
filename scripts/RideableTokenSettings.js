@@ -1,5 +1,6 @@
 import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF} from "./RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF} from "./RideableFlags.js";
+import { cTokenFormCircle, cTokenFormRectangle} from "./GeometricUtils.js";
 
 class RideableTokenSettings {
 	//DECLARATIONS
@@ -16,18 +17,34 @@ class RideableTokenSettings {
 		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 		
 		//create settings in reversed order
+		//Riders can move within Setting
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
+													vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
+													vtype : "number", 
+													vvalue : RideableFlags.RiderscanMoveWithing(pApp.token), 
+													vflagname : cInsideMovementF
+													});
+													
+		//Token Form
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
+													vhint : Translate("TokenSettings."+ cTokenFormF +".descrp"), 
+													vtype : "select", 
+													voptions : [cTokenFormCircle, cTokenFormRectangle],
+													vvalue : RideableFlags.TokenForm(pApp.token), 
+													vflagname : cTokenFormF
+													});
+													
 		//Max Riders Setting
-		console.log((pApp.token));
-		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings.MaxRiders.name"), 
-													vhint : Translate("TokenSettings.MaxRiders.descrp"), 
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMaxRiderF +".name"), 
+													vhint : Translate("TokenSettings."+ cMaxRiderF +".descrp"), 
 													vtype : "number", 
 													vvalue : RideableFlags.MaxRiders(pApp.token), 
 													vflagname : cMaxRiderF
 													});
 													
 		//Token is Rideable Setting
-		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings.TokenisRideable.name"), 
-													vhint : Translate("TokenSettings.TokenisRideable.descrp"), 
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cissetRideableF +".name"), 
+													vhint : Translate("TokenSettings."+ cissetRideableF +".descrp"), 
 													vtype : "checkbox", 
 													vvalue : RideableFlags.TokenissetRideable(pApp.token),
 													vflagname : cissetRideableF
@@ -67,7 +84,12 @@ class RideableTokenSettings {
 		let vunits = "";	
 		if (pInfos.hasOwnProperty("vunits")) {
 			vunits = pInfos.vunits;
-		} //<span class="units">(${vunits})</span> in label
+		} 
+		
+		let voptions = [];
+		if (pInfos.hasOwnProperty("voptions")) {
+			voptions = pInfos.voptions;
+		} 
 		
 		let vnewHTML = `
 			<div class="form-group slim">
@@ -87,6 +109,21 @@ class RideableTokenSettings {
 				else {
 					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}">`;
 				}
+				break;
+				
+			case "select":
+				vnewHTML = vnewHTML + `<select name="flags.${cModuleName}.${vflagname}">`;
+				
+				for (let i = 0; i < voptions.length; i++) {
+					if (voptions[i] == vvalue) {
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}" selected>${Translate(cModuleName + "." + vflagname + "." + voptions[i])}</option>`;
+					}
+					else {
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}">${Translate(cModuleName + "." + vflagname + "." + voptions[i])}</option>`;
+					}
+				}
+				
+				vnewHTML = vnewHTML + `</select>`;
 				break;
 		}
 			

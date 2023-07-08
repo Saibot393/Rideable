@@ -1,4 +1,5 @@
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { cTokenFormCircle, cTokenFormRectangle } from "./GeometricUtils.js";
 
 const cModule = "Rideable";
 
@@ -15,7 +16,7 @@ const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -51,6 +52,11 @@ class RideableFlags {
 		static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
 		
 		static RiddenToken(pRider) {} //returns the token pRider rides (if any)
+		
+		//additional infos
+		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
+		
+		static RiderscanMoveWithing(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
 	
 		//Rider count infos
 		static RiderCount(pRidden) {} //returns the number of Riders
@@ -174,6 +180,30 @@ class RideableFlags {
 		}
 		
 		return game.settings.get(cModuleName, "defaultRideable"); //default if anything fails		
+	}
+	
+	static #TokenFormFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cTokenFormF)) {
+				return vFlag.TokenFormFlag;
+			}
+		}
+		
+		return cTokenFormCircle; //default if anything fails		
+	}
+	
+	static #InsideMovementFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cInsideMovementF)) {
+				return vFlag.InsideMovementFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
 	}
 	
 	static #setRidingFlag (pToken, pContent) {
@@ -326,6 +356,16 @@ class RideableFlags {
 		return canvas.tokens.placeables.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 	}
 	
+	//additional infos
+	static TokenForm(pToken) {
+		return(this.#TokenFormFlag(pToken));
+	}
+	
+	static RiderscanMoveWithing(pRidden) {
+		return(this.#InsideMovementFlag(pRidden));
+	}
+	
+	//Rider count infos
 	static RiderCount(pRidden) {
 		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID))).length;
 	}

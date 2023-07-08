@@ -29,6 +29,7 @@
   ],
   "esmodules": [
 	"scripts/RideableCompUtils.js",
+	"scripts/GeometricUtils.js",
 	"scripts/RideableUtils.js",
 	"scripts/RideablePopups.js",
 	"scripts/RideableFlags.js",
