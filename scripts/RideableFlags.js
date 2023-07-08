@@ -266,9 +266,9 @@ class RideableFlags {
 		return false;
 	}
 	
-	static #setRelativPosition (pToken, pContent) {
+	static #setRelativPositionFlag (pToken, pContent) {
 	//sets content of RelativPosition (must be array of two numbers)
-		if ((pToken) && (pContent.length == 2)) {
+		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
 			pToken.document.setFlag(cModule, cRelativPositionF, pContent);
 			
 			return true;
@@ -410,7 +410,9 @@ class RideableFlags {
 	}
 	
 	static setRelativPosition(pToken, pPosition) {
-		this.#setRelativPosition(pToken, pPosition);
+		if (pPosition.length == 2) {
+			this.#setRelativPositionFlag(pToken, pPosition);
+		}
 	} 
 	
 	//Rider count infos
@@ -481,6 +483,7 @@ class RideableFlags {
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
+				this.#setRelativPositionFlag(pRiderTokens[i], []);
 				//this.#setFamiliarRidingFlag(pRiderTokens[i], false);
 				this.#setaddRiderHeightFlag(pRiderTokens[i], 0);
 			}
@@ -510,6 +513,7 @@ class RideableFlags {
 					}
 					else {
 						this.#setRidingFlag(vRidingToken, false);
+						this.#setRelativPositionFlag(vRidingToken, []);
 						//this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}
