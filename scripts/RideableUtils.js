@@ -47,10 +47,6 @@ class RideableUtils {
 	
 	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens (related to settings)
 	
-	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
-	
-	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
-	
 	static TokenisFamiliarof(pFamiliar, pMaster) {} //returns true of the deffinition of familiar is matched and both are controlled by current owner
 	
 	static areEnemies(pTokenA, pTokenB) {} //returns true if Tokens belong to oposing fractions (if one is neutral, always return true)
@@ -129,29 +125,6 @@ class RideableUtils {
 	
 	static TokencanRide(pToken) {
 		return true;
-	}
-	
-	static TokenDistance(pTokenA, pTokenB) {
-		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( ((pTokenA.x+pTokenA.w/2)-(pTokenB.x+pTokenB.w/2))**2 + ((pTokenA.y+pTokenA.h/2)-(pTokenB.y+pTokenB.h/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
-		}
-		
-		return 0;
-	}
-	
-	static TokenBorderDistance(pTokenA, pTokenB) {
-		if ((pTokenA) && (pTokenB)) {
-			let vDistance = RideableUtils.TokenDistance(pTokenA, pTokenB) - (Math.max((pTokenA.w+pTokenB.w), (pTokenA.h+pTokenB.h))/2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
-			
-			if (vDistance < 0) {
-				return 0;
-			}
-			else {
-				return vDistance;
-			}
-		}
-		
-		return 0;
 	}
 	
 	static TokenisFamiliarof(pFamiliar, pMaster) {
