@@ -29,11 +29,11 @@ class RideableUtils {
 	static isPf2e() {} //used for special Pf2e functions
 	
 	//Token IDs
-	static TokensfromIDs (pIDs) {} //returns an array of Tokens belonging to the pIDs
+	static TokensfromIDs (pIDs, pScene = null) {} //returns an array of Tokens belonging to the pIDs
 	
 	static IDsfromTokens (pTokens) {} //returns an array of IDs belonging to the pTokens
 	
-	static TokenfromID (pID) {} //returnsthe Token matching pID
+	static TokenfromID (pID, pScene = null) {} //returnsthe Token matching pID
 	
 	//Token Controls
 	static selectedTokens() {} //get array of all selected tokens
@@ -68,8 +68,13 @@ class RideableUtils {
 	}	
 	
 	//Token IDs
-	static TokensfromIDs (pIDs) {
-		return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id));
+	static TokensfromIDs (pIDs, pScene = null) {
+		if (pScene) {
+			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id)).map(vDocument => vDocument.object);
+		}
+		else {
+			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id));
+		}
 	}
 	
 	static IDsfromTokens (pTokens) {
@@ -86,8 +91,21 @@ class RideableUtils {
 		return vIDs;
 	}
 	
-	static TokenfromID (pID) {
-		return canvas.tokens.placeables.find(vToken => vToken.id === pID);
+	static TokenfromID (pID, pScene = null) {
+		if (pScene) {
+			let vDocument = pScene.tokens.find(vDocument => vDocument.id === pID);
+			
+			if (vDocument) {
+				return vDocument.object;
+			}
+			else {
+				return null;
+			}
+		}
+		else {
+			//default scene
+			return canvas.tokens.placeables.find(vToken => vToken.id === pID);
+		}
 	} 
 	
 	//Token Controls

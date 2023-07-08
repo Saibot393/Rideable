@@ -33,14 +33,25 @@ class Ridingmanager {
 	//IMPLEMENTATIONS
 	static OnTokenupdate(pDocument, pchanges, pInfos) {
 		if (game.user.isGM) {
+			console.log("Check1");
 			let vToken = pDocument.object;
 			
+			if (!vToken) {
+				//get token from scene if not linked
+				RideableUtils.TokenfromID(pDocument.id, pDocument.scene)
+			}
+			
 			//Check if vToken is ridden
+			console.log(pDocument.scene.tokens);
 			if (RideableFlags.isRidden(vToken)) {
+				console.log("Check2");
 				//check if token position was actually changed
 				if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
+					console.log("Check3");
 					//check if ridden Token exists
-					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
+					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken), vToken.scene);
+					
+					console.log(vRiderTokenList);
 					
 					Ridingmanager.planRiderTokens(vToken, pDocument, vRiderTokenList, false, pInfos.animate);
 				}
