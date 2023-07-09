@@ -127,19 +127,28 @@ class RideableCompatibility {
 			
 			// get selected tokens data
 			if (vValidTokenIDs.length) {
-				const selectedTokensData = foundry.utils.duplicate(pSourceScene.tokens.filter((vToken) => vValidTokenIDs.includes(vToken.id)))
+				let vselectedTokensData = foundry.utils.duplicate(pSourceScene.tokens.filter((vToken) => vValidTokenIDs.includes(vToken.id)))
 
 				// set new token positions
-				for (let vToken of selectedTokensData) {
+				for (let vToken of vselectedTokensData) {
 					vToken.x = Math.round(pSWTarget.x - vToken.width * pTargetScene.grid.size / 2);
 					vToken.y = Math.round(pSWTarget.y - vToken.height * pTargetScene.grid.size / 2);
-				}
-
+				}					
 
 				// remove selected tokens from current scene (keep remaining tokens)
 				await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, vValidTokenIDs, { isUndo: true });
 				// add selected tokens to target scene
-				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
+				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, vselectedTokensData, { isUndo: true });
+				
+				
+				for (let i = 0; i < vselectedTokensData.length; i++) {
+					//if a standard token gets teleported, let respective owener see the new scene		
+					let vUsers = RideableUtils.UserofCharacterID(vselectedTokensData[i].actorId);
+					
+					for (let j = 0; j < vUsers.length; j++) {
+						game.socket.emit("module.Rideable", {pFunction : "switchScene", pData : {pUserID : vUsers[j].id, pSceneID : pTargetScene.id, px : pSWTarget.x, py : pSWTarget.y}});
+					}
+				}		
 				
 				game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : vValidTokenIDs, pSourceSceneID : pSourceScene.id, pTargetSceneID : pTargetScene.id, pSWTargetID : pSWTarget._id, pUserID : pUser.id}});
 			}
