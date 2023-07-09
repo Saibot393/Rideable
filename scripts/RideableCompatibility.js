@@ -1,6 +1,7 @@
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideableFlags } from "./RideableFlags.js";
 import { UpdateRidderTokens } from "./RidingScript.js";
+import { RideablePopups } from "./RideablePopups.js";
 
 import { RideableCompUtils } from "./RideableCompUtils.js";
 import { cStairways, cTagger, cWallHeight } from "./RideableCompUtils.js";
@@ -13,6 +14,8 @@ class RideableCompatibility {
 	
 	//specific: stairways
 	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
+
+	static onSWPreTeleport(pData) {} //called if stairways module is active and pre teleport is triggered
 	
 	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {} //called if Rideable Teleports Tokens
 	
@@ -31,7 +34,33 @@ class RideableCompatibility {
 			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id, game.user.id);
 		}
 		else {
-			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id, pUserID : game.user.id}});
+			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id, pUserID : pData.userId}});
+		}
+	}
+	
+	static onSWPreTeleport(pData) {
+		if (!game.user.isGM || true) {
+			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {
+				//stop riders from moving through stairways
+				let vInvalidTokens = [];
+				
+				for (let i = 0; i < pData.selectedTokenIds.length; i++) {
+					
+					if (RideableFlags.isRider(RideableUtils.TokenfromID(pData.selectedTokenIds[i]))) {
+						vInvalidTokens[vInvalidTokens.length] = pData.selectedTokenIds[i];
+						
+						let vToken = RideableUtils.TokenfromID(pData.selectedTokenIds[i]);
+						RideablePopups.TextPopUpID(vToken ,"PreventedRiderMove", {pRiddenName : vToken.name}); //MESSAGE POPUP
+					}
+				}
+				
+				pData.selectedTokenIds = pData.selectedTokenIds.filter(vID => !vInvalidTokens.includes(vID));
+				
+				if (!pData.selectedTokenIds.length) {
+					//stop scene change if all tokens are invalid
+					pData.userId = "";
+				}
+			}
 		}
 	}
 	
@@ -149,6 +178,8 @@ Hooks.once("init", () => {
 	
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
+		
+		Hooks.on("PreStairwayTeleport", (...args) => RideableCompatibility.onSWPreTeleport(...args));
 		
 		Hooks.on(cModuleName + "." + "Teleport", (...args) => RideableCompatibility.RequestRideableTeleport(...args))
 		

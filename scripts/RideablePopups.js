@@ -34,7 +34,7 @@ class RideablePopups {
 			
 			if (vToken) {
 				if (vToken.isOwner || !game.settings.get(cModuleName, "OnlyownedMessagePopUps"))
-				canvas.interface.createScrollingText(vToken, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
+				canvas.interface.createScrollingText(vToken.object, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
 			}
 		}
 	}

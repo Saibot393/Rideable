@@ -73,7 +73,7 @@ class RideableUtils {
 			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id));
 		}
 		else {
-			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id));
+			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id)).map(vToken => vToken.document);
 		}
 	}
 	
@@ -104,7 +104,14 @@ class RideableUtils {
 		}
 		else {
 			//default scene
-			return canvas.tokens.placeables.find(vToken => vToken.id === pID);
+			let vToken = canvas.tokens.placeables.find(vToken => vToken.id === pID);
+			
+			if (vToken) {
+				return vToken.document;
+			}
+			else {
+				return null;
+			}
 		}
 	} 
 	
@@ -254,7 +261,7 @@ function Translate(pName){
 }
 
 //for view switching
-function async switchScene( {pUserID, pSceneID, px, py} = {}) {
+async function switchScene( {pUserID, pSceneID, px, py} = {}) {
 	if (game.user.id == pUserID) {
 		await game.scenes.get(pSceneID).view();
 		canvas.pan({ x: px, y: py });
