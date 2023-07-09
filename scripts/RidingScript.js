@@ -237,6 +237,9 @@ class Ridingmanager {
 			if (!RideableFlags.HasrelativPosition(pRiderTokenList[i])) {
 				//if first time Rider give Border position
 				vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken));
+				
+				vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, pRiddenToken.scene.grid);
+				
 				RideableFlags.setRelativPosition(pRiderTokenList[i], vTargetPosition);
 			}
 			

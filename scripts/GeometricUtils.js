@@ -44,6 +44,9 @@ class GeometricUtils {
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
+	//grids
+	static GridSnap(ppositon, pGridType) {}//snaps ppositon to grid
+	
 	//IMPLEMENTATIONS
 	//basics
 	static Rotated(pPosition, protation) {
@@ -68,7 +71,7 @@ class GeometricUtils {
 			vPosition[1] = vPosition[1] + pChanges.y;
 		}
 		else {
-			vPosition[1] = vPosition[1] + pDocument.x;
+			vPosition[1] = vPosition[1] + pDocument.y;
 		}
 		
 		return vPosition;
@@ -206,6 +209,27 @@ class GeometricUtils {
 				
 			default:
 				return false;
+		}
+	}
+	
+	//grids
+	static GridSnap(ppositon, pGrid) {
+		console.log(pGrid);
+		switch (pGrid.type) {
+			case 0:
+			//gridless
+			return ppositon;
+			break;
+			
+			case 1:
+			//squares
+			console.log(ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size));
+			return ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size);
+			break;
+			
+			//add cases for grids(later)
+			default:
+			return ppositon;
 		}
 	}
 }

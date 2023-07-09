@@ -66,7 +66,7 @@ class RideableCompatibility {
 	
 	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {
 		if (game.user.isGM) {
-			if (pSourceSceneID != pTargetSceneID) {
+			if ((pSourceSceneID != pTargetSceneID) && pSourceSceneID && pTargetSceneID) {
 				//only necessary for cross scene teleport
 				
 				let vSourceScene = game.scenes.get(pSourceSceneID);
