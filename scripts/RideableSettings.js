@@ -1,4 +1,4 @@
-import { RideableCompUtils, cWallHeight, cArmReach } from "./RideableCompUtils.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold } from "./RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "./RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./MountingScript.js";
 
@@ -44,7 +44,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.UseArmReachDistance.name"),
 	hint: Translate("Settings.UseArmReachDistance.descrp"),
 	scope: "world",
-	config: RideableCompUtils.isactiveModule(cArmReach),
+	config: (RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)),
 	type: Boolean,
 	default: false
   });
