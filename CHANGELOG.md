@@ -1,6 +1,6 @@
 ## v2.0.0
 - Major changes in the underlying code
-- All actions (such as riding, mounting, unmounting...) now work for players, even if the GM is in another scene (still requires a GM to be online)
+- All actions (such as riding, mounting, unmounting...) now work for players, even if the GM is in different scene (still requires a GM to be online)
 - Added full support for the Stairways module
   - Riders will follow their ridden token through stairways
   - If the option "Move ridden Token" is active, the ridden token will follow its riders through stairways
