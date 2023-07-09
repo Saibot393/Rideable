@@ -228,7 +228,7 @@ class GeometricUtils {
 			
 			//add cases for grids(later)
 			default:
-				return ppositon;
+				return [0,0];
 		}
 	}
 }

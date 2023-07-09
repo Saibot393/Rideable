@@ -196,12 +196,8 @@ class RideableUtils {
 	} 
 	
 	static MountingDistance(pRider, pRidden) {
-		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
-			return game.settings.get(cArmReach, "globalInteractionMeasurement");
-		}
-		
-		if (RideableCompUtils.isactiveModule(cArmReachold) && game.settings.get(cModuleName, "UseArmReachDistance")) {
-			return game.settings.get(cArmReach, "globalInteractionDistance");
+		if ((RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+			return RideableCompUtils.ARReachDistance();
 		}
 		
 		if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
