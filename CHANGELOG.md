@@ -8,6 +8,7 @@
   - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways
 - Fixed a few placement bugs for riders
 - Improved initial placing of riders for free movement
+- Added support for Arms Reach (same as for FoundryVTT Arms Reach)
 
 ## v1.6.0
 - Added titles to settings
@@ -20,7 +21,7 @@
 - Added on-token setting for maximum riders (overrides world setting)
 - Moved the "Rider movement" option to client settings
 - For PF2e: changed name of "Rideable" trait setting to clarify that it is now only one optional way to make tokens rideable
-- Added support for arms reach
+- Added support for FoundryVTT Arms Reach
   - Added an option which overrides the mounting distance with the arms-reach distance
     
 ## v1.5.1
