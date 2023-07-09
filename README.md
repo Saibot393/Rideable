@@ -39,11 +39,17 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 
 #### Explicit compatability:
 
+- [FoundryVTT Arms Reach](https://foundryvtt.com/packages/foundryvtt-arms-reach)/[Arms Reach](https://foundryvtt.com/packages/arms-reach):
+  - Additional setting "Use Arms Reach distance": to use the "Arms Reach" distance instead of the set Mounting distance
+- [Stairways](https://foundryvtt.com/packages/stairways):
+  - Supports both in- and cross-scene stairways
+  - Riders will follow their ridden token through stairways
+  - If the option "Move ridden Token" is active, the ridden token will follow its riders through stairways
+  - If a users (standard) character gets teleported in one of this ways, the user will switch scenes
+  - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways (GMs can override this)
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
   - Additional setting "Use token height": to use the the ridden tokens height instead of the "Riding Height" setting
   - If the above setting is activated the ridden tokens elevation will automatically be updated should the ridden tokens height change
-- [FoundryVTT Arms Reach](https://foundryvtt.com/packages/foundryvtt-arms-reach):
-  - Additional setting "Use Arms Reach distance": to use the "Arms Reach" distance instead of the set Mounting distance
 
 ### Languages:
 
