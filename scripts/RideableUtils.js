@@ -254,9 +254,10 @@ function Translate(pName){
 }
 
 //for view switching
-function switchScene( {pUserID, pSceneID} = {}) {
+function async switchScene( {pUserID, pSceneID, px, py} = {}) {
 	if (game.user.id == pUserID) {
-		game.scenes.get(pSceneID).view();
+		await game.scenes.get(pSceneID).view();
+		canvas.pan({ x: px, y: py });
 	}
 }
 

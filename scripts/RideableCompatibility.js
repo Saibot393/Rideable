@@ -26,7 +26,7 @@ class RideableCompatibility {
 	
 	//specific: stairways
 	static onSWTeleport(pData) {
-		//game.socket.emit("module.Rideable", {pFunction : "switchScene", pData : {pUserID : "T0isEfpkKbyG4zis", pSceneID : "6ploh8zOxN1blPVO"}});
+		//game.socket.emit("module.Rideable", {pFunction : "switchScene", pData : {pUserID : "T0isEfpkKbyG4zis", pSceneID : "6ploh8zOxN1blPVO", px : 0; py : 0}});
 		if (game.user.isGM) {
 			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id, game.user.id);
 		}
