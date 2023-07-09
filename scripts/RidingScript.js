@@ -257,7 +257,7 @@ class Ridingmanager {
 			}
 			else {
 				if (i > 0) {
-					vTargetx = vprex + GeometricUtils.insceneWidth((pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
+					vTargetx = vprex + (GeometricUtils.insceneWidth(pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
 					vprex = vTargetx;
 				}
 				else {

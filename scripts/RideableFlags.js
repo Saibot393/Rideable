@@ -81,13 +81,15 @@ class RideableFlags {
 		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
 	
 	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
 	
 	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
-	static recheckRiding (pRiderTokens) {} //rechecks to see of Ridden Token still exists
+	static recheckRiding (pRiderTokens) {} //rechecks to see if Ridden Token still exists
+	
+	static async recheckRiders (pRiddenToken) {} //rechecks to see if riders of pRiddenToken still exist
 	
 	static stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
 	
@@ -446,9 +448,9 @@ class RideableFlags {
 	}
 	
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false) {
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false, pforceset = false) {
 		if (pRiddenToken) {
-			let vValidTokens = pRiderTokens.filter(vToken => !this.isRider(vToken) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
+			let vValidTokens = pRiderTokens.filter(vToken => (!this.isRider(vToken) || pforceset) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
 			if (await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
 				for (let i = 0; i < vValidTokens.length; i++) {
@@ -496,6 +498,10 @@ class RideableFlags {
 			}
 		}
 	}
+	
+	static async recheckRiders (pRiddenToken) {
+		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => pRiddenToken.scene.tokens.get(vID)));
+	} 
 	
 	static stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
 		if (pRidingTokens) {

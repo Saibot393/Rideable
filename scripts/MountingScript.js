@@ -36,7 +36,7 @@ class MountingManager {
 	//Basic Mounting /UnMounting
 	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
-	static MountSelected(pTargetHovered = false, pFamiliar = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	static async MountSelected(pTargetHovered = false, pFamiliar = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar = false) {} //Request GM user to execute MountSelectedGM with given parameters
 	
@@ -75,6 +75,7 @@ class MountingManager {
 				//pFamiliar riding can only be handled if setting is activated
 				if (pTarget) {
 					if (RideableFlags.TokenisRideable(pTarget) || pFamiliar) {
+						
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pFamiliar));
 						
 						if (vValidTokens.length) {
@@ -101,7 +102,7 @@ class MountingManager {
 		return;
 	}
 	
-	static MountSelected(pTargetHovered = false, pFamiliar = false) {
+	static async MountSelected(pTargetHovered = false, pFamiliar = false) {
 		let vTarget = RideableUtils.targetedToken();
 		
 		if (pTargetHovered || !vTarget) {
@@ -113,6 +114,8 @@ class MountingManager {
 		}
 		
 		//Make sure all riders can even ride the target
+		await RideableFlags.recheckRiders(vTarget);
+		
 		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pFamiliar, true));
 		
 		if (pFamiliar) {
@@ -289,6 +292,7 @@ class MountingManager {
 	//Aditional Informations
 	
 	static TokencanMount (pRider, pRidden, pFamiliar = false) {
+		
 		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
 			//prevent riding loops
 			
@@ -347,7 +351,7 @@ class MountingManager {
 				}
 				
 				if (RideableFlags.isRider(pToken)) {
-					MountingManager.UnMountSelectedGM([pToken]);
+					MountingManager.UnMountSelectedGM([pToken], false);
 				}
 			}
 		}

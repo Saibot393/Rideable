@@ -83,7 +83,8 @@ class RideableCompUtils {
 		await RideableFlags.cleanRiderIDs(pRidden);
 		
 		for (let i = 0; i < vNewRiders.length; i++) {
-			await RideableFlags.addRiderTokens(pRidden, [vNewRiders[i]], RideableFlags.wasFamiliarRider(vNewRiders[i]) );
+			//force new riders
+			await RideableFlags.addRiderTokens(pRidden, [vNewRiders[i]], RideableFlags.wasFamiliarRider(vNewRiders[i]), true);
 			
 			RideableCompUtils.UpdatePreviousID(vNewRiders[i]);
 		}

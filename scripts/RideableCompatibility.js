@@ -14,11 +14,11 @@ class RideableCompatibility {
 	//specific: stairways
 	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 	
-	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {} //called if Rideable Teleports Tokens
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {} //called if Rideable Teleports Tokens
 	
-	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //Organises the teleport of all Riders of pTokenID
+	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {} //Organises the teleport of all Riders of pTokenID
 	
-	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
+	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
 	
 	//specific: wall-heights
 	static onWHTokenupdate(pToken, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
@@ -27,14 +27,14 @@ class RideableCompatibility {
 	//specific: stairways
 	static onSWTeleport(pData) {
 		if (game.user.isGM) {
-			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id);
+			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id, game.user.id);
 		}
 		else {
-			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id}});
+			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id, pUserID : game.user.id}});
 		}
 	}
 	
-	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {
 		if (game.user.isGM) {
 			if (pSourceSceneID != pTargetSceneID) {
 				//only necessary for cross scene teleport
@@ -44,12 +44,13 @@ class RideableCompatibility {
 				
 				let vTarget = vTargetScene.stairways.get(pSWTargetID);	
 				
-				RideableCompatibility.OrganiseTeleport(pTokenIDs, vSourceScene, vTargetScene, vTarget);
+				RideableCompatibility.OrganiseTeleport(pTokenIDs, vSourceScene, vTargetScene, vTarget, game.users.get(pUserID));
 			}
 		}
 	} 	
 		
-	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
+	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {
+		//canvas.tokens.placeables.filter(vToken => vToken.name == "Gegner")[0].actor.ownership["OpgCvzuz9GygT72J"]
 		if (game.user.isGM) {
 			if (pSourceScene != pTargetScene) {
 				if (pSourceScene && pTargetScene) {
@@ -57,9 +58,18 @@ class RideableCompatibility {
 						let vToken = RideableCompUtils.TokenwithpreviousID(pTokenIDs[i], pTargetScene);
 						
 						if (vToken) {
+							if (RideableFlags.isRider(vToken)) {
+								//see if ridden token was left behind
+								let vRiddenToken = pSourceScene.tokens.find(vpreviousToken => RideableFlags.isRiddenbyID(vpreviousToken, RideableCompUtils.PreviousID(vToken)));
+								
+								if (vRiddenToken) {
+									await RideableCompatibility.SWTeleportleftTokens([vRiddenToken.id], pSourceScene, pTargetScene, pSWTarget, pUser);
+								}
+							}
+							
 							if (RideableFlags.isRidden(vToken)) {
-								//teleport
-								await RideableCompatibility.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget);
+								//teleport riders
+								await RideableCompatibility.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget, pUser);
 								
 								//update ridden by id flags
 								await RideableCompUtils.UpdateRiderIDs(vToken);
@@ -78,7 +88,7 @@ class RideableCompatibility {
 		}
 	}
 	
-	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) { 
+	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) { 
 		//adapted from staiways(by SWW13)>teleport.js>handleTeleportRequestGM:
 		if (pSourceScene && pTargetScene) {
 			//filter pTokenIDs
@@ -99,10 +109,12 @@ class RideableCompatibility {
 				await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, vValidTokenIDs, { isUndo: true });
 				// add selected tokens to target scene
 				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, selectedTokensData, { isUndo: true });
+				
+				game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : vValidTokenIDs, pSourceSceneID : pSourceScene.id, pTargetSceneID : pTargetScene.id, pSWTargetID : pSWTarget._id, pUserID : pUser.id}});
 			}
 		}
 		
-		RideableCompatibility.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
+		RideableCompatibility.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser);
 	} 
 	
 	//specific: wall-heights	
@@ -126,7 +138,7 @@ class RideableCompatibility {
 
 
 //exports
-function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID } = {}) { return RideableCompatibility.RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID); }
+function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID } = {}) { return RideableCompatibility.RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID); }
 
 export { RequestRideableTeleport };
 
