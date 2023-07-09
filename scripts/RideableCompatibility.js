@@ -36,9 +36,7 @@ class RideableCompatibility {
 	
 	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID) {
 		if (game.user.isGM) {
-			console.log("Check0.1");
 			if (pSourceSceneID != pTargetSceneID) {
-				console.log("Check0.2");
 				//only necessary for cross scene teleport
 				
 				let vSourceScene = game.scenes.get(pSourceSceneID);
@@ -46,7 +44,6 @@ class RideableCompatibility {
 				
 				let vTarget = vTargetScene.stairways.get(pSWTargetID);	
 				
-				console.log("Check0.3");
 				RideableCompatibility.OrganiseTeleport(pTokenIDs, vSourceScene, vTargetScene, vTarget);
 			}
 		}
@@ -54,18 +51,12 @@ class RideableCompatibility {
 		
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {
 		if (game.user.isGM) {
-			console.log("check1");
 			if (pSourceScene != pTargetScene) {
-				console.log("check2");
 				if (pSourceScene && pTargetScene) {
-					console.log("check3");
 					for (let i = 0; i < pTokenIDs.length; i++) {
-						console.log("check4");
 						let vToken = RideableCompUtils.TokenwithpreviousID(pTokenIDs[i], pTargetScene);
 						
-						console.log(vToken);
 						if (vToken) {
-							console.log("check5");
 							if (RideableFlags.isRidden(vToken)) {
 								//teleport
 								await RideableCompatibility.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget);
@@ -141,18 +132,17 @@ export { RequestRideableTeleport };
 
 //Hook into other modules
 Hooks.once("init", () => {
-	/*
+	
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
 		
-		Hooks.on(cModuleName + "." + "Teleport", (...args) => RideableCompatibility.onRideableTeleport(...args))
+		Hooks.on(cModuleName + "." + "Teleport", (...args) => RideableCompatibility.RequestRideableTeleport(...args))
 		
 		Hooks.on(cModuleName + "." + "Mount", (pRider, pRidden) => {
 																	RideableCompUtils.UpdatePreviousID(pRider)
 																	RideableCompUtils.UpdatePreviousID(pRidden)
 																	}); //so after Teleport Token can still be found through the old id
 	}
-	*/
 	
 	if (RideableCompUtils.isactiveModule(cWallHeight)) {
 		Hooks.on("updateToken", (...args) => RideableCompatibility.onWHTokenupdate(...args));

@@ -56,17 +56,15 @@ class RideableCompUtils {
 	//specific: stairways
 	static UpdatePreviousID(pToken) {
 		if (pToken) {
-			pToken.document.setFlag(cModuleName, cPreviousIDF, pToken.id);
+			pToken.setFlag(cModuleName, cPreviousIDF, pToken.id);
 		}
 	}
 	
 	static PreviousID(pToken) {
 		if (pToken) {
-			if (pToken.document) {
-				if (pToken.document.flags.Rideable) {
-					if (pToken.document.flags.Rideable.PreviousIDFlag) {
-						return pToken.document.flags.Rideable.PreviousIDFlag;
-					}
+			if (pToken.flags.Rideable) {
+				if (pToken.flags.Rideable.PreviousIDFlag) {
+					return pToken.flags.Rideable.PreviousIDFlag;
 				}
 			}
 		}
@@ -80,7 +78,7 @@ class RideableCompUtils {
 	static async UpdateRiderIDs(pRidden) {
 		let vPreviousRiderIDs = RideableFlags.RiderTokenIDs(pRidden);
 		
-		let vNewRiders = await canvas.tokens.placeables.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
+		let vNewRiders = await pRidden.scene.tokens.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
 		
 		await RideableFlags.cleanRiderIDs(pRidden);
 		
@@ -111,7 +109,7 @@ class RideableCompUtils {
 				}
 				else {
 					if (game.settings.get(cWallHeight, 'autoLOSHeight')) {
-						vHeightdiff = canvas.scene.dimensions.distance * Math.max(pToken.width, pToken.height) * ((Math.abs(pToken.texture.scaleX) + Math.abs(pToken.texture.scaleY)) / 2);
+						vHeightdiff = pToken.scene.dimensions.distance * Math.max(pToken.width, pToken.height) * ((Math.abs(pToken.texture.scaleX) + Math.abs(pToken.texture.scaleY)) / 2);
 					}
 					else {
 						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');

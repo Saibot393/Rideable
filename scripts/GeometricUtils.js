@@ -136,6 +136,7 @@ class GeometricUtils {
 			return pToken.object.w;
 		}
 		else {
+			console.log(pToken);
 			return pToken.width * pToken.scene.dimensions.size;
 		}
 	}
