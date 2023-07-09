@@ -1,10 +1,10 @@
 import { MountRequest, UnMountRequest } from "./MountingScript.js";
 import { PopUpRequest } from "./RideablePopups.js";
 import { RequestRideableTeleport } from "./RideableCompatibility.js";
+import { switchScene } from "./RideableUtils.js";
 
 //execute functions with pData depending on pFunction
 function organiseSocketEvents({pFunction, pData} = {}) {
-	console.log(pFunction);
 	switch(pFunction) {
 		case "MountRequest":
 			MountRequest(pData);
@@ -17,6 +17,9 @@ function organiseSocketEvents({pFunction, pData} = {}) {
 			break;
 		case  "RequestRideableTeleport":
 			RequestRideableTeleport(pData);
+			break;
+		case "switchScene":
+			switchScene(pData);
 			break;
 	}
 }

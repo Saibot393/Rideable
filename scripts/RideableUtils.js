@@ -245,7 +245,7 @@ class RideableUtils {
 				flags: {}
 			}
 		}
-	}
+	} 
 }
 
 //for easy translation
@@ -253,5 +253,12 @@ function Translate(pName){
   return game.i18n.localize(cModuleName+"."+pName);
 }
 
+//for view switching
+function switchScene( {pUserID, pSceneID} = {}) {
+	if (game.user.id == pUserID) {
+		game.scenes.get(pSceneID).view();
+	}
+}
+
 //Export RideableFlags Class
-export{ RideableUtils, Translate };
+export{ RideableUtils, Translate, switchScene };

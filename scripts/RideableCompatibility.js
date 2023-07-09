@@ -26,6 +26,7 @@ class RideableCompatibility {
 	
 	//specific: stairways
 	static onSWTeleport(pData) {
+		//game.socket.emit("module.Rideable", {pFunction : "switchScene", pData : {pUserID : "T0isEfpkKbyG4zis", pSceneID : "6ploh8zOxN1blPVO"}});
 		if (game.user.isGM) {
 			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id, game.user.id);
 		}
@@ -62,7 +63,8 @@ class RideableCompatibility {
 								//see if ridden token was left behind
 								let vRiddenToken = pSourceScene.tokens.find(vpreviousToken => RideableFlags.isRiddenbyID(vpreviousToken, RideableCompUtils.PreviousID(vToken)));
 								
-								if (vRiddenToken) {
+								if (vRiddenToken && (vRiddenToken.actor.ownership[pUser.id] >= 3)) {
+									//only teleport if ridden token is owned
 									await RideableCompatibility.SWTeleportleftTokens([vRiddenToken.id], pSourceScene, pTargetScene, pSWTarget, pUser);
 								}
 							}
@@ -88,7 +90,7 @@ class RideableCompatibility {
 		}
 	}
 	
-	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) { 
+	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {
 		//adapted from staiways(by SWW13)>teleport.js>handleTeleportRequestGM:
 		if (pSourceScene && pTargetScene) {
 			//filter pTokenIDs
