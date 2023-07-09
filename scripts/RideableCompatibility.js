@@ -39,7 +39,7 @@ class RideableCompatibility {
 	}
 	
 	static onSWPreTeleport(pData) {
-		if (!game.user.isGM || true) {
+		if (!game.user.isGM) {
 			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow") {
 				//stop riders from moving through stairways
 				let vInvalidTokens = [];

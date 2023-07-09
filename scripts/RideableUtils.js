@@ -54,6 +54,8 @@ class RideableUtils {
 	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
 	
 	static MountingDistance(pRider, pRidden) {} //returns the maximal Riding distance for pRider to mount pRidden
+		
+	static UserofCharacterID(pID) {} //returns all Users which has the character with pID set as their standard character (if any)
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -207,6 +209,10 @@ class RideableUtils {
 		}
 	}
 	
+	static UserofCharacterID(pID) {
+		return game.users.filter(vuser =>)
+	} 
+	
 	//Pf2e specific
 	static Ridingstring(pToken) {
 		if (pToken) {
@@ -262,7 +268,9 @@ function Translate(pName){
 
 //for view switching
 async function switchScene( {pUserID, pSceneID, px, py} = {}) {
-	if (game.user.id == pUserID) {
+	if ((game.user.id == pUserID) && (canvas.scene.id != pSceneID)) {
+		//change only if intended user and not already on target scene
+		
 		await game.scenes.get(pSceneID).view();
 		canvas.pan({ x: px, y: py });
 	}
