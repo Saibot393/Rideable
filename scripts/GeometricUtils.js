@@ -217,19 +217,18 @@ class GeometricUtils {
 		console.log(pGrid);
 		switch (pGrid.type) {
 			case 0:
-			//gridless
-			return ppositon;
-			break;
+				//gridless
+				return ppositon;
+				break;
 			
 			case 1:
-			//squares
-			console.log(ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size));
-			return ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size);
-			break;
+				//squares
+				return ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size);
+				break;
 			
 			//add cases for grids(later)
 			default:
-			return ppositon;
+				return ppositon;
 		}
 	}
 }

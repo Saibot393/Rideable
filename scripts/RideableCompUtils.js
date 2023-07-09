@@ -7,6 +7,7 @@ const cTagger = "tagger";
 const cWallHeight = "wall-height";
 const cLevelsautocover = "levelsautocover";
 const cArmReach = "foundryvtt-arms-reach";
+const cArmReachold = "arms-reach";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -49,7 +50,11 @@ class RideableCompUtils {
 	//specific: Foundry ArmsReach
 	static ARReachDistance() {
 		if (RideableCompUtils.isactiveModule(cArmReach)) {
-			return game.settings.get(cArmReach, "globalInteractionMeasurement")
+			return game.settings.get(cArmReach, "globalInteractionMeasurement");
+		}
+		
+		if (RideableCompUtils.isactiveModule(cArmReachold)) {
+			return game.settings.get(cArmReachold, "globalInteractionDistance");
 		}
 	}
 	
@@ -92,7 +97,7 @@ class RideableCompUtils {
 	
 	//specific: wall-heights
 	static guessWHTokenHeight(pToken, pWithElevation = false) {
-		if (RideableCompUtils.isactiveModule(cWallHeight)) {  //based on wall-height>utils>getTokenLOSheight (no longer ugly)
+		if (RideableCompUtils.isactiveModule(cWallHeight)) {  //based on wall-height(by theripper93)>utils>getTokenLOSheight (no longer ugly)
 			if (pToken) {
 				let vHeightdiff;
 				let vdivider = 1;

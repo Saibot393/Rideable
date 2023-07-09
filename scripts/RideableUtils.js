@@ -1,4 +1,4 @@
-import { RideableCompUtils, cArmReach } from "./RideableCompUtils.js";
+import { RideableCompUtils, cArmReach, cArmReachold } from "./RideableCompUtils.js";
 import { cWallHeight } from "./RideableCompUtils.js";
 
 //CONSTANTS
@@ -199,13 +199,16 @@ class RideableUtils {
 		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
 			return game.settings.get(cArmReach, "globalInteractionMeasurement");
 		}
+		
+		if (RideableCompUtils.isactiveModule(cArmReachold) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+			return game.settings.get(cArmReach, "globalInteractionDistance");
+		}
+		
+		if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
+			return game.settings.get(cModuleName, "MountingDistance");
+		}
 		else {
-			if (game.settings.get(cModuleName, "MountingDistance") >= 0) {
-				return game.settings.get(cModuleName, "MountingDistance");
-			}
-			else {
-				return Infinity;
-			}
+			return Infinity;
 		}
 	}
 	
