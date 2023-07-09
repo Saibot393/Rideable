@@ -29,7 +29,8 @@ class RideablePopups {
 	
 	static PopUpRequest(pTokenID, pText) {
 		if (game.settings.get(cModuleName, "MessagePopUps")) {
-			let vToken = RideableUtils.TokenfromID(pTokenID);
+			//only relevant if token is on current canves, no scene necessary
+			let vToken = RideableUtils.TokenfromID(pTokenID); 
 			
 			if (vToken) {
 				if (vToken.isOwner || !game.settings.get(cModuleName, "OnlyownedMessagePopUps"))

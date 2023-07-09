@@ -21,7 +21,7 @@ class RideableCompatibility {
 	static async SWTeleportleftTokens(pTokenIDs, pSourceScene, pTargetScene, pSWTarget) {} //teleports all Tokens in pTokenIDs that have not yet been teleported
 	
 	//specific: wall-heights
-	static onWHTokenupdate(pDocument, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
+	static onWHTokenupdate(pToken, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
 	//IMPLEMENTATIONS
 	
 	//specific: stairways
@@ -76,7 +76,7 @@ class RideableCompatibility {
 								RideableCompUtils.UpdatePreviousID(vToken);
 								
 								//order riders
-								let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
+								let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken), vToken.scene);
 						
 								UpdateRidderTokens(vToken, vRiderTokenList, false, false);
 							}
@@ -115,19 +115,17 @@ class RideableCompatibility {
 	} 
 	
 	//specific: wall-heights	
-	static onWHTokenupdate(pDocument, pchanges, pInfos) {
-		if (game.user.isGM) {
-			let vToken = pDocument.object;
-			
+	static onWHTokenupdate(pToken, pchanges, pInfos) {
+		if (game.user.isGM) {			
 			//Check if vToken is ridden
-			if (RideableFlags.isRidden(vToken)) {
+			if (RideableFlags.isRidden(pToken)) {
 				
 				//check if token position was actually changed
 				if (pchanges.flags && pchanges.flags[cWallHeight]) {
 					//check if ridden Token exists
-					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken));
+					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), pToken.scene);
 					
-					UpdateRidderTokens(vToken, vRiderTokenList, false, pInfos.animate);
+					UpdateRidderTokens(pToken, vRiderTokenList, false, pInfos.animate);
 				}
 			}
 		}

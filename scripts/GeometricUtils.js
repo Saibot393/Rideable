@@ -152,7 +152,7 @@ class GeometricUtils {
 	//advanced
 	static closestBorderposition(pToken, pTokenForm, pDirection) {
 		//unrotate direction to calculate relative position
-		let vDirection = GeometricUtils.Rotated(pDirection, -pToken.document.rotation);
+		let vDirection = GeometricUtils.Rotated(pDirection, -pToken.rotation);
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
@@ -198,7 +198,7 @@ class GeometricUtils {
 			case cTokenFormRectangle:
 				let vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
 				
-				vDifference = GeometricUtils.Rotated(vDifference, -pToken.document.rotation);
+				vDifference = GeometricUtils.Rotated(vDifference, -pToken.rotation);
 				
 				return ((Math.abs(vDifference[0]) <= GeometricUtils.insceneWidth(pToken)/2) && (Math.abs(vDifference[1]) <= GeometricUtils.insceneHeight(pToken)/2));
 			

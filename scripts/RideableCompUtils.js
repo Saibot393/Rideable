@@ -73,15 +73,8 @@ class RideableCompUtils {
 		return "";
 	}
 	
-	static TokenwithpreviousID(pID, pScene) {
-		let vTokens = pScene.tokens.map(vDocument => vDocument.object);
-		
-		console.log(vTokens);
-		
-		console.log(pID);
-		console.log(vTokens.map(vToken => RideableCompUtils.PreviousID(vToken)));
-		
-		return vTokens.filter(vToken => RideableCompUtils.PreviousID(vToken) == pID)[0];
+	static TokenwithpreviousID(pID, pScene) {	
+		return pScene.tokens.filter(vToken => RideableCompUtils.PreviousID(vToken) == pID)[0];
 	}
 	
 	static async UpdateRiderIDs(pRidden) {
