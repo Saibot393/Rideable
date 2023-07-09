@@ -1,3 +1,7 @@
+## v2.0.0
+- Major changes in the underlying code
+- All actions (such as riding, mounting, unmounting...) now work for players, even if the GM is in another scene (still requires a GM to be online)
+
 ## v1.6.0
 - Added titles to settings
 - Added on-token setting Token form which determines how the border is defined
