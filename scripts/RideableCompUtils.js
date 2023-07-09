@@ -115,8 +115,13 @@ class RideableCompUtils {
 						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');
 					}
 				}
-
-				return pToken.elevation + vHeightdiff / vdivider;
+				
+				if (pWithElevation) {
+					return pToken.elevation + vHeightdiff / vdivider;
+				}
+				else {
+					return vHeightdiff / vdivider;
+				}
 			}
 		}
 		else {

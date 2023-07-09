@@ -61,7 +61,7 @@ class RideableCompatibility {
 								//teleport
 								await RideableCompatibility.SWTeleportleftTokens(RideableFlags.RiderTokenIDs(vToken), pSourceScene, pTargetScene, pSWTarget);
 								
-								//update flags
+								//update ridden by id flags
 								await RideableCompUtils.UpdateRiderIDs(vToken);
 								
 								RideableCompUtils.UpdatePreviousID(vToken);
@@ -69,8 +69,6 @@ class RideableCompatibility {
 								//order riders
 								let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken), vToken.scene);
 						
-								console.log(vToken);
-								console.log(vRiderTokenList);
 								UpdateRidderTokens(vToken, vRiderTokenList, false, false);
 							}
 						}
@@ -104,7 +102,7 @@ class RideableCompatibility {
 			}
 		}
 		
-		//RideableCompatibility.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
+		RideableCompatibility.OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget);
 	} 
 	
 	//specific: wall-heights	
