@@ -101,12 +101,7 @@ class RideableFlags {
 	static #RideableFlags (pToken) {	
 	//returns all Module Flags of pToken (if any) (can contain Riding and Riders Flags)
 		if (pToken) {
-			if (pToken) {
-				if (pToken.flags.hasOwnProperty(cModuleName)) {
-					return pToken.flags.Rideable;
-				}
-			}
-			else if (pToken.flags.hasOwnProperty(cModuleName)) { //in case pToken is a document (necessary for token deletion)
+			if (pToken.flags.hasOwnProperty(cModuleName)) {
 				return pToken.flags.Rideable;
 			}
 		}
