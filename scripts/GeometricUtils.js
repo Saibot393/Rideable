@@ -146,6 +146,7 @@ class GeometricUtils {
 			return pToken.object.h;
 		}
 		else {
+			console.log(pToken);
 			return pToken.height * pToken.scene.dimensions.size;
 		}
 	}

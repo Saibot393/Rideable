@@ -478,7 +478,11 @@ class RideableFlags {
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
-				this.#setRelativPositionFlag(pRiderTokens[i], []);
+				
+				if (pRemoveRiddenreference) {
+					this.#setRelativPositionFlag(pRiderTokens[i], []);
+				}
+				
 				//this.#setFamiliarRidingFlag(pRiderTokens[i], false);
 				this.#setaddRiderHeightFlag(pRiderTokens[i], 0);
 			}
@@ -508,7 +512,10 @@ class RideableFlags {
 					}
 					else {
 						this.#setRidingFlag(vRidingToken, false);
-						this.#setRelativPositionFlag(vRidingToken, []);
+						
+						if (pRemoveRiddenreference) {
+							this.#setRelativPositionFlag(vRidingToken, []);
+						}
 						//this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}

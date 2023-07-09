@@ -69,6 +69,8 @@ class RideableCompatibility {
 								//order riders
 								let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(vToken), vToken.scene);
 						
+								console.log(vToken);
+								console.log(vRiderTokenList);
 								UpdateRidderTokens(vToken, vRiderTokenList, false, false);
 							}
 						}
