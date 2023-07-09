@@ -4,7 +4,8 @@
 - Added full support for the Stairways module
   - Riders will follow their ridden token through stairways
   - If the option "Move ridden Token" is active, the ridden token will follow its riders through stairways
-  - If a users (standard) character gets teleported in one of this ways the user will switch scenes
+  - If a users (standard) character gets teleported in one of this ways, the user will switch scenes
+  - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways
 
 ## v1.6.0
 - Added titles to settings
