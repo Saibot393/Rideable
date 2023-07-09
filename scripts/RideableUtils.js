@@ -210,7 +210,7 @@ class RideableUtils {
 	}
 	
 	static UserofCharacterID(pID) {
-		return game.users.filter(vuser =>)
+		return game.users.filter(vuser => vuser.character).filter(vuser => vuser.character.id = pID);
 	} 
 	
 	//Pf2e specific
