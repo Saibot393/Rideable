@@ -80,7 +80,6 @@ class RideableCompatibility {
 	} 	
 		
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {
-		//canvas.tokens.placeables.filter(vToken => vToken.name == "Gegner")[0].actor.ownership["OpgCvzuz9GygT72J"]
 		if (game.user.isGM) {
 			if (pSourceScene != pTargetScene) {
 				if (pSourceScene && pTargetScene) {
