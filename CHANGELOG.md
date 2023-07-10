@@ -1,3 +1,7 @@
+## v2.1.0
+- Improved previous (v2.0.1) bug fix
+- Fixed bug related to familiar riding
+
 ## v2.0.1
 -  hotfix for Foundry v10
 
