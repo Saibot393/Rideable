@@ -368,7 +368,7 @@ class RideableFlags {
 			let i = 0;
 			while ((i < RideableFlags.RiderTokenIDs(pRider).length) && (!vRidingLoop)) {
 				//with recursion, check all Riders of pRider for RidingLoop with pRidden
-				vRidingLoop = RideableFlags.RidingLoop(RideableUtils.TokenfromID(RideableFlags.RiderTokenIDs(pRider)[i], pRider.scene), pRidden);
+				vRidingLoop = RideableFlags.RidingLoop(RideableUtils.TokenfromID(RideableFlags.RiderTokenIDs(pRider)[i], RideableUtils.sceneof(pRider)), pRidden);
 			
 				i++;
 			}
@@ -380,7 +380,7 @@ class RideableFlags {
 	}
 	
 	static RiddenToken(pRider) {
-		return pRider.scene.tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		return RideableUtils.sceneof(pRider).tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 	}
 	
 	//additional infos
@@ -414,7 +414,7 @@ class RideableFlags {
 	
 	//Rider count infos
 	static RiderCount(pRidden) {
-		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID , pRidden.scene))).length;
+		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID , RideableUtils.sceneof(pRidden)))).length;
 	}
 	
 	static MaxRiders(pRidden) {
@@ -440,7 +440,7 @@ class RideableFlags {
 	}
 	
 	static RiderFamiliarCount(pRidden) {
-		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID, pRidden.scene))).length;
+		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID, RideableUtils.sceneof(pRidden)))).length;
 	} 
 	
 	static RiderHeight(pRider) {
@@ -465,7 +465,7 @@ class RideableFlags {
 	
 	static async cleanRiderIDs (pRiddenToken) {
 		//will only keep ids for which a token exists that has the Rider flag
-		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID, pRiddenToken.scene))));
+		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID, RideableUtils.sceneof(pRiddenToken)))));
 	} 
 	
 	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {
@@ -494,13 +494,13 @@ class RideableFlags {
 	static recheckRiding (pRiderTokens) {
 		if (pRiderTokens) {
 			for (let i = 0; i < pRiderTokens.length; i++) {
-				this.#setRidingFlag(pRiderTokens[i], Boolean(pRiderTokens[i].scene.tokens.find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i]))));
+				this.#setRidingFlag(pRiderTokens[i], Boolean(RideableUtils.sceneof(pRiderTokens[i]).tokens.find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i]))));
 			}
 		}
 	}
 	
 	static async recheckRiders (pRiddenToken) {
-		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => pRiddenToken.scene.tokens.get(vID)));
+		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableUtils.sceneof(pRiddenToken).tokens.get(vID)));
 	} 
 	
 	static stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
@@ -509,7 +509,7 @@ class RideableFlags {
 				if (pRidingTokens[i]) {
 					let vRidingToken = pRidingTokens[i];
 					
-					let vRiddenTokens = pRidingTokens[i].scene.tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
+					let vRiddenTokens = RideableUtils.sceneof(pRidingTokens[i]).tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {

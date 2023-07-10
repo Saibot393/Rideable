@@ -62,6 +62,9 @@ class RideableUtils {
 		
 	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
 	
+	//scenes
+	static sceneof(pToken) {} //get scene of token
+	
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -258,6 +261,11 @@ class RideableUtils {
 			}
 		}
 	} 
+	
+	//scenes
+	static sceneof(pToken) {
+		return game.scenes.find(vscene => vscene.tokens.get(pToken.id));
+	}
 }
 
 //for easy translation

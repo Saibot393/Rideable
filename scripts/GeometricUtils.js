@@ -139,7 +139,7 @@ class GeometricUtils {
 			return pToken.object.w;
 		}
 		else {
-			return pToken.width * pToken.scene.dimensions.size;
+			return pToken.width * game.scenes.find(vscene => vscene.tokens.get(pToken.id)).dimensions.size;
 		}
 	}
 	
@@ -148,7 +148,7 @@ class GeometricUtils {
 			return pToken.object.h;
 		}
 		else {
-			return pToken.height * pToken.scene.dimensions.size;
+			return pToken.height * game.scenes.find(vscene => vscene.tokens.get(pToken.id)).dimensions.size;
 		}
 	}
 	
@@ -214,7 +214,6 @@ class GeometricUtils {
 	
 	//grids
 	static GridSnap(ppositon, pGrid) {
-		console.log(pGrid);
 		switch (pGrid.type) {
 			case 0:
 				//gridless

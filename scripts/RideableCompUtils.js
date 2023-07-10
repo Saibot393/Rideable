@@ -83,7 +83,7 @@ class RideableCompUtils {
 	static async UpdateRiderIDs(pRidden) {
 		let vPreviousRiderIDs = RideableFlags.RiderTokenIDs(pRidden);
 		
-		let vNewRiders = await pRidden.scene.tokens.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
+		let vNewRiders = await game.scenes.find(vscene => vscene.tokens.get(pRidden.id)).tokens.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
 		
 		await RideableFlags.cleanRiderIDs(pRidden);
 		
@@ -115,7 +115,7 @@ class RideableCompUtils {
 				}
 				else {
 					if (game.settings.get(cWallHeight, 'autoLOSHeight')) {
-						vHeightdiff = pToken.scene.dimensions.distance * Math.max(pToken.width, pToken.height) * ((Math.abs(pToken.texture.scaleX) + Math.abs(pToken.texture.scaleY)) / 2);
+						vHeightdiff = game.scenes.find(vscene => vscene.tokens.get(pToken.id)).dimensions.distance * Math.max(pToken.width, pToken.height) * ((Math.abs(pToken.texture.scaleX) + Math.abs(pToken.texture.scaleY)) / 2);
 					}
 					else {
 						vHeightdiff =  game.settings.get(cWallHeight, 'defaultLosHeight');
