@@ -28,13 +28,19 @@ class GeometricUtils {
 	
 	static scale(pNumberArray, pfactor) {} //scales pNumberarray by pfactor
 	
-	static scaleto(pVector, pfactor) {} //scales pNumberarray to pfactor
+	static scalexy(pNumberArray, pfactorarray) {} //scales pNumberarray by pfactorarray (position by position)
+	
+	static scaleto(pVector, pfactor) {} //scales pVector to pfactor length
+	
+	static scaletoxy(pVector, pfactorarray) {} //scales pVector to a new vector in the same direction but with pfactorarray as max value in x/y (ellipses)
 	
 	static norm(pVector) {} //returns pVector normed to 1
 	
 	static Direction(pPositionA, pPositionB) {} //returns (x-y array) with the relativ direction of pPositionA to pPositionB(normed to one)
 	
 	static Distance(pPositionA, pPositionB) {} //returns the distance between position A nad B
+	
+	static scaledDistance(pPositionA, pPositionB, pfactorarray, protation = 0) {} //returns the distance between position A nad B with the x and y component scaled with pfactorarray (rotates difference before claculation if protation != 0)
 	
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
@@ -98,9 +104,17 @@ class GeometricUtils {
 		return pNumberArray.map(pValue => pValue*pfactor);
 	} 
 	
+	static scalexy(pNumberArray, pfactorarray) {
+		return [pNumberArray[0] * pfactorarray[0], pNumberArray[1] * pfactorarray[1]];
+	} 
+	
 	static scaleto(pVector, pfactor) {
 		return GeometricUtils.scale(pVector, pfactor/GeometricUtils.value(pVector));
 	}
+	
+	static scaletoxy(pVector, pfactorarray) {
+		return GeometricUtils.scalexy(GeometricUtils.norm(GeometricUtils.scalexy(pVector, pfactorarray.map(vvalue => 1/vvalue))),pfactorarray);
+	} 
 	
 	static norm(pVector) {
 		return GeometricUtils.scaleto(pVector, 1);
@@ -115,6 +129,15 @@ class GeometricUtils {
 	static Distance(pPositionA, pPositionB) {
 		return GeometricUtils.value(GeometricUtils.Difference(pPositionA, pPositionB));
 	}
+	
+	static scaledDistance(pPositionA, pPositionB, pfactorarray, protation = 0) {
+		if (!protation) {
+			return GeometricUtils.value(GeometricUtils.scalexy(GeometricUtils.Difference(pPositionA, pPositionB), pfactorarray));
+		}
+		else {
+			return GeometricUtils.value(GeometricUtils.scalexy(GeometricUtils.Rotated(GeometricUtils.Difference(pPositionA, pPositionB), protation), pfactorarray));
+		}
+	} 
 	
 	static TokenDistance(pTokenA, pTokenB) {
 		if ((pTokenA) && (pTokenB)) {
@@ -164,8 +187,13 @@ class GeometricUtils {
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
-				
-				return (GeometricUtils.scaleto(vDirection, Math.max(GeometricUtils.insceneWidth(pToken), GeometricUtils.insceneHeight(pToken))/2));
+				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
+					return (GeometricUtils.scaleto(vDirection, Math.max(GeometricUtils.insceneWidth(pToken))/2));
+				}
+				else {				
+					//supports ellipses through scaling
+					return GeometricUtils.scaletoxy(vDirection, [GeometricUtils.insceneWidth(pToken)/2, GeometricUtils.insceneHeight(pToken)/2]);
+				}
 				
 				break;
 			
@@ -199,7 +227,13 @@ class GeometricUtils {
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
-				return (GeometricUtils.Distance(GeometricUtils.CenterPosition(pToken), pPosition) <= Math.max(GeometricUtils.insceneWidth(pToken), GeometricUtils.insceneHeight(pToken))/2);
+				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
+					return (GeometricUtils.Distance(GeometricUtils.CenterPosition(pToken), pPosition) <= Math.max(GeometricUtils.insceneWidth(pToken))/2);
+				}
+				else {	
+					//supports ellipses through scaling
+					return (GeometricUtils.scaledDistance(GeometricUtils.CenterPosition(pToken), pPosition, [1/GeometricUtils.insceneWidth(pToken), 1/GeometricUtils.insceneHeight(pToken)], -pToken.rotation) <= 1/2);
+				}
 				
 				break;
 			

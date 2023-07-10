@@ -132,7 +132,7 @@
 				"name"					: "Token form",
 				"descrp"				: "",
 				"options" : {
-					"TokenFormCircle"	: "Circle",
+					"TokenFormCircle"	: "Circle/Ellipse",
 					"TokenFormRectangle": "Rectangle"
 				}
 			},

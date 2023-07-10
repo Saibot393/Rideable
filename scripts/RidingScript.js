@@ -5,6 +5,12 @@ import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideablePopups } from "./RideablePopups.js";
 import { GeometricUtils } from "./GeometricUtils.js";
 
+//positioning options
+const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
+const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
+
+export { cRowplacement, cCircleplacement };
+
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
@@ -185,36 +191,54 @@ class Ridingmanager {
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		if (pRiderTokenList.length) {
-			let vbunchedRiders = true;
-			let vxoffset = 0;
-			let vxdelta = 0;
-			
-			let vRiderWidthSumm = 0;
-			
-			for (let i = 0; i < pRiderTokenList.length; i++) {
-				vRiderWidthSumm = vRiderWidthSumm + GeometricUtils.insceneWidth(pRiderTokenList[i]);
-			}
-			
-			//if Riders have to be bunched
-			if (vRiderWidthSumm > GeometricUtils.insceneWidth(pRiddenToken)) {
-				vbunchedRiders = true;
+			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
+				case cCircleplacement:
 				
-				vxoffset = -GeometricUtils.insceneWidth(pRiddenToken)/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;
-			
-				if (pRiderTokenList.length > 1) {
-					vxdelta = (GeometricUtils.insceneWidth(pRiddenToken) - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
-				}
-			} 
-			//if Riders dont have to be bunched
-			else {
-				vbunchedRiders = false;
-				
-				vxoffset = -vRiderWidthSumm/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;
-			
-				vxdelta = 0; //every Rider has a custom delta, set higher for Rider seperation
+					break;
+				case cRowplacement:
+				default:
+					let vbunchedRiders = true;
+					let vxoffset = 0;
+					let vxdelta = 0;
+					
+					let vRiderWidthSumm = 0;					
+					for (let i = 0; i < pRiderTokenList.length; i++) {
+						vRiderWidthSumm = vRiderWidthSumm + GeometricUtils.insceneWidth(pRiderTokenList[i]);
+					}
+					
+					//if Riders have to be bunched
+					if (vRiderWidthSumm > GeometricUtils.insceneWidth(pRiddenToken)) {
+						vxoffset = -GeometricUtils.insceneWidth(pRiddenToken)/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
+						if (pRiderTokenList.length > 1) {
+							vxdelta = (GeometricUtils.insceneWidth(pRiddenToken) - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
+						}
+					} 
+					else { //if Riders dont have to be bunched
+						vbunchedRiders = false;
+						
+						vxoffset = -vRiderWidthSumm/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
+					}
+		
+					for (let i = 0; i < pRiderTokenList.length; i++) {
+						//update riders position in x, y
+						let vTargetx = 0;
+						
+						if (vbunchedRiders) {
+							vTargetx = vxoffset + i*vxdelta;
+						}
+						else {
+							if (i > 0) {
+								vTargetx = vxoffset + (GeometricUtils.insceneWidth(pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
+								vxoffset = vTargetx;
+							}
+							else {
+								vTargetx = vxoffset;
+							}
+						}
+						
+						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, 0, pAnimations);		
+					}
 			}
-			//place riders				
-			Ridingmanager.placeRiderTokensPattern(pRiddenToken, pRiderTokenList, vxoffset, vxdelta, vbunchedRiders, pAnimations);
 		}
 	} 
 	
@@ -250,28 +274,10 @@ class Ridingmanager {
 	}
 	
 	static placeRiderTokensPattern(pRiddenToken, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
-		let vprex = 0;
-		
-		for (let i = 0; i < pRiderTokenList.length; i++) {
-			//update riders position in x, y and z (only if not already on target position)		
-			let vTargetx = 0;
-			let vTargety = 0;
-			
-			if (pbunchedRiders) {
-				vTargetx = pxoffset + i*pxdelta;
-			}
-			else {
-				if (i > 0) {
-					vTargetx = vprex + (GeometricUtils.insceneWidth(pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
-					vprex = vTargetx;
-				}
-				else {
-					vTargetx = pxoffset;
-					vprex = vTargetx;
-				}
-			}
-			
-			Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
+		switch (RideableFlags.RiderPositioning(pRiddenToken)) {
+			case cRowplacement:
+			default:
+
 		}
 	}
 	

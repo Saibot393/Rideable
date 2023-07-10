@@ -14,6 +14,7 @@ const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or n
 const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
 const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
 const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
+const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -60,6 +61,8 @@ class RideableFlags {
 		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
 		
 		static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
+		
+		static RiderPositioning(pToken) {} //returns how riders should be placed on this token
 		
 		//relativ Position handling
 		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -225,6 +228,18 @@ class RideableFlags {
 		return []; //default if anything fails			
 	}
 	
+	static #RiderPositioningFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRiderPositioningF)) {
+				return vFlag.RiderPositioningFlag;
+			}
+		}
+		
+		return ""; //default if anything fails			
+	}
+	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if ((pToken) && (pToken)) {
@@ -387,11 +402,15 @@ class RideableFlags {
 	
 	//additional infos
 	static TokenForm(pToken) {
-		return(this.#TokenFormFlag(pToken));
+		return this.#TokenFormFlag(pToken);
 	}
 	
 	static RiderscanMoveWithin(pRidden) {
 		return(this.#InsideMovementFlag(pRidden));
+	}
+	
+	static RiderPositioning(pToken) {
+		return this.#RiderPositioningFlag(pToken);
 	}
 	
 	//relativ Position handling

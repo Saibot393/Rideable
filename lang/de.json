@@ -132,7 +132,7 @@
 				"name"					: "Markenform",
 				"descrp"				: "",
 				"options" : {
-					"TokenFormCircle"	: "Kreis",
+					"TokenFormCircle"	: "Kreis/Ellipse",
 					"TokenFormRectangle": "Rechteck"
 				}
 			},
