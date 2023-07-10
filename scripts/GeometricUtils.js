@@ -3,6 +3,9 @@ import * as FCore from "./CoreVersionComp.js";
 //CONSTANTS
 const cGradtoRad = Math.PI/180;
 
+const cxid = 0;
+const cyid = 1;
+
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 
@@ -47,7 +50,7 @@ class GeometricUtils {
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
 	//grids
-	static GridSnap(ppositon, pGridType) {}//snaps ppositon to grid
+	static GridSnap(ppositon, pGridType, podd) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y
 	
 	//IMPLEMENTATIONS
 	//basics
@@ -215,7 +218,9 @@ class GeometricUtils {
 	}
 	
 	//grids
-	static GridSnap(ppositon, pGrid) {
+	static GridSnap(ppositon, pGrid, podd) {
+		console.log(podd);
+		//podd: depends on refrence point, if corner => podd == false, if middle => podd == true
 		switch (pGrid.type) {
 			case 0:
 				//gridless
@@ -224,7 +229,18 @@ class GeometricUtils {
 			
 			case 1:
 				//squares
-				return ppositon.map(pValue => Math.sign(pValue) * Math.round((Math.abs(pValue)-1)/pGrid.size) * pGrid.size);
+				let voffset = 0;
+				let vsnapposition = [0,0];
+				
+				for (let dim = cxid; dim <= cyid; dim++) {
+					if (!podd[dim]) {
+						voffset = pGrid.size/2;
+					}
+					
+					vsnapposition[dim] = Math.sign(ppositon[dim]) * (Math.round((Math.abs(ppositon[dim])-voffset-1)/pGrid.size) * pGrid.size + voffset)
+				}
+				
+				return vsnapposition;
 				break;
 			
 			//add cases for grids(later)
