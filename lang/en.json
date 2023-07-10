@@ -123,6 +123,15 @@
 				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
 			},
 			
+			"RiderPositioningFlag" : {
+				"name"					: "Rider positioning",
+				"descrp"				: "The pattern in which the rider tokens will be placed",
+				"options" : {
+					"CirclePlacement"	: "Circle",
+					"RowPlacement"		: "Row"
+				}
+			},
+			
 			"issetRideableFlag" : {
 				"name"					: "Token is Rideable",
 				"descrp"				: "Overrides the global default setting"

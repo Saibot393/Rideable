@@ -123,6 +123,15 @@
 				"descrp"				: "Überschreibt die Welt Einstellung für diese Marke (-1 für unlimitiert, leer lassen um zur Welt Einstellung zurück zu kehren)"
 			},
 			
+			"RiderPositioningFlag" : {
+				"name"					: "Reiter platzierung",
+				"descrp"				: "Das Muster in welchem die Reitermarken platziert werden",
+				"options" : {
+					"CirclePlacement"	: "Kreis",
+					"RowPlacement"		: "Reihe"
+				}
+			},
+			
 			"issetRideableFlag" : {
 				"name"					: "Marke ist Reitbar",
 				"descrp"				: "Überschreibt den Globalen standard"
