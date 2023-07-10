@@ -3,6 +3,7 @@
 - Fixed bug related to familiar riding
 - Improved grid snapping for mounting free move tokens
 - Now supports elliptical tokens for ridden tokens with free movement
+- Added alternative placement mode "Circle" which can be chosen in the settings of ridden tokens
 
 ## v2.0.1
 -  hotfix for Foundry v10
