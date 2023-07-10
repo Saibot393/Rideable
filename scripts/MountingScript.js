@@ -1,3 +1,5 @@
+import * as FCore from "./CoreVersionComp.js";
+
 import { RideableFlags } from "./RideableFlags.js";
 import { GeometricUtils } from "./GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
@@ -79,7 +81,7 @@ class MountingManager {
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pFamiliar));
 						
 						if (vValidTokens.length) {
-							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget), RideableUtils.sceneof(pTarget));
+							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget), FCore.sceneof(pTarget));
 							
 							if (pFamiliar) {
 								//if a familiar was added only the familiars positions have to be updated
@@ -135,7 +137,7 @@ class MountingManager {
 					
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(vValidRiders);
 					
-					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : RideableUtils.sceneof(vTarget).id, pFamiliar : pFamiliar}});
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pFamiliar : pFamiliar}});
 				}
 			}
 		}
@@ -204,7 +206,7 @@ class MountingManager {
 			if (!game.paused && pTokens.length) {
 				let vUnMountTokensIDs = RideableUtils.IDsfromTokens(pTokens);
 				
-				game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vUnMountTokensIDs, pSceneID : RideableUtils.sceneof(pTokens[0]).id}});
+				game.socket.emit("module.Rideable", {pFunction : "UnMountRequest", pData : {pselectedTokenIDs: vUnMountTokensIDs, pSceneID : FCore.sceneof(pTokens[0]).id}});
 			}
 		}
 	} 
@@ -225,7 +227,7 @@ class MountingManager {
 	
 	static UnMountallRiders(pRiddenToken) {
 		if (pRiddenToken) {
-			MountingManager.UnMountRiders(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), RideableUtils.sceneof(pRiddenToken)));
+			MountingManager.UnMountRiders(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken)));
 		}
 	} 
 	
@@ -347,7 +349,7 @@ class MountingManager {
 				}*/
 				
 				if (RideableFlags.isRidden(pToken)) {
-					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), RideableUtils.sceneof(pToken)), false);
+					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken)), false);
 				}
 				
 				if (RideableFlags.isRider(pToken)) {

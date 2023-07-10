@@ -1,3 +1,5 @@
+import * as FCore from "./CoreVersionComp.js";
+
 //CONSTANTS
 const cGradtoRad = Math.PI/180;
 
@@ -139,7 +141,7 @@ class GeometricUtils {
 			return pToken.object.w;
 		}
 		else {
-			return pToken.width * game.scenes.find(vscene => vscene.tokens.get(pToken.id)).dimensions.size;
+			return pToken.width * FCore.sceneof(pToken.id).dimensions.size;
 		}
 	}
 	
@@ -148,7 +150,7 @@ class GeometricUtils {
 			return pToken.object.h;
 		}
 		else {
-			return pToken.height * game.scenes.find(vscene => vscene.tokens.get(pToken.id)).dimensions.size;
+			return pToken.height * FCore.sceneof(pToken.id).dimensions.size;
 		}
 	}
 	

@@ -1,3 +1,5 @@
+import * as FCore from "./CoreVersionComp.js";
+
 import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideablePopups } from "./RideablePopups.js";
@@ -36,7 +38,7 @@ class Ridingmanager {
 			
 			if (!pToken) {
 				//get token from scene if not linked
-				RideableUtils.TokenfromID(pToken.id, RideableUtils.sceneof(pToken))
+				RideableUtils.TokenfromID(pToken.id, FCore.sceneof(pToken))
 			}
 			
 			//Check if vToken is ridden
@@ -44,7 +46,7 @@ class Ridingmanager {
 				//check if token position was actually changed
 				if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
 					//check if ridden Token exists
-					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), RideableUtils.sceneof(pToken));
+					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
 					
 					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, false, pInfos.animate);
 				}
@@ -238,7 +240,7 @@ class Ridingmanager {
 				//if first time Rider give Border position
 				vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken));
 				
-				vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, RideableUtils.sceneof(pRiddenToken).grid);
+				vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRiddenToken).grid);
 				
 				RideableFlags.setRelativPosition(pRiderTokenList[i], vTargetPosition);
 			}

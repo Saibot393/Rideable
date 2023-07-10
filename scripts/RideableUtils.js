@@ -62,9 +62,6 @@ class RideableUtils {
 		
 	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
 	
-	//scenes
-	static sceneof(pToken) {} //get scene of token
-	
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -174,7 +171,7 @@ class RideableUtils {
 					return ((pFamiliar.actor.type == cFamilarType) && ((pMaster.actor.type == cCharacterType) || (pMaster.actor.type == cNPCType)));//check if pFamiliar is of type familiar and pMaster is player character or npc
 				}
 				
-				return ((pFamiliar.h < pMaster.h)||(pFamiliar.w < pMaster.w)); //check if pFamiliar is smaller then pMaster
+				return ((pFamiliar.height < pMaster.height)||(pFamiliar.width < pMaster.width)); //check if pFamiliar is smaller then pMaster
 			}
 		}
 		
@@ -261,11 +258,6 @@ class RideableUtils {
 			}
 		}
 	} 
-	
-	//scenes
-	static sceneof(pToken) {
-		return game.scenes.find(vscene => vscene.tokens.get(pToken.id));
-	}
 }
 
 //for easy translation

@@ -28,6 +28,7 @@
     }
   ],
   "esmodules": [
+	"scripts/CoreVersionComp.js",
 	"scripts/RideableCompUtils.js",
 	"scripts/GeometricUtils.js",
 	"scripts/RideableUtils.js",
