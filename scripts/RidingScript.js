@@ -3,7 +3,7 @@ import * as FCore from "./CoreVersionComp.js";
 import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideablePopups } from "./RideablePopups.js";
-import { GeometricUtils } from "./GeometricUtils.js";
+import { GeometricUtils, cGradtoRad } from "./GeometricUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -30,7 +30,8 @@ class Ridingmanager {
 	
 	static placeRelativRiderTokens(pRiddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
-	static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
+	//DEPRICATED:
+	//static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
 	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
@@ -193,8 +194,26 @@ class Ridingmanager {
 		if (pRiderTokenList.length) {
 			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
 				case cCircleplacement:
-				
+					let vAngleSteps = 360/pRiderTokenList.length;
+					
+					//calculate maximum placement heights and widths
+					let vMaxHeight = 0;
+					let vMaxWidth = 0;
+					
+					for (let i = 0; i < pRiderTokenList.length; i++) {
+						vMaxHeight = Math.max(vMaxHeight, GeometricUtils.insceneHeight(pRiderTokenList[i]));
+						vMaxWidth = Math.max(vMaxWidth, GeometricUtils.insceneWidth(pRiderTokenList[i]));
+					}
+					
+					vMaxHeight = (GeometricUtils.insceneHeight(pRiddenToken) - vMaxHeight)/2;
+					vMaxWidth = (GeometricUtils.insceneWidth(pRiddenToken) - vMaxWidth)/2;
+					
+					for (let i = 0; i < pRiderTokenList.length; i++) {
+						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i), -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i), pAnimations);
+					}	
+					
 					break;
+					
 				case cRowplacement:
 				default:
 					let vbunchedRiders = true;
@@ -270,14 +289,6 @@ class Ridingmanager {
 			}
 			
 			Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetPosition[0], vTargetPosition[1], pAnimations);		
-		}
-	}
-	
-	static placeRiderTokensPattern(pRiddenToken, pRiderTokenList, pxoffset, pxdelta, pbunchedRiders, pAnimations = true) {
-		switch (RideableFlags.RiderPositioning(pRiddenToken)) {
-			case cRowplacement:
-			default:
-
 		}
 	}
 	

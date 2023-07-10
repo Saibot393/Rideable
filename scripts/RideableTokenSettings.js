@@ -1,6 +1,7 @@
 import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF} from "./RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF} from "./RideableFlags.js";
 import { cTokenFormCircle, cTokenFormRectangle} from "./GeometricUtils.js";
+import { cRowplacement, cCircleplacement } from "./RidingScript.js";
 
 class RideableTokenSettings {
 	//DECLARATIONS
@@ -17,6 +18,7 @@ class RideableTokenSettings {
 		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 		
 		//create settings in reversed order
+			
 		//Riders can move within Setting
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
 													vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
@@ -24,6 +26,7 @@ class RideableTokenSettings {
 													vvalue : RideableFlags.RiderscanMoveWithin(pApp.token), 
 													vflagname : cInsideMovementF
 													});
+		
 													
 		//Token Form
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
@@ -33,6 +36,15 @@ class RideableTokenSettings {
 													vvalue : RideableFlags.TokenForm(pApp.token), 
 													vflagname : cTokenFormF
 													});
+							
+		//RiderPositioning
+		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
+													vhint : Translate("TokenSettings."+ cRiderPositioningF +".descrp"), 
+													vtype : "select", 
+													voptions : [cRowplacement, cCircleplacement],
+													vvalue : RideableFlags.RiderPositioning(pApp.token), 
+													vflagname : cRiderPositioningF
+													});		
 													
 		//Max Riders Setting
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMaxRiderF +".name"), 

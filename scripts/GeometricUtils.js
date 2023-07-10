@@ -167,7 +167,7 @@ class GeometricUtils {
 			return pToken.object.w;
 		}
 		else {
-			return pToken.width * FCore.sceneof(pToken.id).dimensions.size;
+			return pToken.width * FCore.sceneof(pToken).dimensions.size;
 		}
 	}
 	
@@ -176,7 +176,7 @@ class GeometricUtils {
 			return pToken.object.h;
 		}
 		else {
-			return pToken.height * FCore.sceneof(pToken.id).dimensions.size;
+			return pToken.height * FCore.sceneof(pToken).dimensions.size;
 		}
 	}
 	
