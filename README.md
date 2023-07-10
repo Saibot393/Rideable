@@ -30,7 +30,8 @@ Ridden tokens can themselfve ride other tokens.
 #### Tokens:
 - Token is Rideable: to override world default for this token
 - Maximum riders: to override world default for this token
-- Token form: to set the form used to define this tokens border
+- Rider positioning: to set how in which pattern rider tokens should be placed (Row or Circle)
+- Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 
 ### Compatibility:
