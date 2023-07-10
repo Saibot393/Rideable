@@ -253,7 +253,6 @@ class GeometricUtils {
 	
 	//grids
 	static GridSnap(ppositon, pGrid, podd) {
-		console.log(podd);
 		//podd: depends on refrence point, if corner => podd == false, if middle => podd == true
 		switch (pGrid.type) {
 			case 0:
