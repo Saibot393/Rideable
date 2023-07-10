@@ -1,3 +1,6 @@
+## v2.0.1
+-  hotfix for Foundry v10
+
 ## v2.0.0
 - Major changes in the underlying code
 - All actions (such as riding, mounting, unmounting...) now work for players, even if the GM is in different scene (still requires a GM to be online)
