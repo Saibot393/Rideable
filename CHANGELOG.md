@@ -2,6 +2,7 @@
 - Improved previous (v2.0.1) bug fix
 - Fixed bug related to familiar riding
 - Improved grid snapping for mounting free move tokens
+- Now supports elliptical tokens for ridden tokens with free movement
 
 ## v2.0.1
 -  hotfix for Foundry v10
