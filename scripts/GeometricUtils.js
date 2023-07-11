@@ -56,7 +56,7 @@ class GeometricUtils {
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
 	//grids
-	static GridSnap(ppositon, pGridType, podd) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y
+	static GridSnap(ppositon, pGridType, podd) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
 	
 	//IMPLEMENTATIONS
 	//basics
@@ -266,7 +266,7 @@ class GeometricUtils {
 				let vsnapposition = [0,0];
 				
 				for (let dim = cxid; dim <= cyid; dim++) {
-					if (!podd[dim]) {
+					if (podd[dim]) {
 						voffset = pGrid.size/2;
 					}
 					
