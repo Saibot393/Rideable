@@ -24,7 +24,7 @@ Ridden tokens can themselfve ride other tokens.
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 #### Client:
-- Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider or stop the movement
+- Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Message popups: to activate some pop ups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens:
