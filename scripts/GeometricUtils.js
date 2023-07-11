@@ -266,11 +266,11 @@ class GeometricUtils {
 				let vsnapposition = [0,0];
 				
 				for (let dim = cxid; dim <= cyid; dim++) {
-					if (podd[dim]) {
+					if (podd && podd[dim]) {
 						voffset = pGrid.size/2;
 					}
 					
-					vsnapposition[dim] = Math.sign(ppositon[dim]) * (Math.round((Math.abs(ppositon[dim])-voffset-1)/pGrid.size) * pGrid.size + voffset)
+					vsnapposition[dim] = Math.sign(ppositon[dim]) * (Math.round((Math.abs(ppositon[dim])-voffset-1)/pGrid.size) * pGrid.size + voffset);
 				}
 				
 				return vsnapposition;
