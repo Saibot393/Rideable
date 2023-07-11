@@ -3,6 +3,8 @@ import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMoveme
 import { cTokenFormCircle, cTokenFormRectangle} from "./GeometricUtils.js";
 import { cRowplacement, cCircleplacement } from "./RidingScript.js";
 
+const cRideableIcon = "fa-horse-saddle";
+
 class RideableTokenSettings {
 	//DECLARATIONS
 	static TestSetting(vApp, vHTML, vData) {} //just for test purposes
@@ -18,17 +20,17 @@ class RideableTokenSettings {
 		
 		//create new tab
 		let vTabsheet = pHTML.find(`.sheet-tabs`);
-		let vprevTab = pHTML.find(`div[data-tab="resources"]`);
+		let vprevTab = pHTML.find(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
 		
-		let vTabHTML = 	`
+		let vTabButtonHTML = 	`
 						<a class="item" data-tab="${cModuleName}">
-							<i class="fas fa-horse-saddle"></i>
+							<i class="fas ${cRideableIcon}"></i>
 							${Translate("Titles."+cModuleName)}
 						</a>
-						`;
-		let vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`;		
+						`; //tab button HTML
+		let vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
 		
-		vTabsheet.append(vTabHTML);
+		vTabsheet.append(vTabButtonHTML);
 		vprevTab.after(vTabContentHTML);
 		
 		//create settings in reversed order	
