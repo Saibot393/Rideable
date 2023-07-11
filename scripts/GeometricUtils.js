@@ -3,6 +3,8 @@ import * as FCore from "./CoreVersionComp.js";
 //CONSTANTS
 const cGradtoRad = Math.PI/180;
 
+const chexfactor = Math.cos(30 * cGradtoRad);
+
 const cxid = 0;
 const cyid = 1;
 
@@ -253,6 +255,7 @@ class GeometricUtils {
 	
 	//grids
 	static GridSnap(ppositon, pGrid, podd) {
+		let vsnapposition = [0,0];
 		//podd: depends on refrence point, if corner => podd == false, if middle => podd == true
 		switch (pGrid.type) {
 			case 0:
@@ -263,7 +266,6 @@ class GeometricUtils {
 			case 1:
 				//squares
 				let voffset = 0;
-				let vsnapposition = [0,0];
 				
 				for (let dim = cxid; dim <= cyid; dim++) {
 					if (podd && podd[dim]) {
@@ -276,9 +278,42 @@ class GeometricUtils {
 				return vsnapposition;
 				break;
 			
+			case 2:
+				/*
+				let vgridheight = Math.round(chexfactor*pGrid.size+0.5);
+				
+				console.log(podd);
+				
+				let vyoffset = 0;
+				if (podd && podd[cyid]) {
+					vyoffset = vgridheight/2;
+				}	
+				
+				vsnapposition[cyid] = Math.sign(ppositon[cyid]) * (Math.round((Math.abs(ppositon[cyid])-vyoffset)/(vgridheight)-0.5) * vgridheight + vyoffset);
+				
+				//Check
+				
+				let vxoffset = 0;		
+				
+				if (podd && podd[cxid]) {
+					vxoffset = vxoffset + pGrid.size/2;
+				}		
+				
+				if (((podd && podd[cxid]) && (Math.round(vsnapposition[cyid]/vgridheight+0.5)%2)) || (!(podd && podd[cxid]) && !(Math.round(vsnapposition[cyid]/vgridheight+0.5)%2))) {
+					vxoffset = vxoffset + pGrid.size/2;
+				}	
+
+				console.log((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size);
+				console.log(Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5));
+				console.log(Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5) * pGrid.size + vxoffset);
+				vsnapposition[cxid] = Math.sign(ppositon[cxid]) * (Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5) * pGrid.size + vxoffset);
+				console.log(vsnapposition[cxid]);
+				
+				return vsnapposition;
+				*/
 			//add cases for grids(later)
 			default:
-				return [0,0];
+				return vsnapposition;
 		}
 	}
 }
