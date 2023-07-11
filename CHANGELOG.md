@@ -1,5 +1,6 @@
 ## v2.2.0 (unreleased)
 - Moved on-token settings into separate tab
+- Improved grid snapping
 
 ## v2.1.0
 - Improved previous (v2.0.1) bug fix
