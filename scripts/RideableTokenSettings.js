@@ -17,6 +17,18 @@ class RideableTokenSettings {
 	 
 		pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 		
+		//some tests
+		vTittleHTML = '<a class="item" data-tab="rideable">"rideable"</a>';
+		let posTab = pHTML.find(`.sheet-tabs`);
+		posTab.append(vTittleHTML);
+		
+		posTab = pHTML.find(`div[data-tab="resources"]`);
+		vTittleHTML = `<div class="tab" data-group="main" data-tab="rideable">
+		<h3 class="border" name="RideableTest">Test</h3>
+		</div>
+		`;
+		posTab.after(vTittleHTML);
+		
 		//create settings in reversed order
 			
 		//Riders can move within Setting
