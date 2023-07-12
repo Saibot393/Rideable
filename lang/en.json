@@ -149,6 +149,11 @@
 			"InsideMovementFlag" : {
 				"name"					: "Riders can move freely",
 				"descrp"				: "If riders can move freely within the boundaries of this token"
+			},
+			
+			"SpawnRidersFlag" : {
+				"name"					: "Spawn riders",
+				"descrp"				: "Riders this token spawns with (Names or IDs, seperated with \";\")"
 			}
 		},
 		

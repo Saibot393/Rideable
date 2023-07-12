@@ -149,6 +149,11 @@
 			"InsideMovementFlag" : {
 				"name"					: "Reiter können sich frei bewegen",
 				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Marke bewegen können"
+			},
+			
+			"SpawnRidersFlag" : {
+				"name"					: "Reiter bei Erschaffung",
+				"descrp"				: "Reiter mit welchen diese Marke erschaffen wird (Namen order IDs, getrennt mit \";\")"
 			}
 		},
 		
