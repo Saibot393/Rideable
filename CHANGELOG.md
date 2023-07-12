@@ -1,6 +1,7 @@
 ## v2.2.0 (unreleased)
 - Moved on-token settings into separate tab
 - Improved grid snapping
+- Added on-token option to spawn with riders
 
 ## v2.1.0
 - Improved previous (v2.0.1) bug fix
