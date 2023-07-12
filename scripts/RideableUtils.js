@@ -28,12 +28,19 @@ class RideableUtils {
 	//Identification
 	static isPf2e() {} //used for special Pf2e functions
 	
-	//Token IDs
+	//Token IDs/Names
 	static TokensfromIDs (pIDs, pScene = null) {} //returns an array of Tokens belonging to the pIDs
 	
 	static IDsfromTokens (pTokens) {} //returns an array of IDs belonging to the pTokens
 	
 	static TokenfromID (pID, pScene = null) {} //returnsthe Token matching pID
+	
+	//spawns
+	static async SpawnableActors(pIdentifications) {} //returns an array of tokendocuments defined by their names or ids through pIdentifications and present in the actor tab
+	
+	static async SpawnTokens(pActors, pScene, px, py, pInfos = {}) {} //spawns tokens described by actors in array pActors to scene at position px, py
+	
+	static ignoreSpawn(pInfo) {} //returns if a spawn with this pInfo should be ignored by Rideable
 	
 	//Token Controls
 	static selectedTokens() {} //get array of all selected tokens
@@ -69,7 +76,7 @@ class RideableUtils {
 		return game.system.id === cPf2eName;
 	}	
 	
-	//Token IDs
+	//Token IDs/Names
 	static TokensfromIDs (pIDs, pScene = null) {
 		if (pScene) {
 			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id));
@@ -116,6 +123,40 @@ class RideableUtils {
 			}
 		}
 	} 
+	
+	//spawns
+	static async SpawnableActors(pIdentifications) {
+		let vActors = [];
+		
+		for (let i = 0; i < pIdentifications.length; i++) {
+			let vBuffer = await game.actors.get(pIdentifications[i]);
+			
+			if (!vBuffer) {
+				vBuffer = await game.actors.find(vToken => vToken.name == pIdentifications[i]);
+			}
+			
+			if (vBuffer) {
+				vActors[vActors.length] = vBuffer;
+			}
+		}
+		
+		return vActors;
+	}
+	
+	static async SpawnTokens(pActors, pScene, px, py, pInfos = {}) {
+		for (let i = 0; i < pActors.length; i++) {
+			console.log(px, py);
+			if (pActors[i]) {
+				let vDocument = await pActors[i].getTokenDocument({x: px, y: py});
+				
+				await vDocument.constructor.create(vDocument, {parent: pScene, RideableSpawn: true, RideableInfos: pInfos});
+			}
+		}
+	} 
+	
+	static ignoreSpawn(pInfo) {
+		return RideableCompUtils.ignoreSpawn(pInfo);
+	}
 	
 	//Token Controls
 	static selectedTokens() {

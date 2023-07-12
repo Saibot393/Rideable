@@ -135,9 +135,9 @@ class RideableCompatibility {
 				}					
 
 				// remove selected tokens from current scene (keep remaining tokens)
-				await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, vValidTokenIDs, { isUndo: true });
+				await pSourceScene.deleteEmbeddedDocuments(Token.embeddedName, vValidTokenIDs, { isUndo: true, RideableSpawn: true});
 				// add selected tokens to target scene
-				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, vselectedTokensData, { isUndo: true });
+				await pTargetScene.createEmbeddedDocuments(Token.embeddedName, vselectedTokensData, { isUndo: true, RideableSpawn: true});
 				
 				
 				for (let i = 0; i < vselectedTokensData.length; i++) {

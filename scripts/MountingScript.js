@@ -1,36 +1,11 @@
 import * as FCore from "./CoreVersionComp.js";
 
 import { RideableFlags } from "./RideableFlags.js";
+import { EffectManager } from "./EffectManager.js";
 import { GeometricUtils } from "./GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./RideableUtils.js";
 import { RideablePopups } from "./RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
-
-var vSystemRidingEffect = null; //saves the systems mounting effects (if any)
-
-const cMountedPf2eEffectID = "Compendium.pf2e.other-effects.Item.9c93NfZpENofiGUp"; //Mounted effects of Pf2e system
-
-class MountingEffectManager {
-	//DECLARATIONS
-	static async preloadEffects() {} //preloads effects to make things smoother
-	
-	static getSystemMountingEffect() {} //returns an appropiate Mounting effect if the game system has one
-	
-	//IMPLEMENTATION
-	static async preloadEffects() {
-		if (RideableUtils.isPf2e()) {
-			vSystemRidingEffect = (await fromUuid(cMountedPf2eEffectID)).toObject();
-		} 
-	}
-	static getSystemMountingEffect() {
-		
-		if (vSystemRidingEffect) {
-			return vSystemRidingEffect;
-		}
-		
-		return;
-	}
-}
 
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
@@ -64,7 +39,9 @@ class MountingManager {
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pFamiliar = false, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
 	
-	//Handel Token Deletion
+	//Handel Token Creation/Deletion
+	static async onTokenCreation(pTokenDocument, pInfos, pID) {} //Span on spawn tokens or mount if on spawn is active
+	
 	static onTokenDeletion(pToken) {} //Removes pToken from the Rider logic (both in Regards to Ridden and Riders)
 	
 	//IMPLEMENTATION
@@ -145,7 +122,7 @@ class MountingManager {
 		return;
 	}
 	
-	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar) { 
+	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar = false) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
@@ -257,8 +234,8 @@ class MountingManager {
 			
 			//Aplly mounted effect if turned on
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				if (MountingEffectManager.getSystemMountingEffect()) {
-					pRider.actor.createEmbeddedDocuments("Item", [MountingEffectManager.getSystemMountingEffect()]);
+				if (EffectManager.getSystemMountingEffect()) {
+					pRider.actor.createEmbeddedDocuments("Item", [EffectManager.getSystemMountingEffect()]);
 				}
 			}
 		}
@@ -282,8 +259,8 @@ class MountingManager {
 			}
 			
 			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				if (MountingEffectManager.getSystemMountingEffect()) {
-					await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == MountingEffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+				if (EffectManager.getSystemMountingEffect()) {
+					await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == EffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
 				}
 			}
 		}
@@ -338,7 +315,37 @@ class MountingManager {
 		return false; //default
 	}
 	
-	//Handel Token Deletion
+	//Handel Token Creation/Deletion
+	static async onTokenCreation(pTokenDocument, pInfos, pID) {
+		console.log(pInfos);
+		//only relevant for GMs
+		if (game.user.isGM) {		
+			if (!RideableUtils.ignoreSpawn(pInfos)) {
+				if (pInfos.RideableSpawn) {
+					let vRideableInfos = pInfos.RideableInfos;
+					
+					if (vRideableInfos) {
+						if (vRideableInfos.MountonSpawn) {
+							MountingManager.MountRequest(vRideableInfos.MountonSpawn, [pTokenDocument.id], FCore.sceneof(pTokenDocument));
+						}
+					}
+				}
+				else {
+					//spawn SpawnRideables
+					let vSpawnRiders = RideableFlags.SpawnRiders(pTokenDocument);
+					
+					if (vSpawnRiders.length) {
+						let vActors = await RideableUtils.SpawnableActors(vSpawnRiders);
+						
+						if (vActors.length) {
+							RideableUtils.SpawnTokens(vActors, FCore.sceneof(pTokenDocument), pTokenDocument.x, pTokenDocument.y, {MountonSpawn: pTokenDocument.id});
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	static onTokenDeletion(pToken) {
 		//only relevant for GMs
 		if (game.user.isGM) {
@@ -361,11 +368,13 @@ class MountingManager {
 }
 
 //Hooks
+Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
+
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
 
-Hooks.on("ready", function() { MountingEffectManager.preloadEffects(); });
+Hooks.on("ready", function() { EffectManager.preloadEffects(); });
 
 //wrap and export functions
 

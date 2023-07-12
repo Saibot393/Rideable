@@ -22,6 +22,8 @@ class RideableCompUtils {
 	//basic
 	static isactiveModule(pModule) {} //determines if module with id pModule is active
 	
+	static ignoreSpawn(pInfo) {} //returns if a spawn with this pInfo should be ignored by Rideable
+	
 	//specific: Foundry ArmsReach
 	static ARReachDistance() {} //[ArmsReach] gives the current arms reach distance
 	
@@ -46,6 +48,11 @@ class RideableCompUtils {
 		
 		return false;
 	};
+	
+	static ignoreSpawn(pInfo) {
+				//stairways
+		return (pInfo.isUndo)
+	}
 	
 	//specific: Foundry ArmsReach
 	static ARReachDistance() {

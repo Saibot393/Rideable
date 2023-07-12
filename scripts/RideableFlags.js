@@ -5,6 +5,8 @@ import { cTokenFormCircle, cTokenFormRectangle } from "./GeometricUtils.js";
 
 const cModule = "Rideable";
 
+const cDelimiter = ";";
+
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
@@ -15,12 +17,13 @@ const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
 const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
 const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
 const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
+const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -63,6 +66,10 @@ class RideableFlags {
 		static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
 		
 		static RiderPositioning(pToken) {} //returns how riders should be placed on this token
+		
+		static SpawnRiders(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in an array
+		
+		static SpawnRidersstring(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in a string
 		
 		//relativ Position handling
 		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -240,9 +247,21 @@ class RideableFlags {
 		return ""; //default if anything fails			
 	}
 	
+	static #SpawnRidersFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cSpawnRidersF)) {
+				return vFlag.SpawnRidersFlag;
+			}
+		}
+		
+		return ""; //default if anything fails			
+	}
+	
 	static #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
-		if ((pToken) && (pToken)) {
+		if (pToken) {
 			pToken.setFlag(cModule, cRidingF, Boolean(pContent));
 			
 			return true;
@@ -252,7 +271,7 @@ class RideableFlags {
 	
 	static #setFamiliarRidingFlag (pToken, pContent) {
 	//sets content of FamiliarRiddenFlag (must be boolean)
-		if ((pToken) && (pToken)) {
+		if (pToken) {
 			pToken.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
@@ -411,6 +430,14 @@ class RideableFlags {
 	
 	static RiderPositioning(pToken) {
 		return this.#RiderPositioningFlag(pToken);
+	}
+	
+	static SpawnRiders(pToken) {
+		return this.#SpawnRidersFlag(pToken).split(cDelimiter);
+	}
+	
+	static SpawnRidersstring(pToken) {
+		return this.#SpawnRidersFlag(pToken);
 	}
 	
 	//relativ Position handling

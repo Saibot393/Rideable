@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF} from "./RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF} from "./RideableFlags.js";
 import { cTokenFormCircle, cTokenFormRectangle} from "./GeometricUtils.js";
 import { cRowplacement, cCircleplacement } from "./RidingScript.js";
 
@@ -77,6 +77,17 @@ class RideableTokenSettings {
 													vflagname : cInsideMovementF
 													});
 													
+		if (game.user.isGM) {//GM settings
+			//Tokens spawned on creation
+			RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSpawnRidersF +".name"), 
+														vhint : Translate("TokenSettings."+ cSpawnRidersF +".descrp"), 
+														vtype : "text",
+														vwide : true,
+														vvalue : RideableFlags.SpawnRidersstring(pApp.token), 
+														vflagname : cSpawnRidersF
+														});
+		}
+													
 		
 		pApp.setPosition({ height: "auto" });
 		
@@ -118,14 +129,25 @@ class RideableTokenSettings {
 			voptions = pInfos.voptions;
 		} 
 		
-		let vnewHTML = `
-			<div class="form-group slim">
-				<label>${vlabel}</label>
-			<div class="form-fields">
-		`;
+		let vnewHTML = ``;
+		if (!(pInfos.hasOwnProperty("vwide") && pInfos.vwide)) {
+			vnewHTML = `
+				<div class="form-group slim">
+					<label>${vlabel}</label>
+				<div class="form-fields">
+			`;
+		}
+		else {//for wide imputs
+			vnewHTML = `
+				<div class="form-group">
+					<label>${vlabel}</label>
+				<div class="form-fields">
+			`;
+		}
 		
 		switch (vtype){
 			case "number":
+			case "text":
 				vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}" value="${vvalue}">`;
 				break;
 				
