@@ -199,7 +199,10 @@ Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
 		pHTML.find('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
 		
 		//first client setting
-		vnewHTML = `<h3 class="border">${Translate("Titles.ClientSettings")}</h3>`;
+		vnewHTML = `
+					<hr>
+					<h3 class="border">${Translate("Titles.ClientSettings")}</h3>
+					`;
 		 
 		pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
 	}

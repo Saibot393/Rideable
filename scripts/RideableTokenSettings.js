@@ -78,6 +78,12 @@ class RideableTokenSettings {
 													});
 													
 		if (game.user.isGM) {//GM settings
+			let vGMTittleHTML = `
+									<hr>
+									<h3 class="border" name="RideableTitle">${Translate("Titles.GMonly")}</h3>
+								`;
+			pHTML.find(`div[data-tab="${cModuleName}"]`).append(vGMTittleHTML);
+		
 			//Tokens spawned on creation
 			RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSpawnRidersF +".name"), 
 														vhint : Translate("TokenSettings."+ cSpawnRidersF +".descrp"), 

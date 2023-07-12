@@ -3,7 +3,8 @@
 		"Titles" : {
 			"Rideable"					: "Rideable",
 			"WorldSettings"				: "Welt Einstellungen (nur SL)",
-			"ClientSettings"			: "Nutzer Einstellungen"
+			"ClientSettings"			: "Nutzer Einstellungen",
+			"GMonly"					: "nur SLs"
 		},
 		
 		"Settings" : {
