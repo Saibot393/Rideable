@@ -1,5 +1,5 @@
-import { RideableCompUtils, cArmReach, cArmReachold } from "./RideableCompUtils.js";
-import { cWallHeight } from "./RideableCompUtils.js";
+import { RideableCompUtils, cArmReach, cArmReachold } from "../compatibility/RideableCompUtils.js";
+import { cWallHeight } from "../compatibility/RideableCompUtils.js";
 
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
@@ -145,7 +145,6 @@ class RideableUtils {
 	
 	static async SpawnTokens(pActors, pScene, px, py, pInfos = {}) {
 		for (let i = 0; i < pActors.length; i++) {
-			console.log(px, py);
 			if (pActors[i]) {
 				let vDocument = await pActors[i].getTokenDocument({x: px, y: py});
 				

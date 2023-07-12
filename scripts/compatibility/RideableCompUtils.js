@@ -1,5 +1,5 @@
-import { cModuleName } from "./RideableUtils.js";
-import { RideableFlags } from "./RideableFlags.js";
+import { cModuleName } from "../utils/RideableUtils.js";
+import { RideableFlags } from "../helpers/RideableFlags.js";
 
 //Module Names
 const cStairways = "stairways";

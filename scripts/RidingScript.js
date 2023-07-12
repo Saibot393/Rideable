@@ -1,9 +1,9 @@
 import * as FCore from "./CoreVersionComp.js";
 
-import { RideableFlags, cCornermaxRiders } from "./RideableFlags.js";
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
-import { RideablePopups } from "./RideablePopups.js";
-import { GeometricUtils, cGradtoRad } from "./GeometricUtils.js";
+import { RideableFlags, cCornermaxRiders } from "./helpers/RideableFlags.js";
+import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
+import { RideablePopups } from "./helpers/RideablePopups.js";
+import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement

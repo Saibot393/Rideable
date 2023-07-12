@@ -1,4 +1,4 @@
-import * as FCore from "./CoreVersionComp.js";
+import * as FCore from "../CoreVersionComp.js";
 
 //CONSTANTS
 const cGradtoRad = Math.PI/180;

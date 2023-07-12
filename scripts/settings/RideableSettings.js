@@ -1,6 +1,6 @@
-import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold } from "./RideableCompUtils.js";
-import { RideableUtils, cModuleName, Translate} from "./RideableUtils.js";
-import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./MountingScript.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold } from "../compatibility/RideableCompUtils.js";
+import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
+import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "../MountingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings

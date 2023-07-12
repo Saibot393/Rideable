@@ -1,4 +1,4 @@
-import { RideableUtils, cModuleName, cPopUpID, Translate } from "./RideableUtils.js";
+import { RideableUtils, cModuleName, cPopUpID, Translate } from "../utils/RideableUtils.js";
 
 class RideablePopups {
 	//DECLARATIONS

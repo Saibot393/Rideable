@@ -1,7 +1,7 @@
-import * as FCore from "./CoreVersionComp.js";
+import * as FCore from "../CoreVersionComp.js";
 
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
-import { cTokenFormCircle, cTokenFormRectangle } from "./GeometricUtils.js";
+import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
+import { cTokenFormCircle, cTokenFormRectangle } from "../utils/GeometricUtils.js";
 
 const cModule = "Rideable";
 

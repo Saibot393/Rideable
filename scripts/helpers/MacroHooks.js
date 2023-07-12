@@ -1,4 +1,4 @@
-import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "./MountingScript.js";
+import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "../MountingScript.js";
 
 //functions for macros
 Hooks.on("init",() => {

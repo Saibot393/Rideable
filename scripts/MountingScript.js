@@ -1,10 +1,10 @@
 import * as FCore from "./CoreVersionComp.js";
 
-import { RideableFlags } from "./RideableFlags.js";
-import { EffectManager } from "./EffectManager.js";
-import { GeometricUtils } from "./GeometricUtils.js";
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
-import { RideablePopups } from "./RideablePopups.js";
+import { RideableFlags } from "./helpers/RideableFlags.js";
+import { EffectManager } from "./helpers/EffectManager.js";
+import { GeometricUtils } from "./utils/GeometricUtils.js";
+import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
+import { RideablePopups } from "./helpers/RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
@@ -317,7 +317,6 @@ class MountingManager {
 	
 	//Handel Token Creation/Deletion
 	static async onTokenCreation(pTokenDocument, pInfos, pID) {
-		console.log(pInfos);
 		//only relevant for GMs
 		if (game.user.isGM) {		
 			if (!RideableUtils.ignoreSpawn(pInfos)) {

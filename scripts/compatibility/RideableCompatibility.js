@@ -1,7 +1,7 @@
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
-import { RideableFlags } from "./RideableFlags.js";
-import { UpdateRidderTokens } from "./RidingScript.js";
-import { RideablePopups } from "./RideablePopups.js";
+import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
+import { RideableFlags } from "../helpers/RideableFlags.js";
+import { UpdateRidderTokens } from "../RidingScript.js";
+import { RideablePopups } from "../helpers/RideablePopups.js";
 
 import { RideableCompUtils } from "./RideableCompUtils.js";
 import { cStairways, cTagger, cWallHeight } from "./RideableCompUtils.js";

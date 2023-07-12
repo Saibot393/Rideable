@@ -1,4 +1,4 @@
-import { RideableUtils, cModuleName } from "./RideableUtils.js";
+import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
 
 const cMountedPf2eEffectID = "Compendium.pf2e.other-effects.Item.9c93NfZpENofiGUp"; //Mounted effects of Pf2e system
 

@@ -1,7 +1,7 @@
-import { RideableUtils, cModuleName, Translate } from "./RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF} from "./RideableFlags.js";
-import { cTokenFormCircle, cTokenFormRectangle} from "./GeometricUtils.js";
-import { cRowplacement, cCircleplacement } from "./RidingScript.js";
+import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF} from "../helpers/RideableFlags.js";
+import { cTokenFormCircle, cTokenFormRectangle} from "../utils/GeometricUtils.js";
+import { cRowplacement, cCircleplacement } from "../RidingScript.js";
 
 const cRideableIcon = "fa-horse-saddle";
 

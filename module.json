@@ -29,18 +29,18 @@
   ],
   "esmodules": [
 	"scripts/CoreVersionComp.js",
-	"scripts/RideableCompUtils.js",
-	"scripts/GeometricUtils.js",
-	"scripts/RideableUtils.js",
-	"scripts/RideablePopups.js",
-	"scripts/RideableFlags.js",
+	"scripts/compatibility/RideableCompUtils.js",
+	"scripts/utils/GeometricUtils.js",
+	"scripts/utils/RideableUtils.js",
+	"scripts/helpers/RideablePopups.js",
+	"scripts/helpers/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",
-	"scripts/SocketHandler.js",
-	"scripts/MacroHooks.js",
-	"scripts/RideableSettings.js",
-	"scripts/RideableTokenSettings.js",
-	"scripts/RideableCompatibility.js"
+	"scripts/helpers/SocketHandler.js",
+	"scripts/helpers/MacroHooks.js",
+	"scripts/settings/RideableSettings.js",
+	"scripts/settings/RideableTokenSettings.js",
+	"scripts/compatibility/RideableCompatibility.js"
   ],
   "packs": [
 	{
