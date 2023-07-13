@@ -73,6 +73,11 @@
 				"descrp"				: "Erlaubt es Vertrauten ihrem Meister zu folgen, die Vertrauten werden hierbei and den Ecken ihres Meister platziert"				
 			},
 			
+			"Grappling" : {
+				"name" 					: "Greifen",
+				"descrp"				: "Erlaubt es Marken einander zu greifen (gegriffene Marken können nur von der ergreifenden Marke los gelassen werden)"				
+			},
+			
 			"PreventEnemyRiding" : {
 				"name" 					: "Gegner reiten verhindern",
 				"descrp"				: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)"				
@@ -103,6 +108,11 @@
 			"MountFamiliar" : {
 				"name" 					: "Aufsteigen für Vertraute",
 				"descrp"				: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\") (nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)"
+			},
+			
+			"GrappleTarget" : {
+				"name" 					: "Greife Ziel/lasse Ziel los",
+				"descrp"				: "Lässt die ausgewählten Marke die angezielte Marke greifen, kann nur von der ausgewählten Marke rückgängig gemacht werden(Alternativ Macro: \"Grapple\") (nur wenn die Einstellung \"Greifen\" aktiviert ist)"
 			}
 		},
 		
@@ -115,7 +125,11 @@
 			"RidingLoop"				: "{pRiddenName} zu reiten wäre komisch",
 			"NoPlace"					: "{pRiddenName} hat keinen Platz mehr",
 			"EnemyRiding"				: "{pRiddenName} ist mein Gegner",
-			"Toofaraway"				: "{pRiddenName} ist zu weit weg"
+			"Toofaraway"				: "{pRiddenName} ist zu weit weg",
+			
+			"Grappling"					: "Von {pRiddenName} ergriffen",
+			"UnGrappling"				: "Von {pRiddenName} frei gelassen",
+			"PreventedGrappledMove"		: "Von {pRiddenName} ergriffen"
 		},	
 		
 		"TokenSettings" : {

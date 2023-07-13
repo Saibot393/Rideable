@@ -1,6 +1,6 @@
 import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
-import { MountSelected, MountSelectedFamiliar, UnMountSelected } from "../MountingScript.js";
+import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected } from "../MountingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
@@ -103,6 +103,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+   game.settings.register(cModuleName, "Grappling", {
+	name: Translate("Settings.Grappling.name"),
+	hint: Translate("Settings.Grappling.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   game.settings.register(cModuleName, "PreventEnemyRiding", {
 	name: Translate("Settings.PreventEnemyRiding.name"),
 	hint: Translate("Settings.PreventEnemyRiding.descrp"),
@@ -182,6 +191,19 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
       }
     ],
     onDown: () => { MountSelectedFamiliar(true); },
+    restricted: false,
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+  
+   game.keybindings.register(cModuleName, "GrappleTarget", {
+    name: Translate("Keys.GrappleTarget.name"),
+    hint: Translate("Keys.GrappleTarget.descrp"),
+    editable: [
+      {
+        key: "KeyK"
+      }
+    ],
+    onDown: () => { GrappleTargeted(); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });

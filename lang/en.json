@@ -73,6 +73,11 @@
 				"descrp"				: "Allows for familiars to ride their master, the familairs will be placed at the corners of their master"				
 			},
 			
+			"Grappling" : {
+				"name" 					: "Grappling",
+				"descrp"				: "Allows tokens to grapple one another (grappled tokens can only be unmounted by the grappling token)"				
+			},
+			
 			"PreventEnemyRiding" : {
 				"name" 					: "Prevent enemy riding",
 				"descrp"				: "Stops tokens from riding enemy tokens (GMs can still override this)"				
@@ -103,6 +108,11 @@
 			"MountFamiliar" : {
 				"name" 					: "Mount familiar",
 				"descrp"				: "Mount controlled familiars to targeted Token if targeted Token is master(alternative Macro: \"MountFamiliar\") (only if setting \"Familiar riding\" is activated)"
+			},
+			
+			"GrappleTarget" : {
+				"name" 					: "Grapple/release target",
+				"descrp"				: "Mount targeted token to controlled Token, can only be unmounted by grappling token(alternative Macro: \"Grapple\") (only if setting \"Grappling\" is activated)"
 			}
 		},
 		
@@ -115,7 +125,11 @@
 			"RidingLoop"				: "Riding {pRiddenName} would be awkward",
 			"NoPlace"					: "{pRiddenName} has no place left",
 			"EnemyRiding"				: "{pRiddenName} is my enemy",
-			"Toofaraway"				: "{pRiddenName} is too far away"
+			"Toofaraway"				: "{pRiddenName} is too far away",
+			
+			"Grappling"					: "Grappled by {pRiddenName}",
+			"UnGrappling"				: "Released from {pRiddenName}",
+			"PreventedGrappledMove"		: "Still grappled by {pRiddenName}"
 		},	
 		
 		"TokenSettings" : {

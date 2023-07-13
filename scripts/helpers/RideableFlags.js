@@ -18,6 +18,7 @@ const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this
 const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
 const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
+const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -46,13 +47,21 @@ class RideableFlags {
 		
 		static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
 		
-		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag and Familiar Riding flag true
+		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken has Riding flag and Familiar Riding flag true
 		
 		static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
+		
+		static isGrappled (pRiderToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true
+		
+		static isGrappledby (pRiderToken, pRiddenToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true and Rides pRiddenToken
+		
+		static wasGrappled(pRiderToken) {} //returns true if pRiderToken is has Grappled flag
 		
 		static isRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag true
 		
 		static isFamiliarRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
+		
+		static isGrappledID(pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Grappled Riding flag true
 		
 		static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
 		
@@ -70,13 +79,6 @@ class RideableFlags {
 		static SpawnRiders(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in an array
 		
 		static SpawnRidersstring(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in a string
-		
-		//relativ Position handling
-		static HasrelativPosition(pToken) {} //if a relativ position has already been Set
-		
-		static RelativPosition(pToken) {} //the current relativ Position
-		
-		static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
 	
 		//Rider count infos
 		static RiderCount(pRidden) {} //returns the number of Riders
@@ -88,12 +90,14 @@ class RideableFlags {
 		static TokenhasRidingPlace(pToken, pRidingOptions = {}) {} //returns if pToken has Riding places left
 		
 		static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
+		
+		static RiderGrappledCount(pRidden) {} //returns the number of "Riders" that are grappled
 	
 		//Riding height info
 		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false}, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false, Grappled: false}, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
 	
 	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
 	
@@ -108,6 +112,13 @@ class RideableFlags {
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
 	static setRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
+	
+	//relativ Position handling
+	static HasrelativPosition(pToken) {} //if a relativ position has already been Set
+	
+	static RelativPosition(pToken) {} //the current relativ Position
+	
+	static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
 	//IMPLEMENTATIONS
 	
 	//flags handling support
@@ -259,6 +270,19 @@ class RideableFlags {
 		return ""; //default if anything fails			
 	}
 	
+	static #GrappledFlag (pToken) { 
+	//returns content of Gappled Flag of pToken (if any) (true or false)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cGrappledF)) {
+				return vFlag.GrappledFlag;
+			}
+		}
+		
+		return false; //default if anything fails
+	} 
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -307,6 +331,16 @@ class RideableFlags {
 			return true;
 		}
 		return false;		
+	}
+	
+	static async #setGrappledFlag(pToken, pContent) {
+	//sets content of GrappledFlag (must be boolean)
+		if (pToken) {
+			await pToken.setFlag(cModule, cGrappledF, Boolean(pContent));
+			
+			return true;
+		}
+		return false;
 	}
 	
 	static #resetFlags (pToken) {
@@ -370,7 +404,19 @@ class RideableFlags {
 	
 	static wasFamiliarRider (pRiderToken) {
 		return this.#FamiliarRidingFlag(pRiderToken);
+	}
+	
+	static isGrappled (pRiderToken) {
+		return (this.isRider(pRiderToken) && this.#GrappledFlag(pRiderToken));
+	}
+	
+	static isGrappledby (pRiderToken, pRiddenToken) {
+		return this.isGrappled(pRiderToken) && this.isRiddenby(pRiddenToken, pRiderToken);
 	} 
+	
+	static wasGrappled(pRiderToken) {
+		return this.#GrappledFlag(pRiderToken);
+	}
 	
 	static isRiderID (pRiderTokenID, pScene = null) {
 		let vToken = RideableUtils.TokenfromID(pRiderTokenID, pScene);
@@ -391,6 +437,16 @@ class RideableFlags {
 		
 		return false;
 	} 
+	
+	static isGrappledID(pRiderTokenID, pScene = null) {
+		let vToken = RideableUtils.TokenfromID(pRiderTokenID, pScene);
+		
+		if (vToken) {
+			return this.isGrappled(vToken);
+		}
+		
+		return false;		
+	}
 	
 	static RiderTokenIDs (pRiddenToken) {
 		return this.#RidersFlag(pRiddenToken);
@@ -440,26 +496,6 @@ class RideableFlags {
 		return this.#SpawnRidersFlag(pToken);
 	}
 	
-	//relativ Position handling
-	static HasrelativPosition(pToken) {
-		return (this.#RelativPositionFlag(pToken).length == 2);
-	} 
-	
-	static RelativPosition(pToken) {
-		if (RideableFlags.HasrelativPosition(pToken)) {
-			return this.#RelativPositionFlag(pToken);
-		}
-		else {
-			return [0,0];
-		}
-	}
-	
-	static setRelativPosition(pToken, pPosition) {
-		if (pPosition.length == 2) {
-			this.#setRelativPositionFlag(pToken, pPosition);
-		}
-	} 
-	
 	//Rider count infos
 	static RiderCount(pRidden) {
 		return this.#RidersFlag(pRidden).filter(vID => !RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID , FCore.sceneof(pRidden)))).length;
@@ -478,9 +514,12 @@ class RideableFlags {
 		if (pRidingOptions.Familiar) {
 			return (cCornermaxRiders - RideableFlags.RiderFamiliarCount(pToken));
 		}
-		else {
-			return (RideableFlags.MaxRiders(pToken) - RideableFlags.RiderCount(pToken));
+		
+		if (pRidingOptions.Grappled) {
+			return Infinity; //change for max grappling
 		}
+		
+		return (RideableFlags.MaxRiders(pToken) - RideableFlags.RiderCount(pToken));
 	} 
 	
 	static TokenhasRidingPlace(pToken, pRidingOptions = {}) {
@@ -491,12 +530,16 @@ class RideableFlags {
 		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isFamiliarRider(RideableUtils.TokenfromID(vID, FCore.sceneof(pRidden)))).length;
 	} 
 	
+	static RiderGrappledCount(pRidden) {
+		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isGrappled(RideableUtils.TokenfromID(vID, FCore.sceneof(pRidden)))).length;
+	}
+	
 	static RiderHeight(pRider) {
 		return this.#RidingHeightFlag(pRider);
 	}
 	
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false}, pforceset = false) {
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false, Grappled: false}, pforceset = false) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => (!this.isRider(vToken) || pforceset) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
@@ -505,6 +548,7 @@ class RideableFlags {
 					if (vValidTokens[i]) {
 						await this.#setRidingFlag(vValidTokens[i],true);
 						await this.#setFamiliarRidingFlag(vValidTokens[i],pRidingOptions.Familiar);
+						await this.#setGrappledFlag(vValidTokens[i],pRidingOptions.Grappled);
 					}
 				}				
 			}
@@ -594,6 +638,26 @@ class RideableFlags {
 			if (pToken) {
 				this.#setaddRiderHeightFlag(pToken, pHeight);
 			}
+		}
+	} 
+	
+	//relativ Position handling
+	static HasrelativPosition(pToken) {
+		return (this.#RelativPositionFlag(pToken).length == 2);
+	} 
+	
+	static RelativPosition(pToken) {
+		if (RideableFlags.HasrelativPosition(pToken)) {
+			return this.#RelativPositionFlag(pToken);
+		}
+		else {
+			return [0,0];
+		}
+	}
+	
+	static setRelativPosition(pToken, pPosition) {
+		if (pPosition.length == 2) {
+			this.#setRelativPositionFlag(pToken, pPosition);
 		}
 	} 
 }
