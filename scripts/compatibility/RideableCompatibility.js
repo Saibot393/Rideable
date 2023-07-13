@@ -50,7 +50,7 @@ class RideableCompatibility {
 						vInvalidTokens[vInvalidTokens.length] = pData.selectedTokenIds[i];
 						
 						let vToken = RideableUtils.TokenfromID(pData.selectedTokenIds[i]);
-						RideablePopups.TextPopUpID(vToken ,"PreventedRiderMove", {pRiddenName : vToken.name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(vToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pToken).name}); //MESSAGE POPUP
 					}
 				}
 				
@@ -91,7 +91,7 @@ class RideableCompatibility {
 								//see if ridden token was left behind
 								let vRiddenToken = pSourceScene.tokens.find(vpreviousToken => RideableFlags.isRiddenbyID(vpreviousToken, RideableCompUtils.PreviousID(vToken)));
 								
-								if (vRiddenToken && (vRiddenToken.actor.ownership[pUser.id] >= 3)) {
+								if (vRiddenToken && (vRiddenToken.actor.ownership[pUser.id] >= 3 || vRiddenToken.actor.ownership.default >= 3)) {
 									//only teleport if ridden token is owned
 									await RideableCompatibility.SWTeleportleftTokens([vRiddenToken.id], pSourceScene, pTargetScene, pSWTarget, pUser);
 								}
