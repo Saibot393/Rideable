@@ -67,7 +67,7 @@ class MountingManager {
 			
 			if (RideableFlags.isGrappledby(vSelected[0], vTarget)) {
 				//if it is already grappled, ungrapple instead
-				MountingManager.UnMountSelected();
+				MountingManager.UnMountSelected(pTargetHovered);
 				
 				return;
 			}

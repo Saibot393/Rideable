@@ -203,7 +203,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
         key: "KeyK"
       }
     ],
-    onDown: () => { GrappleTargeted(); },
+    onDown: () => { GrappleTargeted(true); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
