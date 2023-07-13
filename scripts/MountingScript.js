@@ -321,7 +321,7 @@ class MountingManager {
 					
 					if (vRideableInfos) {
 						if (vRideableInfos.MountonSpawn) {
-							MountingManager.MountRequest(vRideableInfos.MountonSpawn, [pTokenDocument.id], FCore.sceneof(pTokenDocument));
+							MountingManager.MountRequest(vRideableInfos.MountonSpawn, [pTokenDocument.id], FCore.sceneof(pTokenDocument), {});
 						}
 					}
 				}

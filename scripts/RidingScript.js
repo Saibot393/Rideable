@@ -28,6 +28,8 @@ class Ridingmanager {
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
+	static planRowRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true, pyoffset = 0) {} //works out the position of tokens if they are spread according in a row
+	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
@@ -213,50 +215,64 @@ class Ridingmanager {
 					
 				case cRowplacement:
 				default:
-					let vbunchedRiders = true;
-					let vxoffset = 0;
-					let vxdelta = 0;
-					
-					let vRiderWidthSumm = 0;					
-					for (let i = 0; i < pRiderTokenList.length; i++) {
-						vRiderWidthSumm = vRiderWidthSumm + GeometricUtils.insceneWidth(pRiderTokenList[i]);
-					}
-					
-					//if Riders have to be bunched
-					if (vRiderWidthSumm > GeometricUtils.insceneWidth(pRiddenToken)) {
-						vxoffset = -GeometricUtils.insceneWidth(pRiddenToken)/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
-						if (pRiderTokenList.length > 1) {
-							vxdelta = (GeometricUtils.insceneWidth(pRiddenToken) - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
-						}
-					} 
-					else { //if Riders dont have to be bunched
-						vbunchedRiders = false;
-						
-						vxoffset = -vRiderWidthSumm/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
-					}
-		
-					for (let i = 0; i < pRiderTokenList.length; i++) {
-						//update riders position in x, y
-						let vTargetx = 0;
-						
-						if (vbunchedRiders) {
-							vTargetx = vxoffset + i*vxdelta;
-						}
-						else {
-							if (i > 0) {
-								vTargetx = vxoffset + (GeometricUtils.insceneWidth(pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
-								vxoffset = vTargetx;
-							}
-							else {
-								vTargetx = vxoffset;
-							}
-						}
-						
-						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, 0, pAnimations);		
-					}
+					Ridingmanager.planRowRidersTokens(pRiddenToken, pRiderTokenList, pAnimations);
 			}
 		}
 	} 
+	
+	static planRowRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true, pyoffset = 0) {
+		let vbunchedRiders = true;
+		let vxoffset = 0;
+		let vxdelta = 0;
+		
+		let vRiderWidthSumm = 0;					
+		for (let i = 0; i < pRiderTokenList.length; i++) {
+			vRiderWidthSumm = vRiderWidthSumm + GeometricUtils.insceneWidth(pRiderTokenList[i]);
+		}
+		
+		//if Riders have to be bunched
+		if (vRiderWidthSumm > GeometricUtils.insceneWidth(pRiddenToken)) {
+			vxoffset = -GeometricUtils.insceneWidth(pRiddenToken)/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
+			if (pRiderTokenList.length > 1) {
+				vxdelta = (GeometricUtils.insceneWidth(pRiddenToken) - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
+			}
+		} 
+		else { //if Riders dont have to be bunched
+			vbunchedRiders = false;
+			
+			vxoffset = -vRiderWidthSumm/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
+		}
+
+		for (let i = 0; i < pRiderTokenList.length; i++) {
+			//update riders position in x, y
+			let vTargetx = 0;
+			let vTargety = 0;
+			
+			if (vbunchedRiders) {
+				vTargetx = vxoffset + i*vxdelta;
+			}
+			else {
+				if (i > 0) {
+					vTargetx = vxoffset + (GeometricUtils.insceneWidth(pRiderTokenList[i-1])+GeometricUtils.insceneWidth(pRiderTokenList[i]))/2;
+					vxoffset = vTargetx;
+				}
+				else {
+					vTargetx = vxoffset;
+				}
+			}
+			
+			if (pyoffset && (pyoffset.length != 0)) {
+				if (pyoffset.length) {
+					vTargety = pyoffset[i%pyoffset.length]
+				}
+				else {
+					vTargety = pyoffset;
+				}
+			}
+			
+			Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, pAnimations);		
+		}
+	}
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
