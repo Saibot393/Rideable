@@ -1,7 +1,7 @@
 import * as FCore from "../CoreVersionComp.js";
 
 import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
-import { cTokenFormCircle, cTokenFormRectangle } from "../utils/GeometricUtils.js";
+import { cTokenForms } from "../utils/GeometricUtils.js";
 
 const cModule = "Rideable";
 
@@ -83,9 +83,9 @@ class RideableFlags {
 		
 		static MaxRiders(pRidden) {} //returns the maximum amount of riders this pRidden can can take
 		
-		static TokenRidingSpaceleft(pToken, pFamiliars = false) {} //returns amount of riding places left in pToken
+		static TokenRidingSpaceleft(pToken, pRidingOptions = {}) {} //returns amount of riding places left in pToken
 		
-		static TokenhasRidingPlace(pToken, pFamiliars = false) {} //returns if pToken has Riding places left
+		static TokenhasRidingPlace(pToken, pRidingOptions = {}) {} //returns if pToken has Riding places left
 		
 		static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
 	
@@ -93,7 +93,7 @@ class RideableFlags {
 		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
 		
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false}, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
 	
 	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
 	
@@ -208,7 +208,7 @@ class RideableFlags {
 			}
 		}
 		
-		return cTokenFormCircle; //default if anything fails		
+		return cTokenForms[0]; //default if anything fails		
 	}
 	
 	static #InsideMovementFlag(pToken) {
@@ -474,8 +474,8 @@ class RideableFlags {
 		}
 	}
 	
-	static TokenRidingSpaceleft(pToken, pFamiliars = false) {
-		if (pFamiliars) {
+	static TokenRidingSpaceleft(pToken, pRidingOptions = {}) {
+		if (pRidingOptions.Familiar) {
 			return (cCornermaxRiders - RideableFlags.RiderFamiliarCount(pToken));
 		}
 		else {
@@ -483,8 +483,8 @@ class RideableFlags {
 		}
 	} 
 	
-	static TokenhasRidingPlace(pToken, pFamiliars = false) {
-		return (RideableFlags.TokenRidingSpaceleft(pToken, pFamiliars) > 0);
+	static TokenhasRidingPlace(pToken, pRidingOptions = {}) {
+		return (RideableFlags.TokenRidingSpaceleft(pToken, pRidingOptions) > 0);
 	}
 	
 	static RiderFamiliarCount(pRidden) {
@@ -496,7 +496,7 @@ class RideableFlags {
 	}
 	
 	//flag setting
-	static async addRiderTokens (pRiddenToken, pRiderTokens, pFamiliarRiding = false, pforceset = false) {
+	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false}, pforceset = false) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => (!this.isRider(vToken) || pforceset) && (vToken != pRiddenToken)); //only Tokens which currently are not Rider can Ride and Tokens can not ride them selfs
 			
@@ -504,7 +504,7 @@ class RideableFlags {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
 						this.#setRidingFlag(vValidTokens[i],true);
-						this.#setFamiliarRidingFlag(vValidTokens[i],pFamiliarRiding);
+						this.#setFamiliarRidingFlag(vValidTokens[i],pRidingOptions.Familiar);
 					}
 				}				
 			}

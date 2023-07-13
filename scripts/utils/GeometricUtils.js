@@ -11,7 +11,9 @@ const cyid = 1;
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 
-export {cTokenFormCircle, cTokenFormRectangle, cGradtoRad}
+const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
+
+export {cTokenForms, cGradtoRad}
 
 class GeometricUtils {
 	//DECLARATIONS

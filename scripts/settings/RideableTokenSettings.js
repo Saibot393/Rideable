@@ -1,7 +1,7 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
 import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF} from "../helpers/RideableFlags.js";
-import { cTokenFormCircle, cTokenFormRectangle} from "../utils/GeometricUtils.js";
-import { cRowplacement, cCircleplacement } from "../RidingScript.js";
+import { cTokenForms } from "../utils/GeometricUtils.js";
+import { cPlacementPatterns } from "../RidingScript.js";
 
 const cRideableIcon = "fa-horse-saddle";
 
@@ -55,7 +55,7 @@ class RideableTokenSettings {
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
 													vhint : Translate("TokenSettings."+ cRiderPositioningF +".descrp"), 
 													vtype : "select", 
-													voptions : [cRowplacement, cCircleplacement],
+													voptions : cPlacementPatterns,
 													vvalue : RideableFlags.RiderPositioning(pApp.token), 
 													vflagname : cRiderPositioningF
 													});
@@ -64,7 +64,7 @@ class RideableTokenSettings {
 		RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
 													vhint : Translate("TokenSettings."+ cTokenFormF +".descrp"), 
 													vtype : "select", 
-													voptions : [cTokenFormCircle, cTokenFormRectangle],
+													voptions : cTokenForms,
 													vvalue : RideableFlags.TokenForm(pApp.token), 
 													vflagname : cTokenFormF
 													});

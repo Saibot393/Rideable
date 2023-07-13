@@ -9,7 +9,9 @@ import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 
-export { cRowplacement, cCircleplacement };
+const cPlacementPatterns = [cRowplacement, cCircleplacement];
+
+export { cRowplacement, cPlacementPatterns };
 
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
@@ -18,17 +20,17 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
+	static planRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
-	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
+	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
 	
-	static placeRelativRiderTokens(pRiddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
+	static placeRelativRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
 	//DEPRICATED:
 	//static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
@@ -88,9 +90,9 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {
 		if (priddenToken) {
-			Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pallFamiliars, pAnimations);
+			Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations);
 		}
 	} 
 	
@@ -161,7 +163,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pallFamiliars = false, pAnimations = true) {
+	static planRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		
@@ -170,7 +172,7 @@ class Ridingmanager {
 		
 		if (game.settings.get(cModuleName, "FamiliarRiding")) { 
 		//split riders in familiars and normal riders
-			if (pallFamiliars) {
+			if (pRidingOptions.Familiar) {
 				vRiderFamiliarList = vRiderTokenList;
 			}
 			else {
@@ -366,8 +368,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars = false, pAnimations = true) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pallFamiliars, pAnimations);
+function UpdateRidderTokens(priddenToken, vRiderTokenList, pRidingOptions = {}, pAnimations = true) {
+	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pRidingOptions, pAnimations);
 }
 function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);

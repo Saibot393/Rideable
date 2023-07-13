@@ -11,11 +11,11 @@ import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 class MountingManager {
 	//DECLARATIONS
 	//Basic Mounting /UnMounting
-	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
+	static async MountSelected(pTargetHovered = false, pRidingOptions = {Familiar: false, Grappled: false}) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
-	static async MountSelected(pTargetHovered = false, pFamiliar = false) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	static MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
-	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar = false) {} //Request GM user to execute MountSelectedGM with given parameters
+	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Request GM user to execute MountSelectedGM with given parameters
 	
 	static UnMountSelectedGM(pselectedTokens, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
@@ -32,12 +32,12 @@ class MountingManager {
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
-	static onMount(pRider, pRidden, pFamiliar = false) {} //everything that happens upon a token mounting (besides the basics)
+	static onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
 	
-	static onUnMount(pRider, pRidden, pFamiliar = false) {} //everything that happens upon a token unmounting (besides the basics)
+	static onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
 	
 	//Aditional Informations
-	static TokencanMount (pRider, pRidden, pFamiliar = false, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
+	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
 	
 	//Handel Token Creation/Deletion
 	static async onTokenCreation(pTokenDocument, pInfos, pID) {} //Span on spawn tokens or mount if on spawn is active
@@ -45,43 +45,8 @@ class MountingManager {
 	static onTokenDeletion(pToken) {} //Removes pToken from the Rider logic (both in Regards to Ridden and Riders)
 	
 	//IMPLEMENTATION
-	//Basic Mounting /UnMounting
-	static MountSelectedGM(pTarget, pselectedTokens, pFamiliar = false, pScene = null) {
-		//only works directly for GMs
-		if (game.user.isGM) {		
-			//make sure ptarget exists	
-			if ((!pFamiliar) || (game.settings.get(cModuleName, "FamiliarRiding"))) {
-				//pFamiliar riding can only be handled if setting is activated
-				if (pTarget) {
-					if (RideableFlags.TokenisRideable(pTarget) || pFamiliar) {
-						
-						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pFamiliar));
-						
-						if (vValidTokens.length) {
-							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget), FCore.sceneof(pTarget));
-							
-							if (pFamiliar) {
-								//if a familiar was added only the familiars positions have to be updated
-								vpreviousRiders = vpreviousRiders.filter(vToken => RideableFlags.isFamiliarRider(vToken));
-							}
-							
-							RideableFlags.addRiderTokens(pTarget, vValidTokens, pFamiliar);
-							
-							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pFamiliar);
-							
-							for (let i = 0; i < vValidTokens.length; i++) {
-								MountingManager.onMount(vValidTokens[i], pTarget, pFamiliar);
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return;
-	}
-	
-	static async MountSelected(pTargetHovered = false, pFamiliar = false) {
+	//Basic Mounting /UnMounting	
+	static async MountSelected(pTargetHovered = false,  pRidingOptions = {Familiar: false}) {
 		let vTarget = RideableUtils.targetedToken();
 		
 		if (pTargetHovered || !vTarget) {
@@ -95,16 +60,16 @@ class MountingManager {
 		//Make sure all riders can even ride the target
 		await RideableFlags.recheckRiders(vTarget);
 		
-		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pFamiliar, true));
+		let vValidRiders = RideableUtils.selectedTokens().filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pRidingOptions, true));
 		
-		if (pFamiliar) {
-			//pFamiliar make sure selected are actually familairs of target
+		if (pRidingOptions.Familiar) {
+			//Familiar make sure selected are actually familairs of target
 			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
 		}
 		
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
 		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(vTarget, vValidRiders, pFamiliar);
+			MountingManager.MountSelectedGM(vTarget, vValidRiders, pRidingOptions);
 		}
 		else {
 			if (!game.paused) {
@@ -114,7 +79,7 @@ class MountingManager {
 					
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(vValidRiders);
 					
-					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pFamiliar : pFamiliar}});
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pRidingOptions : pRidingOptions}});
 				}
 			}
 		}
@@ -122,12 +87,47 @@ class MountingManager {
 		return;
 	}
 	
-	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar = false) { 
+	static MountSelectedGM(pTarget, pselectedTokens, pRidingOptions, pScene = null) {
+		//only works directly for GMs
+		if (game.user.isGM) {		
+			//make sure ptarget exists	
+			if ((!pRidingOptions.Familiar) || (game.settings.get(cModuleName, "FamiliarRiding"))) {
+				//Familiar riding can only be handled if setting is activated
+				if (pTarget) {
+					if (RideableFlags.TokenisRideable(pTarget) || pRidingOptions.Familiar) {
+						
+						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
+						
+						if (vValidTokens.length) {
+							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget), FCore.sceneof(pTarget));
+							
+							if (pRidingOptions.Familiar) {
+								//if a familiar was added only the familiars positions have to be updated
+								vpreviousRiders = vpreviousRiders.filter(vToken => RideableFlags.isFamiliarRider(vToken));
+							}
+							
+							RideableFlags.addRiderTokens(pTarget, vValidTokens, pRidingOptions);
+							
+							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
+							
+							for (let i = 0; i < vValidTokens.length; i++) {
+								MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return;
+	}
+	
+	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
 			
-			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID, vScene), RideableUtils.TokensfromIDs(pselectedTokensID, vScene), pFamiliar);
+			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID, vScene), RideableUtils.TokensfromIDs(pselectedTokensID, vScene), pRidingOptions);
 		}
 		
 		return;
@@ -150,7 +150,7 @@ class MountingManager {
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
 				
-				MountingManager.onUnMount(vRiderTokens[i], vRiddenTokens[i]);
+				MountingManager.onUnMount(vRiderTokens[i], vRiddenTokens[i], {Familiar: RideableFlags.wasFamiliarRider(vRiderTokens[i])});
 			}
 		}
 	}
@@ -220,11 +220,11 @@ class MountingManager {
 		}
 	}
 	
-	static onMount(pRider, pRidden, pFamiliar = false) {
-		if (!pFamiliar) {
+	static onMount(pRider, pRidden, pRidingOptions) {
+		if (!pRidingOptions.Familiar) {
 			
 			if (pRidden) {
-				if (pFamiliar) {
+				if (pRidingOptions.Familiar) {
 					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
@@ -243,14 +243,14 @@ class MountingManager {
 			
 		}	
 		
-		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
-	static async onUnMount(pRider, pRidden, pFamiliar = false) {
+	static async onUnMount(pRider, pRidden, pRidingOptions) {
 		if (pRider) {
 			
 			if (pRidden) {
-				if (pFamiliar) {
+				if (pRidingOptions.Familiar) {
 					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 				}
 				else {
@@ -265,17 +265,17 @@ class MountingManager {
 			}
 		}
 		
-		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pFamiliar);
+		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
 	} 
 	
 	//Aditional Informations
 	
-	static TokencanMount (pRider, pRidden, pFamiliar = false) {
+	static TokencanMount (pRider, pRidden, pRidingOptions) {
 		
 		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
 			//prevent riding loops
 			
-			if (RideableFlags.TokenhasRidingPlace(pRidden, pFamiliar)) {
+			if (RideableFlags.TokenhasRidingPlace(pRidden, pRidingOptions)) {
 			//check if Token has place left to be ridden
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM) {
@@ -379,9 +379,9 @@ Hooks.on("ready", function() { EffectManager.preloadEffects(); });
 
 function MountSelected(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered); }
 
-function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, true); }
+function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Familiar: true}); }
 
-function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pFamiliar } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pFamiliar); }
+function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
