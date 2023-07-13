@@ -19,7 +19,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
-- Maximum riders per token: to limit the amounts of token that can ride the same token
+- Maximum riders per token: to limit the amounts of tokens that can ride the same token
 - Link rotations: to link the rotation of the rider tokens to the ridden token (or vice versa with the "Move ridden on rider movement" option)
 - Apply "Mounted" effect: to apply an appropriate effect to the riding token if the game system supports this
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
