@@ -28,7 +28,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
-- Message popups: to activate some pop ups on certain actions
+- Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
@@ -53,7 +53,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - If a users (standard) character gets teleported in one of this ways, the user will switch scenes
   - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways (GMs can override this)
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
-  - Additional setting "Use token height": to use the the ridden tokens height instead of the "Riding Height" setting
+  - Additional setting "Use token height": to use the ridden tokens height instead of the "Riding Height" setting
   - If the above setting is activated the ridden tokens elevation will automatically be updated should the ridden tokens height change
 
 ### Languages:
