@@ -26,11 +26,11 @@ class Ridingmanager {
 	
 	static planRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
-	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
+	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
 	
-	static placeRelativRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
+	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
 	//DEPRICATED:
 	//static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
@@ -57,7 +57,7 @@ class Ridingmanager {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
 					
-					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, false, pInfos.animate);
+					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, {}, pInfos.animate);
 				}
 			}
 		}

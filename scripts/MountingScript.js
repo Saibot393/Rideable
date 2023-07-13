@@ -79,7 +79,7 @@ class MountingManager {
 					
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(vValidRiders);
 					
-					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pRidingOptions : pRidingOptions}});
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pRidingOptionFamiliar : pRidingOptions.Familiar, pRidingOptionGrappled : pRidingOptions.Grappled}});
 				}
 			}
 		}
@@ -381,7 +381,7 @@ function MountSelected(pTargetHovered = false) { return MountingManager.MountSel
 
 function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Familiar: true}); }
 
-function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
+function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptionFamiliar, pRidingOptionGrappled } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, {Familiar: pRidingOptionFamiliar, Grappled: pRidingOptionGrappled}); }
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
