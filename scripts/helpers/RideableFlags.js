@@ -259,20 +259,20 @@ class RideableFlags {
 		return ""; //default if anything fails			
 	}
 	
-	static #setRidingFlag (pToken, pContent) {
+	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
-			pToken.setFlag(cModule, cRidingF, Boolean(pContent));
+			await pToken.setFlag(cModule, cRidingF, Boolean(pContent));
 			
 			return true;
 		}
 		return false;
 	} 
 	
-	static #setFamiliarRidingFlag (pToken, pContent) {
+	static async #setFamiliarRidingFlag (pToken, pContent) {
 	//sets content of FamiliarRiddenFlag (must be boolean)
 		if (pToken) {
-			pToken.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
+			await pToken.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -503,8 +503,8 @@ class RideableFlags {
 			if (await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).concat(RideableUtils.IDsfromTokens(vValidTokens)))) {
 				for (let i = 0; i < vValidTokens.length; i++) {
 					if (vValidTokens[i]) {
-						this.#setRidingFlag(vValidTokens[i],true);
-						this.#setFamiliarRidingFlag(vValidTokens[i],pRidingOptions.Familiar);
+						await this.#setRidingFlag(vValidTokens[i],true);
+						await this.#setFamiliarRidingFlag(vValidTokens[i],pRidingOptions.Familiar);
 					}
 				}				
 			}

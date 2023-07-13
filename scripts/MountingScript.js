@@ -13,7 +13,7 @@ class MountingManager {
 	//Basic Mounting /UnMounting
 	static async MountSelected(pTargetHovered = false, pRidingOptions = {Familiar: false, Grappled: false}) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
-	static MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
+	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Request GM user to execute MountSelectedGM with given parameters
 	
@@ -87,7 +87,7 @@ class MountingManager {
 		return;
 	}
 	
-	static MountSelectedGM(pTarget, pselectedTokens, pRidingOptions, pScene = null) {
+	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions, pScene = null) {
 		//only works directly for GMs
 		if (game.user.isGM) {		
 			//make sure ptarget exists	
@@ -106,7 +106,7 @@ class MountingManager {
 								vpreviousRiders = vpreviousRiders.filter(vToken => RideableFlags.isFamiliarRider(vToken));
 							}
 							
-							RideableFlags.addRiderTokens(pTarget, vValidTokens, pRidingOptions);
+							await RideableFlags.addRiderTokens(pTarget, vValidTokens, pRidingOptions);
 							
 							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
 							
@@ -221,7 +221,7 @@ class MountingManager {
 	}
 	
 	static onMount(pRider, pRidden, pRidingOptions) {
-		if (!pRidingOptions.Familiar) {
+		if (pRider) {
 			
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
@@ -239,16 +239,12 @@ class MountingManager {
 				}
 			}
 		}
-		else {
-			
-		}	
 		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
 	static async onUnMount(pRider, pRidden, pRidingOptions) {
-		if (pRider) {
-			
+		if (pRider) {	
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
 					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP

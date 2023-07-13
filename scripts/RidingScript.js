@@ -20,11 +20,11 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
+	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
@@ -57,7 +57,7 @@ class Ridingmanager {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
 					
-					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, {}, pInfos.animate);
+					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, pInfos.animate);
 				}
 			}
 		}
@@ -90,9 +90,9 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {
+	static UpdateRidderTokens(priddenToken, pRiderTokenList, pAnimations = true) {
 		if (priddenToken) {
-			Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pRidingOptions, pAnimations);
+			Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pAnimations);
 		}
 	} 
 	
@@ -163,7 +163,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pRidingOptions, pAnimations = true) {
+	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		
@@ -172,14 +172,9 @@ class Ridingmanager {
 		
 		if (game.settings.get(cModuleName, "FamiliarRiding")) { 
 		//split riders in familiars and normal riders
-			if (pRidingOptions.Familiar) {
-				vRiderFamiliarList = vRiderTokenList;
-			}
-			else {
-				vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
+			vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
 				
-				vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
-			}
+			vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
 		}
     
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
@@ -368,8 +363,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList, pRidingOptions = {}, pAnimations = true) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pRidingOptions, pAnimations);
+function UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations = true) {
+	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations);
 }
 function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
