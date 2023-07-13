@@ -1,4 +1,4 @@
-## v2.2.0 (unreleased)
+## v2.2.0
 - Moved on-token settings into separate tab
 - Added on-token option to spawn with riders
 - Added Grappling (has to be turned in the settings)
