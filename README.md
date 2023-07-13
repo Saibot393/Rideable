@@ -10,7 +10,7 @@ Upon mounting the module will spread the mounted tokens on the ridden token and 
 
 Ridden tokens can themselfve ride other tokens.
 
-Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings)
+Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings).
 
 ### Settings:
 
