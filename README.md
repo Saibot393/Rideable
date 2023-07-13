@@ -10,6 +10,8 @@ Upon mounting the module will spread the mounted tokens on the ridden token and 
 
 Ridden tokens can themselfve ride other tokens.
 
+Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings)
+
 ### Settings:
 
 #### World:
@@ -22,17 +24,19 @@ Ridden tokens can themselfve ride other tokens.
 - Apply "Mounted" effect: to apply an appropriate effect to the riding token if the game system supports this
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
+- Grappling: to allow tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Message popups: to activate some pop ups on certain actions
 - Own message popups only: to only show message popups from tokens you control
-#### Tokens:
+#### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
 - Maximum riders: to override world default for this token
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
+- Spawn riders (GM only): to set with which riders this token spawns
 
 ### Compatibility:
 
