@@ -413,7 +413,7 @@ function MountSelected(pTargetHovered = false) { return MountingManager.MountSel
 
 function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Familiar: true}); }
 
-function GrappleTargeted() { return MountingManager.MountSelected(false, {Grappled: true})};
+function GrappleTargeted(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Grappled: true})};
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptionFamiliar, pRidingOptionGrappled } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, {Familiar: pRidingOptionFamiliar, Grappled: pRidingOptionGrappled}); }
 
