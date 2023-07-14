@@ -8,7 +8,7 @@ To mount, select a group of tokens and press 'm' or use the 'Mount' macro while 
 
 Upon mounting the module will spread the mounted tokens on the ridden token and increase their z-height relative to the ridden token. The mounted tokens will always move with the ridden token. Upon dismounting the z-height of the previously mounted tokens will be reduced again.
 
-Ridden tokens can themselfve ride other tokens.
+Ridden tokens can themself ride other tokens.
 
 Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings).
 
