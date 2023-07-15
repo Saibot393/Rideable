@@ -8,7 +8,7 @@ To mount, select a group of tokens and press 'm' or use the 'Mount' macro while 
 
 Upon mounting the module will spread the mounted tokens on the ridden token and increase their z-height relative to the ridden token. The mounted tokens will always move with the ridden token. Upon dismounting the z-height of the previously mounted tokens will be reduced again.
 
-Ridden tokens can themselfve ride other tokens.
+Ridden tokens can themself ride other tokens.
 
 Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings).
 
@@ -19,7 +19,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
-- Maximum riders per token: to limit the amounts of token that can ride the same token
+- Maximum riders per token: to limit the amounts of tokens that can ride the same token
 - Link rotations: to link the rotation of the rider tokens to the ridden token (or vice versa with the "Move ridden on rider movement" option)
 - Apply "Mounted" effect: to apply an appropriate effect to the riding token if the game system supports this
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
@@ -28,7 +28,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
-- Message popups: to activate some pop ups on certain actions
+- Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
@@ -53,7 +53,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - If a users (standard) character gets teleported in one of this ways, the user will switch scenes
   - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways (GMs can override this)
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
-  - Additional setting "Use token height": to use the the ridden tokens height instead of the "Riding Height" setting
+  - Additional setting "Use token height": to use the ridden tokens height instead of the "Riding Height" setting
   - If the above setting is activated the ridden tokens elevation will automatically be updated should the ridden tokens height change
 
 ### Languages:
