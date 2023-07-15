@@ -168,6 +168,7 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
+			console.log(pRemoveRiddenreference);
 			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
@@ -387,11 +388,11 @@ class MountingManager {
 				}*/
 				
 				if (RideableFlags.isRidden(pToken)) {
-					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken)), false);
+					MountingManager.UnMountSelectedGM(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken)), true, false);
 				}
 				
 				if (RideableFlags.isRider(pToken)) {
-					MountingManager.UnMountSelectedGM([pToken], false, false);
+					MountingManager.UnMountSelectedGM([pToken], true, false);
 				}
 			}
 		}
