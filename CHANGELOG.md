@@ -1,3 +1,6 @@
+## v2.2.1
+- Bug fix for free riding tokens and stairways compatibility
+
 ## v2.2.0
 - Moved on-token settings into separate tab
 - Added on-token option to spawn with riders
