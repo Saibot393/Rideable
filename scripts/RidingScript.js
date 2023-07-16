@@ -11,12 +11,7 @@ const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 
 const cPlacementPatterns = [cRowplacement, cCircleplacement];
 
-enum tPlacementPatterns = {
-	RowPlacement,
-	CirclePlacement
-};
-
-export { cRowplacement, cPlacementPatterns, tPlacement };
+export { cRowplacement, cPlacementPatterns };
 
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {

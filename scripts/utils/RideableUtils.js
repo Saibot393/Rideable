@@ -129,10 +129,43 @@ class RideableUtils {
 		let vActors = [];
 		
 		for (let i = 0; i < pIdentifications.length; i++) {
+			//world
+			//-uuid
 			let vBuffer = await game.actors.get(pIdentifications[i]);
 			
+			//-name
 			if (!vBuffer) {
 				vBuffer = await game.actors.find(vToken => vToken.name == pIdentifications[i]);
+			}
+			
+			//direct id
+			if (!vBuffer) {
+				console.log(pIdentifications[i]);
+				vBuffer = await fromUuid(pIdentifications[i]);
+			}
+			
+			//compendium
+			if (!vBuffer) {
+				let vElement;
+				let vPackIndexes = game.packs.filter(vPacks => vPacks.documentName == "Actor").map(vPack => vPack.index);
+				
+				//-uuid
+				let vPack = vPackIndexes.find(vPack => vPack.get(pIdentifications[i]));
+				
+				if (vPack) {
+					vElement = vPack.get(pIdentifications[i]);
+				}
+				else {//-name
+					vPack = vPackIndexes.find(vPack => vPack.find(vData => vData.name == pIdentifications[i]));
+					
+					if (vPack) {
+						vElement = vPack.find(vData => vData.name == pIdentifications[i]);
+					}
+				}
+				
+				if (vPack) {
+					vBuffer = await fromUuid(vElement.uuid);
+				}
 			}
 			
 			if (vBuffer) {

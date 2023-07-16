@@ -12,11 +12,6 @@ const cyid = 1;
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 
-enum tTokenForms = {
-	TokenFormCircle,
-	TokenFormRectangle
-}
-
 const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
 
 export {cTokenForms, cGradtoRad}
