@@ -8,8 +8,14 @@ const chexfactor = Math.cos(30 * cGradtoRad);
 const cxid = 0;
 const cyid = 1;
 
+//forms
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
+
+enum tTokenForms = {
+	TokenFormCircle,
+	TokenFormRectangle
+}
 
 const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
 
