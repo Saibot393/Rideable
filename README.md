@@ -26,6 +26,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Grappling: to allow tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
+- Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Message popups: to activate some popups on certain actions
