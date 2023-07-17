@@ -8,6 +8,7 @@ const chexfactor = Math.cos(30 * cGradtoRad);
 const cxid = 0;
 const cyid = 1;
 
+//forms
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 
@@ -53,6 +54,11 @@ class GeometricUtils {
 	static insceneWidth(pToken) {} //returns the tokens width in its scene
 	
 	static insceneHeight(pToken) {} //returns the tokens width in its scene
+	
+	static insceneSize(pToken) {} // returns the scene size of pTokens scene
+	
+	//sort
+	static sortbymaxdim(pTokens) {} //sorts pTokens array by their largest dimensions, returns sorted array and array with their values
 	
 	//advanced
 	static closestrelativBorderposition(pToken, pTokenForm, pDirection) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
@@ -183,6 +189,19 @@ class GeometricUtils {
 			return pToken.height * FCore.sceneof(pToken).dimensions.size;
 		}
 	}
+	
+	static insceneSize(pToken) {
+		return FCore.sceneof(pToken).dimensions.size;
+	}
+	
+	//sort
+	static sortbymaxdim(pTokens) {
+		let vsortedTokens = pTokens.sort(function(vTokena,vTokenb){return Math.max(vTokena.height, vTokena.width)-Math.max(vTokenb.height, vTokenb.width)});
+		
+		let vsortedmaxdim = vsortedTokens.map(vToken => Math.max(vToken.height, vToken.width));
+		
+		return [vsortedTokens, vsortedmaxdim];
+	} 
 	
 	//advanced
 	static closestBorderposition(pToken, pTokenForm, pDirection) {

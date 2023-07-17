@@ -82,6 +82,11 @@
 				"name" 					: "Gegner reiten verhindern",
 				"descrp"				: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)"				
 			},
+			
+			"FitRidersize" : {
+				"name" 					: "Passe Reitergröße an",
+				"descrp"				: "Passt die Größe der reitenden Marke an, sollte sie größer oder gleich der gerittenen Marke sein"				
+			},
 		
 			"MessagePopUps" : {
 				"name" 					: "Pop-up Meldungen",
@@ -143,7 +148,8 @@
 				"descrp"				: "Das Muster in welchem die Reitermarken platziert werden",
 				"options" : {
 					"CirclePlacement"	: "Kreis",
-					"RowPlacement"		: "Reihe"
+					"RowPlacement"		: "Reihe",
+					"ClusterPlacement"	: "Bündel"
 				}
 			},
 			

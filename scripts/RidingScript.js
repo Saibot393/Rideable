@@ -8,10 +8,14 @@ import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
+const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
+const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 
-const cPlacementPatterns = [cRowplacement, cCircleplacement];
+const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
 export { cRowplacement, cPlacementPatterns };
+
+const cSizeFactor = 2/3;
 
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
@@ -24,11 +28,13 @@ class Ridingmanager {
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
+	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
+	
+	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {} //reduces the size of all tokens that are equal or greater in size to their ridden token to pSizeFactor of ridden token
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
@@ -177,7 +183,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		let vGrappledList = [];
@@ -198,6 +204,11 @@ class Ridingmanager {
 				
 			vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
 		}
+		
+		//reduce size if necessary
+		if (game.settings.get(cModuleName, "FitRidersize")) {
+			await Ridingmanager.fitRiders(pRiddenToken, vRiderTokenList);
+		}
     
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
 			Ridingmanager.planRelativRiderTokens(pRiddenToken, vRiderTokenList, pAnimations);
@@ -215,9 +226,11 @@ class Ridingmanager {
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		if (pRiderTokenList.length) {
+			let vAngleSteps; //to fix javascript syntax bug
+			
 			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
 				case cCircleplacement:
-					let vAngleSteps = 360/pRiderTokenList.length;
+					vAngleSteps = 360/pRiderTokenList.length;
 					
 					//calculate maximum placement heights and widths
 					let vMaxHeight = 0;
@@ -235,6 +248,58 @@ class Ridingmanager {
 						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i), -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i), pAnimations);
 					}	
 					
+					break;
+					
+				case cClusterplacement:
+						let vSizeFactor = GeometricUtils.insceneSize(pRiddenToken);
+				
+						let vsortedTokens;
+						let vsortedSizes;
+						let vPlacementInterval = [0,0];
+						vAngleSteps = 0;
+						let vBaseRadius = 0;
+						let vMaxSize;
+						let vSizesumm;
+						
+						//sort tokens
+						[vsortedTokens, vsortedSizes] = GeometricUtils.sortbymaxdim(pRiderTokenList);
+						
+						//place largest tokens first
+						vsortedTokens.reverse();
+						vsortedSizes.reverse();
+						
+						//for 0th token
+						vMaxSize = vsortedSizes[0];
+						
+						while (vPlacementInterval[1] < vsortedTokens.length) {
+							//placements						
+							for (let i = vPlacementInterval[0]; i <= vPlacementInterval[1]; i++) {
+								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i), -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i), pAnimations);
+							}	
+							
+							vBaseRadius = vBaseRadius + vMaxSize/2;
+							
+							//new calculations
+							vPlacementInterval[0] = vPlacementInterval[1] + 1;
+							vPlacementInterval[1] = vPlacementInterval[0];
+							
+							vMaxSize = vsortedSizes[vPlacementInterval[0]];
+							vSizesumm = vsortedSizes[vPlacementInterval[0]];
+							
+							//check if next element exists and fits in new circumference
+							while (((vPlacementInterval[1]+1) < vsortedTokens.length) && ((2*vBaseRadius + Math.max(vsortedSizes[vPlacementInterval[1]+1], vMaxSize))*Math.PI > (vSizesumm + vsortedSizes[vPlacementInterval[1]+1]))) {
+										
+								vPlacementInterval[1] = vPlacementInterval[1] + 1;
+								
+								vMaxSize = Math.max(vMaxSize, vsortedSizes[vPlacementInterval[1]]);
+								vSizesumm = vSizesumm + vsortedSizes[vPlacementInterval[1]];
+							}
+							
+							vAngleSteps = 360/(vPlacementInterval[1] - vPlacementInterval[0] + 1);		
+
+							vBaseRadius = vBaseRadius + vMaxSize/2;
+						}
+						
 					break;
 					
 				case cRowplacement:
@@ -258,6 +323,15 @@ class Ridingmanager {
 			}	
 		}
 	}
+	
+	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {
+		for (let i = 0; i < pRiderTokenList.length; i++) {
+			
+			if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
+				await pRiderTokenList[i].update({width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height});
+			}
+		}		
+	} 
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		let vRiddenForm = RideableFlags.TokenForm(pRiddenToken);

@@ -1,7 +1,6 @@
 import * as FCore from "./CoreVersionComp.js";
 
 import { RideableFlags } from "./helpers/RideableFlags.js";
-import { EffectManager } from "./helpers/EffectManager.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
@@ -32,9 +31,9 @@ class MountingManager {
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
-	static onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
+	static async onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
 	
-	static onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
+	static async onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -133,11 +132,11 @@ class MountingManager {
 							
 							await RideableFlags.addRiderTokens(pTarget, vValidTokens, pRidingOptions);
 							
-							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
-							
 							for (let i = 0; i < vValidTokens.length; i++) {
-								MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
+								await MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
 							}
+							
+							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
 						}
 					}
 				}
@@ -168,7 +167,6 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			console.log(pRemoveRiddenreference);
 			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
@@ -247,7 +245,7 @@ class MountingManager {
 		}
 	}
 	
-	static onMount(pRider, pRidden, pRidingOptions) {
+	static async onMount(pRider, pRidden, pRidingOptions) {
 		if (pRider) {
 			
 			if (pRidden) {
@@ -264,11 +262,8 @@ class MountingManager {
 				}
 			}
 			
-			//Aplly mounted effect if turned on
-			if (game.settings.get(cModuleName, "RidingSystemEffects") && !(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
-				if (EffectManager.getSystemMountingEffect()) {
-					pRider.actor.createEmbeddedDocuments("Item", [EffectManager.getSystemMountingEffect()]);
-				}
+			if (game.settings.get(cModuleName, "FitRidersize")) {
+				RideableFlags.savecurrentSize(pRider);
 			}
 		}
 		
@@ -291,10 +286,8 @@ class MountingManager {
 				}
 			}
 			
-			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				if (EffectManager.getSystemMountingEffect()) {
-					await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == EffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
-				}
+			if (game.settings.get(cModuleName, "FitRidersize")) {
+				RideableFlags.resetSize(pRider);
 			}
 		}
 		
@@ -405,8 +398,6 @@ Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
-
-Hooks.on("ready", function() { EffectManager.preloadEffects(); });
 
 //wrap and export functions
 

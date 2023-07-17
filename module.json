@@ -7,7 +7,7 @@
     "name": "saibot"
     }
   ],
-  "version": "2.2.1",
+  "version": "2.3.0",
   "compatibility": {
     "minimum": "10",
     "verified": "11"
@@ -33,6 +33,7 @@
 	"scripts/utils/GeometricUtils.js",
 	"scripts/utils/RideableUtils.js",
 	"scripts/helpers/RideablePopups.js",
+	"scripts/helpers/EffectManager.js",
 	"scripts/helpers/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",
@@ -51,7 +52,7 @@
 	}
   ],
   "url": "https://github.com/Saibot393/Rideable",
-  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v2.2.1.zip",
+  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v2.3.0.zip",
   "manifest": "https://github.com/Saibot393/Rideable/releases/latest/download/module.json",
   "readme": "https://github.com/Saibot393/Rideable/blob/main/README.md",
   "changelog": "https://github.com/Saibot393/Rideable/blob/main/CHANGELOG.md",
