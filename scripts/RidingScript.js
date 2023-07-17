@@ -8,8 +8,10 @@ import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
+const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
+const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 
-const cPlacementPatterns = [cRowplacement, cCircleplacement];
+const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
 export { cRowplacement, cPlacementPatterns };
 
@@ -215,9 +217,11 @@ class Ridingmanager {
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		if (pRiderTokenList.length) {
+			let vAngleSteps; //to fix javascript syntax bug
+			
 			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
 				case cCircleplacement:
-					let vAngleSteps = 360/pRiderTokenList.length;
+					vAngleSteps = 360/pRiderTokenList.length;
 					
 					//calculate maximum placement heights and widths
 					let vMaxHeight = 0;
@@ -235,6 +239,59 @@ class Ridingmanager {
 						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i), -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i), pAnimations);
 					}	
 					
+					break;
+					
+				case cClusterplacement:
+						let vSizeFactor = GeometricUtils.insceneSize(pRiddenToken);
+				
+						let vsortedTokens;
+						let vsortedSizes;
+						let vPlacementInterval = [0,0];
+						vAngleSteps = 0;
+						let vBaseRadius = 0;
+						let vMaxSize;
+						let vSizesumm;
+						
+						//sort tokens
+						[vsortedTokens, vsortedSizes] = GeometricUtils.sortbymaxdim(pRiderTokenList);
+						
+						//place largest tokens first
+						vsortedTokens.reverse();
+						vsortedSizes.reverse();
+						
+						//for 0th token
+						console.log(vsortedSizes);
+						vMaxSize = vsortedSizes[0];
+						
+						while (vPlacementInterval[1] < vsortedTokens.length) {
+							//placements						
+							for (let i = vPlacementInterval[0]; i <= vPlacementInterval[1]; i++) {
+								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i), -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i), pAnimations);
+							}	
+							
+							vBaseRadius = vBaseRadius + vMaxSize/2;
+							
+							//new calculations
+							vPlacementInterval[0] = vPlacementInterval[1] + 1;
+							vPlacementInterval[1] = vPlacementInterval[0];
+							
+							vMaxSize = vsortedSizes[vPlacementInterval[0]];
+							vSizesumm = vsortedSizes[vPlacementInterval[0]];
+							
+							//check if next element exists and fits in new circumference
+							while (((vPlacementInterval[1]+1) < vsortedTokens.length) && ((2*vBaseRadius + Math.max(vsortedSizes[vPlacementInterval[1]+1], vMaxSize))*Math.PI > (vSizesumm + vsortedSizes[vPlacementInterval[1]+1]))) {
+										
+								vPlacementInterval[1] = vPlacementInterval[1] + 1;
+								
+								vMaxSize = Math.max(vMaxSize, vsortedSizes[vPlacementInterval[1]]);
+								vSizesumm = vSizesumm + vsortedSizes[vPlacementInterval[1]];
+							}
+							
+							vAngleSteps = 360/(vPlacementInterval[1] - vPlacementInterval[0] + 1);		
+
+							vBaseRadius = vBaseRadius + vMaxSize/2;
+						}
+						
 					break;
 					
 				case cRowplacement:
