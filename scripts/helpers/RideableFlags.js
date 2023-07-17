@@ -19,6 +19,7 @@ const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ
 const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
+const cSizesaveFlag = "SizesaveFlag"; //Flag that can save the size of the token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -112,6 +113,10 @@ class RideableFlags {
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
 	static setRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
+	
+	static async savecurrentSize(pToken) {} //saves the current size of pToken into the SizesaveFlag (and makes size changeable if necessary)
+	
+	static resetSize(pToken) {} //resets the size of pToken to the SizesaveFlag if a size is saved
 	
 	//relativ Position handling
 	static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -283,6 +288,18 @@ class RideableFlags {
 		return false; //default if anything fails
 	} 
 	
+	static #SizesaveFlag(pToken) {
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cSizesaveFlag)) {
+				return vFlag.SizesaveFlag;
+			}
+		}
+		
+		return []; //default if anything fails			
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -337,6 +354,15 @@ class RideableFlags {
 	//sets content of GrappledFlag (must be boolean)
 		if (pToken) {
 			await pToken.setFlag(cModule, cGrappledF, Boolean(pContent));
+			
+			return true;
+		}
+		return false;
+	}
+	
+	static #setSizesaveFlag(pToken, pContent) {
+		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
+			pToken.setFlag(cModule, cSizesaveFlag, pContent);
 			
 			return true;
 		}
@@ -639,7 +665,29 @@ class RideableFlags {
 				this.#setaddRiderHeightFlag(pToken, pHeight);
 			}
 		}
-	} 
+	}
+
+	static async savecurrentSize(pToken) {
+		await this.#setSizesaveFlag(pToken, [pToken.width, pToken.height]);
+		
+		if (RideableUtils.isPf2e()) {
+			await pToken.update({flags : {pf2e : {linkToActorSize : false}}})
+		}
+	}
+	
+	static resetSize(pToken) {
+		if (this.#SizesaveFlag(pToken).length) {
+			let vsavedSize = this.#SizesaveFlag(pToken);
+			
+			this.#setSizesaveFlag(pToken, []);
+			
+			pToken.update({width: vsavedSize[0], height: vsavedSize[1]});
+			
+			if (RideableUtils.isPf2e()) {
+				pToken.update({flags : {pf2e : {linkToActorSize : true}}})
+			}
+		}
+	}
 	
 	//relativ Position handling
 	static HasrelativPosition(pToken) {

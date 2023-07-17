@@ -82,6 +82,11 @@
 				"name" 					: "Prevent enemy riding",
 				"descrp"				: "Stops tokens from riding enemy tokens (GMs can still override this)"				
 			},
+			
+			"FitRidersize" : {
+				"name" 					: "Adjust rider size",
+				"descrp"				: "Adjusts the size of the rider in the case that it is greater or equal to the size of the ridden token"				
+			},
 		
 			"MessagePopUps" : {
 				"name" 					: "Message popups",

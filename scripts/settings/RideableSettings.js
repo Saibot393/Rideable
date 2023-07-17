@@ -121,6 +121,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "FitRidersize", {
+	name: Translate("Settings.FitRidersize.name"),
+	hint: Translate("Settings.FitRidersize.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   //client settings
   
   game.settings.register(cModuleName, "RiderMovement", {

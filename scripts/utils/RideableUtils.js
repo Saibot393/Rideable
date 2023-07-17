@@ -140,31 +140,37 @@ class RideableUtils {
 			
 			//direct id
 			if (!vBuffer) {
-				console.log(pIdentifications[i]);
 				vBuffer = await fromUuid(pIdentifications[i]);
 			}
 			
 			//compendium
 			if (!vBuffer) {
 				let vElement;
-				let vPackIndexes = game.packs.filter(vPacks => vPacks.documentName == "Actor").map(vPack => vPack.index);
+				let vPacks = game.packs.filter(vPacks => vPacks.documentName == "Actor");//.map(vPack => vPack.index);
 				
 				//-uuid
-				let vPack = vPackIndexes.find(vPack => vPack.get(pIdentifications[i]));
+				let vPack = vPacks.find(vPack => vPack.index.get(pIdentifications[i]));
 				
 				if (vPack) {
-					vElement = vPack.get(pIdentifications[i]);
+					vElement = vPack.index.get(pIdentifications[i]);
 				}
 				else {//-name
-					vPack = vPackIndexes.find(vPack => vPack.find(vData => vData.name == pIdentifications[i]));
+					vPack = vPacks.find(vPack => vPack.index.find(vData => vData.name == pIdentifications[i]));
 					
 					if (vPack) {
-						vElement = vPack.find(vData => vData.name == pIdentifications[i]);
+						vElement = vPack.index.find(vData => vData.name == pIdentifications[i]);
 					}
 				}
-				
-				if (vPack) {
-					vBuffer = await fromUuid(vElement.uuid);
+			
+				if (vElement) {
+					if (vElement.uuid) {
+						//v11
+						vBuffer = await fromUuid(vElement.uuid);
+					}
+					else {
+						//v10
+						vBuffer = await fromUuid("Compendium" + "." + vPack.collection + "." + vElement._id);
+					}
 				}
 			}
 			

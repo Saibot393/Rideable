@@ -15,6 +15,8 @@ const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
 export { cRowplacement, cPlacementPatterns };
 
+const cSizeFactor = 2/3;
+
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
@@ -26,11 +28,13 @@ class Ridingmanager {
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
+	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
+	
+	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {} //reduces the size of all tokens that are equal or greater in size to their ridden token to pSizeFactor of ridden token
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
@@ -179,7 +183,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		let vGrappledList = [];
@@ -199,6 +203,11 @@ class Ridingmanager {
 			vRiderFamiliarList = vRiderTokenList.filter(vToken => RideableFlags.isFamiliarRider(vToken));
 				
 			vRiderTokenList = vRiderTokenList.filter(vToken => !vRiderFamiliarList.includes(vToken));
+		}
+		
+		//reduce size if necessary
+		if (game.settings.get(cModuleName, "FitRidersize")) {
+			await Ridingmanager.fitRiders(pRiddenToken, vRiderTokenList);
 		}
     
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
@@ -260,7 +269,6 @@ class Ridingmanager {
 						vsortedSizes.reverse();
 						
 						//for 0th token
-						console.log(vsortedSizes);
 						vMaxSize = vsortedSizes[0];
 						
 						while (vPlacementInterval[1] < vsortedTokens.length) {
@@ -315,6 +323,15 @@ class Ridingmanager {
 			}	
 		}
 	}
+	
+	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {
+		for (let i = 0; i < pRiderTokenList.length; i++) {
+			
+			if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
+				await pRiderTokenList[i].update({width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height});
+			}
+		}		
+	} 
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		let vRiddenForm = RideableFlags.TokenForm(pRiddenToken);

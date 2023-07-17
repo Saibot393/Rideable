@@ -31,9 +31,9 @@ class MountingManager {
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
-	static onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
+	static async onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
 	
-	static onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
+	static async onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -132,11 +132,11 @@ class MountingManager {
 							
 							await RideableFlags.addRiderTokens(pTarget, vValidTokens, pRidingOptions);
 							
-							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
-							
 							for (let i = 0; i < vValidTokens.length; i++) {
-								MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
+								await MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
 							}
+							
+							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
 						}
 					}
 				}
@@ -245,7 +245,7 @@ class MountingManager {
 		}
 	}
 	
-	static onMount(pRider, pRidden, pRidingOptions) {
+	static async onMount(pRider, pRidden, pRidingOptions) {
 		if (pRider) {
 			
 			if (pRidden) {
@@ -261,12 +261,16 @@ class MountingManager {
 					}
 				}
 			}
+			
+			if (game.settings.get(cModuleName, "FitRidersize")) {
+				RideableFlags.savecurrentSize(pRider);
+			}
 		}
 		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
-	static onUnMount(pRider, pRidden, pRidingOptions) {
+	static async onUnMount(pRider, pRidden, pRidingOptions) {
 		if (pRider) {	
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
@@ -280,6 +284,10 @@ class MountingManager {
 						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 					}
 				}
+			}
+			
+			if (game.settings.get(cModuleName, "FitRidersize")) {
+				RideableFlags.resetSize(pRider);
 			}
 		}
 		
