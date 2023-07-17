@@ -1,6 +1,7 @@
 ## v2.3.0 (unreleased)
 - Added compendium token support for "Spawn riders"
 - Added "cluster" placement pattern
+- Added "Adjust rider size" setting
 
 ## v2.2.1
 - Bug fix for free riding tokens and stairways compatibility
