@@ -163,6 +163,14 @@ class RideableUtils {
 				}
 			
 				if (vElement) {
+					console.log("Compendium" + "." + vPack.collection + "." + vElement._id);
+					if (game.actors.filter(vToken => vToken.flags.core).find(vToken => vToken.flags.core.sourceId == "Compendium." + vPack.collection + ".Actor." + vElement._id)) {
+						vBuffer = await game.actors.filter(vToken => vToken.flags.core).find(vToken => vToken.flags.core.sourceId == "Compendium." + vPack.collection + ".Actor." + vElement._id);
+					}
+					else {
+						vBuffer = await game.actors.importFromCompendium(vPack, vElement._id);
+					};
+					/*
 					if (vElement.uuid) {
 						//v11
 						vBuffer = await fromUuid(vElement.uuid);
@@ -171,6 +179,7 @@ class RideableUtils {
 						//v10
 						vBuffer = await fromUuid("Compendium" + "." + vPack.collection + "." + vElement._id);
 					}
+					*/
 				}
 			}
 			

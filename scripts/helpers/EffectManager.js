@@ -24,7 +24,6 @@ class EffectManager {
 	
 	//Hooks
 	static onRiderMount(pRider, pRidden, pRidingOptions) {
-		console.log("here");
 		if (game.settings.get(cModuleName, "RidingSystemEffects") && !(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
 			if (vSystemRidingEffect) {
 				pRider.actor.createEmbeddedDocuments("Item", [vSystemRidingEffect]);
