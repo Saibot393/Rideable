@@ -1,7 +1,6 @@
 import * as FCore from "./CoreVersionComp.js";
 
 import { RideableFlags } from "./helpers/RideableFlags.js";
-import { EffectManager } from "./helpers/EffectManager.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
@@ -168,7 +167,6 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			console.log(pRemoveRiddenreference);
 			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
@@ -263,19 +261,12 @@ class MountingManager {
 					}
 				}
 			}
-			
-			//Aplly mounted effect if turned on
-			if (game.settings.get(cModuleName, "RidingSystemEffects") && !(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
-				if (EffectManager.getSystemMountingEffect()) {
-					pRider.actor.createEmbeddedDocuments("Item", [EffectManager.getSystemMountingEffect()]);
-				}
-			}
 		}
 		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
-	static async onUnMount(pRider, pRidden, pRidingOptions) {
+	static onUnMount(pRider, pRidden, pRidingOptions) {
 		if (pRider) {	
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
@@ -288,12 +279,6 @@ class MountingManager {
 					else {
 						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
 					}
-				}
-			}
-			
-			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				if (EffectManager.getSystemMountingEffect()) {
-					await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == EffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
 				}
 			}
 		}
@@ -405,8 +390,6 @@ Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
-
-Hooks.on("ready", function() { EffectManager.preloadEffects(); });
 
 //wrap and export functions
 
