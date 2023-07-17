@@ -6,10 +6,9 @@ const cMountedPf2eEffectID = "Compendium.pf2e.other-effects.Item.9c93NfZpENofiGU
 var vSystemRidingEffect = null; //saves the systems mounting effects (if any)
 
 class EffectManager {
+	
 	//DECLARATIONS
 	static async preloadEffects() {} //preloads effects to make things smoother
-	
-	static getSystemMountingEffect() {} //returns an appropiate Mounting effect if the game system has one
 	
 	//Hooks
 	static onRiderMount(pRider, pRidden, pRidingOptions) {} //handle creation of mounting effects
@@ -22,29 +21,21 @@ class EffectManager {
 			vSystemRidingEffect = (await fromUuid(cMountedPf2eEffectID)).toObject();
 		} 
 	}
-	static getSystemMountingEffect() {
-		
-		if (vSystemRidingEffect) {
-			return vSystemRidingEffect;
-		}
-		
-		return;
-	}
 	
 	//Hooks
 	static onRiderMount(pRider, pRidden, pRidingOptions) {
 		console.log("here");
 		if (game.settings.get(cModuleName, "RidingSystemEffects") && !(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
-			if (EffectManager.getSystemMountingEffect()) {
-				pRider.actor.createEmbeddedDocuments("Item", [EffectManager.getSystemMountingEffect()]);
+			if (vSystemRidingEffect) {
+				pRider.actor.createEmbeddedDocuments("Item", [vSystemRidingEffect]);
 			}
 		}		
 	}
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {
 		if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-			if (EffectManager.getSystemMountingEffect()) {
-				pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == EffectManager.getSystemMountingEffect().flags.core.sourceId).map(vElement => vElement.id));
+			if (vSystemRidingEffect) {
+				pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => vElement.sourceId == vSystemRidingEffect.flags.core.sourceId).map(vElement => vElement.id));
 			}
 		}
 	}
