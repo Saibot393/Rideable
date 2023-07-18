@@ -1,3 +1,6 @@
+## v2.3.1
+- Improved compendium token support for "Spawn riders"
+
 ## v2.3.0
 - Added compendium token support for "Spawn riders"
 - Added "cluster" placement pattern
