@@ -1,7 +1,7 @@
 {
   "id": "Rideable",
   "title": "Rideable",
-  "description": "A small module to automate the movement of riders and ridden tokens relying on effects",
+  "description": "A small module to handle riding and mounting",
   "authors": [
     {
     "name": "saibot"
