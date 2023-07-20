@@ -4,7 +4,7 @@ import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected 
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
-   game.settings.register(cModuleName, "defaultRideable", {
+  game.settings.register(cModuleName, "defaultRideable", {
 	name: Translate("Settings.defaultRideable.name"),
 	hint: Translate("Settings.defaultRideable.descrp"),
 	scope: "world",
@@ -220,7 +220,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 
 //Hooks
 Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
-	//add a few subtitles	
+	//add a few titles	
 	let vnewHTML;
 	
 	if (game.user.isGM) {
