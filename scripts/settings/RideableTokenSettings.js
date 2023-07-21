@@ -7,13 +7,13 @@ const cRideableIcon = "fa-horse-saddle";
 
 class RideableTokenSettings {
 	//DECLARATIONS
-	static TestSetting(vApp, vHTML, vData) {} //just for test purposes
+	static TokenSetting(vApp, vHTML, vData) {} //settings for tokens
 	
 	static AddHTMLOption(pHTML, pInfos) {} //adds a new HTML option to pHTML
 	
 	//IMPLEMENTATIONS
 	
-	static TestSetting(pApp, pHTML, pData) {
+	static TokenSetting(pApp, pHTML, pData) {
 		//create title (under which all settings are placed)
 		//let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Titles.Rideable")}</h3>`;
 		//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
@@ -195,4 +195,4 @@ class RideableTokenSettings {
 	}
 }
 
-Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableTokenSettings.TestSetting(vApp, vHTML, vData));
+Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableTokenSettings.TokenSetting(vApp, vHTML, vData));
