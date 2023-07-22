@@ -56,6 +56,10 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
   - Additional setting "Use token height": to use the ridden tokens height instead of the "Riding Height" setting
   - If the above setting is activated the ridden tokens elevation will automatically be updated should the ridden tokens height change
+- [Lock & Key](https://foundryvtt.com/packages/locknkey):
+  - Has to be activated in the settings
+  - Rideable tokens are lockeable
+  - Locked tokens can not be mounted or unmounted
 
 ### Languages:
 
