@@ -1,3 +1,7 @@
+## v2.4.0
+- Compatibility with Lock & Key
+- Generell improvements
+
 ## v2.3.1
 - Improved compendium token support for "Spawn riders"
 
