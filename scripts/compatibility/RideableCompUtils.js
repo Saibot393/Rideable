@@ -1,5 +1,6 @@
 import { cModuleName } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
+import { RideablePopups } from "../helpers/RideablePopups.js";
 
 //Module Names
 const cStairways = "stairways";
@@ -8,11 +9,12 @@ const cWallHeight = "wall-height";
 const cLevelsautocover = "levelsautocover";
 const cArmReach = "foundryvtt-arms-reach";
 const cArmReachold = "arms-reach";
+const cLocknKey = "LocknKey"; //self promotion
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold }
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
@@ -23,6 +25,8 @@ class RideableCompUtils {
 	static isactiveModule(pModule) {} //determines if module with id pModule is active
 	
 	static ignoreSpawn(pInfo) {} //returns if a spawn with this pInfo should be ignored by Rideable
+	
+	static issettingMountableandUn(pToken, pPopup) {} //returns if token is Mountable and Unmountable according to settings [LocknKey]
 	
 	//specific: Foundry ArmsReach
 	static ARReachDistance() {} //[ArmsReach] gives the current arms reach distance
@@ -52,6 +56,22 @@ class RideableCompUtils {
 	static ignoreSpawn(pInfo) {
 				//stairways
 		return (pInfo.isUndo)
+	}
+	
+	static issettingMountableandUn(pToken, pPopup) {
+		let vMountableUn = true;
+		
+		if (RideableCompUtils.isactiveModule(cLocknKey) && game.settings.get(cModuleName, "LocknKeyintegration")) {
+			//check if token is locked [LocknKey]
+			vMountableUn = !pToken.getFlag(cLocknKey, "LockableFlag") || !pToken.getFlag(cLocknKey, "LockedFlag");
+
+			if (pPopup && !vMountableUn) {
+				RideablePopups.TextPopUpID(pToken ,"RiddenisLocked", {pRiddenName : pToken.name});
+			}
+
+		}
+		
+		return vMountableUn;
 	}
 	
 	//specific: Foundry ArmsReach

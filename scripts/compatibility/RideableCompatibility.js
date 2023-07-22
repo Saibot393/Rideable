@@ -4,7 +4,7 @@ import { UpdateRidderTokens } from "../RidingScript.js";
 import { RideablePopups } from "../helpers/RideablePopups.js";
 
 import { RideableCompUtils } from "./RideableCompUtils.js";
-import { cStairways, cTagger, cWallHeight } from "./RideableCompUtils.js";
+import { cStairways, cTagger, cWallHeight, cLocknKey } from "./RideableCompUtils.js";
 //			SW			TGG		WH
 
 //RideableCompatibility will take care of compatibility with other modules in regards to calls, currently supported:

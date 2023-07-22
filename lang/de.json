@@ -13,6 +13,11 @@
 				"descrp"				: "Ob marken standardmäßig reitbar sein sollen(kann für jede Marke in den Markeneinstellungen geändert werden)"
 			},
 			
+			"LocknKeyintegration" : {
+				"name" 					: "Lock & Key Integration",
+				"descrp"				: "Erlaubt es reitbare Marken abzuschließen"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Reithöhe",
 				"descrp"				: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)"
@@ -131,6 +136,7 @@
 			"NoPlace"					: "{pRiddenName} hat keinen Platz mehr",
 			"EnemyRiding"				: "{pRiddenName} ist mein Gegner",
 			"Toofaraway"				: "{pRiddenName} ist zu weit weg",
+			"RiddenisLocked"			: "{pRiddenName} ist abgeschlossen",
 			
 			"Grappling"					: "Von {pRiddenName} ergriffen",
 			"UnGrappling"				: "Von {pRiddenName} frei gelassen",

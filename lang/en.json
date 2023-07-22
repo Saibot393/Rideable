@@ -13,6 +13,11 @@
 				"descrp"				: "Wether all tokens should be rideable by default (can be changed for each token in the token settings)"
 			},
 			
+			"LocknKeyintegration" : {
+				"name" 					: "Lock & Key integration",
+				"descrp"				: "Allows rideable tokens to be locked"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Riding height",
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
@@ -131,6 +136,7 @@
 			"NoPlace"					: "{pRiddenName} has no place left",
 			"EnemyRiding"				: "{pRiddenName} is my enemy",
 			"Toofaraway"				: "{pRiddenName} is too far away",
+			"RiddenisLocked"			: "{pRiddenName} is locked",
 			
 			"Grappling"					: "Grappled by {pRiddenName}",
 			"UnGrappling"				: "Released from {pRiddenName}",

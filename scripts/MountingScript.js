@@ -113,7 +113,7 @@ class MountingManager {
 			if (((!pRidingOptions.Familiar) || (game.settings.get(cModuleName, "FamiliarRiding"))) && ((!pRidingOptions.Grappled) || (game.settings.get(cModuleName, "Grappling")))) {
 				//Familiar riding can only be handled if setting is activated
 				if (pTarget) {
-					if (RideableFlags.TokenisRideable(pTarget) || pRidingOptions.Familiar || pRidingOptions.Grappled) {
+					if ((RideableFlags.TokenisRideable(pTarget, true) && RideableUtils.issettingMountableandUn(pTarget, true)) || pRidingOptions.Familiar || pRidingOptions.Grappled) {
 						
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
 						
@@ -160,7 +160,9 @@ class MountingManager {
 	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
-			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken) && (!RideableFlags.isGrappled(vToken) || pfromRidden));//.filter(vToken => RideableFlags.isRider(vToken));
+			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken) && (!RideableFlags.isGrappled(vToken) || pfromRidden));
+			vRiderTokens = vRiderTokens.filter(vRider => RideableUtils.issettingMountableandUn(RideableFlags.RiddenToken(vRider), true)); //check if Ridden is Unmountable
+			
 			let vRiddenTokens = [];
 			
 			for (let i = 0; i < vRiderTokens.length; i++) {

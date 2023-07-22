@@ -50,7 +50,9 @@ class RideableUtils {
 	static hoveredToken() {} //get first hovered token
 	
 	//Additional Token Infos
-	static TokenissettingRideable(pToken) {} //returns if Token is rideable under current settings (related to settings)
+	static issettingMountableandUn(pToken, pPopup = false) {} //returns if Token is rideable under current settings (related to settings)
+	
+	static TokenissettingunRideable(pToken, pPopup = false) {} //returns if Token is currently prevented from being ridden
 	
 	static TokencanRide(pToken) {} //returns if Token can Ride other Tokens (related to settings)
 	
@@ -217,8 +219,8 @@ class RideableUtils {
 	}
 		
 	//Additional Token Infos
-	static TokenissettingRideable(pToken) {
-		if (pToken) {
+	static TokenissettingRideable(pToken, pPopup = false) {
+		if (pToken) {		
 			if (game.settings.get(cModuleName, "RideableTag")) {
 				switch (game.system.id) {
 					case cPf2eName:
@@ -234,6 +236,10 @@ class RideableUtils {
 		}
 		
 		return false; 
+	}
+	
+	static issettingMountableandUn(pToken, pPopup = false) {
+		return RideableCompUtils.issettingMountableandUn(pToken, pPopup);
 	}
 	
 	static TokencanRide(pToken) {
