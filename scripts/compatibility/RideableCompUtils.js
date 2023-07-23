@@ -14,7 +14,10 @@ const cLocknKey = "LocknKey"; //self promotion
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey }
+//special words
+const cLockTypeRideable = "LTRideable";
+
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
