@@ -1,3 +1,6 @@
+## v2.4.1
+- Improved compatibility with Lock & Key
+
 ## v2.4.0
 - Compatibility with Lock & Key
 - Generell improvements
