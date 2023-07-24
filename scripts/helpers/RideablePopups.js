@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, cPopUpID, Translate } from "../utils/RideableUtils.js";
-import { GeometricUtils } from "../utils/Geometricutils.js";
+import { GeometricUtils } from "../utils/GeometricUtils.js";
 
 class RideablePopups {
 	//DECLARATIONS
