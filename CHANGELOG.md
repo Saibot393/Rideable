@@ -1,3 +1,8 @@
+## v2.4.2
+- Improved Arms reach integration
+- Improved Popups position
+- Implemented a temporary fix for a problem that caused macros not to work due to a [Foundry bug](https://github.com/foundryvtt/foundryvtt/issues/9814)
+
 ## v2.4.1
 - Improved compatibility with Lock & Key
 
