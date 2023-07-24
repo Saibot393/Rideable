@@ -308,24 +308,12 @@ class MountingManager {
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM || pRidingOptions.Grappled) {
 				//Prevents enemy riding if enabled (override as GM and for grapples)
-					if (RideableUtils.MountingDistance(pRider, pRidden) >= 0) {
-						let vInDistance = true;
-						
-						if (game.settings.get(cModuleName, "BorderDistance")) {
-							vInDistance = (GeometricUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
-						}
-						else {
-							vInDistance = (GeometricUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance(pRider, pRidden));
-						}
-						
-						if (!vInDistance) {
-							RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
-						}
-						
-						return vInDistance;
+					if (RideableUtils.WithinMountingDistance(pRider, pRidden)) {
+						return true;
 					}
 					else {
-						return true;
+						RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name});
+						return false;
 					}
 				}
 				else {

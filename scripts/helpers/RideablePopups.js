@@ -1,4 +1,5 @@
 import { RideableUtils, cModuleName, cPopUpID, Translate } from "../utils/RideableUtils.js";
+import { GeometricUtils } from "../utils/Geometricutils.js";
 
 class RideablePopups {
 	//DECLARATIONS
@@ -31,10 +32,13 @@ class RideablePopups {
 		if (game.settings.get(cModuleName, "MessagePopUps")) {
 			//only relevant if token is on current canves, no scene necessary
 			let vToken = RideableUtils.TokenfromID(pTokenID); 
+			let vPosition;
 			
 			if (vToken) {
-				if (vToken.isOwner || !game.settings.get(cModuleName, "OnlyownedMessagePopUps"))
-				canvas.interface.createScrollingText(vToken.object, pText, {x: vToken.x, y: vToken.y, text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
+				vPosition = GeometricUtils.CenterPosition(vToken);
+				if (vToken.isOwner || !game.settings.get(cModuleName, "OnlyownedMessagePopUps")) {
+					canvas.interface.createScrollingText({x: vPosition[0], y: vPosition[1]}, pText, {text: pText, anchor: CONST.TEXT_ANCHOR_POINTS.TOP, fill: "#FFFFFF", stroke: "#000000"});
+				}
 			}
 		}
 	}

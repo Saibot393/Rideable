@@ -1,5 +1,6 @@
 import { RideableCompUtils, cArmReach, cArmReachold } from "../compatibility/RideableCompUtils.js";
 import { cWallHeight } from "../compatibility/RideableCompUtils.js";
+import { GeometricUtils } from "./GeometricUtils.js";
 
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
@@ -62,7 +63,9 @@ class RideableUtils {
 	
 	static Ridingheight(pRidden) {} //returns the riding height of given token pRidden based on the settings [or based on the wall-height token height]
 	
-	static MountingDistance(pRider, pRidden) {} //returns the maximal Riding distance for pRider to mount pRidden
+	static MountingDistance() {} //returns the maximal Riding distance
+	
+	static WithinMountingDistance(pRider, pRidden) {} //returns if pRider is close enought to pRidden to mount
 		
 	static UserofCharacterID(pID) {} //returns all Users which has the character with pID set as their standard character (if any)
 	
@@ -277,7 +280,7 @@ class RideableUtils {
 		}
 	} 
 	
-	static MountingDistance(pRider, pRidden) {
+	static MountingDistance() {
 		if ((RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)) && game.settings.get(cModuleName, "UseArmReachDistance")) {
 			return RideableCompUtils.ARReachDistance();
 		}
@@ -287,6 +290,19 @@ class RideableUtils {
 		}
 		else {
 			return Infinity;
+		}
+	}
+	
+	static WithinMountingDistance(pRider, pRidden) {
+		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+			return RideableCompUtils.ARWithinMountingDistance(pRider, pRidden);
+		}
+						
+		if (game.settings.get(cModuleName, "BorderDistance")) {
+			return GeometricUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance();
+		}
+		else {
+			return GeometricUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance();
 		}
 	}
 	

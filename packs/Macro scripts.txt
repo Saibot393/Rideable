@@ -3,7 +3,28 @@ suggested icons:
 -Pf2e: systems/pf2e/icons/equipment/worn-items/companion-items/barding-of-the-zephyr.webp
 -D&D5e: icons/environment/creatures/horse-brown.webp
 
+//cheap fix for Foundry bug, DO NOT REMOVE
+console.log();
+
 For Unmount: game.Rideable.UnMountSelected();
 suggested icons:
 -Pf2e: systems/pf2e/icons/equipment/worn-items/other-worn-items/boots-of-bounding.webp
-s-D&D 5e: icons/equipment/feet/boots-collared-simple-leather.webp
+-D&D 5e: icons/equipment/feet/boots-collared-simple-leather.webp
+
+//cheap fix for Foundry bug, DO NOT REMOVE
+console.log();
+
+game.Rideable.MountSelectedFamiliar();
+//suggested icons:
+//-Pf2e: systems/pf2e/icons/equipment/tattoos/familiar-tattoo.webp
+
+//cheap fix for Foundry bug, DO NOT REMOVE
+console.log();
+
+For Grapple:
+game.Rideable.GrappleTargeted();
+//suggested icons:
+//-Pf2e: systems/pf2e/icons/conditions/grabbed.webp
+
+//cheap fix for Foundry bug, DO NOT REMOVE
+console.log();

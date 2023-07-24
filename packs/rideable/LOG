@@ -1,22 +1,9 @@
-2023/07/13-18:42:41.951 33d0 Recovering log #234
-2023/07/13-18:42:41.957 33d0 Delete type=2 #13
-2023/07/13-18:42:41.958 33d0 Delete type=0 #134
-2023/07/13-18:42:41.958 33d0 Delete type=2 #145
-2023/07/13-18:42:41.958 33d0 Delete type=0 #148
-2023/07/13-18:42:41.958 33d0 Delete type=0 #234
-2023/07/13-18:42:41.958 33d0 Delete type=3 #133
-2023/07/13-18:42:41.958 33d0 Delete type=3 #146
-2023/07/13-18:42:41.959 33d0 Delete type=3 #150
-2023/07/13-18:42:41.959 33d0 Delete type=3 #196
-2023/07/13-18:49:38.826 894 Level-0 table #240: started
-2023/07/13-18:49:38.853 894 Level-0 table #240: 570 bytes OK
-2023/07/13-18:49:38.858 894 Delete type=0 #238
-2023/07/13-18:49:38.862 894 Manual compaction at level-0 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
-2023/07/13-18:49:38.863 894 Manual compaction at level-1 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at '!macros!BAHc9jacKsw4z0Ua' @ 10 : 1
-2023/07/13-18:49:38.863 894 Compacting 1@1 + 1@2 files
-2023/07/13-18:49:38.885 894 Generated table #241@1: 4 keys, 1088 bytes
-2023/07/13-18:49:38.886 894 Compacted 1@1 + 1@2 files => 1088 bytes
-2023/07/13-18:49:38.890 894 compacted to: files[ 0 0 1 0 0 0 0 ]
-2023/07/13-18:49:38.891 894 Delete type=2 #236
-2023/07/13-18:49:38.891 894 Delete type=2 #240
-2023/07/13-18:49:38.891 894 Manual compaction at level-1 from '!macros!BAHc9jacKsw4z0Ua' @ 10 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
+2023/07/24-15:39:05.467 1cdc Recovering log #354
+2023/07/24-15:39:05.472 1cdc Delete type=0 #354
+2023/07/24-15:39:05.472 1cdc Delete type=3 #242
+2023/07/24-15:39:05.472 1cdc Delete type=3 #340
+2023/07/24-15:41:48.983 5ed8 Level-0 table #360: started
+2023/07/24-15:41:48.984 5ed8 Level-0 table #360: 0 bytes OK
+2023/07/24-15:41:48.989 5ed8 Delete type=0 #358
+2023/07/24-15:41:48.991 5ed8 Manual compaction at level-0 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
+2023/07/24-15:41:48.992 5ed8 Manual compaction at level-1 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)

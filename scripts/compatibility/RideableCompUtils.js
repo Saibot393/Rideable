@@ -1,6 +1,7 @@
 import { cModuleName } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
 import { RideablePopups } from "../helpers/RideablePopups.js";
+import { GeometricUtils } from "../utils/GeometricUtils.js";
 
 //Module Names
 const cStairways = "stairways";
@@ -32,7 +33,9 @@ class RideableCompUtils {
 	static issettingMountableandUn(pToken, pPopup) {} //returns if token is Mountable and Unmountable according to settings [LocknKey]
 	
 	//specific: Foundry ArmsReach
-	static ARReachDistance() {} //[ArmsReach] gives the current arms reach distance
+	static ARReachDistance() {} //[ArmReachold, ArmReach] gives the current arms reach distance
+	
+	static ARWithinMountingDistance(pRider, pRidden) {} //[ArmReach] returns if pRider is close enought to pRidden to mount
 	
 	//specific: stairways
 	static UpdatePreviousID(pToken) {} //sets the previous id to the current ID
@@ -86,6 +89,16 @@ class RideableCompUtils {
 		if (RideableCompUtils.isactiveModule(cArmReachold)) {
 			return game.settings.get(cArmReachold, "globalInteractionDistance");
 		}
+		
+		return Infinity; //if anything fails
+	}
+	
+	static ARWithinMountingDistance(pRider, pRidden) {
+		if (RideableCompUtils.isactiveModule(cArmReach)) {
+			return game.modules.get(cArmReach).api.isReachable(pRider, pRidden);
+		}		
+		
+		return true;//if anything failse
 	}
 	
 	//specific: stairways
