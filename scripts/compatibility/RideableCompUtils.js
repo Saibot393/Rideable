@@ -98,6 +98,10 @@ class RideableCompUtils {
 			return game.modules.get(cArmReach).api.isReachable(pRider, pRidden);
 		}		
 		
+		if (RideableCompUtils.isactiveModule(cArmReachold)) {
+			return game.modules.get(cArmReachold).api.isReachable(pRider, pRidden);
+		}	
+		
 		return true;//if anything failse
 	}
 	

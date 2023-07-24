@@ -294,7 +294,7 @@ class RideableUtils {
 	}
 	
 	static WithinMountingDistance(pRider, pRidden) {
-		if (RideableCompUtils.isactiveModule(cArmReach) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+		if ((RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)) && game.settings.get(cModuleName, "UseArmReachDistance")) {
 			return RideableCompUtils.ARWithinMountingDistance(pRider, pRidden);
 		}
 						
