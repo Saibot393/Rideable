@@ -1,3 +1,10 @@
+## v2.5.0
+- Improved german translation (thanks to [mhilbrunner](https://github.com/mhilbrunner))
+- [only Pf2e] added custom riding effects
+  - new World setting Custom riding effects: to list effects that should be applied to tokens when they start riding
+  - new Token setting Riding effects: effects tokens gain when they start riding this token
+  - new Token setting Override world riding effects: to override the world standard riding effects with the tokens effects (instead of appending them)
+
 ## v2.4.2
 - Improved Arms reach integration
 - Improved Popups position
