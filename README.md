@@ -22,6 +22,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Maximum riders per token: to limit the amounts of tokens that can ride the same token
 - Link rotations: to link the rotation of the rider tokens to the ridden token (or vice versa with the "Move ridden on rider movement" option)
 - Apply "Mounted" effect: to apply an appropriate effect to the riding token if the game system supports this
+- Custom riding effects: to list effects that should be applied to tokens when they start riding
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Grappling: to allow tokens to grapple one another
@@ -38,6 +39,8 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 - Spawn riders (GM only): to set with which riders this token spawns
+- Riding effects: effects tokens gain when they start riding this token
+- Override world riding effects: to override the world standard riding effects with the tokens effects (instead of appending them)
 
 ### Compatibility:
 
