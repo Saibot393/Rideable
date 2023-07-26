@@ -39,8 +39,8 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 - Spawn riders (GM only): to set with which riders this token spawns
-- Riding effects: effects tokens gain when they start riding this token
-- Override world riding effects: to override the world standard riding effects with the tokens effects (instead of appending them)
+- Riding effects (GM only): effects tokens gain when they start riding this token
+- Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
 
 ### Compatibility:
 
