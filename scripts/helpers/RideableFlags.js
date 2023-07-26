@@ -3,8 +3,6 @@ import * as FCore from "../CoreVersionComp.js";
 import { RideableUtils, cModuleName, cDelimiter } from "../utils/RideableUtils.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 
-const cModule = "Rideable";
-
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
@@ -344,7 +342,7 @@ class RideableFlags {
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
-			await pToken.setFlag(cModule, cRidingF, Boolean(pContent));
+			await pToken.setFlag(cModuleName, cRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -354,7 +352,7 @@ class RideableFlags {
 	static async #setFamiliarRidingFlag (pToken, pContent) {
 	//sets content of FamiliarRiddenFlag (must be boolean)
 		if (pToken) {
-			await pToken.setFlag(cModule, cFamiliarRidingF, Boolean(pContent));
+			await pToken.setFlag(cModuleName, cFamiliarRidingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -364,7 +362,7 @@ class RideableFlags {
 	static async #setRidersFlag (pToken, pContent) {
 	//sets content of addRiderHeight Flag (must number)
 		if ((pToken) && (Array.isArray(pContent))) {
-			await pToken.setFlag(cModule, cRidersF, pContent.filter(vID => vID != pToken.id));
+			await pToken.setFlag(cModuleName, cRidersF, pContent.filter(vID => vID != pToken.id));
 			
 			return true;
 		}
@@ -374,7 +372,7 @@ class RideableFlags {
 	static #setaddRiderHeightFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be array of strings)
 		if ((pToken) && (typeof pContent === "number")) {
-			pToken.setFlag(cModule, caddRiderHeightF, pContent);
+			pToken.setFlag(cModuleName, caddRiderHeightF, pContent);
 			
 			return true;
 		}
@@ -384,7 +382,7 @@ class RideableFlags {
 	static #setRelativPositionFlag (pToken, pContent) {
 	//sets content of RelativPosition (must be array of two numbers)
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.setFlag(cModule, cRelativPositionF, pContent);
+			pToken.setFlag(cModuleName, cRelativPositionF, pContent);
 			
 			return true;
 		}
@@ -394,7 +392,7 @@ class RideableFlags {
 	static async #setGrappledFlag(pToken, pContent) {
 	//sets content of GrappledFlag (must be boolean)
 		if (pToken) {
-			await pToken.setFlag(cModule, cGrappledF, Boolean(pContent));
+			await pToken.setFlag(cModuleName, cGrappledF, Boolean(pContent));
 			
 			return true;
 		}
@@ -403,7 +401,7 @@ class RideableFlags {
 	
 	static #setSizesaveFlag(pToken, pContent) {
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.setFlag(cModule, cSizesaveF, pContent);
+			pToken.setFlag(cModuleName, cSizesaveF, pContent);
 			
 			return true;
 		}
@@ -413,12 +411,12 @@ class RideableFlags {
 	static #resetFlags (pToken) {
 	//removes all Flags
 		if (pToken) {
-			pToken.unsetFlag(cModule, cRidingF);
-			pToken.unsetFlag(cModule, cFamiliarRidingF);
-			pToken.unsetFlag(cModule, cRidersF);
-			pToken.unsetFlag(cModule, caddRiderHeight);
-			pToken.unsetFlag(cModule, cMaxRiderF);
-			pToken.unsetFlag(cModule, cissetRideableF);
+			pToken.unsetFlag(cModuleName, cRidingF);
+			pToken.unsetFlag(cModuleName, cFamiliarRidingF);
+			pToken.unsetFlag(cModuleName, cRidersF);
+			pToken.unsetFlag(cModuleName, caddRiderHeight);
+			pToken.unsetFlag(cModuleName, cMaxRiderF);
+			pToken.unsetFlag(cModuleName, cissetRideableF);
 			
 			return true;
 		}
