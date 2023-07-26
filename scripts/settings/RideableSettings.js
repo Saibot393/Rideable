@@ -89,10 +89,19 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.RidingSystemEffects.name"),
 	hint: Translate("Settings.RidingSystemEffects.descrp"),
 	scope: "world",
-	config: true,
+	config: RideableUtils.isPf2e(),
 	type: Boolean,
 	default: true
-  });  
+  }); 
+
+  game.settings.register(cModuleName, "CustomRidingEffects", {
+	name: Translate("Settings.CustomRidingEffects.name"),
+	hint: Translate("Settings.CustomRidingEffects.descrp"),
+	scope: "world",
+	config: RideableUtils.isPf2e(),
+	type: String,
+	default: ""
+  });    
   
   game.settings.register(cModuleName, "RideableTag", {
 	name: Translate("Settings.RideableTag.name"),

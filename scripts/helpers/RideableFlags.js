@@ -1,11 +1,9 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
+import { RideableUtils, cModuleName, cDelimiter } from "../utils/RideableUtils.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 
 const cModule = "Rideable";
-
-const cDelimiter = ";";
 
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
@@ -19,13 +17,17 @@ const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ
 const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
-const cSizesaveFlag = "SizesaveFlag"; //Flag that can save the size of the token
+const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
+
+const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
+const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
+const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -124,6 +126,18 @@ class RideableFlags {
 	static RelativPosition(pToken) {} //the current relativ Position
 	
 	static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
+	
+	//pf2e specific
+	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
+	
+	static MountingEffectsstring(pToken) {} //returns alls the effects pToken gives its Riders
+	
+	static OverrideWorldMEffects(pToken) {} //returns if this Token mounting effects override the world standard (or just add to it)
+	
+	static async MarkasRideableEffect(pEffect) {} //gives pEffect the appropiate Flag
+	
+	static isRideableEffect(pEffect) {} //returns wether pEffect is flagges as RideableFlag
+	
 	//IMPLEMENTATIONS
 	
 	//flags handling support
@@ -289,16 +303,43 @@ class RideableFlags {
 	} 
 	
 	static #SizesaveFlag(pToken) {
+	//array of x,y size
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			if (vFlag.hasOwnProperty(cSizesaveFlag)) {
+			if (vFlag.hasOwnProperty(cSizesaveF)) {
 				return vFlag.SizesaveFlag;
 			}
 		}
 		
 		return []; //default if anything fails			
 	}
+	
+	static #MountingEffectsFlag(pToken) {
+	//string of tokens mounting effects
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cMountingEffectsF)) {
+				return vFlag.MountingEffectsFlag;
+			}
+		}
+		
+		return ""; //default if anything fails			
+	}
+	
+	static #WorldMEffectOverrideFlag (pToken) { 
+	//returns content of WorldMEffectOverrideFlag of pToken (if any) (true or false)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cWorldMEffectOverrideF)) {
+				return vFlag.WorldMEffectOverrideFlag;
+			}
+		}
+		
+		return false; //default if anything fails
+	} 
 	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
@@ -362,7 +403,7 @@ class RideableFlags {
 	
 	static #setSizesaveFlag(pToken, pContent) {
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.setFlag(cModule, cSizesaveFlag, pContent);
+			pToken.setFlag(cModule, cSizesaveF, pContent);
 			
 			return true;
 		}
@@ -708,6 +749,35 @@ class RideableFlags {
 			this.#setRelativPositionFlag(pToken, pPosition);
 		}
 	} 
+	
+	//pf2e specific
+	static MountingEffects(pToken) {
+		return this.#MountingEffectsFlag(pToken).split(cDelimiter);
+	}
+	
+	static MountingEffectsstring(pToken) {
+		return this.#MountingEffectsFlag(pToken);
+	}
+	
+	static OverrideWorldMEffects(pToken) {
+		return this.#WorldMEffectOverrideFlag(pToken);
+	}
+	
+	static async MarkasRideableEffect(pEffect) {
+		if (pEffect) {
+			pEffect.setFlag(cModuleName, cRideableEffectF, true)
+		}
+	}
+	
+	static isRideableEffect(pEffect) {
+		let vFlag = this.#RideableFlags(pEffect);
+		
+		if (vFlag) {
+			return (vFlag.hasOwnProperty(cRideableEffectF) && vFlag.RideableEffectFlag);
+		}
+		
+		return false;
+	}
 }
 
 //Export RideableFlags Class

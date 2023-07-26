@@ -68,6 +68,11 @@
 				"descrp"				: "If a token starts riding, a system dependent effect will be applied to the token (only works if the game system has a known \"Mounted\" effect. Compatible systems: Pf2e)"				
 			},
 			
+			"CustomRidingEffects" : {
+				"name" 					: "Custom riding effects",
+				"descrp"				: "Effect that are applied to tokens when they start riding (Names or IDs, seperated with \";\")"				
+			},			
+			
 			"RideableTag" : {
 				"name" 					: "\"Rideable\" trait",
 				"descrp"				: "Allows tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				

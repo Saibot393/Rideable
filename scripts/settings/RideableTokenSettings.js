@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
@@ -92,6 +92,26 @@ class RideableTokenSettings {
 														vvalue : RideableFlags.SpawnRidersstring(pApp.token), 
 														vflagname : cSpawnRidersF
 														});
+			
+			if (RideableUtils.isPf2e()) {
+				//Custom Mounting effects applied to Riders
+				RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
+															vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
+															vtype : "text",
+															vwide : true,
+															vvalue : RideableFlags.MountingEffectsstring(pApp.token), 
+															vflagname : cMountingEffectsF
+															});
+				
+			//if custom Mounting effects should override world stndard
+			RideableTokenSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
+														vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
+														vtype : "checkbox",
+														vwide : true,
+														vvalue : RideableFlags.OverrideWorldMEffects(pApp.token), 
+														vflagname : cWorldMEffectOverrideF
+														});
+			}
 		}
 													
 		

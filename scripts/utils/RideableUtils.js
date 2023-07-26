@@ -7,6 +7,8 @@ const cModuleName = "Rideable"; //name of Module
 
 const cPopUpID = "Popup";
 
+const cDelimiter = ";";
+
 //System names
 const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 
@@ -20,7 +22,9 @@ const cNPCType = "npc"; //type of npc tokens
 const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
-export { cPf2eName, cModuleName, cPopUpID };
+const cPf2EffectType = "effect"; //the item type of Pf2e effects
+
+export { cPf2eName, cModuleName, cPopUpID, cDelimiter };
 
 //a few support functions
 class RideableUtils {
@@ -37,7 +41,7 @@ class RideableUtils {
 	static TokenfromID (pID, pScene = null) {} //returnsthe Token matching pID
 	
 	//spawns
-	static async SpawnableActors(pIdentifications) {} //returns an array of tokendocuments defined by their names or ids through pIdentifications and present in the actor tab
+	static async SpawnableActors(pIdentifications) {} //returns an array of tokendocuments defined by their names or ids through pIdentifications and present the compendium or actors tab
 	
 	static async SpawnTokens(pActors, pScene, px, py, pInfos = {}) {} //spawns tokens described by actors in array pActors to scene at position px, py
 	
@@ -72,7 +76,9 @@ class RideableUtils {
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
 		
-	static createRideEffect() {} //returns a prepared Ride Effects describing conected to pRiderToken
+	static async ApplicableEffects(pIdentifications) {} //returns an array of tokendocuments defined by their names or ids through pIdentifications and present in the compendium or items tab
+	
+	static CustomWorldRidingEffects() {} //returns all World setting Riding effects
 	
 	//IMPLEMENTATIONS
 	
@@ -320,42 +326,66 @@ class RideableUtils {
 		}
 	}
 	
-	
-	static createRideEffect() {
-		//pTarget.actor.createEmbeddedDocuments("Item", vRideeffects);
-		if (RideableUtils.isPf2e()) {
-			return {
-				type: "effect",
-				name: "name", //localize('.nameOfQuickUntitledEffect'),
-				img: "systems/pf2e/icons/equipment/worn-items/companion-items/barding-of-the-zephyr.webp",
-				data: {
-				  tokenIcon: { show: true },
-				  duration: {
-					value: 1,
-					unit: "unlimited",
-					sustained: false,
-					expiry: "turn-start"
-				  },
-				  description: {
-					value: "some description",
-				  },
-				  unidentified: false,
-				  traits: {
-					custom: "",
-					rarity: "common",
-					value: []
-				  },
-				  level: {
-					value: 0
-				  },
-				  source: {
-					value: ""
-				  }
-				},
-				flags: {}
+	static async ApplicableEffects(pIdentifications) {
+		let vEffects = [];
+		
+		for (let i = 0; i < pIdentifications.length; i++) {
+			//world
+			//-uuid
+			let vBuffer = await game.items.get(pIdentifications[i]);
+			
+			//-name
+			if (!vBuffer) {
+				vBuffer = await game.items.find(vEffect => vEffect.name == pIdentifications[i]);
+			}
+			
+			//direct id
+			if (!vBuffer) {
+				vBuffer = await fromUuid(pIdentifications[i]);
+			}
+			
+			//compendium
+			if (!vBuffer) {
+				let vElement;
+				let vPacks = game.packs.filter(vPacks => vPacks.documentName == "Item");//.map(vPack => vPack.index);
+				
+				//-uuid
+				let vPack = vPacks.find(vPack => vPack.index.get(pIdentifications[i]));
+				
+				if (vPack) {
+					vElement = vPack.index.get(pIdentifications[i]);
+				}
+				else {//-name
+					vPack = vPacks.find(vPack => vPack.index.find(vData => vData.name == pIdentifications[i]));
+					
+					if (vPack) {
+						vElement = vPack.index.find(vData => vData.name == pIdentifications[i]);
+					}
+				}
+			
+				if (vElement) {
+					vBuffer = vElement;
+					/*
+					vBuffer = await game.items.filter(vToken => vToken.flags.core).find(vToken => vToken.flags.core.sourceId == "Compendium." + vPack.collection + ".Item." + vElement._id);
+					
+					if (!vBuffer) {
+						vBuffer = await game.items.importFromCompendium(vPack, vElement._id);
+					};
+					*/
+				}
+			}
+			
+			if (vBuffer && vBuffer.type == cPf2EffectType) {
+				vEffects[vEffects.length] = vBuffer.toObject();
 			}
 		}
-	} 
+		
+		return vEffects;
+	}
+	
+	static CustomWorldRidingEffects() {
+		return game.settings.get(cModuleName, "CustomRidingEffects").split(cDelimiter);
+	} //returns all World setting Riding effects
 }
 
 //for easy translation
