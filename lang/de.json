@@ -65,7 +65,12 @@
 		
 			"RidingSystemEffects" : {
 				"name" 					: "\"Reitend\" Effekt anwenden",
-				"descrp"				: "Wenn eine Marke anfängt zu reiten, wird ein System abhängiger Effekt auf die Marke gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)"				
+				"descrp"				: "Wenn eine Figure anfängt zu reiten, wird ein System abhängiger Effekt auf die Figur gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)"				
+			},
+			
+			"CustomRidingEffects" : {
+				"name" 					: "Eigene Reiteffekte",
+				"descrp"				: "Effekte welche auf reitende Figuren angewandt werden (Namen oder IDs, getrennt mit \";\")"				
 			},
 			
 			"RideableTag" : {
@@ -100,7 +105,7 @@
 			
 			"OnlyownedMessagePopUps" : {
 				"name" 					: "Nur eigene Pop-up Meldungen",
-				"descrp"				: "Zeigt nur die Pop-up Meldungen der Marken unter eigener Kontrolle"				
+				"descrp"				: "Zeigt nur die Pop-up Meldungen der Figuren unter eigener Kontrolle"				
 			}		
 		},
 		
@@ -181,6 +186,16 @@
 			"SpawnRidersFlag" : {
 				"name"					: "Reiter bei Erschaffung",
 				"descrp"				: "Reiter mit welchen diese Figur erschaffen wird (Namen oder IDs, getrennt mit \";\")"
+			},
+			
+			"MountingEffectsFlag" : {
+				"name"					: "Reiteffekte",
+				"descrp"				: "Effekte welche auf Reiter dieser Figur angewandt werden"
+			},
+			
+			"WorldMEffectOverrideFlag" : {
+				"name"					: "Überschreibe Welt-Reiteffekte",
+				"descrp"				: "Überschreibt die Welt-Reiteffekte mit den oben festgelegten (anstatt sie zu erweitern)"
 			}
 		},
 		

@@ -186,6 +186,16 @@
 			"SpawnRidersFlag" : {
 				"name"					: "Spawn riders",
 				"descrp"				: "Riders this token spawns with (Names or IDs, seperated with \";\")"
+			},
+			
+			"MountingEffectsFlag" : {
+				"name"					: "Riding effects",
+				"descrp"				: "Effects that are applied to riders of this token"
+			},
+			
+			"WorldMEffectOverrideFlag" : {
+				"name"					: "Override world riding effects",
+				"descrp"				: "Overrides the world standard riding effects with the above set effects (instead of appending them)"
 			}
 		},
 		
