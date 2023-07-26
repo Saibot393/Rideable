@@ -65,7 +65,7 @@
 		
 			"RidingSystemEffects" : {
 				"name" 					: "Apply \"Mounted\" effect",
-				"descrp"				: "If a token starts riding, a system dependent effect will be applied to the token (only works if the game system has a known \"Mounted\" effect. Compatible systems: Pf2e)"				
+				"descrp"				: "If a token starts riding, a system dependent effect will be applied to the token"				
 			},
 			
 			"CustomRidingEffects" : {

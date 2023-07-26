@@ -65,7 +65,7 @@
 		
 			"RidingSystemEffects" : {
 				"name" 					: "\"Reitend\" Effekt anwenden",
-				"descrp"				: "Wenn eine Figure anfängt zu reiten, wird ein System abhängiger Effekt auf die Figur gesetzt (funktioniert nur mit Systemen welche einen bekannten \"Reitend\" Effekt haben. Kompatible Systeme: Pf2e)"				
+				"descrp"				: "Wenn eine Figure anfängt zu reiten, wird ein System abhängiger Effekt auf die Figur gesetzt"				
 			},
 			
 			"CustomRidingEffects" : {
