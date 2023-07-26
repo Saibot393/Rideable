@@ -2,65 +2,65 @@
 	"Rideable" : {
 		"Titles" : {
 			"Rideable"					: "Rideable",
-			"WorldSettings"				: "Welt Einstellungen (nur SL)",
-			"ClientSettings"			: "Nutzer Einstellungen",
-			"GMonly"					: "nur SLs"
+			"WorldSettings"				: "Welt-Einstellungen (nur SL)",
+			"ClientSettings"			: "Nutzer-Einstellungen",
+			"GMonly"					: "Nur Spielleitung"
 		},
 		
 		"Settings" : {
 			"defaultRideable" : {
-				"name" 					: "Marken standardmäßig reitbar",
-				"descrp"				: "Ob marken standardmäßig reitbar sein sollen(kann für jede Marke in den Markeneinstellungen geändert werden)"
+				"name" 					: "Figuren standardmäßig reitbar",
+				"descrp"				: "Ob Spielfiguren standardmäßig reitbar sein sollen (kann für jede Figur in den Figureinstellungen geändert werden)"
 			},
 			
 			"LocknKeyintegration" : {
 				"name" 					: "Lock & Key Integration",
-				"descrp"				: "Erlaubt es reitbare Marken abzuschließen"
+				"descrp"				: "Erlaubt es, reitbare Figuren abzuschließen"
 			},
 			
 			"RidingHeight" : {
 				"name" 					: "Reithöhe",
-				"descrp"				: "Die z-Höhe welche eine reitende Marke im vergleich zur getrittenen Marke hat (es wird ein Wert über 0 empfohlen)"
+				"descrp"				: "Die Z-Höhe welche eine reitende Figur im Vergleich zur getrittenen Figur hat (es wird ein Wert über 0 empfohlen)"
 			},
 			
 			"useRiddenTokenHeight" : {
-				"name" 					: "Nutze Marken höhe",
-				"descrp"				: "Nutzt die Höhe der gerittenen Marke (hinzugefügt durch das Modul \"Wall-Height\") anstatt der eingestellten \"Reithöhe\""
+				"name" 					: "Nutze Figurhöhe",
+				"descrp"				: "Nutzt die Höhe der gerittenen Figur (hinzugefügt durch das Modul \"Wall-Height\") anstatt der eingestellten \"Reithöhe\""
 			},
 			
 			"MountingDistance" : {
 				"name" 					: "Reitdistanz",
-				"descrp"				: "Die maximale Distanz die zwischen einer Marke und ihrem Reitziel liegen kann (-1 für eine unendliche Reitdistanz)"
+				"descrp"				: "Die maximale Distanz die zwischen einer Figur und ihrem Reitziel liegen kann (-1 für unendliche Reitdistanz)"
 			},
 			
 			"UseArmReachDistance": {
 				"name" 					: "Nutze \"Arms Reach\"-Distanz",
-				"descrp"				: "Nutzt die Distanz welche in \"Arms Reach\" eingestellt ist für die Reitdistanz"	
+				"descrp"				: "Nutzt die Distanz welche in \"Arms Reach\" eingestellt ist als Reitdistanz"	
 			},
 			
 			"BorderDistance" : {
 				"name" 					: "Rand zu Rand Distanz",
-				"descrp"				: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Marke berechnet werden soll (funktioniert nur mit Kreis/Quadrat Marken)"
+				"descrp"				: "Ob die Reitdistanz vom Rand anstatt der Mitte einer Figur berechnet werden soll (funktioniert nur mit Kreis/Quadrat Figuren)"
 			},
 
 			"MaxRiders" : {
-				"name" 					: "Maximale Reiter pro Marke",
-				"descrp"				: "Die maximale Anzahl an Marken von welchen eine Marke gleichzeitig geritten werden kann (-1 für unlimitiert)"
+				"name" 					: "Maximale Reiter pro Figur",
+				"descrp"				: "Die maximale Anzahl an Figuren von welchen eine Figur gleichzeitig geritten werden kann (-1 für unbegrenzt)"
 			},		
 
 			"RiderMovement" : {
-				"name" 					: "Reiter Bewegung",
+				"name" 					: "Reiter-Bewegung",
 				"descrp"				: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
 				"options" : {
-					"disallow"			: "verhindere Bewegung",
-					"dismount"			: "lasse Reiter absteigen",
-					"moveridden"		: "Bewege gerittene Marke (wenn Besitzer)"
+					"disallow"			: "Verhindere Bewegung",
+					"dismount"			: "Lasse Reiter absteigen",
+					"moveridden"		: "Bewege gerittene Figur (wenn Besitzer)"
 				}
 			},
 			
 			"RiderRotation" : {
-				"name" 					: "Rotations Verbindung",
-				"descrp"				: "Rotiert alle reitenden Marken wenn die gerittene Marke rotiert wird (funktioniert auch mit der \"Bewege gerittene Marke\" option)"				
+				"name" 					: "Rotations-Verbindung",
+				"descrp"				: "Rotiert alle reitenden Figuren wenn die gerittene Figur rotiert wird (funktioniert auch mit der \"Bewege gerittene Figur\"-Option)"				
 			},
 		
 			"RidingSystemEffects" : {
@@ -69,33 +69,33 @@
 			},
 			
 			"RideableTag" : {
-				"name" 					: "\"Rideable\" Eigenschaft",
-				"descrp"				: "Erlaube es Marken welche die \"Rideable\" Eigenschaft haben geritten zu werden (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
+				"name" 					: "\"Rideable\"-Eigenschaft",
+				"descrp"				: "Erlaube das Reiten auf Figuren mit \"Rideable\"-Eigenschaft (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter Settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
 			"FamiliarRiding" : {
 				"name" 					: "Vertrauten reiten",
-				"descrp"				: "Erlaubt es Vertrauten ihrem Meister zu folgen, die Vertrauten werden hierbei and den Ecken ihres Meister platziert"				
+				"descrp"				: "Erlaubt es Vertrauten, ihrem Meister zu folgen. Die Vertrauten werden hierbei an den Ecken ihres Meister platziert."				
 			},
 			
 			"Grappling" : {
-				"name" 					: "Greifen",
-				"descrp"				: "Erlaubt es Marken einander zu greifen (gegriffene Marken können nur von der ergreifenden Marke los gelassen werden)"				
+				"name" 					: "Packen",
+				"descrp"				: "Erlaubt es Figuren einander zu packen (gegriffene Figuren können nur von der ergreifenden Figur losgelassen werden)"				
 			},
 			
 			"PreventEnemyRiding" : {
 				"name" 					: "Gegner reiten verhindern",
-				"descrp"				: "Hält Marken davon ab Gegner zu reiten (SL Befehle ignorieren diese Einstellung)"				
+				"descrp"				: "Hält Figuren davon ab Gegner zu reiten (SL-Befehle ignorieren diese Einstellung)"				
 			},
 			
 			"FitRidersize" : {
 				"name" 					: "Passe Reitergröße an",
-				"descrp"				: "Passt die Größe der reitenden Marke an, sollte sie größer oder gleich der gerittenen Marke sein"				
+				"descrp"				: "Passt die Größe der reitenden Figur an, sollte sie größer oder gleich der gerittenen Figur sein"				
 			},
 		
 			"MessagePopUps" : {
-				"name" 					: "Pop-up Meldungen",
-				"descrp"				: "Aktiviert mehrere pop-up Meldungen bei aktionen wie dem Auf- oder Absteigen"				
+				"name" 					: "Pop-up-Meldungen",
+				"descrp"				: "Aktiviert mehrere Pop-up-Meldungen bei Aktionen wie Auf- oder Absteigen"				
 			},		
 			
 			"OnlyownedMessagePopUps" : {
@@ -107,22 +107,22 @@
 		"Keys" : {
 			"Mount" : {
 				"name" 					: "Aufsteigen",
-				"descrp"				: "Lässt die kontrollierten Marken die angezielte Marke besteigen (Alternativ Macro: \"Mount\")"
+				"descrp"				: "Lässt die kontrollierten Figuren die angezielte Figur besteigen (Alternativ-Makro: \"Mount\")"
 			},
 			
 			"UnMount" : {
 				"name" 					: "Absteigen",
-				"descrp"				: "Lässt die kontrollierten Marken von ihren bestiegenen Marken absteigen, oder lässt die angezielte Marke von der kontrollierten Marke absteigen (Alternativ Macro: \"Unmount\")"
+				"descrp"				: "Lässt die kontrollierten Figuren von ihren bestiegenen Figuren absteigen, oder lässt die angezielte Figur von der kontrollierten Figur absteigen (Alternativ-Makro: \"Unmount\")"
 			},
 			
 			"MountFamiliar" : {
 				"name" 					: "Aufsteigen für Vertraute",
-				"descrp"				: "Lässt die kontrollierten Vertrauten die angezielte Marke besteigen, sollte diese ihr Meister sein(Alternativ Macro: \"MountFamiliar\") (nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)"
+				"descrp"				: "Lässt die kontrollierten Vertrauten die angezielte Figur besteigen, sollte diese ihr Meister sein (Alternativ-Makro: \"MountFamiliar\") (Nur wenn die Einstellung \"Vertrauten reiten\" aktiviert ist)"
 			},
 			
 			"GrappleTarget" : {
-				"name" 					: "Greife Ziel/lasse Ziel los",
-				"descrp"				: "Lässt die ausgewählten Marke die angezielte Marke greifen, kann nur von der ausgewählten Marke rückgängig gemacht werden(Alternativ Macro: \"Grapple\") (nur wenn die Einstellung \"Greifen\" aktiviert ist)"
+				"name" 					: "Packe Ziel/lasse Ziel los",
+				"descrp"				: "Lässt die ausgewählte Figur die angezielte Figur packen, kann nur von der ausgewählten Figur rückgängig gemacht werden (Alternativ-Makro: \"Grapple\") (Nur wenn die Einstellung \"Packen\" aktiviert ist)"
 			}
 		},
 		
@@ -134,24 +134,24 @@
 			"PreventedRiderMove"		: "Reitet noch {pRiddenName}",
 			"RidingLoop"				: "{pRiddenName} zu reiten wäre komisch",
 			"NoPlace"					: "{pRiddenName} hat keinen Platz mehr",
-			"EnemyRiding"				: "{pRiddenName} ist mein Gegner",
+			"EnemyRiding"				: "{pRiddenName} ist ein Gegner",
 			"Toofaraway"				: "{pRiddenName} ist zu weit weg",
 			"RiddenisLocked"			: "{pRiddenName} ist abgeschlossen",
 			
-			"Grappling"					: "Von {pRiddenName} ergriffen",
-			"UnGrappling"				: "Von {pRiddenName} frei gelassen",
-			"PreventedGrappledMove"		: "Von {pRiddenName} ergriffen"
+			"Grappling"					: "Von {pRiddenName} gepackt",
+			"UnGrappling"				: "Von {pRiddenName} freigelassen",
+			"PreventedGrappledMove"		: "Von {pRiddenName} gepackt"
 		},	
 		
 		"TokenSettings" : {
 			"MaxRiderFlag" : {
 				"name"					: "Maximale Reiter",
-				"descrp"				: "Überschreibt die Welt Einstellung für diese Marke (-1 für unlimitiert, leer lassen um zur Welt Einstellung zurück zu kehren)"
+				"descrp"				: "Überschreibt die Welt-Einstellung für diese Figur (-1 für unbegrenzt, leer lassen um Welt-Einstellung zu nutzen)"
 			},
 			
 			"RiderPositioningFlag" : {
-				"name"					: "Reiter platzierung",
-				"descrp"				: "Das Muster in welchem die Reitermarken platziert werden",
+				"name"					: "Reiterplatzierung",
+				"descrp"				: "Das Muster in welchem die Reiterfiguren platziert werden",
 				"options" : {
 					"CirclePlacement"	: "Kreis",
 					"RowPlacement"		: "Reihe",
@@ -160,12 +160,12 @@
 			},
 			
 			"issetRideableFlag" : {
-				"name"					: "Marke ist Reitbar",
-				"descrp"				: "Überschreibt den Globalen standard"
+				"name"					: "Figur ist Reitbar",
+				"descrp"				: "Überschreibt den globalen Standard"
 			},
 			
 			"TokenFormFlag" : {
-				"name"					: "Markenform",
+				"name"					: "Figurenform",
 				"descrp"				: "",
 				"options" : {
 					"TokenFormCircle"	: "Kreis/Ellipse",
@@ -175,12 +175,12 @@
 			
 			"InsideMovementFlag" : {
 				"name"					: "Reiter können sich frei bewegen",
-				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Marke bewegen können"
+				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Figur bewegen können"
 			},
 			
 			"SpawnRidersFlag" : {
 				"name"					: "Reiter bei Erschaffung",
-				"descrp"				: "Reiter mit welchen diese Marke erschaffen wird (Namen order IDs, getrennt mit \";\")"
+				"descrp"				: "Reiter mit welchen diese Figur erschaffen wird (Namen oder IDs, getrennt mit \";\")"
 			}
 		},
 		
