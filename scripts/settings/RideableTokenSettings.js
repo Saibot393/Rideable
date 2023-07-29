@@ -3,7 +3,7 @@ import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMoveme
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
-const cRideableIcon = "fa-horse-saddle";
+const cRideableIcon = "fa-horse";
 
 class RideableTokenSettings {
 	//DECLARATIONS
@@ -19,7 +19,7 @@ class RideableTokenSettings {
 		//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 		
 		//create new tab
-		let vTabsheet = pHTML.find(`.sheet-tabs`);
+		let vTabsheet = pHTML.find(`[data-group="main"].sheet-tabs`);
 		let vprevTab = pHTML.find(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
 		
 		let vTabButtonHTML = 	`
