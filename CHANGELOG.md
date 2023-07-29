@@ -1,3 +1,6 @@
+## v2.5.1
+- Fixed small bug in Token sheet ui
+
 ## v2.5.0
 - Improved german translation (thanks to [mhilbrunner](https://github.com/mhilbrunner))
 - [only Pf2e] added custom riding effects
