@@ -202,7 +202,7 @@ Hooks.once("init", () => {
 	}
 	
 	if (RideableCompUtils.isactiveModule(cLocknKey)) {
-		Hooks.on(cLocknKey+".Locktype", (pDocument, pLocktype) => {if ((pDocument.documentName == "Token") && RideableFlags.TokenissetRideable(pDocument)) {pLocktype.type = cLockTypeRideable }}); //return Rideable Lock type if valid rideable
+		Hooks.on(cLocknKey+".Locktype", (pDocument, pLocktype) => {if ((pDocument.documentName == "Token") && RideableFlags.TokenissetRideable(pDocument) && game.settings.get(cModuleName, "LocknKeyintegration")) {pLocktype.type = cLockTypeRideable }}); //return Rideable Lock type if valid rideable
 		
 		Hooks.on(cLocknKey+".isTokenLocktype", (pLocktype, vLockInfo) => {if ((pLocktype == cLockTypeRideable) && game.settings.get(cModuleName, "LocknKeyintegration")) { vLockInfo.isTokenLocktype = true }}); //return true if pLocktype matches cLockTypeRideable
 	}
