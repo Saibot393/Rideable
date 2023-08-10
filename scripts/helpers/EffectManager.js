@@ -18,8 +18,11 @@ class EffectManager {
 	
 	//IMPLEMENTATION
 	static async applyMountingEffects(pRider, pRidden) {
+		let vEffectDocuments;
 		//Ridden Mounting Effects
 		let vEffectNames = RideableFlags.MountingEffects(pRidden);
+		
+		EffectManager.removeMountingEffects(pRider);
 		
 		if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
 			//World Mounting effects
@@ -31,7 +34,9 @@ class EffectManager {
 			}
 		}
 		
-		let vEffects = await pRider.actor.createEmbeddedDocuments("Item", await RideableUtils.ApplicableEffects(vEffectNames));
+		vEffectDocuments = await RideableUtils.ApplicableEffects(vEffectNames);
+		
+		let vEffects = await pRider.actor.createEmbeddedDocuments("Item", vEffectDocuments);
 		
 		for (let i = 0; i < vEffects.length; i++) {
 			
