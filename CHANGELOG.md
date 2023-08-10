@@ -1,3 +1,7 @@
+## v2.5.2
+- Improved compatibility with Lock & Key
+- Mounting will no longer apply mounted effects that are already applied
+
 ## v2.5.1
 - Fixed small bug in Token sheet ui
 
