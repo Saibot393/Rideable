@@ -8,7 +8,7 @@ class EffectManager {
 	//DECLARATIONS
 	static applyMountingEffects(pRider, pRidden) {} //gives the rider all pEffects
 	
-	static removeMountingEffects(pRider) {} //remove all effects flaged as Rideable effect
+	static async removeMountingEffects(pRider) {} //remove all effects flaged as Rideable effect
 	
 	//Hooks
 	
@@ -22,7 +22,7 @@ class EffectManager {
 		//Ridden Mounting Effects
 		let vEffectNames = RideableFlags.MountingEffects(pRidden);
 		
-		EffectManager.removeMountingEffects(pRider);
+		await EffectManager.removeMountingEffects(pRider);
 		
 		if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
 			//World Mounting effects
@@ -44,8 +44,8 @@ class EffectManager {
 		}
 	}
 	
-	static removeMountingEffects(pRider) {
-		pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => RideableFlags.isRideableEffect(vElement)).map(vElement => vElement.id));
+	static async removeMountingEffects(pRider) {
+		await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.filter(vElement => RideableFlags.isRideableEffect(vElement)).map(vElement => vElement.id));
 	}
 	
 	//Hooks
