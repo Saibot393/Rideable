@@ -13,6 +13,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: true
   }); 
   
+  game.settings.register(cModuleName, "allowTileRiding", {
+	name: Translate("Settings.allowTokenRiding.name"),
+	hint: Translate("Settings.allowTokenRiding.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  }); 
+  
   game.settings.register(cModuleName, "LocknKeyintegration", {
 	name: Translate("Settings.LocknKeyintegration.name"),
 	hint: Translate("Settings.LocknKeyintegration.descrp"),

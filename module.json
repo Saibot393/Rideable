@@ -40,7 +40,7 @@
 	"scripts/helpers/SocketHandler.js",
 	"scripts/helpers/MacroHooks.js",
 	"scripts/settings/RideableSettings.js",
-	"scripts/settings/RideableTokenSettings.js",
+	"scripts/settings/RideableSheetSettings.js",
 	"scripts/compatibility/RideableCompatibility.js"
   ],
   "packs": [

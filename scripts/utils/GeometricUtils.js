@@ -173,6 +173,10 @@ class GeometricUtils {
 	}
 	
 	static insceneWidth(pToken) {
+		if (pToken.documentName == "Tile") {
+			return pToken.width;
+		}
+		
 		if (pToken.object) {
 			return pToken.object.w;
 		}
@@ -181,7 +185,11 @@ class GeometricUtils {
 		}
 	}
 	
-	static insceneHeight(pToken) {
+	static insceneHeight(pToken) {		
+		if (pToken.documentName == "Tile") {
+			return pToken.height;
+		}
+		
 		if (pToken.object) {
 			return pToken.object.h;
 		}

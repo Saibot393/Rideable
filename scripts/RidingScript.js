@@ -490,4 +490,6 @@ export { UpdateRidderTokens, UnsetRidingHeight };
 //Set Hooks
 Hooks.on("updateToken", (...args) => Ridingmanager.OnTokenupdate(...args));
 
+Hooks.on("updateTile", (...args) => Ridingmanager.OnTokenupdate(...args));
+
 Hooks.on("preUpdateToken", (...args) => Ridingmanager.OnTokenpreupdate(...args));

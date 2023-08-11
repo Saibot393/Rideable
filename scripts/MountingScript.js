@@ -5,6 +5,7 @@ import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
+import { TileUtils } from "./utils/TileUtils.js";
 
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
@@ -51,6 +52,12 @@ class MountingManager {
 		
 		if (pTargetHovered || !vTarget) {
 			vTarget = RideableUtils.hoveredToken();
+			
+			if (game.settings.get(cModuleName, "allowTileRiding")) {
+				if (!vTarget) {
+					vTarget = TileUtils.hoveredRideableTile();
+				}
+			}
 			
 			if (!vTarget) {
 				vTarget = RideableUtils.targetedToken();

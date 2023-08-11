@@ -11,6 +11,7 @@ const cLevelsautocover = "levelsautocover";
 const cArmReach = "foundryvtt-arms-reach";
 const cArmReachold = "arms-reach";
 const cLocknKey = "LocknKey"; //self promotion
+const cLibWrapper = "lib-wrapper";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -18,7 +19,7 @@ const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in co
 //special words
 const cLockTypeRideable = "LTRideable";
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable }
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
