@@ -1,3 +1,9 @@
+## v2.6.0
+- Added tile mounting (a bit experimental for the moment)
+  - World option Tiles can be mounted: to enable tile mounting feature
+  - Added tile setting Tile name: to set the name rideable will use for this tile
+- Added world setting Familiar riding position: to set the corner familiars will be positioned first
+
 ## v2.5.2
 - Improved compatibility with Lock & Key
 - Mounting will no longer apply mounted effects that are already applied
