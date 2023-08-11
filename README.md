@@ -16,6 +16,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 
 #### World:
 - Tokens rideable by default: to change if tokens are rideable by default
+- Tiles can be mounted: to enable tile mounting feature
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
@@ -25,6 +26,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Custom riding effects: to list effects that should be applied to tokens when they start riding
 - "Rideable" trait: to use the Pf2e trait system to decide if a token can be ridden
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
+- Familiar riding position: to set the corner familiars will be positioned first
 - Grappling: to allow tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
@@ -34,6 +36,7 @@ Since v2.2.0 the module also has basic support for tokens to grapple one another
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
+- Tile name [*Tiles only*]: to set the name rideable will use for this tile
 - Maximum riders: to override world default for this token
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
