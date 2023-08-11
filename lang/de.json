@@ -4,13 +4,19 @@
 			"Rideable"					: "Rideable",
 			"WorldSettings"				: "Welt-Einstellungen (nur SL)",
 			"ClientSettings"			: "Nutzer-Einstellungen",
-			"GMonly"					: "Nur Spielleitung"
+			"GMonly"					: "Nur Spielleitung",
+			"Tile"						: "Fliese"
 		},
 		
 		"Settings" : {
 			"defaultRideable" : {
 				"name" 					: "Figuren standardmäßig reitbar",
 				"descrp"				: "Ob Spielfiguren standardmäßig reitbar sein sollen (kann für jede Figur in den Figureinstellungen geändert werden)"
+			},
+			
+			"allowTileRiding" : {
+				"name" 					: "Fliesen können geritten werden",
+				"descrp"				: "Ob Fliesen geritten werden können, genauso wie Figuren"
 			},
 			
 			"LocknKeyintegration" : {
@@ -81,6 +87,17 @@
 			"FamiliarRiding" : {
 				"name" 					: "Vertrauten reiten",
 				"descrp"				: "Erlaubt es Vertrauten, ihrem Meister zu folgen. Die Vertrauten werden hierbei an den Ecken ihres Meister platziert."				
+			},
+			
+			"FamiliarRidingFirstCorner" : {
+				"name" 					: "Vertrauten reiten Position",
+				"descrp"				: "Erste Ecke welche beim Vertrauten reiten besetzt wird.",
+				"options" : {
+					"tl"				: "Oben links",
+					"tr"				: "Oben rechts",
+					"bl"				: "Unten links",
+					"br"				: "Unten rechts"
+				}
 			},
 			
 			"Grappling" : {
@@ -167,6 +184,11 @@
 			"issetRideableFlag" : {
 				"name"					: "Figur ist Reitbar",
 				"descrp"				: "Überschreibt den globalen Standard"
+			},
+			
+			"TileRideableNameFlag" : {
+				"name"					: "Fliesen Name",
+				"descrp"				: "Name welcher von Rideable für die Fliese benutzt wird (z.B. Popups)"
 			},
 			
 			"TokenFormFlag" : {

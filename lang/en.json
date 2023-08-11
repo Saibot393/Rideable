@@ -4,13 +4,19 @@
 			"Rideable"					: "Rideable",
 			"WorldSettings"				: "World settings (GM only)",
 			"ClientSettings"			: "Client settings",
-			"GMonly"					: "GM only"
+			"GMonly"					: "GM only",
+			"Tile"						: "Tile"
 		},
 		
 		"Settings" : {
 			"defaultRideable" : {
 				"name" 					: "Tokens rideable by default",
 				"descrp"				: "Wether all tokens should be rideable by default (can be changed for each token in the token settings)"
+			},
+			
+			"allowTileRiding" : {
+				"name" 					: "Tiles can be mounted",
+				"descrp"				: "Wether tiles can be mounted, just like tokens"
 			},
 			
 			"LocknKeyintegration" : {
@@ -81,6 +87,17 @@
 			"FamiliarRiding" : {
 				"name" 					: "Familiar riding",
 				"descrp"				: "Allows for familiars to ride their master, the familairs will be placed at the corners of their master"				
+			},
+			
+			"FamiliarRidingFirstCorner" : {
+				"name" 					: "Familiar riding position",
+				"descrp"				: "First corner occupied by familiars.",
+				"options" : {
+					"tl"				: "Top left",
+					"tr"				: "Top right",
+					"bl"				: "Bottom left",
+					"br"				: "Bottom right"
+				}
 			},
 			
 			"Grappling" : {
@@ -167,6 +184,11 @@
 			"issetRideableFlag" : {
 				"name"					: "Token is Rideable",
 				"descrp"				: "Overrides the global default setting"
+			},
+			
+			"TileRideableNameFlag" : {
+				"name"					: "Tile name",
+				"descrp"				: "Name used by Rideable for this tile (e.g. Popups)"
 			},
 			
 			"TokenFormFlag" : {

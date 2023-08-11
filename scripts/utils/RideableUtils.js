@@ -90,10 +90,10 @@ class RideableUtils {
 	//Token IDs/Names
 	static TokensfromIDs (pIDs, pScene = null) {
 		if (pScene) {
-			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id));
+			return pScene.tokens.filter(vDocument => pIDs.includes(vDocument.id)).concat(pScene.tiles.filter(vDocument => pIDs.includes(vDocument.id)));
 		}
 		else {
-			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id)).map(vToken => vToken.document);
+			return canvas.tokens.placeables.filter(vToken => pIDs.includes(vToken.id)).map(vToken => vToken.document).concat(canvas.tiles.placeables.filter(vToken => pIDs.includes(vToken.id)).map(vToken => vToken.document));;
 		}
 	}
 	
@@ -115,6 +115,10 @@ class RideableUtils {
 		if (pScene) {
 			let vDocument = pScene.tokens.find(vDocument => vDocument.id === pID);
 			
+			if (!vDocument) {
+				vDocument = pScene.tiles.find(vDocument => vDocument.id === pID);
+			}
+			
 			if (vDocument) {
 				return vDocument;
 			}
@@ -125,6 +129,10 @@ class RideableUtils {
 		else {
 			//default scene
 			let vToken = canvas.tokens.placeables.find(vToken => vToken.id === pID);
+			
+			if (!vToken) {
+				vToken = canvas.tiles.placeables.find(vToken => vToken.id === pID);
+			}
 			
 			if (vToken) {
 				return vToken.document;

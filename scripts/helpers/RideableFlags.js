@@ -1,6 +1,6 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableUtils, cModuleName, cDelimiter } from "../utils/RideableUtils.js";
+import { RideableUtils, cModuleName, cDelimiter, Translate } from "../utils/RideableUtils.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
@@ -20,12 +20,13 @@ const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
 const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
+const cTileRideableNameF = "TileRideableNameFlag"; //name of the rideable tile
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -80,6 +81,8 @@ class RideableFlags {
 		static SpawnRiders(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in an array
 		
 		static SpawnRidersstring(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in a string
+		
+		static RideableName(pToken) {} //returns name of pToken, either token name or Tile rideable name
 	
 		//Rider count infos
 		static RiderCount(pRidden) {} //returns the number of Riders
@@ -339,6 +342,19 @@ class RideableFlags {
 		return false; //default if anything fails
 	} 
 	
+	static #TileRideableNameFlag (pToken) { 
+	//returns content of TileRideableNameFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cTileRideableNameF)) {
+				return vFlag.TileRideableNameFlag;
+			}
+		}
+		
+		return Translate(); //default if anything fails
+	} 
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -537,7 +553,13 @@ class RideableFlags {
 	}
 	
 	static RiddenToken(pRider) {
-		return FCore.sceneof(pRider).tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		let vToken = FCore.sceneof(pRider).tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		
+		if (!vToken) {
+			vToken = FCore.sceneof(pRider).tiles.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		}
+		
+		return vToken;
 	}
 	
 	//additional infos
@@ -559,6 +581,19 @@ class RideableFlags {
 	
 	static SpawnRidersstring(pToken) {
 		return this.#SpawnRidersFlag(pToken);
+	}
+	
+	static RideableName(pToken) {
+		switch (pToken.documentName) {
+			case "Token":
+				return pToken.name;
+				break;
+			case "Tile":
+				return RideableFlags.#TileRideableNameFlag(pToken);
+				break;
+		}
+		
+		return "";
 	}
 	
 	//Rider count infos
@@ -649,9 +684,12 @@ class RideableFlags {
 	}
 	
 	static recheckRiding (pRiderTokens) {
+		let vScene;
 		if (pRiderTokens) {
 			for (let i = 0; i < pRiderTokens.length; i++) {
-				this.#setRidingFlag(pRiderTokens[i], Boolean(FCore.sceneof(pRiderTokens[i]).tokens.find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i]))));
+				vScene = FCore.sceneof(pRiderTokens[i]);
+				
+				this.#setRidingFlag(pRiderTokens[i], Boolean(vScene.tokens.find(vTokens => this.isRiddenby(vTokens, pRiderTokens[i])) || vScene.tiles.find(vTile => this.isRiddenby(vTile, pRiderTokens[i]))));
 			}
 		}
 	}
@@ -666,7 +704,11 @@ class RideableFlags {
 				if (pRidingTokens[i]) {
 					let vRidingToken = pRidingTokens[i];
 					
-					let vRiddenTokens = FCore.sceneof(pRidingTokens[i]).tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
+					let vScene = FCore.sceneof(pRidingTokens[i]);
+					
+					let vRiddenTokens = vScene.tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
+					
+					vRiddenTokens = vRiddenTokens.concat(vScene.tiles.filter(vTile => this.isRiddenby(vTile, vRidingToken)));
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {

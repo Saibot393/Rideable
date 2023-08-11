@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
@@ -14,120 +14,132 @@ class RideableSheetSettings {
 	//IMPLEMENTATIONS
 	
 	static SheetSetting(pApp, pHTML, pData, pisTile = false) {
-		//create title (under which all settings are placed)
-		//let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Titles.Rideable")}</h3>`;
-		//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
-		
-		//create new tab
-		let vTabsheet;
-		let vprevTab;
-		let vTabContentHTML;
-		
-		if (!pisTile) { //Tokens
-			vTabsheet = pHTML.find(`[data-group="main"].sheet-tabs`);
-			vprevTab = pHTML.find(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
-			vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
-		}
-		else { //Tiles
-			vTabsheet =  pHTML.find(`[aria-role="Form Tab Navigation"].sheet-tabs`);
-			vprevTab = pHTML.find(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
-			vTabContentHTML = `<div class="tab" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
-		}
-		
-		let vTabButtonHTML = 	`
-						<a class="item" data-tab="${cModuleName}">
-							<i class="fas ${cRideableIcon}"></i>
-							${Translate("Titles."+cModuleName)}
-						</a>
-						`; //tab button HTML
-		
-		vTabsheet.append(vTabButtonHTML);
-		vprevTab.after(vTabContentHTML);
-		
-		//create settings in reversed order	
-
-		//Token is Rideable Setting
-		RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cissetRideableF +".name"), 
-													vhint : Translate("TokenSettings."+ cissetRideableF +".descrp"), 
-													vtype : "checkbox", 
-													vvalue : RideableFlags.TokenissetRideable(pApp.document),
-													vflagname : cissetRideableF
-													});
-													
-		//Max Riders Setting
-		RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMaxRiderF +".name"), 
-													vhint : Translate("TokenSettings."+ cMaxRiderF +".descrp"), 
-													vtype : "number", 
-													vvalue : RideableFlags.MaxRiders(pApp.document), 
-													vflagname : cMaxRiderF
-													});
-													
-		//RiderPositioning
-		RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
-													vhint : Translate("TokenSettings."+ cRiderPositioningF +".descrp"), 
-													vtype : "select", 
-													voptions : cPlacementPatterns,
-													vvalue : RideableFlags.RiderPositioning(pApp.document), 
-													vflagname : cRiderPositioningF
-													});
-
-		//Token Form
-		RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
-													vhint : Translate("TokenSettings."+ cTokenFormF +".descrp"), 
-													vtype : "select", 
-													voptions : cTokenForms,
-													vvalue : RideableFlags.TokenForm(pApp.document), 
-													vflagname : cTokenFormF
-													});
-													
-		//Riders can move within Setting
-		RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
-													vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
-													vtype : "checkbox", 
-													vvalue : RideableFlags.RiderscanMoveWithin(pApp.document), 
-													vflagname : cInsideMovementF
-													});
-													
-		if (game.user.isGM) {//GM settings
-			let vGMTittleHTML = `
-									<hr>
-									<h3 class="border" name="RideableTitle">${Translate("Titles.GMonly")}</h3>
-								`;
-			pHTML.find(`div[data-tab="${cModuleName}"]`).append(vGMTittleHTML);
-		
-			//Tokens spawned on creation
-			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSpawnRidersF +".name"), 
-														vhint : Translate("TokenSettings."+ cSpawnRidersF +".descrp"), 
-														vtype : "text",
-														vwide : true,
-														vvalue : RideableFlags.SpawnRidersstring(pApp.document), 
-														vflagname : cSpawnRidersF
-														});
+		if (!pisTile || game.settings.get(cModuleName, "allowTileRiding")) {
+			//create title (under which all settings are placed)
+			//let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Titles.Rideable")}</h3>`;
+			//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 			
-			if (RideableUtils.isPf2e()) {
-				//Custom Mounting effects applied to Riders
-				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
-															vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
+			//create new tab
+			let vTabsheet;
+			let vprevTab;
+			let vTabContentHTML;
+			
+			if (!pisTile) { //Tokens
+				vTabsheet = pHTML.find(`[data-group="main"].sheet-tabs`);
+				vprevTab = pHTML.find(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
+				vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
+			}
+			else { //Tiles
+				vTabsheet =  pHTML.find(`[aria-role="Form Tab Navigation"].sheet-tabs`);
+				vprevTab = pHTML.find(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
+				vTabContentHTML = `<div class="tab" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
+			}
+			
+			let vTabButtonHTML = 	`
+							<a class="item" data-tab="${cModuleName}">
+								<i class="fas ${cRideableIcon}"></i>
+								${Translate("Titles."+cModuleName)}
+							</a>
+							`; //tab button HTML
+			
+			vTabsheet.append(vTabButtonHTML);
+			vprevTab.after(vTabContentHTML);
+			
+			//create settings in reversed order	
+
+			//Token is Rideable Setting
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cissetRideableF +".name"), 
+														vhint : Translate("TokenSettings."+ cissetRideableF +".descrp"), 
+														vtype : "checkbox", 
+														vvalue : RideableFlags.TokenissetRideable(pApp.document),
+														vflagname : cissetRideableF
+														});
+												
+			if (pisTile) {
+				//Tile name for rideable purposes
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTileRideableNameF +".name"), 
+															vhint : Translate("TokenSettings."+ cTileRideableNameF +".descrp"), 
+															vtype : "text", 
+															vwide : true,
+															vvalue : RideableFlags.RideableName(pApp.document),
+															vflagname : cTileRideableNameF
+															});
+			}
+														
+			//Max Riders Setting
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMaxRiderF +".name"), 
+														vhint : Translate("TokenSettings."+ cMaxRiderF +".descrp"), 
+														vtype : "number", 
+														vvalue : RideableFlags.MaxRiders(pApp.document), 
+														vflagname : cMaxRiderF
+														});
+														
+			//RiderPositioning
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
+														vhint : Translate("TokenSettings."+ cRiderPositioningF +".descrp"), 
+														vtype : "select", 
+														voptions : cPlacementPatterns,
+														vvalue : RideableFlags.RiderPositioning(pApp.document), 
+														vflagname : cRiderPositioningF
+														});
+
+			//Token Form
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
+														vhint : Translate("TokenSettings."+ cTokenFormF +".descrp"), 
+														vtype : "select", 
+														voptions : cTokenForms,
+														vvalue : RideableFlags.TokenForm(pApp.document), 
+														vflagname : cTokenFormF
+														});
+														
+			//Riders can move within Setting
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
+														vhint : Translate("TokenSettings."+ cInsideMovementF +".descrp"), 
+														vtype : "checkbox", 
+														vvalue : RideableFlags.RiderscanMoveWithin(pApp.document), 
+														vflagname : cInsideMovementF
+														});
+														
+			if (game.user.isGM) {//GM settings
+				let vGMTittleHTML = `
+										<hr>
+										<h3 class="border" name="RideableTitle">${Translate("Titles.GMonly")}</h3>
+									`;
+				pHTML.find(`div[data-tab="${cModuleName}"]`).append(vGMTittleHTML);
+			
+				//Tokens spawned on creation
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSpawnRidersF +".name"), 
+															vhint : Translate("TokenSettings."+ cSpawnRidersF +".descrp"), 
 															vtype : "text",
 															vwide : true,
-															vvalue : RideableFlags.MountingEffectsstring(pApp.document), 
-															vflagname : cMountingEffectsF
+															vvalue : RideableFlags.SpawnRidersstring(pApp.document), 
+															vflagname : cSpawnRidersF
 															});
 				
-			//if custom Mounting effects should override world stndard
-			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
-														vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
-														vtype : "checkbox",
-														vwide : true,
-														vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
-														vflagname : cWorldMEffectOverrideF
-														});
+				if (RideableUtils.isPf2e()) {
+					//Custom Mounting effects applied to Riders
+					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
+																vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
+																vtype : "text",
+																vwide : true,
+																vvalue : RideableFlags.MountingEffectsstring(pApp.document), 
+																vflagname : cMountingEffectsF
+																});
+					
+				//if custom Mounting effects should override world stndard
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
+															vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
+															vtype : "checkbox",
+															vwide : true,
+															vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
+															vflagname : cWorldMEffectOverrideF
+															});
+				}
 			}
+														
+			
+			pApp.setPosition({ height: "auto" });
 		}
-													
-		
-		pApp.setPosition({ height: "auto" });
-		
 	} 
 	
 	static AddHTMLOption(pHTML, pInfos) {

@@ -259,14 +259,14 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
-					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 				}
 				else {
 					if (pRidingOptions.Grappled) {
-						RideablePopups.TextPopUpID(pRider ,"Grappling", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"Grappling", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -283,14 +283,14 @@ class MountingManager {
 		if (pRider) {	
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
-					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 				}
 				else {
 					if (pRidingOptions.Grappled) {
-						RideablePopups.TextPopUpID(pRider ,"UnGrappling", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"UnGrappling", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -319,20 +319,20 @@ class MountingManager {
 						return true;
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : pRidden.name});
+						RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : RideableFlags.RideableName(pRidden)});
 						return false;
 					}
 				}
 				else {
-					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : pRidden.name}); //MESSAGE POPUP	
+					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
 				}
 			}
 			else {
-				RideablePopups.TextPopUpID(pRider ,"NoPlace", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider ,"NoPlace", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 			}
 		}
 		else {
-			//RideablePopups.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : pRidden.name}); //MESSAGE POPUP
+			//RideablePopups.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 		}
 		
 		return false; //default

@@ -20,7 +20,7 @@ const cSizeFactor = 2/3;
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
-	static OnTokenupdate(pToken, pchanges, pInfos) {} //calculates which Tokens are Riders of priddenToken und places them on it
+	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {} //calculates which Tokens are Riders of priddenToken und places them on it
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
@@ -50,7 +50,7 @@ class Ridingmanager {
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
 	//IMPLEMENTATIONS
-	static OnTokenupdate(pToken, pchanges, pInfos) {
+	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {
 		if (game.user.isGM) {
 			
 			if (!pToken) {
@@ -65,7 +65,7 @@ class Ridingmanager {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
 					
-					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, pInfos.animate);
+					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, !pisTile && pInfos.animate);
 				}
 			}
 		}
@@ -98,7 +98,7 @@ class Ridingmanager {
 						delete pchanges.elevation;
 						delete pchanges.rotation;
 				
-						RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RiddenToken(pToken).name}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
 					}
 					
 					if (vindependentRiderLeft) {
@@ -135,7 +135,7 @@ class Ridingmanager {
 				//suppress movement
 				vdeleteChanges = true;
 				
-				RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RiddenToken(pToken).name}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
 			}
 			
 			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
@@ -325,12 +325,14 @@ class Ridingmanager {
 	}
 	
 	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {
-		for (let i = 0; i < pRiderTokenList.length; i++) {
-			
-			if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
-				await pRiderTokenList[i].update({width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height});
-			}
-		}		
+		if (pRiddenToken.documentName == "Token") {
+			for (let i = 0; i < pRiderTokenList.length; i++) {
+				
+				if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
+					await pRiderTokenList[i].update({width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height});
+				}
+			}	
+		}
 	} 
 	
 	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
@@ -490,6 +492,6 @@ export { UpdateRidderTokens, UnsetRidingHeight };
 //Set Hooks
 Hooks.on("updateToken", (...args) => Ridingmanager.OnTokenupdate(...args));
 
-Hooks.on("updateTile", (...args) => Ridingmanager.OnTokenupdate(...args));
+Hooks.on("updateTile", (...args) => Ridingmanager.OnTokenupdate(...args, true));
 
 Hooks.on("preUpdateToken", (...args) => Ridingmanager.OnTokenpreupdate(...args));

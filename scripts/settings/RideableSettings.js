@@ -1,3 +1,5 @@
+import * as FCore from "../CoreVersionComp.js";
+
 import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected } from "../MountingScript.js";
@@ -14,10 +16,10 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   }); 
   
   game.settings.register(cModuleName, "allowTileRiding", {
-	name: Translate("Settings.allowTokenRiding.name"),
-	hint: Translate("Settings.allowTokenRiding.descrp"),
+	name: Translate("Settings.allowTileRiding.name"),
+	hint: Translate("Settings.allowTileRiding.descrp"),
 	scope: "world",
-	config: true,
+	config: FCore.Fversion() > 10,
 	type: Boolean,
 	default: false
   }); 
@@ -137,10 +139,10 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	config: true,
 	type: String,
 	choices: {
-		0: Translate("Settings.RiderMovement.options.tl"),
-		1: Translate("Settings.RiderMovement.options.tr"),
-		2: Translate("Settings.RiderMovement.options.bl"),
-		3: Translate("Settings.RiderMovement.options.br")
+		0: Translate("Settings.FamiliarRidingFirstCorner.options.tl"),
+		1: Translate("Settings.FamiliarRidingFirstCorner.options.tr"),
+		2: Translate("Settings.FamiliarRidingFirstCorner.options.bl"),
+		3: Translate("Settings.FamiliarRidingFirstCorner.options.br")
 	},
 	default: 0
   });

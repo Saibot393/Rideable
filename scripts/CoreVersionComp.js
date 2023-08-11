@@ -28,3 +28,7 @@ export function sceneof(pToken) {
 	
 	return vscene;
 }
+
+export function Fversion() {
+	return Number(game.version.split(".")[0]);
+}
