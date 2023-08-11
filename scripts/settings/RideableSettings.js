@@ -121,6 +121,21 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "FamiliarRidingFirstCorner", {
+	name: Translate("Settings.FamiliarRidingFirstCorner.name"),
+	hint: Translate("Settings.FamiliarRidingFirstCorner.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		0: Translate("Settings.RiderMovement.options.tl"),
+		1: Translate("Settings.RiderMovement.options.tr"),
+		2: Translate("Settings.RiderMovement.options.bl"),
+		3: Translate("Settings.RiderMovement.options.br")
+	},
+	default: 0
+  });
+  
    game.settings.register(cModuleName, "Grappling", {
 	name: Translate("Settings.Grappling.name"),
 	hint: Translate("Settings.Grappling.descrp"),
