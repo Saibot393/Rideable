@@ -10,13 +10,13 @@ Upon mounting the module will spread the mounted tokens on the ridden token and 
 
 Ridden tokens can themself ride other tokens.
 
-Since v2.2.0 the module also has basic support for tokens to grapple one another (target a token while having another token selected and press 'k', has to be turned on in the settings).
+Since v2.6.0 tiles can be mounted too (v11 upwards only)
 
 ### Settings:
 
 #### World:
 - Tokens rideable by default: to change if tokens are rideable by default
-- Tiles can be mounted: to enable tile mounting feature
+- Tiles can be mounted[*v11 upwards*]: to enable tile mounting feature
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
