@@ -200,6 +200,11 @@
 				}
 			},
 			
+			"cCustomRidingheightF" : {
+				"name"					: "Custom riding height",
+				"descrp"				: "Custom height of this token, used for its riders (-1 to used default)"
+			},
+			
 			"InsideMovementFlag" : {
 				"name"					: "Riders can move freely",
 				"descrp"				: "If riders can move freely within the boundaries of this token"

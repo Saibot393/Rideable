@@ -200,6 +200,11 @@
 				}
 			},
 			
+			"cCustomRidingheightF" : {
+				"name"					: "Reithöhe",
+				"descrp"				: "Reithöhe der Figur welche für die Reiter verwendet wird (-1 um den Standard zu benutzen)"
+			},
+			
 			"InsideMovementFlag" : {
 				"name"					: "Reiter können sich frei bewegen",
 				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Figur bewegen können"

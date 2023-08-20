@@ -253,7 +253,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     hint: Translate("Keys.GrappleTarget.descrp"),
     editable: [
       {
-        key: "KeyK"
+        key: "KeyH"
       }
     ],
     onDown: () => { GrappleTargeted(true); },

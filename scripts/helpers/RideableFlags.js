@@ -12,11 +12,11 @@ const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or n
 const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
 const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
 const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
-const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the riderr tokens should be place
+const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the rider tokens should be place
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
-
+const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom riding height of a ridden token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
 const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
@@ -26,7 +26,7 @@ const cTileRideableNameF = "TileRideableNameFlag"; //name of the rideable tile
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -34,71 +34,75 @@ class RideableFlags {
 	
 	//flag handling	
 	//flag information
-		//basic Rider Info
-		static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
-		
-		static TokenissetRideable(pToken) {} //if token is set to Rideable
-		
-		static TokenisRideable(pToken) {} //returns if token is Rideable trough flags and through settings
-		
-		static isRiddenID (pRiddenTokenID, pScene = null) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
-		
-		static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
-		
-		static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
-		
-		static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
-		
-		static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken has Riding flag and Familiar Riding flag true
-		
-		static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
-		
-		static isGrappled (pRiderToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true
-		
-		static isGrappledby (pRiderToken, pRiddenToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true and Rides pRiddenToken
-		
-		static wasGrappled(pRiderToken) {} //returns true if pRiderToken is has Grappled flag
-		
-		static isRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag true
-		
-		static isFamiliarRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
-		
-		static isGrappledID(pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Grappled Riding flag true
-		
-		static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
-		
-		static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
-		
-		static RiddenToken(pRider) {} //returns the token pRider rides (if any)
-		
-		//additional infos
-		static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
-		
-		static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
-		
-		static RiderPositioning(pToken) {} //returns how riders should be placed on this token
-		
-		static SpawnRiders(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in an array
-		
-		static SpawnRidersstring(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in a string
-		
-		static RideableName(pToken) {} //returns name of pToken, either token name or Tile rideable name
+	//basic Rider Info
+	static isRidden (pRiddenToken) {} //returns true if pRiddenToken has Rider Tokens in Flags
 	
-		//Rider count infos
-		static RiderCount(pRidden) {} //returns the number of Riders
-		
-		static MaxRiders(pRidden) {} //returns the maximum amount of riders this pRidden can can take
-		
-		static TokenRidingSpaceleft(pToken, pRidingOptions = {}) {} //returns amount of riding places left in pToken
-		
-		static TokenhasRidingPlace(pToken, pRidingOptions = {}) {} //returns if pToken has Riding places left
-		
-		static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
-		
-		static RiderGrappledCount(pRidden) {} //returns the number of "Riders" that are grappled
+	static TokenissetRideable(pToken) {} //if token is set to Rideable
 	
-		//Riding height info
-		static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
+	static TokenisRideable(pToken) {} //returns if token is Rideable trough flags and through settings
+	
+	static isRiddenID (pRiddenTokenID, pScene = null) {} //returns true if pRiddenTokenID matches Token which has Rider Tokens in Flags
+	
+	static isRiddenbyID (pRiddenToken, pRiderID) {} //returns true if pRiderID is in pRiddenToken RidersFlag
+	
+	static isRiddenby (pRiddenToken, pRider) {} //returns true if id of pRider is in pRiddenToken RidersFlag
+	
+	static isRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag true
+	
+	static isFamiliarRider (pRiderToken) {} //returns true if pRiderToken has Riding flag and Familiar Riding flag true
+	
+	static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
+	
+	static isGrappled (pRiderToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true
+	
+	static isGrappledby (pRiderToken, pRiddenToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true and Rides pRiddenToken
+	
+	static wasGrappled(pRiderToken) {} //returns true if pRiderToken is has Grappled flag
+	
+	static isRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag true
+	
+	static isFamiliarRiderID (pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Familiar Riding flag true
+	
+	static isGrappledID(pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Grappled Riding flag true
+	
+	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
+	
+	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
+	
+	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
+	
+	//additional infos
+	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
+	
+	static RiderscanMoveWithin(pRidden) {} //returns if Riders are able move freely within the constraints of pRidden
+	
+	static RiderPositioning(pToken) {} //returns how riders should be placed on this token
+	
+	static SpawnRiders(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in an array
+	
+	static SpawnRidersstring(pToken) {} //returns all SpawnRider IDs/Names ofr the given token in a string
+	
+	static RideableName(pToken) {} //returns name of pToken, either token name or Tile rideable name
+
+	//Rider count infos
+	static RiderCount(pRidden) {} //returns the number of Riders
+	
+	static MaxRiders(pRidden) {} //returns the maximum amount of riders this pRidden can can take
+	
+	static TokenRidingSpaceleft(pToken, pRidingOptions = {}) {} //returns amount of riding places left in pToken
+	
+	static TokenhasRidingPlace(pToken, pRidingOptions = {}) {} //returns if pToken has Riding places left
+	
+	static RiderFamiliarCount(pRidden) {} //returns the number of Riders that are familiars
+	
+	static RiderGrappledCount(pRidden) {} //returns the number of "Riders" that are grappled
+
+	//Riding height info
+	static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
+	
+	static HascustomRidingHeight(pRidden) {} //if pRidden has a custom height
+	
+	static customRidingHeight(pRidden) {} //custom height of pRidden
 		
 	//flag setting
 	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false, Grappled: false}, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
@@ -352,8 +356,21 @@ class RideableFlags {
 			}
 		}
 		
-		return Translate(); //default if anything fails
+		return Translate("Titles.Tile"); //default if anything fails
 	} 
+	
+	static #CustomRidingheightFlag (pToken) {
+	//returns content of CustomRidingheightFlag of pToken (number)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cCustomRidingheightF)) {
+				return vFlag.CustomRidingheightFlag;
+			}
+		}
+		
+		return -1; //default if anything fails		
+	}
 	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
@@ -634,8 +651,17 @@ class RideableFlags {
 		return this.#RidersFlag(pRidden).filter(vID => RideableFlags.isGrappled(RideableUtils.TokenfromID(vID, FCore.sceneof(pRidden)))).length;
 	}
 	
+	//Riding height info
 	static RiderHeight(pRider) {
 		return this.#RidingHeightFlag(pRider);
+	}
+	
+	static HascustomRidingHeight(pRidden) {
+		return this.#CustomRidingheightFlag(pRidden) >= 0;
+	}
+	
+	static customRidingHeight(pRidden) {
+		return this.#CustomRidingheightFlag(pRidden);
 	}
 	
 	//flag setting

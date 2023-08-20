@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
@@ -72,6 +72,14 @@ class RideableSheetSettings {
 														vtype : "number", 
 														vvalue : RideableFlags.MaxRiders(pApp.document), 
 														vflagname : cMaxRiderF
+														});
+														
+			//Custom Riding height
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cCustomRidingheightF +".name"), 
+														vhint : Translate("TokenSettings."+ cCustomRidingheightF +".descrp"), 
+														vtype : "number", 
+														vvalue : RideableFlags.customRidingHeight(pApp.document), 
+														vflagname : cCustomRidingheightF
 														});
 														
 			//RiderPositioning

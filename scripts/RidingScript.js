@@ -315,7 +315,12 @@ class Ridingmanager {
 			let vTargetz = pRiddenToken.elevation;
 			
 			if (!pPlaceSameheight) {
-				vTargetz = vTargetz + RideableUtils.Ridingheight(pRiddenToken)/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.RiderHeight(pRiderTokenList[i]);
+				if (RideableFlags.HascustomRidingHeight(pRiddenToken)) {
+					vTargetz = vTargetz + RideableFlags.customRidingHeight(pRiddenToken);
+				}
+				else {
+					vTargetz = vTargetz + RideableUtils.Ridingheight(pRiddenToken)/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.RiderHeight(pRiderTokenList[i]);
+				}
 			}
 				
 			if (pRiderTokenList[i].elevation != vTargetz) {
