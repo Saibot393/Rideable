@@ -15,7 +15,7 @@ class MountingManager {
 	
 	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
-	static RequestMount() {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Request GM user to execute MountSelectedGM with given parameters
 	
@@ -95,6 +95,7 @@ class MountingManager {
 			//add Grapple filter here
 		}
 		
+		/*
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
 		if (game.user.isGM) {
 			MountingManager.MountSelectedGM(vTarget, vValidRiders, pRidingOptions);
@@ -107,10 +108,13 @@ class MountingManager {
 					
 					let vselectedTokenIDs = RideableUtils.IDsfromTokens(vValidRiders);
 					
-					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pRidingOptionFamiliar : pRidingOptions.Familiar, pRidingOptionGrappled : pRidingOptions.Grappled}});
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: vcurrentTargetID, pselectedTokensID: vselectedTokenIDs, pSceneID : FCore.sceneof(vTarget).id, pRidingOptions : pRidingOptions}});
 				}
 			}
 		}
+		*/
+		
+		MountingManager.RequestMount(vValidRiders, vTarget, pRidingOptions);
 		
 		return;
 	}
@@ -162,7 +166,7 @@ class MountingManager {
 		}
 		else {
 			if (!game.paused && pTokens.length) {
-				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptionFamiliar : pRidingOptions.Familiar, pRidingOptionGrappled : pRidingOptions.Grappled}});
+				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
 			}
 		}		
 	} 
@@ -204,7 +208,6 @@ class MountingManager {
 	
 	
 	static UnMountSelected() {
-		//fork dependent on GM status of user (either direct unmount or unmount request through Token ID send via socket)
 		if (RideableUtils.selectedTokens().length > 0) {
 			let vUnMountTokens = RideableUtils.selectedTokens();		
 			let vTarget = RideableUtils.targetedToken();
@@ -418,10 +421,16 @@ function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.
 
 function GrappleTargeted(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Grappled: true})};
 
-function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptionFamiliar, pRidingOptionGrappled } = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, {Familiar: pRidingOptionFamiliar, Grappled: pRidingOptionGrappled}); }
-
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
+
+function Mount(pselectedTokens, pTarget, pRidingOptions) { return MountingManager.RequestMount(pselectedTokens, pTarget, pRidingOptions)};
+
+function UnMount(pTokens) { return MountingManager.RequestUnmount(pTokens)};
+
+//Request Handler
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
+
+function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
 export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest };
