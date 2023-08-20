@@ -15,6 +15,8 @@ class MountingManager {
 	
 	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
 	
+	static RequestMount() {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Request GM user to execute MountSelectedGM with given parameters
 	
 	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
@@ -113,7 +115,7 @@ class MountingManager {
 		return;
 	}
 	
-	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions, pScene = null) {
+	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {
 		//only works directly for GMs
 		if (game.user.isGM) {		
 			//make sure ptarget exists	
@@ -152,6 +154,18 @@ class MountingManager {
 		
 		return;
 	}
+	
+	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
+		//starts a mount reequest
+		if (game.user.isGM) {
+			MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
+		}
+		else {
+			if (!game.paused && pTokens.length) {
+				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptionFamiliar : pRidingOptions.Familiar, pRidingOptionGrappled : pRidingOptions.Grappled}});
+			}
+		}		
+	} 
 	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
