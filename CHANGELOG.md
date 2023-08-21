@@ -1,3 +1,7 @@
+## v2.7.0 (unreleased)
+- Added token/tile setting Custom riding height to set the height used for tokens riding this token
+- Added new macros code to mount/dismount specific tokens/tiles
+
 ## v2.6.0
 - Added tile mounting (a bit experimental for the moment)
   - World option Tiles can be mounted: to enable tile mounting feature
