@@ -1,6 +1,6 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected } from "../MountingScript.js";
 
@@ -32,6 +32,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: Boolean,
 	default: false
   });   
+  
+  game.settings.register(cModuleName, "TaggerMountingIntegration", {
+	name: Translate("Settings.TaggerMountingIntegration.name"),
+	hint: Translate("Settings.TaggerMountingIntegration.descrp"),
+	scope: "world",
+	config: RideableCompUtils.isactiveModule(cTagger),
+	type: Boolean,
+	default: false
+  }); 
   
   game.settings.register(cModuleName, "RidingHeight", {
 	name: Translate("Settings.RidingHeight.name"),

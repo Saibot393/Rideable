@@ -2,8 +2,9 @@ import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
 import { UpdateRidderTokens } from "../RidingScript.js";
 import { RideablePopups } from "../helpers/RideablePopups.js";
+import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID } from "../MountingScript.js";
 
-import { RideableCompUtils, cLockTypeRideable } from "./RideableCompUtils.js";
+import { RideableCompUtils, cLockTypeRideable, cRideableTag } from "./RideableCompUtils.js";
 import { cStairways, cTagger, cWallHeight, cLocknKey } from "./RideableCompUtils.js";
 //			SW			TGG		WH
 
@@ -25,6 +26,9 @@ class RideableCompatibility {
 	
 	//specific: wall-heights
 	static onWHTokenupdate(pToken, pchanges, pInfos) {} //only called if cWallHeight is active and a token updates, handels HWTokenheight updates for riders
+	
+	//specific: tagger
+	static onTGGTokenpreupdate(pToken, pchanges, pInfos) {} //only called if cTagger is active and a token updates, handels tagger updates for ridden 
 	//IMPLEMENTATIONS
 	
 	//specific: stairways
@@ -173,6 +177,37 @@ class RideableCompatibility {
 		}
 	}
 	
+	//specific: tagger
+	static onTGGTokenpreupdate(pToken, pchanges, pInfos) {	
+		if (game.settings.get(cModuleName, "TaggerMountingIntegration")) {
+			if (game.user.isGM && RideableFlags.TokenisRideable(pToken)) {			
+				if (pchanges.flags && pchanges.flags.hasOwnProperty(cTagger)) {
+					//get orriginal token for comparrison
+					let vOriginalToken = RideableUtils.TokenfromID(pToken.id);
+					
+					let vCurrentTags = pchanges.flags[cTagger].tags;
+					let vOriginalTags = [];
+					
+					let vAddedIDs = [];
+					let vRemovedIDs = [];
+					
+					if (vOriginalToken.flags && vOriginalToken.flags.hasOwnProperty(cTagger)) {
+						vOriginalTags = vOriginalToken.flags[cTagger].tags;
+					}
+					
+					//figure out which tokens have been added and which have been deleted
+					vAddedIDs = vCurrentTags.filter(vTag => !vOriginalTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));
+					
+					vRemovedIDs = vOriginalTags.filter(vTag => !vCurrentTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));		
+
+					//mount new ones and unmount old ones
+					MountbyID(vAddedIDs, vOriginalToken.id);
+					
+					UnMountbyID(vRemovedIDs);
+				}
+			}
+		}
+	} 
 }
 
 
@@ -205,5 +240,11 @@ Hooks.once("init", () => {
 		Hooks.on(cLocknKey+".Locktype", (pDocument, pLocktype) => {if ((pDocument.documentName == "Token") && RideableFlags.TokenissetRideable(pDocument) && game.settings.get(cModuleName, "LocknKeyintegration")) {pLocktype.type = cLockTypeRideable }}); //return Rideable Lock type if valid rideable
 		
 		Hooks.on(cLocknKey+".isTokenLocktype", (pLocktype, vLockInfo) => {if ((pLocktype == cLockTypeRideable) && game.settings.get(cModuleName, "LocknKeyintegration")) { vLockInfo.isTokenLocktype = true }}); //return true if pLocktype matches cLockTypeRideable
+	}
+	
+	if (RideableCompUtils.isactiveModule(cTagger)) {
+		Hooks.on("preUpdateToken", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
+		
+		Hooks.on("preUpdateTile", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
 	}
 });

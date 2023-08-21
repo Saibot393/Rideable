@@ -1,4 +1,5 @@
 import { MountSelected, MountSelectedFamiliar, UnMountSelected, GrappleTargeted } from "../MountingScript.js";
+import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID } from "../MountingScript.js";
 
 //functions for macros
 Hooks.on("init",() => {
@@ -6,6 +7,12 @@ Hooks.on("init",() => {
 		MountSelected, //game.Rideable.MountSelected() -> Makes selected Tokens Ride targeted Token
 		MountSelectedFamiliar,
 		UnMountSelected,
-		GrappleTargeted
+		GrappleTargeted,
+		Mount,
+		UnMount,
+		UnMountallRiders,
+		MountbyID,
+		UnMountbyID,
+		UnMountallRidersbyID
 	};
 });

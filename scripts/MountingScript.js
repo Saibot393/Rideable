@@ -17,19 +17,25 @@ class MountingManager {
 	
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
-	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Request GM user to execute MountSelectedGM with given parameters
+	static RequestMountbyID(pselectedTokens, pTarget, pRidingOptions, pSceneID = null) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
+	
+	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Answer request for GM user to execute MountSelectedGM with given parameters
 	
 	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
 	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
 	
 	static RequestUnmount(pTokens, pfromRidden = false) {} //exceutes a UnMountSelectedGM request socket for players or UnMountSelectedGM directly for GMs (pfromRidden if request came from ridden token)
+	
+	static RequestUnmountbyID(pTokens, pfromRidden = false, pSceneID = null) {} //exceutes a UnMountSelectedGM request socket for players or UnMountSelectedGM directly for GMs (pfromRidden if request came from ridden token)
 
-	static UnMountRequest(pselectedTokenID , pSceneID, pfromRidden) {} //Request GM user to execute UnMountSelectedGM with given parameters (pfromRidden if request came from ridden token)
+	static UnMountRequest(pselectedTokenID , pSceneID, pfromRidden) {} //Answer request for GM user to execute UnMountSelectedGM with given parameters (pfromRidden if request came from ridden token)
 	
 	static UnMountRiders(pRiddenToken, pRiders) {} //Unmounts all Tokens in pRiders that currently Ride pRiddenToken
 	
 	static UnMountallRiders(pRiddenToken) {} //Unmounts all Tokens that currently Ride pRiddenToken
+	
+	static UnMountallRidersbyID(pRiddenToken, pSceneID = null) {} //Unmounts all Tokens that currently Ride pRiddenToken
 	
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
@@ -171,6 +177,10 @@ class MountingManager {
 		}		
 	} 
 	
+	static RequestMountbyID(pselectedTokens, pTarget, pRidingOptions, pSceneID = null) {
+		MountingManager.RequestMount(RideableUtils.TokensfromIDs(pselectedTokens, pSceneID), RideableUtils.TokenfromID(pTarget, pSceneID), pRidingOptions);
+	}
+	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) { 
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
@@ -239,6 +249,10 @@ class MountingManager {
 		}
 	} 
 	
+	static RequestUnmountbyID(pTokens, pfromRidden = false, pSceneID = null) {
+		MountingManager.RequestUnmount(RideableUtils.TokensfromIDs(pTokens, pSceneID), pfromRidden);
+	}
+	
 	static UnMountRequest( pselectedTokenIDs, pSceneID, pfromRidden) { 
 		//Handels UnMount request by matching TokenIDs to Tokens and unmounting them
 		if (game.user.isGM) {
@@ -258,6 +272,10 @@ class MountingManager {
 			MountingManager.UnMountRiders(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken)));
 		}
 	} 
+	
+	static UnMountallRidersbyID(pRiddenToken, pSceneID = null) {
+		MountingManager.UnMountallRiders(RideableUtils.TokenfromID(pRiddenToken, pSceneID));
+	}
 	
 	//Additional functions
 	
@@ -423,14 +441,23 @@ function GrappleTargeted(pTargetHovered = false) { return MountingManager.MountS
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
-
 function Mount(pselectedTokens, pTarget, pRidingOptions) { return MountingManager.RequestMount(pselectedTokens, pTarget, pRidingOptions)};
 
 function UnMount(pTokens) { return MountingManager.RequestUnmount(pTokens)};
 
-//Request Handler
+function UnMountallRiders(pRidden) { return MountingManager.UnMountallRiders(pRidden)};
+
+function MountbyID(pselectedTokens, pTarget, pRidingOptions = {}, pSceneID = null) { return MountingManager.RequestMountbyID(pselectedTokens, pTarget, pRidingOptions, pSceneID)};
+
+function UnMountbyID(pTokens, pSceneID = null) { return MountingManager.RequestUnmountbyID(pTokens, pSceneID)};
+
+function UnMountallRidersbyID(pRidden, pSceneID = null) { return MountingManager.UnMountallRidersbyID(pRidden, pSceneID)};
+
+//Request Handlers
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
 export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest };
+
+export { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };
