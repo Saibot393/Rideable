@@ -24,6 +24,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   }); 
   
+  game.settings.register(cModuleName, "allowMountingonEntering", {
+	name: Translate("Settings.allowMountingonEntering.name"),
+	hint: Translate("Settings.allowMountingonEntering.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  }); 
+  
   game.settings.register(cModuleName, "LocknKeyintegration", {
 	name: Translate("Settings.LocknKeyintegration.name"),
 	hint: Translate("Settings.LocknKeyintegration.descrp"),

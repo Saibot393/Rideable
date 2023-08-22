@@ -20,13 +20,14 @@ const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom r
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
 const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
-const cTileRideableNameF = "TileRideableNameFlag"; //name of the rideable tile
+const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the rideable tile
+const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatically mount this token/tile when they enter it
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -70,6 +71,8 @@ class RideableFlags {
 	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
 	
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
+	
+	static MountonEnter(pRidden, pRaw = false) {} //returns of tokens should mount pRidden if they enter it
 	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
@@ -372,6 +375,19 @@ class RideableFlags {
 		return -1; //default if anything fails		
 	}
 	
+	static #MountonEnterFlag (pToken) { 
+	//returns content of MountonEnterFlag of pToken (if any) (true or false)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cMountonEnterF)) {
+				return vFlag.MountonEnterFlag;
+			}
+		}
+		
+		return false; //default if anything fails
+	} 
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -577,6 +593,10 @@ class RideableFlags {
 		}
 		
 		return vToken;
+	}
+	
+	static MountonEnter(pRidden, pRaw = false) {
+		return (pRaw || RideableFlags.TokenisRideable(pRidden)) && this.#MountonEnterFlag(pRidden);
 	}
 	
 	//additional infos

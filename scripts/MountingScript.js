@@ -44,6 +44,8 @@ class MountingManager {
 	
 	static async onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
 	
+	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
+	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
 	
@@ -338,6 +340,21 @@ class MountingManager {
 		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
 	} 
 	
+	static CheckEntering(pToken, pchanges, pInfos, pID) {
+		if (game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id) {
+			let vNewPosition = GeometricUtils.CenterPosition(pToken);
+			let vMoEobjects = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.MountonEnter(vToken));
+			
+			if (game.settings.get(cModuleName, "allowTileRiding")) {
+				vMoEobjects = vMoEobjects.concat(canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => RideableFlags.MountonEnter(vToken)));
+			}
+			
+			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition));
+			
+			console.log(vMoEobjects);
+		}
+	}
+	
 	//Aditional Informations
 	
 	static TokencanMount (pRider, pRidden, pRidingOptions) {
@@ -428,6 +445,8 @@ class MountingManager {
 Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
 
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
+
+Hooks.on("updateToken", (...args) => MountingManager.CheckEntering(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
 

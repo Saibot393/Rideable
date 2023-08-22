@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
@@ -64,6 +64,15 @@ class RideableSheetSettings {
 															vvalue : RideableFlags.RideableName(pApp.document),
 															vflagname : cTileRideableNameF
 															});
+			}
+			
+			if (game.settings.get(cModuleName, "allowMountingonEntering")) {
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountonEnterF +".name"), 
+														vhint : Translate("TokenSettings."+ cMountonEnterF +".descrp"), 
+														vtype : "checkbox", 
+														vvalue : RideableFlags.MountonEnter(pApp.document, true),
+														vflagname : cMountonEnterF
+														});				
 			}
 														
 			//Max Riders Setting
