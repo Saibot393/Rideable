@@ -17,6 +17,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 #### World:
 - Tokens rideable by default: to change if tokens are rideable by default
 - Tiles can be mounted[*v11 upwards*]: to enable tile mounting feature
+- Allow mount on enter: to activate the mount on enter feature in this world (*turn off to increase performance*)
 - Riding Height: to change the relative z-height of the riders 
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
@@ -30,14 +31,17 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Grappling: to allow tokens to grapple one another
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
+- Rider movement default setting: to set the default Rider movement behaviour for new players
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
+- Mount on enter: to mount tokens that enter this token/tile automatically
 - Tile name [*Tiles only*]: to set the name rideable will use for this tile
 - Maximum riders: to override world default for this token
+- Custom riding height: to set the height used for tokens riding this token
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
@@ -66,6 +70,49 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Has to be activated with the setting "Lock & Key integration"
   - Rideable tokens are lockeable
   - Locked tokens can not be mounted or unmounted
+- [Tagger](https://foundryvtt.com/packages/tagger/):
+  - Has to be activated with the setting "Tagger integration"
+  - Adding the Tag "Rideable:{TokenID}" to a token/tile will mount the appropiate token
+  - Removing this tag will unmount the token
+
+### Macros:
+- `game.Rideable.MountSelected(pTargetHovered)`
+  - To mount the selected Tokens to the targeted token
+  -  `pTargetHovered` (optional): boolean, to also use hovered tokens as potential targets
+- `game.Rideable.MountSelectedFamiliar(pTargetHovered)`
+  - To mount the selected Tokens to the targeted token as a familiar
+  - `pTargetHovered` (optional): boolean, to also use hovered tokens as potential targets
+- `game.Rideable.GrappleTargeted(pTargetHovered)`
+  - To grapple the targeted Tokens as the selected token
+  - `pTargetHovered` (optional): boolean, to also use hovered tokens as potential targets
+- `game.Rideable.UnMountSelected()`
+  - To unmount the selected Tokens
+- `game.Rideable.Mount(pselectedTokens, pTarget, pRidingOptions)`
+  - To mount multiple specified tokens to a target
+  - `pselectedTokens`: array of token documents, tokens which are to be mounted
+  - `pTarget`: token document, token on which tokens are to be mounted
+  - `pRidingOptions`: 
+    - `Familiar`: boolean, to mount `pselectedTokens` as familiars
+    - `Grappled`: boolean, to mount `pselectedTokens` as grappled
+- `game.Rideable.UnMount(pTokens)`
+  - To unmount multiple specified tokens
+  - `pTokens`: array of token documents, tokens which are to be unmounted
+- `game.Rideable.UnMountallRiders(pRidden)`
+  - To unmount all riders from a token
+  - `pRidden`: token document, token from which all riders are to be unmounted
+- `game.Rideable.MountbyID(pselectedTokens, pTarget, pRidingOptions)`
+  - To mount multiple specified tokens to a target
+  - `pselectedTokens`: array of token ids, tokens which are to be mounted
+  - `pTarget`: token id, token on which tokens are to be mounted
+  - `pRidingOptions`: 
+    - `Familiar`: boolean, to mount `pselectedTokens` as familiars
+    - `Grappled`: boolean, to mount `pselectedTokens` as grappled
+- `game.Rideable.UnMountbyID(pTokens)`
+  - To unmount multiple specified tokens
+  - `pTokens`: array of token ids, tokens which are to be unmounted
+- `game.Rideable.UnMountallRidersbyID(pRidden)`
+  - To unmount all riders from a token
+  - `pRidden`: token id, token from which all riders are to be unmounted
 
 ### Languages:
 
