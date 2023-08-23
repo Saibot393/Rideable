@@ -92,17 +92,6 @@ class MountingManager {
 		//Make sure all riders can even ride the target
 		await RideableFlags.recheckRiders(vTarget);
 		
-		let vValidRiders = vSelected.filter(vToken => MountingManager.TokencanMount(vToken, vTarget, pRidingOptions, true));
-		
-		if (pRidingOptions.Familiar) {
-			//Familiar make sure selected are actually familairs of target
-			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
-		}
-		
-		if (pRidingOptions.Grappled) {
-			//add Grapple filter here
-		}
-		
 		/*
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
 		if (game.user.isGM) {
@@ -122,7 +111,7 @@ class MountingManager {
 		}
 		*/
 		
-		MountingManager.RequestMount(vValidRiders, vTarget, pRidingOptions);
+		MountingManager.RequestMount(vSelected, vTarget, pRidingOptions);
 		
 		return;
 	}
@@ -168,13 +157,23 @@ class MountingManager {
 	}
 	
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
+		let vValidRiders = pselectedTokens.filter(vToken => MountingManager.TokencanMount(vToken, pTarget, pRidingOptions, true));
+		
+		if (pRidingOptions.Familiar) {
+			//Familiar make sure selected are actually familairs of target
+			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
+		}
+		
+		if (pRidingOptions.Grappled) {
+			//add Grapple filter here
+		}
 		//starts a mount reequest
 		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
+			MountingManager.MountSelectedGM(pTarget, vValidRiders, pRidingOptions);
 		}
 		else {
-			if (!game.paused && pTokens.length) {
-				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
+			if (!game.paused) {
+				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(vValidRiders), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
 			}
 		}		
 	} 
@@ -283,7 +282,7 @@ class MountingManager {
 	
 	static onIndependentRiderMovement(pToken, pChanges) {
 		if (RideableFlags.isRider(pToken)) {
-			if (game.settings.get(cModuleName, "RiderMovement") == "RiderMovement-dismount") {
+			if (RideableUtils.getRiderMovementsetting() == "RiderMovement-dismount") {
 				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation")) {
 					MountingManager.RequestUnmount([pToken]);
 				}

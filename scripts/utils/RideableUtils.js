@@ -54,6 +54,8 @@ class RideableUtils {
 	
 	static hoveredToken() {} //get first hovered token
 	
+	static getRiderMovementsetting() {} //returns the setting belonging to the RiderMovement setting of the player
+	
 	//Additional Token Infos
 	static issettingMountableandUn(pToken, pPopup = false) {} //returns if Token is rideable under current settings (related to settings)
 	
@@ -234,6 +236,16 @@ class RideableUtils {
 			return null;
 		}
 	}
+	
+	static getRiderMovementsetting() {
+		switch (game.settings.get(cModuleName, "RiderMovement")) {
+			case "RiderMovement-worlddefault":
+				return game.settings.get(cModuleName, "RiderMovementworlddefault");
+				break;
+			default:
+				return game.settings.get(cModuleName, "RiderMovement");
+		}
+	} 
 		
 	//Additional Token Infos
 	static TokenissettingRideable(pToken, pPopup = false) {

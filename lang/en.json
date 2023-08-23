@@ -62,12 +62,18 @@
 			"MaxRiders" : {
 				"name" 					: "Maximum riders per token",
 				"descrp"				: "The maximum amount of tokens, a token can be ridden by (-1 for unlimited)"
-			},		
+			},
+
+			"RiderMovementworlddefault" : {
+				"name" 					: "Rider movement default setting",
+				"descrp"				: "Default setting for the Rider movement of the players (does not override)"
+			},			
 
 			"RiderMovement" : {
 				"name" 					: "Rider movement",
 				"descrp"				: "What should happen if a riding token tries to move on its own",
 				"options" : {
+					"worlddefault"		: "use worl default setting",
 					"disallow"			: "Prevent movement",
 					"dismount"			: "Unmount rider",
 					"moveridden"		: "Move ridden Token (if owned)"

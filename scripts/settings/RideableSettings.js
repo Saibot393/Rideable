@@ -192,6 +192,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "RiderMovementworlddefault", {
+	name: Translate("Settings.RiderMovementworlddefault.name"),
+	hint: Translate("Settings.RiderMovementworlddefault.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"RiderMovement-disallow": Translate("Settings.RiderMovement.options.disallow"),
+		"RiderMovement-dismount": Translate("Settings.RiderMovement.options.dismount"),
+		"RiderMovement-moveridden": Translate("Settings.RiderMovement.options.moveridden")
+	},
+	default: "RiderMovement-disallow"
+  });
+  
   //client settings
   
   game.settings.register(cModuleName, "RiderMovement", {
@@ -201,11 +215,12 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	config: true,
 	type: String,
 	choices: {
+		"RiderMovement-worlddefault": Translate("Settings.RiderMovement.options.worlddefault"),
 		"RiderMovement-disallow": Translate("Settings.RiderMovement.options.disallow"),
 		"RiderMovement-dismount": Translate("Settings.RiderMovement.options.dismount"),
 		"RiderMovement-moveridden": Translate("Settings.RiderMovement.options.moveridden")
 	},
-	default: "RiderMovement-disallow"
+	default: "RiderMovement-worlddefault"
   });
   
   game.settings.register(cModuleName, "MessagePopUps", {

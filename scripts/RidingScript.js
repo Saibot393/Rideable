@@ -119,7 +119,7 @@ class Ridingmanager {
 		let vGMoverride = false;
 					
 		if (psendingUser.isGM) {
-			if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden")) {
+			if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden")) {
 				//if a dm tried to only change the elevation while "move ridden" is off
 				vGMoverride = true;
 				
@@ -131,14 +131,14 @@ class Ridingmanager {
 			let vdeleteChanges = false;
 			
 			
-			if ((game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-disallow")) {	
+			if ((RideableUtils.getRiderMovementsetting() === "RiderMovement-disallow")) {	
 				//suppress movement
 				vdeleteChanges = true;
 				
 				RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
 			}
 			
-			if (game.settings.get(cModuleName, "RiderMovement") === "RiderMovement-moveridden") {	
+			if (RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden") {	
 				//move ridden and stop own movement		
 				if (pRidden) {
 					if (pRidden.isOwner) {

@@ -63,11 +63,17 @@
 				"name" 					: "Maximale Reiter pro Figur",
 				"descrp"				: "Die maximale Anzahl an Figuren von welchen eine Figur gleichzeitig geritten werden kann (-1 für unbegrenzt)"
 			},		
+			
+			"RiderMovementworlddefault" : {
+				"name" 					: "Reiter-Bewegung Standardeinstellung",
+				"descrp"				: "Standardeinstellung für die Reiter-Bewegung der Spieler (überschreibt nicht)"
+			},
 
 			"RiderMovement" : {
 				"name" 					: "Reiter-Bewegung",
 				"descrp"				: "Was passieren soll, wenn ein Reiter sich eigenständig bewegt",
 				"options" : {
+					"worlddefault"		: "nutze Welt Standardeinstellung",
 					"disallow"			: "Verhindere Bewegung",
 					"dismount"			: "Lasse Reiter absteigen",
 					"moveridden"		: "Bewege gerittene Figur (wenn Besitzer)"
