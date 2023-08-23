@@ -1,4 +1,4 @@
-## v2.7.0 (unreleased)
+## v2.7.0
 - Added token/tile setting Custom riding height to set the height used for tokens riding this token
 - Added new [macros](https://github.com/Saibot393/Rideable/blob/main/README.md#Macros) to mount/dismount specific tokens/tiles
 - Added Tagger integration
