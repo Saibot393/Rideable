@@ -1,6 +1,6 @@
 ## v2.7.0 (unreleased)
 - Added token/tile setting Custom riding height to set the height used for tokens riding this token
-- Added new macros to mount/dismount specific tokens/tiles
+- Added new [macros](https://github.com/Saibot393/Rideable/blob/main/README.md#Macros) to mount/dismount specific tokens/tiles
 - Added Tagger integration
   - Added setting Tagger mounting integration to activate the integration
     - If active, adding a tag like "Rideable:{TokenID}" to a token or tile will mount the appropriate token belonging to TokenID (removing this tag will unmount the token)
