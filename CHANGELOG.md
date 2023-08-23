@@ -4,8 +4,8 @@
 - Added Tagger integration
   - Added setting Tagger mounting integration to activate the integration
     - If active, adding a tag like "Rideable:{TokenID}" to a token or tile will mount the appropriate token belonging to TokenID (removing this tag will unmount the token)
-- Added setting Allow mount on enter to activate the mount on enter feature in this world
-  - New token/tile setting Mount on enter to mount tokens that enter this token/tile automatically
+- Added world setting Allow mount on enter to activate the mount on enter feature in this world
+  - Added token/tile setting Mount on enter to mount tokens that enter this token/tile automatically
 
 ## v2.6.0
 - Added tile mounting (a bit experimental for the moment)
