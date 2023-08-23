@@ -2,9 +2,9 @@
 - Added token/tile setting Custom riding height to set the height used for tokens riding this token
 - Added new macros code to mount/dismount specific tokens/tiles
 - Added Tagger integration
-  - New World setting Tagger mounting integration to activate the integration
+  - Added setting Tagger mounting integration to activate the integration
     - If active, adding a tag like "Rideable:{TokenID}" to a token or tile will mount the appropriate token belonging to TokenID (removing this tag will unmount the token)
-- New world setting Allow mount on enter to activate the mount on enter feature in this world
+- Added setting Allow mount on enter to activate the mount on enter feature in this world
   - New token/tile setting Mount on enter to mount tokens that enter this token/tile automatically
 
 ## v2.6.0
