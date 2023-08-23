@@ -367,7 +367,7 @@ class RideableFlags {
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			if (vFlag.hasOwnProperty(cCustomRidingheightF)) {
+			if (vFlag.hasOwnProperty(cCustomRidingheightF) && typeof vFlag.CustomRidingheightFlag == "number") {
 				return vFlag.CustomRidingheightFlag;
 			}
 		}
@@ -681,7 +681,11 @@ class RideableFlags {
 	}
 	
 	static customRidingHeight(pRidden) {
-		return this.#CustomRidingheightFlag(pRidden);
+		if (RideableFlags.HascustomRidingHeight(pRidden)) {
+			return this.#CustomRidingheightFlag(pRidden);
+		}
+		
+		return;
 	}
 	
 	//flag setting

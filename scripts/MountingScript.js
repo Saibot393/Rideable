@@ -341,7 +341,7 @@ class MountingManager {
 	} 
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {
-		if (game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id) {
+		if ((pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
 			let vNewPosition = GeometricUtils.CenterPosition(pToken);
 			let vMoEobjects = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.MountonEnter(vToken));
 			
@@ -351,7 +351,9 @@ class MountingManager {
 			
 			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition));
 			
-			console.log(vMoEobjects);
+			if (vMoEobjects.length) {
+				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {});
+			}
 		}
 	}
 	
@@ -460,7 +462,7 @@ function GrappleTargeted(pTargetHovered = false) { return MountingManager.MountS
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
-function Mount(pselectedTokens, pTarget, pRidingOptions) { return MountingManager.RequestMount(pselectedTokens, pTarget, pRidingOptions)};
+function Mount(pselectedTokens, pTarget, pRidingOptions = {}) { return MountingManager.RequestMount(pselectedTokens, pTarget, pRidingOptions)};
 
 function UnMount(pTokens) { return MountingManager.RequestUnmount(pTokens)};
 

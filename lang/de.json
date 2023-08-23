@@ -19,9 +19,19 @@
 				"descrp"				: "Ob Fliesen geritten werden können, genauso wie Figuren"
 			},
 			
+			"allowMountingonEntering" : {
+				"name" 					: "Erlaube Reiten bei betreten",
+				"descrp"				: "Erlaubt es Fieguren und Fliesen so eingestellt zu werden, dass Figuren welche ihren Bereich betreten auf diese automatisch aufsteigen"
+			},
+			
 			"LocknKeyintegration" : {
 				"name" 					: "Lock & Key Integration",
 				"descrp"				: "Erlaubt es, reitbare Figuren abzuschließen"
+			},
+			
+			"TaggerMountingIntegration" : {
+				"name" 					: "Tagger Reit Integration",
+				"descrp"				: "Erlaubt es Figuren über Tags auf Fieguren/Fliesen auf- oder absteigen zu lassen (Tag: \"Rideable:{ReiterFigurID}\")"
 			},
 			
 			"RidingHeight" : {
@@ -171,6 +181,11 @@
 				"descrp"				: "Überschreibt die Welt-Einstellung für diese Figur (-1 für unbegrenzt, leer lassen um Welt-Einstellung zu nutzen)"
 			},
 			
+			"MountonEnterFlag" : {
+				"name"					: "Reiten bei betreten",
+				"descrp"				: "Figuren welche den Bereich dieser Figur/Fliese betreten steigen auf"
+			},
+			
 			"RiderPositioningFlag" : {
 				"name"					: "Reiterplatzierung",
 				"descrp"				: "Das Muster in welchem die Reiterfiguren platziert werden",
@@ -200,9 +215,9 @@
 				}
 			},
 			
-			"cCustomRidingheightF" : {
+			"CustomRidingheightFlag" : {
 				"name"					: "Reithöhe",
-				"descrp"				: "Reithöhe der Figur welche für die Reiter verwendet wird (-1 um den Standard zu benutzen)"
+				"descrp"				: "Reithöhe der Figur welche für die Reiter verwendet wird (leer lassen um Standardwert zu nutzen)"
 			},
 			
 			"InsideMovementFlag" : {

@@ -19,9 +19,19 @@
 				"descrp"				: "Wether tiles can be mounted, just like tokens"
 			},
 			
+			"allowMountingonEntering" : {
+				"name" 					: "Allow mount on enter",
+				"descrp"				: "Allow tokens and tiles so be set up to be mounted by tokens that enter their space"
+			},
+			
 			"LocknKeyintegration" : {
 				"name" 					: "Lock & Key integration",
 				"descrp"				: "Allows rideable tokens to be locked"
+			},
+			
+			"TaggerMountingIntegration" : {
+				"name" 					: "Tagger mounting integration",
+				"descrp"				: "Allows tokens to be mounted and unmounted via tags (tag: \"Rideable:{RiderTokenID}\")"
 			},
 			
 			"RidingHeight" : {
@@ -171,6 +181,11 @@
 				"descrp"				: "Overrides the global setting for this token (-1 for unlimited, leave empty to return to default world setting)"
 			},
 			
+			"MountonEnterFlag" : {
+				"name"					: "Mount on enter",
+				"descrp"				: "Tokens that enter this tokens/tiles space mount it"
+			},
+			
 			"RiderPositioningFlag" : {
 				"name"					: "Rider positioning",
 				"descrp"				: "The pattern in which the rider tokens will be placed",
@@ -200,9 +215,9 @@
 				}
 			},
 			
-			"cCustomRidingheightF" : {
+			"CustomRidingheightFlag" : {
 				"name"					: "Custom riding height",
-				"descrp"				: "Custom height of this token, used for its riders (-1 to used default)"
+				"descrp"				: "Custom height of this token, used for its riders (leave empty for default value)"
 			},
 			
 			"InsideMovementFlag" : {
