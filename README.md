@@ -75,6 +75,10 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Adding the Tag "Rideable:{TokenID}" to a token/tile will mount the appropiate token
   - Removing this tag will unmount the token
 
+### Languages:
+
+The module contains an English and a German translation
+
 ### Macros:
 - `game.Rideable.MountSelected(pTargetHovered)`
   - To mount the selected Tokens to the targeted token
@@ -113,10 +117,6 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 - `game.Rideable.UnMountallRidersbyID(pRidden)`
   - To unmount all riders from a token
   - `pRidden`: token id, token from which all riders are to be unmounted
-
-### Languages:
-
-The module contains an English and a German translation
 
 ---
 
