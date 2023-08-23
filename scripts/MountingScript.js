@@ -161,7 +161,7 @@ class MountingManager {
 		
 		if (pRidingOptions.Familiar) {
 			//Familiar make sure selected are actually familairs of target
-			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, vTarget));
+			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, pTarget));
 		}
 		
 		if (pRidingOptions.Grappled) {

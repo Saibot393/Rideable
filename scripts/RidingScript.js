@@ -417,7 +417,7 @@ class Ridingmanager {
 				let vTargetx = 0;
 				let vTargety = 0;
 				
-				switch ((i + game.settings.get(cModuleName, "FamiliarRidingFirstCorner"))%cCornermaxRiders) {
+				switch ((i + Number(game.settings.get(cModuleName, "FamiliarRidingFirstCorner")))%cCornermaxRiders) {
 					case 0: //tl
 						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2;
 						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2;
