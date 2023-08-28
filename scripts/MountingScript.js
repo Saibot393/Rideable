@@ -345,7 +345,7 @@ class MountingManager {
 			let vMoEobjects = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.MountonEnter(vToken));
 			
 			if (game.settings.get(cModuleName, "allowTileRiding")) {
-				vMoEobjects = vMoEobjects.concat(canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => RideableFlags.MountonEnter(vToken)));
+				vMoEobjects = vMoEobjects.concat(canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => RideableFlags.MountonEnter(vTile)));
 			}
 			
 			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition));
