@@ -1,3 +1,6 @@
+## v2.7.2
+- Fixed bug with mount on enter that occurred when tile riding was active
+
 ## v2.7.1
 - Fixed bug regarding familiar riding
 
