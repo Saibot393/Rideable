@@ -146,9 +146,7 @@ class MountingManager {
 								await MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
 							}
 							
-							if (!(pRidingOptions.MountbyEnter && RideableFlags.RiderscanMoveWithin(pTarget))) {
-								UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
-							}
+							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
 						}
 					}
 				}

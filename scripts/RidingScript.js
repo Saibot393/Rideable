@@ -349,7 +349,12 @@ class Ridingmanager {
 			
 			if (!RideableFlags.HasrelativPosition(pRiderTokenList[i])) {
 				//if first time Rider give Border position
-				vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken));
+				if (!GeometricUtils.withinBoundaries(pRiddenToken, RideableFlags.TokenForm(pRiddenToken), GeometricUtils.CenterPosition(pRiderTokenList[i]))) {
+					vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken));					
+				}
+				else {
+					vTargetPosition = GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken);
+				}
 				
 				vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRiddenToken).grid, [(pRiddenToken.width+pRiderTokenList[i].width)%2,(pRiddenToken.height+pRiderTokenList[i].height)%2]);
 				
