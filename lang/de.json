@@ -217,7 +217,8 @@
 				"descrp"				: "",
 				"options" : {
 					"TokenFormCircle"	: "Kreis/Ellipse",
-					"TokenFormRectangle": "Rechteck"
+					"TokenFormRectangle": "Rechteck",
+					"TokenTransparency"	: "von Transparenz"
 				}
 			},
 			

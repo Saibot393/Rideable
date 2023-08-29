@@ -8,10 +8,12 @@ const chexfactor = Math.cos(30 * cGradtoRad);
 const cxid = 0;
 const cyid = 1;
 
+const cAlphaTreshhold = 5;
+
 //forms
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
-const cTokenFormTransparency = "TokenFormTransparency";
+const cTokenFormTransparency = "TokenTransparency";
 
 const cTokenForms = [cTokenFormCircle, cTokenFormRectangle, cTokenFormTransparency];
 
@@ -224,7 +226,6 @@ class GeometricUtils {
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
-			case cTokenFormTransparency: //cheap solution for now
 				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
 					return (GeometricUtils.scaleto(vDirection, Math.max(GeometricUtils.insceneWidth(pToken))/2));
 				}
@@ -255,6 +256,28 @@ class GeometricUtils {
 				return vTarget;
 			
 				break;
+				
+			case cTokenFormTransparency:
+				//jump empty distance
+				let vStartingPosition = GeometricUtils.closestBorderposition(pToken, cTokenFormRectangle, pDirection);
+				
+				if (!pToken.object.texture) {
+					return vStartingPosition;
+				}
+				
+				let vLength = GeometricUtils.value(vStartingPosition);
+				
+				let vPixels = GeometricUtils.Pixelsof(pToken);
+				
+				for (let i = Math.round(vLength); i > -vLength; i--) {
+					let vPartLength = GeometricUtils.scale(vStartingPosition, i/vLength);
+					
+					if (GeometricUtils.AlphaValue(vPartLength, vPixels, pToken) > cAlphaTreshhold) {
+						return vPartLength;
+					}
+				}
+			
+				return [0,0];
 				
 			default:
 				return [0,0];
@@ -297,7 +320,7 @@ class GeometricUtils {
 				//render texture
 				let vpixels = GeometricUtils.Pixelsof(pToken);
 				
-				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken) > 0;
+				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken) > cAlphaTreshhold;
 			default:
 				return false;
 		}
@@ -384,11 +407,21 @@ class GeometricUtils {
 	}
 	
 	static AlphaValue(pPosition, pPixelArray, pObject) {	
+		let vAlpha = 0;
+		
 		let vTexturex = Math.round((GeometricUtils.insceneWidth(pObject)/2 - pPosition[0]) / GeometricUtils.insceneWidth(pObject) * pObject.object.texture.width);
 		
 		let vTexturey = Math.round((GeometricUtils.insceneHeight(pObject)/2 - pPosition[1]) / GeometricUtils.insceneHeight(pObject) * pObject.object.texture.height);
 		
-		return pPixelArray[(vTexturey * pObject.object.texture.width + vTexturex)*4 + 3];
+		if ((vTexturex >= 0 && vTexturex < pObject.object.texture.width) && (vTexturey >= 0 && vTexturey < pObject.object.texture.height)) {
+			vAlpha = pPixelArray[(vTexturey * pObject.object.texture.width + vTexturex)*4 + 3];
+			
+			if (vAlpha == undefined) {
+				vAlpha = 0;
+			}
+		}
+		
+		return vAlpha;
 	}
 }
 

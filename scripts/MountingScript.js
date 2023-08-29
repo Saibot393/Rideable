@@ -146,7 +146,9 @@ class MountingManager {
 								await MountingManager.onMount(vValidTokens[i], pTarget, pRidingOptions);
 							}
 							
-							UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders), pRidingOptions);
+							if (!(pRidingOptions.MountbyEnter && RideableFlags.RiderscanMoveWithin(pTarget))) {
+								UpdateRidderTokens(pTarget, vValidTokens.concat(vpreviousRiders));
+							}
 						}
 					}
 				}
@@ -351,7 +353,7 @@ class MountingManager {
 			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition));
 			
 			if (vMoEobjects.length) {
-				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {});
+				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {MountbyEnter : true});
 			}
 		}
 	}
