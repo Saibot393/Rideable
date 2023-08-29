@@ -1,3 +1,7 @@
+## v2.7.3 (unreleased)
+- Added from transparency to token forms to auto detect a tokens (tiles) form from its used image
+- Improved the innitial placing on tokens (tiles) with free movement enabled when the mounting token is already within the ridden token (tile) 
+
 ## v2.7.2
 - Fixed bug with mount on enter that occurred when tile riding was active
 
