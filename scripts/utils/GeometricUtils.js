@@ -11,8 +11,9 @@ const cyid = 1;
 //forms
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
+const cTokenFormTransparency = "TokenFormTransparency";
 
-const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
+const cTokenForms = [cTokenFormCircle, cTokenFormRectangle, cTokenFormTransparency];
 
 export {cTokenForms, cGradtoRad}
 
@@ -67,6 +68,11 @@ class GeometricUtils {
 	
 	//grids
 	static GridSnap(ppositon, pGridType, podd) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
+	
+	//graphics
+	static Pixelsof(pObject) {} //returns the pixels of pObject
+	
+	static AlphaValue(pPosition, pPixelArray, pObject) {} //returns the Alpha value of Pixel at pPosition of pPixelArray with described size
 	
 	//IMPLEMENTATIONS
 	//basics
@@ -218,6 +224,7 @@ class GeometricUtils {
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
+			case cTokenFormTransparency: //cheap solution for now
 				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
 					return (GeometricUtils.scaleto(vDirection, Math.max(GeometricUtils.insceneWidth(pToken))/2));
 				}
@@ -255,6 +262,7 @@ class GeometricUtils {
 	} 
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {
+		let vDifference;
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
@@ -269,7 +277,7 @@ class GeometricUtils {
 				break;
 			
 			case cTokenFormRectangle:
-				let vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
+				vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
 				
 				vDifference = GeometricUtils.Rotated(vDifference, -pToken.rotation);
 				
@@ -277,6 +285,19 @@ class GeometricUtils {
 			
 				break;
 				
+			case cTokenFormTransparency:
+				vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
+				
+				vDifference = GeometricUtils.Rotated(vDifference, -pToken.rotation);
+				
+				if (!pToken.object.texture) {
+					GeometricUtils.withinBoundaries(pToken, cTokenFormRectangle, pPosition); //probably monochromatic rectangle
+				}
+				
+				//render texture
+				let vpixels = GeometricUtils.Pixelsof(pToken);
+				
+				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken) > 0;
 			default:
 				return false;
 		}
@@ -344,6 +365,30 @@ class GeometricUtils {
 			default:
 				return vsnapposition;
 		}
+	}
+	
+	//graphics
+	static Pixelsof(pObject) {
+		let vsprite = new PIXI.Sprite(pObject.object.texture);
+		let vtexture = PIXI.RenderTexture.create({width: vsprite.width, height: vsprite.height});
+		
+		canvas.app.renderer.render(vsprite, { renderTexture: vtexture });
+		
+		vsprite.destroy(false);
+		
+		let vpixels = canvas.app.renderer.extract.pixels(vtexture);		
+		
+		vtexture.destroy(true);
+		
+		return vpixels;
+	}
+	
+	static AlphaValue(pPosition, pPixelArray, pObject) {	
+		let vTexturex = Math.round((GeometricUtils.insceneWidth(pObject)/2 - pPosition[0]) / GeometricUtils.insceneWidth(pObject) * pObject.object.texture.width);
+		
+		let vTexturey = Math.round((GeometricUtils.insceneHeight(pObject)/2 - pPosition[1]) / GeometricUtils.insceneHeight(pObject) * pObject.object.texture.height);
+		
+		return pPixelArray[(vTexturey * pObject.object.texture.width + vTexturex)*4 + 3];
 	}
 }
 
