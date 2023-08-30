@@ -15,7 +15,7 @@ const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 const cTokenFormTransparency = "TokenTransparency";
 
-const cTokenForms = [cTokenFormCircle, cTokenFormRectangle, cTokenFormTransparency];
+const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
 
 export {cTokenForms, cGradtoRad}
 
@@ -424,5 +424,12 @@ class GeometricUtils {
 		return vAlpha;
 	}
 }
+
+Hooks.once("ready", () => {
+	if (FCore.Fversion() >= 11) {
+		//only works in foundry 11 and higher
+		cTokenForms.push(cTokenFormTransparency);
+	}
+});
 
 export { GeometricUtils }
