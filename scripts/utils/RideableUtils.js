@@ -52,6 +52,8 @@ class RideableUtils {
 	
 	static targetedToken() {} //get first selected token
 	
+	static targetedTokens() {} //get first selected token
+	
 	static hoveredToken() {} //get first hovered token
 	
 	static getRiderMovementsetting() {} //returns the setting belonging to the RiderMovement setting of the player
@@ -226,6 +228,15 @@ class RideableUtils {
 		else {
 			return null;
 		}
+	}
+	
+	static targetedTokens() {
+		if (game.user.targets.ids.length) {
+			return canvas.tokens.placeables.filter(velement => game.user.targets.ids.includes(velement.id)).map(vToken => vToken.document);
+		}
+		else {
+			return [];
+		}		
 	}
 	
 	static hoveredToken() {

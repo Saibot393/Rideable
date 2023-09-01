@@ -17,20 +17,24 @@ class EffectManager {
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {} //handle deletion of mounting effects
 	
 	//IMPLEMENTATION
-	static async applyMountingEffects(pRider, pRidden) {
+	static async applyMountingEffects(pRider, pRidden, pRidingOptions) {
 		let vEffectDocuments;
 		//Ridden Mounting Effects
-		let vEffectNames = RideableFlags.MountingEffects(pRidden);
+		let vEffectNames = [];
 		
-		await EffectManager.removeMountingEffects(pRider);
-		
-		if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
-			//World Mounting effects
-			vEffectNames = vEffectNames.concat(RideableUtils.CustomWorldRidingEffects());
+		if (!(pRidingOptions.Familiar || pRidingOptions.Grappled)) {
+			vEffectNames = RideableFlags.MountingEffects(pRidden);
 			
-			//Standard mounting effect
-			if (game.settings.get(cModuleName, "RidingSystemEffects")) {
-				vEffectNames.push(cMountedPf2eEffectID);
+			await EffectManager.removeMountingEffects(pRider);
+			
+			if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
+				//World Mounting effects
+				vEffectNames = vEffectNames.concat(RideableUtils.CustomWorldRidingEffects());
+				
+				//Standard mounting effect
+				if (game.settings.get(cModuleName, "RidingSystemEffects")) {
+					vEffectNames.push(cMountedPf2eEffectID);
+				}
 			}
 		}
 		
@@ -50,15 +54,11 @@ class EffectManager {
 	
 	//Hooks
 	static onRiderMount(pRider, pRidden, pRidingOptions) {
-		if (!(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
-			EffectManager.applyMountingEffects(pRider, pRidden); //add additional systems here if necessary
-		}
+		EffectManager.applyMountingEffects(pRider, pRidden, pRidingOptions); //add additional systems here if necessary
 	}
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {
-		if (!(RideableFlags.isFamiliarRider(pRider) || RideableFlags.isGrappled(pRider))) {
-			EffectManager.removeMountingEffects(pRider); //add additional systems here if necessary
-		}
+		EffectManager.removeMountingEffects(pRider); //add additional systems here if necessary
 	}
 }
 

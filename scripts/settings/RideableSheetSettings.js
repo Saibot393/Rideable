@@ -3,7 +3,7 @@ import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMoveme
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
-const cRideableIcon = "fa-horse";
+const cRideableIcon = "fas fa-horse";
 
 class RideableSheetSettings {
 	//DECLARATIONS
@@ -37,7 +37,7 @@ class RideableSheetSettings {
 			
 			let vTabButtonHTML = 	`
 							<a class="item" data-tab="${cModuleName}">
-								<i class="fas ${cRideableIcon}"></i>
+								<i class="${cRideableIcon}"></i>
 								${Translate("Titles."+cModuleName)}
 							</a>
 							`; //tab button HTML

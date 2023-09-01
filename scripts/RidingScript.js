@@ -7,6 +7,7 @@ import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
+const cColumnplacement = "ColumnPlacement"; //place all tokens in a RowPlacement
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
 const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster

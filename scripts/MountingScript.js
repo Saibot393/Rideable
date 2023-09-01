@@ -7,10 +7,12 @@ import { RideablePopups } from "./helpers/RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
 
+const cRideableIcon = "fas fa-horse";
+
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
 	//DECLARATIONS
-	//Basic Mounting /UnMounting
+	//Basic Mounting
 	static async MountSelected(pTargetHovered = false, pRidingOptions = {Familiar: false, Grappled: false}) {} //exceutes a MountSelectedGM request socket for players or MountSelectedGM directly for GMs
 	
 	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {} //starts riding flag distribution, marking pselectedTokens as riding pTarget
@@ -21,6 +23,7 @@ class MountingManager {
 	
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Answer request for GM user to execute MountSelectedGM with given parameters
 	
+	//Basic Unmounting
 	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
 	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
@@ -36,6 +39,14 @@ class MountingManager {
 	static UnMountallRiders(pRiddenToken) {} //Unmounts all Tokens that currently Ride pRiddenToken
 	
 	static UnMountallRidersbyID(pRiddenToken, pSceneID = null) {} //Unmounts all Tokens that currently Ride pRiddenToken
+	
+	//more mounting/Unmounting
+	static async ToggleMountselected(pTargetHovered = false,  pRidingOptions = {Familiar: false, Grappled: false}) {} //toggles the mount status of the selected tokens regaridng the targeted/hovered token
+	
+	static RequestToggleMount(pselectedTokens, pTarget, pRidingOptions = {Familiar: false, Grappled: false}, vfromRidden = false) {} //starts appropiate mount/unmount requests for pselectedTokens
+	
+	//ui
+	static addMountingButton(pHUD, pHTML, pToken) {} //checks if a button should be added and adds it
 	
 	//Additional functions
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
@@ -55,7 +66,7 @@ class MountingManager {
 	static onTokenDeletion(pToken) {} //Removes pToken from the Rider logic (both in Regards to Ridden and Riders)
 	
 	//IMPLEMENTATION
-	//Basic Mounting /UnMounting	
+	//Basic Mounting	
 	static async MountSelected(pTargetHovered = false,  pRidingOptions = {Familiar: false, Grappled: false}) {//!pRidingOptions should have only one option set to true!
 		let vTarget = RideableUtils.targetedToken();
 		let vSelected = RideableUtils.selectedTokens();
@@ -127,6 +138,17 @@ class MountingManager {
 						
 						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
 						
+						vValidTokens = vValidTokens.filter(vToken => MountingManager.TokencanMount(vToken, pTarget, pRidingOptions, true));
+		
+						if (pRidingOptions.Familiar) {
+							
+							vValidTokens = vValidTokens.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, pTarget));
+						}
+						
+						if (pRidingOptions.Grappled) {
+							//add Grapple filter here
+						}
+		
 						if (vValidTokens.length) {
 							let vpreviousRiders = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pTarget), FCore.sceneof(pTarget));
 							
@@ -157,23 +179,13 @@ class MountingManager {
 	}
 	
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
-		let vValidRiders = pselectedTokens.filter(vToken => MountingManager.TokencanMount(vToken, pTarget, pRidingOptions, true));
-		
-		if (pRidingOptions.Familiar) {
-			//Familiar make sure selected are actually familairs of target
-			vValidRiders = vValidRiders.filter(vToken => RideableUtils.TokenisFamiliarof(vToken, pTarget));
-		}
-		
-		if (pRidingOptions.Grappled) {
-			//add Grapple filter here
-		}
 		//starts a mount reequest
 		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(pTarget, vValidRiders, pRidingOptions);
+			MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
 		}
 		else {
 			if (!game.paused) {
-				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(vValidRiders), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
+				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
 			}
 		}		
 	} 
@@ -193,6 +205,7 @@ class MountingManager {
 		return;
 	}
 	
+	//Basic Unmounting
 	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
@@ -278,8 +291,74 @@ class MountingManager {
 		MountingManager.UnMountallRiders(RideableUtils.TokenfromID(pRiddenToken, pSceneID));
 	}
 	
-	//Additional functions
+	//more mounting/Unmounting
+	static async ToggleMountselected(pTargetHovered = false,  pRidingOptions = {Familiar: false, Grappled: false}) {
+		let vTargets = RideableUtils.targetedTokens();
+		let vSelected = RideableUtils.selectedTokens();
+		let vfromRidden = false;
+					
+		if (pTargetHovered || !vTargets.length) {
+			vTargets = vTargets.concat([RideableUtils.hoveredToken()]);
+			
+			if (game.settings.get(cModuleName, "allowTileRiding")) {
+				if (!vTargets.length) {
+					vTargets = vTargets.concat([TileUtils.hoveredRideableTile()]);
+				}
+			}
+		}
+		
+		if (pRidingOptions.Grappled) {
+			//switch target and selected for grapples
+			let vBuffer = vTargets;
+			
+			vTargets = vSelected;
+			vSelected = vBuffer;
+		}
+		
+		//Make sure all riders can even ride the target
+		if (vTargets.length) {
+			await RideableFlags.recheckRiders(vTargets[0]);
+		}
+		
+		MountingManager.RequestToggleMount(vSelected, vTargets[0], pRidingOptions, vfromRidden);
+		
+		return;
+	}
 	
+	static RequestToggleMount(pselectedTokens, pTarget, pRidingOptions = {Familiar: false, Grappled: false}, vfromRidden = false) {
+		let vselectedTokens = pselectedTokens.filter(vToken => vToken);
+		
+		let vCurrentRiders = vselectedTokens.filter(vRider => (pTarget && (RideableFlags.isRiddenby(pTarget, vRider) || (pRidingOptions.Grappled && RideableFlags.isGrappledby(vRider, pTarget)))) || (!pTarget && (RideableFlags.isRider(vRider))));
+		
+		let vCurrentNotRiders = vselectedTokens.filter(vToken => !RideableFlags.isRider(vToken));
+		
+		console.log(vCurrentNotRiders);
+		console.log(vCurrentRiders);
+		
+		if (vCurrentRiders.length) {
+			MountingManager.RequestUnmount(vCurrentRiders, vfromRidden = (vfromRidden || pRidingOptions.Grappled));
+		}
+		else {
+			if (vCurrentNotRiders.length && pTarget) {
+				MountingManager.RequestMount(vCurrentNotRiders, pTarget, pRidingOptions);
+			}
+		}
+	}
+	
+	//ui
+	static addMountingButton(pHUD, pHTML, pToken) {
+		let vButtonDirection = "right";
+		
+		let vButtonHTML = `<div class="control-icon" data-action="mount">
+							<i class="${cRideableIcon}"></i>
+					   </div>`;
+		
+		let vButton = pHTML.find("div.col."+vButtonDirection).append(vButtonHTML);
+		
+		vButton.click((pEvent) => {console.log(pEvent, pToken)});
+	}
+	
+	//Additional functions	
 	static onIndependentRiderMovement(pToken, pChanges) {
 		if (RideableFlags.isRider(pToken)) {
 			if (RideableUtils.getRiderMovementsetting() == "RiderMovement-dismount") {
@@ -449,6 +528,8 @@ Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
 
 Hooks.on("updateToken", (...args) => MountingManager.CheckEntering(...args));
 
+Hooks.on("renderTokenHUD", (...args) => MountingManager.addMountingButton(...args));
+
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
 
 //wrap and export functions
@@ -457,7 +538,9 @@ function MountSelected(pTargetHovered = false) { return MountingManager.MountSel
 
 function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Familiar: true}); }
 
-function GrappleTargeted(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered, {Grappled: true})};
+function ToggleMountselected(pTargetHovered = false) {return MountingManager.ToggleMountselected(pTargetHovered); }
+
+function GrappleTargeted(pTargetHovered = false) { return MountingManager.ToggleMountselected(pTargetHovered, {Grappled: true})};
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 
@@ -478,6 +561,6 @@ function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {retu
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
-export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest };
+export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected };
 
 export { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };
