@@ -212,10 +212,14 @@ class RideableCompUtils {
 	
 	static async RemoveRideableDfredEffect(pEffects, pToken) {
 		for (let i = 0; i < pEffects.length; i++) {
-			console.log(pEffects[i].name, pToken.actor.uuid, cModuleName);
+			let vName = pEffects[i].name;
+			
+			if (!vName) {
+				vName = pEffects[i].label;
+			}
 			
 			await game.dfreds.effectInterface._socket.executeAsGM('removeEffect', {
-			  effectName: pEffects[i].name,
+			  effectName: vName,
 			  uuid : pToken.actor.uuid,
 			  origin : cModuleName
 			});
@@ -229,7 +233,7 @@ class RideableCompUtils {
 		let vBuffer;
 		
 		for (let i = 0; i < pNameIDs.length; i++) {
-			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i]);
+			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i] || vEffect.label == pNameIDs[i]);
 			
 			if (vBuffer) {
 				vNameIDs.push(vBuffer);

@@ -29,6 +29,11 @@
 				"descrp"				: "Allows rideable tokens to be locked"
 			},
 			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "DFreds Convenient Effects integration",
+				"descrp"				: "Allows certain effects to be applied to mounted and grappled tokens"
+			},
+			
 			"TaggerMountingIntegration" : {
 				"name" 					: "Tagger mounting integration",
 				"descrp"				: "Allows tokens to be mounted and unmounted via tags (tag: \"Rideable:{RiderTokenID}\")"
@@ -67,7 +72,12 @@
 			"RiderMovementworlddefault" : {
 				"name" 					: "Rider movement default setting",
 				"descrp"				: "Default setting for the Rider movement of the players (does not override)"
-			},			
+			},		
+
+			"MountButtonDefaultPosition" : {
+				"name" 					: "Mount button default position",
+				"descrp"				: "Default setting for the position of the mount button (does not override)"
+			},					
 
 			"RiderMovement" : {
 				"name" 					: "Rider movement",
@@ -77,6 +87,17 @@
 					"disallow"			: "Prevent movement",
 					"dismount"			: "Unmount rider",
 					"moveridden"		: "Move ridden Token (if owned)"
+				}
+			},
+			
+			"MountButtonPosition" : {
+				"name" 					: "Mount button position",
+				"descrp"				: "Position of the mount button",
+				"options" : {
+					"default"			: "use world default setting",
+					"none"				: "no button",
+					"left"				: "left",
+					"right"				: "right"
 				}
 			},
 			
@@ -121,6 +142,11 @@
 				"descrp"				: "Allows tokens to grapple one another (grappled tokens can only be unmounted by the grappling token)"				
 			},
 			
+			"GrapplingSystemEffects" : {
+				"name" 					: "Apply \"Grappled\" effect",
+				"descrp"				: "If a token gets grappled, a system dependent effect will be applied to the token"				
+			},
+			
 			"PreventEnemyRiding" : {
 				"name" 					: "Prevent enemy riding",
 				"descrp"				: "Stops tokens from riding enemy tokens (GMs can still override this)"				
@@ -161,6 +187,11 @@
 			"GrappleTarget" : {
 				"name" 					: "Grapple/release target",
 				"descrp"				: "Mount targeted token to controlled Token, can only be unmounted by grappling token(alternative Macro: \"Grapple\") (only if setting \"Grappling\" is activated)"
+			},
+			
+			"ToggleMount" : {
+				"name" 					: "Toggle mount",
+				"descrp"				: "Mount or dismount controlled Tokens to/from targeted Token"
 			}
 		},
 		
@@ -245,6 +276,11 @@
 			"WorldMEffectOverrideFlag" : {
 				"name"					: "Override world riding effects",
 				"descrp"				: "Overrides the world standard riding effects with the above set effects (instead of appending them)"
+			},
+			
+			"canbeGrappledFlag" : {
+				"name"					: "Can be grappled",
+				"descrp"				: "If this token can be grappled"
 			}
 		},
 		

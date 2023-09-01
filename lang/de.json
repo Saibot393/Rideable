@@ -29,6 +29,11 @@
 				"descrp"				: "Erlaubt es, reitbare Figuren abzuschließen"
 			},
 			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "DFreds Convenient Effects Integration",
+				"descrp"				: "Erlaubt es gewisse Effekte auf reitende und gepackte Figuren anzuwenden"
+			},
+			
 			"TaggerMountingIntegration" : {
 				"name" 					: "Tagger Reit Integration",
 				"descrp"				: "Erlaubt es Figuren über Tags auf Fieguren/Fliesen auf- oder absteigen zu lassen (Tag: \"Rideable:{ReiterFigurID}\")"
@@ -67,7 +72,12 @@
 			"RiderMovementworlddefault" : {
 				"name" 					: "Reiter-Bewegung Standardeinstellung",
 				"descrp"				: "Standardeinstellung für die Reiter-Bewegung der Spieler (überschreibt nicht)"
-			},
+			},		
+
+			"MountButtonDefaultPosition" : {
+				"name" 					: "Aufsteigenknopf Standardposition",
+				"descrp"				: "Standardeinstellung für die Position des Aufsteigenknopfs (überschreibt nicht)"
+			},	
 
 			"RiderMovement" : {
 				"name" 					: "Reiter-Bewegung",
@@ -77,6 +87,17 @@
 					"disallow"			: "Verhindere Bewegung",
 					"dismount"			: "Lasse Reiter absteigen",
 					"moveridden"		: "Bewege gerittene Figur (wenn Besitzer)"
+				}
+			},
+			
+			"MountButtonPosition" : {
+				"name" 					: "Aufsteigenknopf Position",
+				"descrp"				: "Position des Aufsteigen Knopfs",
+				"options" : {
+					"default"			: "nutze Welt Standardeinstellung",
+					"none"				: "kein Knopf",
+					"left"				: "links",
+					"right"				: "rechts"
 				}
 			},
 			
@@ -121,6 +142,11 @@
 				"descrp"				: "Erlaubt es Figuren einander zu packen (gegriffene Figuren können nur von der ergreifenden Figur losgelassen werden)"				
 			},
 			
+			"GrapplingSystemEffects" : {
+				"name" 					: "\"Gepackt\" Effekt anwenden",
+				"descrp"				: "Wenn eine Figure gepackts wird, wird ein System abhängiger Effekt auf die Figur gesetzt"				
+			},
+			
 			"PreventEnemyRiding" : {
 				"name" 					: "Gegner reiten verhindern",
 				"descrp"				: "Hält Figuren davon ab Gegner zu reiten (SL-Befehle ignorieren diese Einstellung)"				
@@ -161,6 +187,11 @@
 			"GrappleTarget" : {
 				"name" 					: "Packe Ziel/lasse Ziel los",
 				"descrp"				: "Lässt die ausgewählte Figur die angezielte Figur packen, kann nur von der ausgewählten Figur rückgängig gemacht werden (Alternativ-Makro: \"Grapple\") (Nur wenn die Einstellung \"Packen\" aktiviert ist)"
+			},
+			
+			"ToggleMount" : {
+				"name" 					: "Aufsteigen/Absteigen",
+				"descrp"				: "Lässt die kontrollierten Figuren die angezielte Figur besteigen oder davon absteigen"
 			}
 		},
 		
@@ -245,6 +276,11 @@
 			"WorldMEffectOverrideFlag" : {
 				"name"					: "Überschreibe Welt-Reiteffekte",
 				"descrp"				: "Überschreibt die Welt-Reiteffekte mit den oben festgelegten (anstatt sie zu erweitern)"
+			},
+			
+			"canbeGrappledFlag" : {
+				"name"					: "Kan ergriffen werden",
+				"descrp"				: "Ob diese Figur egriffen werden kann"
 			}
 		},
 		
