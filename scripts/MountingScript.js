@@ -146,7 +146,7 @@ class MountingManager {
 						}
 						
 						if (pRidingOptions.Grappled) {
-							//add Grapple filter here
+							vValidTokens = vValidTokens.filter(vToken => RideableFlags.canbeGrappled(vToken));
 						}
 		
 						if (vValidTokens.length) {
@@ -331,9 +331,6 @@ class MountingManager {
 		let vCurrentRiders = vselectedTokens.filter(vRider => (pTarget && (RideableFlags.isRiddenby(pTarget, vRider) || (pRidingOptions.Grappled && RideableFlags.isGrappledby(vRider, pTarget)))) || (!pTarget && (RideableFlags.isRider(vRider))));
 		
 		let vCurrentNotRiders = vselectedTokens.filter(vToken => !RideableFlags.isRider(vToken));
-		
-		console.log(vCurrentNotRiders);
-		console.log(vCurrentRiders);
 		
 		if (vCurrentRiders.length) {
 			MountingManager.RequestUnmount(vCurrentRiders, vfromRidden = (vfromRidden || pRidingOptions.Grappled));

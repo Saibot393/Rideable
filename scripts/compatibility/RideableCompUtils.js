@@ -12,17 +12,20 @@ const cArmReach = "foundryvtt-arms-reach";
 const cArmReachold = "arms-reach";
 const cLocknKey = "LocknKey"; //self promotion
 const cLibWrapper = "lib-wrapper";
+const cDfredCE = "dfreds-convenient-effects";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
 
 //special words
-const cLockTypeRideable = "LTRideable";
+const cLockTypeRideable = "LTRideable"; //for LocknKey
 
-const cRideableTag = "Rideable:";
+const cRideableTag = "Rideable:"; //For tagger
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper }
-export { cRideableTag }
+const cGrabbedEffectName = "Grappled"; //For convenient effects
+
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE }
+export { cRideableTag, cGrabbedEffectName }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
@@ -52,6 +55,13 @@ class RideableCompUtils {
 	
 	//specific: wall-heights
 	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
+	
+	//specific: dfreds-convenient-effects
+	static async AddDfredEffect(pEffects, pToken) {} //uses dfreds api to add effects with pEffectNames to pToken
+	
+	static async RemoveRideableDfredEffect(pEffects, pToken) {} //uses dfreds api to remove effects with pEffectNames to pToken
+	
+	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -184,6 +194,56 @@ class RideableCompUtils {
 		else {
 			return 0;
 		}
+	}
+	
+	//specific: dfreds-convenient-effects
+	static async AddDfredEffect(pEffects, pToken) {
+		for (let i = 0; i < pEffects.length; i++) {
+			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
+			  effect: pEffects[i].toObject(),
+			  uuid : pToken.actor.uuid,
+			  origin : cModuleName
+			});
+			/*
+			game.dfreds.effectInterface.addEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
+			*/
+		}
+	}
+	
+	static async RemoveRideableDfredEffect(pEffects, pToken) {
+		for (let i = 0; i < pEffects.length; i++) {
+			console.log(pEffects[i].name, pToken.actor.uuid, cModuleName);
+			
+			await game.dfreds.effectInterface._socket.executeAsGM('removeEffect', {
+			  effectName: pEffects[i].name,
+			  uuid : pToken.actor.uuid,
+			  origin : cModuleName
+			});
+			//game.dfreds.effectInterface.removeEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
+		}		
+	}
+	
+	static FilterEffects(pNameIDs) {
+		let vNameIDs = [];
+		
+		let vBuffer;
+		
+		for (let i = 0; i < pNameIDs.length; i++) {
+			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i]);
+			
+			if (vBuffer) {
+				vNameIDs.push(vBuffer);
+			}
+			else {
+				vBuffer = game.dfreds.effects._customEffectsHandler._findCustomEffectsItem().effects.get(pNameIDs[i]);
+				
+				if (vBuffer) {
+					vNameIDs.psuh(vBuffer.name);
+				}
+			}
+		}
+		
+		return vNameIDs;
 	}
 }
 

@@ -1,6 +1,6 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected} from "../MountingScript.js";
 
@@ -41,6 +41,16 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: Boolean,
 	default: false
   });   
+  
+  game.settings.register(cModuleName, "DFredsEffectsIntegration", {
+	name: Translate("Settings.DFredsEffectsIntegration.name"),
+	hint: Translate("Settings.DFredsEffectsIntegration.descrp"),
+	scope: "world",
+	config: RideableCompUtils.isactiveModule(cDfredCE) && !RideableUtils.isPf2e(),
+	type: Boolean,
+	default: false,
+	requiresReload: true
+  }); 
   
   game.settings.register(cModuleName, "TaggerMountingIntegration", {
 	name: Translate("Settings.TaggerMountingIntegration.name"),
@@ -127,7 +137,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.CustomRidingEffects.name"),
 	hint: Translate("Settings.CustomRidingEffects.descrp"),
 	scope: "world",
-	config: RideableUtils.isPf2e(),
+	config: RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration"),
 	type: String,
 	default: ""
   });    
@@ -165,11 +175,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: 0
   });
   
-   game.settings.register(cModuleName, "Grappling", {
+  game.settings.register(cModuleName, "Grappling", {
 	name: Translate("Settings.Grappling.name"),
 	hint: Translate("Settings.Grappling.descrp"),
 	scope: "world",
 	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
+  game.settings.register(cModuleName, "GrapplingSystemEffects", {
+	name: Translate("Settings.GrapplingSystemEffects.name"),
+	hint: Translate("Settings.GrapplingSystemEffects.descrp"),
+	scope: "world",
+	config: RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration"),
 	type: Boolean,
 	default: false
   });  

@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns } from "../RidingScript.js";
 
@@ -133,7 +133,7 @@ class RideableSheetSettings {
 															vflagname : cSpawnRidersF
 															});
 				
-				if (RideableUtils.isPf2e()) {
+				if (RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
 					//Custom Mounting effects applied to Riders
 					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
 																vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
@@ -143,15 +143,24 @@ class RideableSheetSettings {
 																vflagname : cMountingEffectsF
 																});
 					
+					//if custom Mounting effects should override world stndard
+					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
+																vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
+																vtype : "checkbox",
+																vwide : true,
+																vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
+																vflagname : cWorldMEffectOverrideF
+																});
+				}
+				
 				//if custom Mounting effects should override world stndard
-				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
-															vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ ccanbeGrappledF +".name"), 
+															vhint : Translate("TokenSettings."+ ccanbeGrappledF +".descrp"), 
 															vtype : "checkbox",
 															vwide : true,
-															vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
-															vflagname : cWorldMEffectOverrideF
+															vvalue : RideableFlags.canbeGrappled(pApp.document), 
+															vflagname : ccanbeGrappledF
 															});
-				}
 			}
 														
 			

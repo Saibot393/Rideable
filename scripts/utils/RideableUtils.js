@@ -23,6 +23,7 @@ const cCharacterType = "character"; //type of npc tokens
 const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 
 const cPf2EffectType = "effect"; //the item type of Pf2e effects
+const cPf2ConditionType = "condition"; //the item type of Pf2e conditions
 
 export { cPf2eName, cModuleName, cPopUpID, cDelimiter };
 
@@ -406,7 +407,7 @@ class RideableUtils {
 				}
 			}
 			
-			if (vBuffer && vBuffer.type == cPf2EffectType) {
+			if (vBuffer && [cPf2ConditionType, cPf2EffectType].includes(vBuffer.type) ) {
 				vEffects[vEffects.length] = vBuffer.toObject();
 			}
 		}

@@ -32,6 +32,7 @@
 	"scripts/compatibility/RideableCompUtils.js",
 	"scripts/utils/GeometricUtils.js",
 	"scripts/utils/RideableUtils.js",
+	"scripts/settings/RideableSettings.js",
 	"scripts/helpers/RideablePopups.js",
 	"scripts/helpers/EffectManager.js",
 	"scripts/helpers/RideableFlags.js",
@@ -39,7 +40,6 @@
 	"scripts/MountingScript.js",
 	"scripts/helpers/SocketHandler.js",
 	"scripts/helpers/MacroHooks.js",
-	"scripts/settings/RideableSettings.js",
 	"scripts/settings/RideableSheetSettings.js",
 	"scripts/compatibility/RideableCompatibility.js"
   ],

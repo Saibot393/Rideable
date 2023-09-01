@@ -15,6 +15,7 @@ const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ
 const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the rider tokens should be place
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
+const ccanbeGrappledF = "canbeGrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
 const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom riding height of a ridden token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
@@ -27,7 +28,7 @@ const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatica
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -55,6 +56,8 @@ class RideableFlags {
 	static wasFamiliarRider (pRiderToken) {} //returns true if pRiderToken is has Riding flag
 	
 	static isGrappled (pRiderToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true
+	
+	static canbeGrappled (pToken) {} //returns true if pToken can be grapped
 	
 	static isGrappledby (pRiderToken, pRiddenToken) {} //returns true if pRiderToken has Riding flag and Grappled flag true and Rides pRiddenToken
 	
@@ -308,6 +311,19 @@ class RideableFlags {
 		}
 		
 		return false; //default if anything fails
+	} canbeGrappledFlag
+	
+	static #canbeGrappledFlag (pToken) { 
+	//returns content of Gappled Flag of pToken (if any) (true or false)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(ccanbeGrappledF)) {
+				return vFlag.canbeGrappledFlag;
+			}
+		}
+		
+		return true; //default if anything fails
 	} 
 	
 	static #SizesaveFlag(pToken) {
@@ -522,6 +538,10 @@ class RideableFlags {
 	
 	static isGrappled (pRiderToken) {
 		return (this.isRider(pRiderToken) && this.#GrappledFlag(pRiderToken));
+	}
+	
+	static canbeGrappled (pToken) {
+		return this.#canbeGrappledFlag(pToken);
 	}
 	
 	static isGrappledby (pRiderToken, pRiddenToken) {
