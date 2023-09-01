@@ -1,3 +1,16 @@
+## v2.8.0
+- Improved grappling, can now ungrapple hovered tokens
+- Added mount/dismount button on tokens
+- Added key-bind for mount toggle
+- Added world setting Mount button deefault position to set the world default position for the mount button
+- Added client setting Mount button position to set the position of the mount button or disable it
+- Added world setting Apply "Grappled" effect to apply a system dependent effect on grappled tokens
+- Added DFreds Convenient Effects Integration
+  - Must be activated with the world setting DFreds Convenient Effects Integration
+  - Allows for effects to be applied to mounted and grappled tokens
+  - Allows for custom mounted effects to be set
+- Added token setting Can be grappled to enabled/disable the grapple feature on this token
+
 ## v2.7.3
 - Added from transparency to token forms to auto detect a tokens (tiles) form from its used image (only Foundry v11)
 - Improved the innitial placing on tokens (tiles) with free movement enabled when the mounting token is already within the ridden token (tile) 
