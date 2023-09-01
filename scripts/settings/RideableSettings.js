@@ -225,6 +225,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "RiderMovement-disallow"
   });
   
+  game.settings.register(cModuleName, "MountButtonDefaultPosition", {
+	name: Translate("Settings.MountButtonDefaultPosition.name"),
+	hint: Translate("Settings.MountButtonDefaultPosition.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"none": Translate("Settings.MountButtonPosition.options.none"),
+		"left": Translate("Settings.MountButtonPosition.options.left"),
+		"right": Translate("Settings.MountButtonPosition.options.right")
+	},
+	default: "none"
+  });
+  
   //client settings
   
   game.settings.register(cModuleName, "RiderMovement", {
@@ -240,6 +254,21 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 		"RiderMovement-moveridden": Translate("Settings.RiderMovement.options.moveridden")
 	},
 	default: "RiderMovement-worlddefault"
+  });
+  
+  game.settings.register(cModuleName, "MountButtonPosition", {
+	name: Translate("Settings.MountButtonPosition.name"),
+	hint: Translate("Settings.MountButtonPosition.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"default" : Translate("Settings.MountButtonPosition.options.default"),
+		"none": Translate("Settings.MountButtonPosition.options.none"),
+		"left": Translate("Settings.MountButtonPosition.options.left"),
+		"right": Translate("Settings.MountButtonPosition.options.right")
+	},
+	default: "default"
   });
   
   game.settings.register(cModuleName, "MessagePopUps", {

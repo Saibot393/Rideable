@@ -325,7 +325,7 @@ class MountingManager {
 		return;
 	}
 	
-	static RequestToggleMount(pselectedTokens, pTarget, pRidingOptions = {Familiar: false, Grappled: false}, vfromRidden = false) {
+	static RequestToggleMount(pselectedTokens, pTarget, pRidingOptions = {Familiar: false, Grappled: false}, vfromRidden = false) {	
 		let vselectedTokens = pselectedTokens.filter(vToken => vToken);
 		
 		let vCurrentRiders = vselectedTokens.filter(vRider => (pTarget && (RideableFlags.isRiddenby(pTarget, vRider) || (pRidingOptions.Grappled && RideableFlags.isGrappledby(vRider, pTarget)))) || (!pTarget && (RideableFlags.isRider(vRider))));
@@ -344,15 +344,23 @@ class MountingManager {
 	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {
-		let vButtonDirection = "right";
-		
-		let vButtonHTML = `<div class="control-icon" data-action="mount">
-							<i class="${cRideableIcon}"></i>
-					   </div>`;
-		
-		let vButton = pHTML.find("div.col."+vButtonDirection).append(vButtonHTML);
-		
-		vButton.click((pEvent) => {console.log(pEvent, pToken)});
+		if (RideableFlags.TokenisRideable(pToken)) {
+			let vButtonPosition = game.settings.get(cModuleName, "MountButtonPosition");
+			
+			if (vButtonPosition == "default") {
+				vButtonPosition = game.settings.get(cModuleName, "MountButtonDefaultPosition");
+			}
+			
+			if (vButtonPosition != "none") {		
+				let vButtonHTML = `<div class="control-icon" data-action="mount">
+									<i class="${cRideableIcon}"></i>
+							   </div>`;
+				
+				let vButton = pHTML.find("div.col."+vButtonPosition).append(vButtonHTML);
+				
+				vButton.click((pEvent) => {MountingManager.RequestToggleMount(RideableUtils.selectedTokens(), RideableUtils.TokenfromID(pToken._id))});
+			}
+		}
 	}
 	
 	//Additional functions	
