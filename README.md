@@ -29,11 +29,14 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Familiar riding: to allow familiars to ride their master (familiars will be placed on their masters corners)
 - Familiar riding position: to set the corner familiars will be positioned first
 - Grappling: to allow tokens to grapple one another
+- Apply "Grappled" effect to: apply a system dependent effect on grappled tokens
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Rider movement default setting: to set the default Rider movement behaviour for new players
+- Mount button deefault position: to set the world default position for the mount button
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
+- Mount button position: to set the position of the mount button or disable it
 - Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 #### Tokens (separate tab):
@@ -48,6 +51,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Spawn riders (GM only): to set with which riders this token spawns
 - Riding effects (GM only): to set effects tokens gain when they start riding this token
 - Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
+- Can be grappled(GM only): to enabled/disable the grapple feature on this token
 
 ### Compatibility:
 
@@ -74,6 +78,10 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Has to be activated with the setting "Tagger integration"
   - Adding the Tag "Rideable:{TokenID}" to a token/tile will mount the appropiate token
   - Removing this tag will unmount the token
+- [Convenient Effects Integration](https://foundryvtt.com/packages/dfreds-convenient-effects):
+  - Must be activated with the world setting DFreds Convenient Effects Integration
+  - Allows for effects to be applied to mounted and grappled tokens
+  - Allows for custom mounted effects to be set
 
 ### Languages:
 
