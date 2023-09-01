@@ -1,5 +1,5 @@
-## v2.7.3 (unreleased)
-- Added from transparency to token forms to auto detect a tokens (tiles) form from its used image
+## v2.7.3
+- Added from transparency to token forms to auto detect a tokens (tiles) form from its used image (only Foundry v11)
 - Improved the innitial placing on tokens (tiles) with free movement enabled when the mounting token is already within the ridden token (tile) 
 
 ## v2.7.2
