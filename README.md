@@ -33,7 +33,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Rider movement default setting: to set the default Rider movement behaviour for new players
-- Mount button deefault position: to set the world default position for the mount button
+- Mount button default position: to set the world default position for the mount button
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Mount button position: to set the position of the mount button or disable it
