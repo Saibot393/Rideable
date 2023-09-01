@@ -279,7 +279,7 @@
 			},
 			
 			"canbeGrappledFlag" : {
-				"name"					: "Kan ergriffen werden",
+				"name"					: "Kann ergriffen werden",
 				"descrp"				: "Ob diese Figur egriffen werden kann"
 			}
 		},
