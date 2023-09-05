@@ -1,3 +1,7 @@
+## v2.8.1
+- Added Wall setting Grappled placement to set where tokens grappled by this token are placed
+- Added key to switch between the grapple placement of selected tokens
+
 ## v2.8.0
 - Improved grappling, can now ungrapple hovered tokens
 - Added mount/dismount button on tokens
