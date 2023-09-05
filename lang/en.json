@@ -83,7 +83,7 @@
 				"name" 					: "Rider movement",
 				"descrp"				: "What should happen if a riding token tries to move on its own",
 				"options" : {
-					"worlddefault"		: "use worl default setting",
+					"worlddefault"		: "use world default setting",
 					"disallow"			: "Prevent movement",
 					"dismount"			: "Unmount rider",
 					"moveridden"		: "Move ridden Token (if owned)"
@@ -192,6 +192,11 @@
 			"ToggleMount" : {
 				"name" 					: "Toggle mount",
 				"descrp"				: "Mount or dismount controlled Tokens to/from targeted Token"
+			},
+			
+			"ToggleGrapplePlacement" : {
+				"name"					: "Switch Grapple placement",
+				"descrp"				: "Switches between the placements options of grapple tokens for the selected tokens"
 			}
 		},
 		
@@ -230,6 +235,15 @@
 					"CirclePlacement"	: "Circle",
 					"RowPlacement"		: "Row",
 					"ClusterPlacement"	: "Cluster"
+				}
+			},
+			
+			"GrapplePlacementFlag" : {
+				"name"					: "Grappled placement",
+				"descrp"				: "Where grappled tokens are placed",
+				"options" : {
+					"RowBelow"			: "below",
+					"RowAbove"			: "above"
 				}
 			},
 			

@@ -4,7 +4,7 @@ import { RideableFlags } from "./helpers/RideableFlags.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
-import { UpdateRidderTokens, UnsetRidingHeight } from "./RidingScript.js";
+import { UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
 
 const cRideableIcon = "fas fa-horse";
@@ -44,6 +44,11 @@ class MountingManager {
 	static async ToggleMountselected(pTargetHovered = false,  pRidingOptions = {Familiar: false, Grappled: false}) {} //toggles the mount status of the selected tokens regaridng the targeted/hovered token
 	
 	static RequestToggleMount(pselectedTokens, pTarget, pRidingOptions = {Familiar: false, Grappled: false}, vfromRidden = false) {} //starts appropiate mount/unmount requests for pselectedTokens
+	
+	//placement
+	static async ToggleGrapplePlacement(pTokens) {} //Toggles the Grapple placements of pTokens
+	
+	static ToggleGrapplePlacementSelected() {} //Taggles the Grapple placements of the selected tokens
 	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {} //checks if a button should be added and adds it
@@ -342,6 +347,27 @@ class MountingManager {
 		}
 	}
 	
+	//placement
+	static async ToggleGrapplePlacement(pTokens) {
+		for (let i = 0; i < pTokens.length; i++) {
+			if (pTokens[i].isOwner) {
+				switch (RideableFlags.GrapplePlacement(pTokens[i])) {
+					case cGrapplePlacements[1]:
+						await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[0]);
+						break;
+					default:
+						await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[1]);
+				}
+				
+				UpdateRidderTokens();
+			}
+		}
+	}
+	
+	static ToggleGrapplePlacementSelected() {
+		MountingManager.ToggleGrapplePlacement(RideableUtils.selectedTokens());
+	}
+	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {
 		if (RideableFlags.TokenisRideable(pToken)) {
@@ -561,11 +587,13 @@ function UnMountbyID(pTokens, pSceneID = null) { return MountingManager.RequestU
 
 function UnMountallRidersbyID(pRidden, pSceneID = null) { return MountingManager.UnMountallRidersbyID(pRidden, pSceneID)};
 
+function ToggleGrapplePlacementSelected() {return MountingManager.ToggleGrapplePlacementSelected()}
+
 //Request Handlers
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
-export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected };
+export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected};
 
 export { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };

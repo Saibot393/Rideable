@@ -1,7 +1,7 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
-import { cPlacementPatterns } from "../RidingScript.js";
+import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
 const cRideableIcon = "fas fa-horse";
 
@@ -99,6 +99,17 @@ class RideableSheetSettings {
 														vvalue : RideableFlags.RiderPositioning(pApp.document), 
 														vflagname : cRiderPositioningF
 														});
+														
+			if (game.settings.get(cModuleName, "Grappling")) {
+				//RiderPositioning
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cGrapplePlacementF +".name"), 
+															vhint : Translate("TokenSettings."+ cGrapplePlacementF +".descrp"), 
+															vtype : "select", 
+															voptions : cGrapplePlacements,
+															vvalue : RideableFlags.GrapplePlacement(pApp.document), 
+															vflagname : cGrapplePlacementF
+															});
+			}
 
 			//Token Form
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 

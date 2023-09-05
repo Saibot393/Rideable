@@ -192,6 +192,11 @@
 			"ToggleMount" : {
 				"name" 					: "Aufsteigen/Absteigen",
 				"descrp"				: "Lässt die kontrollierten Figuren die angezielte Figur besteigen oder davon absteigen"
+			},
+			
+			"ToggleGrapplePlacement" : {
+				"name"					: "Wechsle Ergriffenen Platzierung",
+				"descrp"				: "Wechselts zwischen den Ergriffenen Platzierungsoptionen der ausgewählten Figuren"
 			}
 		},
 		
@@ -230,6 +235,15 @@
 					"CirclePlacement"	: "Kreis",
 					"RowPlacement"		: "Reihe",
 					"ClusterPlacement"	: "Bündel"
+				}
+			},
+			
+			"GrapplePlacementFlag" : {
+				"name"					: "Ergriffenen Platzierung",
+				"descrp"				: "Wo ergriffene Figuren platziert werden",
+				"options" : {
+					"RowBelow"			: "unten",
+					"RowAbove"			: "oben"
 				}
 			},
 			

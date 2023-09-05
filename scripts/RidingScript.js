@@ -12,9 +12,15 @@ const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
 const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 
+//grapple positioning options
+const cRowBelow = "RowBelow"; //places grappled tokens below
+const cRowAbove = "RowAbove"; //places grappled tokens below
+
 const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
-export { cRowplacement, cPlacementPatterns };
+const cGrapplePlacements = [cRowBelow, cRowAbove]
+
+export { cRowplacement, cPlacementPatterns, cGrapplePlacements };
 
 const cSizeFactor = 2/3;
 
@@ -25,7 +31,7 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(priddenToken, pRiderTokenList = [], pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
@@ -110,9 +116,16 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList, pAnimations = true) {
+	static UpdateRidderTokens(priddenToken, pRiderTokenList = [], pAnimations = true) {
 		if (priddenToken) {
-			Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pAnimations);
+			if (pRiderTokenList.length > 0) {
+				Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pAnimations);
+			}
+			else {
+				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
+					
+				Ridingmanager.planRiderTokens(priddenToken, vRiderTokenList, false);
+			}
 		}
 	} 
 	
@@ -222,7 +235,13 @@ class Ridingmanager {
 		Ridingmanager.placeRiderTokenscorner(pRiddenToken, vRiderFamiliarList, pAnimations);
 		
 		//Grappled
-		Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {
+			case cRowAbove:
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+				break;
+			default:
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+		}
 	}
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {

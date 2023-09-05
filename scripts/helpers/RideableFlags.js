@@ -23,12 +23,13 @@ const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effect
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
 const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the rideable tile
 const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatically mount this token/tile when they enter it
+const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled tokens are placed
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -76,6 +77,10 @@ class RideableFlags {
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
 	
 	static MountonEnter(pRidden, pRaw = false) {} //returns of tokens should mount pRidden if they enter it
+	
+	static GrapplePlacement(pRidden) {} //returns the Grappleplacement of pRidden
+	
+	static async setGrapplePlacement(pRidden, pPlacement) {} //sets the grappleplacement of pRidden
 	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
@@ -404,6 +409,19 @@ class RideableFlags {
 		return false; //default if anything fails
 	} 
 	
+	static #GrapplePlacementFlag (pToken) {
+		//returns content of GrapplePlacementFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cGrapplePlacementF)) {
+				return vFlag.GrapplePlacementFlag;
+			}
+		}
+		
+		return ""; //default if anything fails		
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -471,6 +489,15 @@ class RideableFlags {
 			return true;
 		}
 		return false;
+	}
+	
+	static async #setGrapplePlacementFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cGrapplePlacementF, pContent);
+			
+			return true;
+		}
+		return false;		
 	}
 	
 	static #resetFlags (pToken) {
@@ -617,6 +644,14 @@ class RideableFlags {
 	
 	static MountonEnter(pRidden, pRaw = false) {
 		return (pRaw || RideableFlags.TokenisRideable(pRidden)) && this.#MountonEnterFlag(pRidden);
+	}
+	
+	static GrapplePlacement(pRidden) {
+		return this.#GrapplePlacementFlag(pRidden);
+	}
+	
+	static async setGrapplePlacement(pRidden, pPlacement) {
+		return await this.#setGrapplePlacementFlag(pRidden, pPlacement);
 	}
 	
 	//additional infos
