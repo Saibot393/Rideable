@@ -79,7 +79,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Has to be activated with the setting "Tagger integration"
   - Adding the Tag "Rideable:{TokenID}" to a token/tile will mount the appropiate token
   - Removing this tag will unmount the token
-- [DFreds Convenient Effects Integration](https://foundryvtt.com/packages/dfreds-convenient-effects):
+- [DFreds Convenient Effects](https://foundryvtt.com/packages/dfreds-convenient-effects):
   - Must be activated with the world setting DFreds Convenient Effects Integration
   - Allows for effects to be applied to mounted and grappled tokens
   - Allows for custom mounted effects to be set
