@@ -46,6 +46,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Maximum riders: to override world default for this token
 - Custom riding height: to set the height used for tokens riding this token
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
+- Grappled placement: to set where tokens grappled by this token are placed
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 - Spawn riders (GM only): to set with which riders this token spawns
