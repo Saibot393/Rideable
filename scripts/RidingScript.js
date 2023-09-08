@@ -122,7 +122,7 @@ class Ridingmanager {
 				Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pAnimations);
 			}
 			else {
-				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
+				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(priddenToken), FCore.sceneof(priddenToken));
 					
 				Ridingmanager.planRiderTokens(priddenToken, vRiderTokenList, false);
 			}

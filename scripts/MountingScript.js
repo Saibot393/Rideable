@@ -60,6 +60,10 @@ class MountingManager {
 	
 	static async onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
 	
+	static async onpasteToken(pOriginal, pCopyData) {} //called when a token is copied, tries to also copy all riding tokens
+	
+	static async createCopywithRiders(pData, pSourceScene) {} //creates copies of pData at current scene with riders from pSourceScene
+	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
 	
 	//Aditional Informations
@@ -447,7 +451,83 @@ class MountingManager {
 		}
 		
 		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
-	} 
+	}
+
+	static async onpasteToken(pOriginal, pCopyData) {
+		if (game.user.isGM) {
+			if (pOriginal.length > 0) {
+				let vSourceScene = FCore.sceneof(pOriginal[0].document);
+				
+				let vRiddenTokens = pCopyData.filter(vData => RideableFlags.isRidden(vData));
+				
+				let vBlacklist = [];
+				
+				let vRiderIDs = [];
+				
+				for (let i = 0; i < vRiddenTokens.length; i++) {
+					vRiderIDs = vRiderIDs.concat(RideableFlags.RiderTokenIDs(vRiddenTokens[i]));
+				}
+				
+				//pCopyData = pCopyData.filter(vToken => !vRiddenTokens.includes(vToken) && !vRiderIDs.includes(vToken.id));
+				let j = 0;
+				
+				let visRider;
+				let visRidden;
+				
+				while (j < pCopyData.length) {
+					visRider = vRiderIDs.includes(pOriginal[j].id)
+					visRidden = vRiddenTokens.includes(pCopyData[j])
+					
+					if (visRidden || visRider) {
+						if (visRidden && visRider) {
+							vBlacklist.push(pCopyData[j]);
+						}
+						
+						pCopyData.splice(j, 1);
+						pOriginal.splice(j, 1);
+					}
+					else {
+						j = j + 1;
+					}
+				}	
+
+				vRiddenTokens = vRiddenTokens.filter(vToken => !vBlacklist.includes(vToken));
+				
+				MountingManager.createCopywithRiders(vRiddenTokens, vSourceScene);
+			}
+		}
+	}
+	
+	static async createCopywithRiders(pData, pSourceScene) {
+		let vCreations = [];
+		
+		for (let i = 0; i < pData.length; i++) {
+			let vRiderIDs = RideableFlags.RiderTokenIDs(pData[i]);
+			
+			let vRiderTokens = RideableUtils.TokensfromIDs(vRiderIDs, pSourceScene);
+			
+			let vRidden;
+			
+			vRiderTokens = foundry.utils.duplicate(vRiderTokens);
+			
+			for (let j = 0; j < vRiderTokens.length; j++) {
+				vRiderTokens[j].x = pData[i].x;
+				vRiderTokens[j].y = pData[i].y;
+			}
+			
+			let vRiderReplacement = await MountingManager.createCopywithRiders(vRiderTokens, pSourceScene);
+			
+			pData[i].flags[cModuleName]["RidersFlag"] = vRiderReplacement.map(vToken => vToken.id);
+			
+			vRidden = await canvas.scene.createEmbeddedDocuments(Token.embeddedName, [pData[i]], { RideableSpawn: true});
+			
+			UpdateRidderTokens(vRidden[0]);
+			
+			vCreations = vCreations.concat(vRidden);
+		}
+		
+		return vCreations;
+	}
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {
 		if ((pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
@@ -562,6 +642,8 @@ Hooks.on("updateToken", (...args) => MountingManager.CheckEntering(...args));
 Hooks.on("renderTokenHUD", (...args) => MountingManager.addMountingButton(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
+
+Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
 
 //wrap and export functions
 

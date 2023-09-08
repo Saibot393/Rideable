@@ -72,6 +72,8 @@ class RideableFlags {
 	
 	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
 	
+	static async replaceRiderTokenID (pRiddenToken, pOriginalID, pReplacementID) {} //replace pOriginalID with pReplacementID
+	
 	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
 	
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
@@ -632,6 +634,24 @@ class RideableFlags {
 		return true;
 	}
 	
+	static async replaceRiderTokenID(pRiddenToken, pOriginalID, pReplacementID) {
+		let vIndex = RideableFlags.RiderTokenIDs(pRiddenToken).indexOf(pOriginalID);
+		
+		console.log(RideableFlags.RiderTokenIDs(pRiddenToken));
+		console.log(vIndex);
+		if (vIndex >= 0) {
+			pRiddenToken.flags[cModuleName][cRidersF][vIndex] = pReplacementID;
+			
+			console.log(pRiddenToken);
+			//await this.#setRidersFlag(pRiddenToken, vNewIDs);
+			
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	static RiddenToken(pRider) {
 		let vToken = FCore.sceneof(pRider).tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 		
@@ -924,6 +944,8 @@ class RideableFlags {
 		return false;
 	}
 }
+
+export function isRider(pToken) {return RideableFlags.isRider(pToken)}
 
 //Export RideableFlags Class
 export{ RideableFlags };

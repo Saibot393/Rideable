@@ -177,6 +177,8 @@ class RideableSheetSettings {
 			
 			pApp.setPosition({ height: "auto" });
 		}
+		
+		pHTML.css("width", "max-content");
 	} 
 	
 	static AddHTMLOption(pHTML, pInfos) {

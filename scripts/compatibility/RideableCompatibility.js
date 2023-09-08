@@ -1,5 +1,6 @@
 import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
+import { isRider } from "../helpers/RideableFlags.js";
 import { UpdateRidderTokens } from "../RidingScript.js";
 import { RideablePopups } from "../helpers/RideablePopups.js";
 import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID } from "../MountingScript.js";
@@ -247,4 +248,9 @@ Hooks.once("init", () => {
 		
 		Hooks.on("preUpdateTile", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
 	}
+	
+	//compatibility exports
+	game.modules.get(cModuleName).api = {
+		isRider
+	};
 });
