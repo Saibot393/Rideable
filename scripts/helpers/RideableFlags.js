@@ -244,7 +244,7 @@ class RideableFlags {
 			}
 		}
 		
-		return game.settings.get(cModuleName, "defaultRideable") && !pToken.documentName == "Tile"; //default if anything fails, Tiles are not Rideable by default
+		return game.settings.get(cModuleName, "defaultRideable") && !(pToken.documentName == "Tile"); //default if anything fails, Tiles are not Rideable by default
 	}
 	
 	static #TokenFormFlag(pToken) {
