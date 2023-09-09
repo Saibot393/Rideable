@@ -1,3 +1,6 @@
+## v2.9.1
+- Token settings will no longer be wide
+
 ## v2.9.0
 - Copy-pasting ridden tokens should now correctly copy the riders
 - Added api for compatibility
