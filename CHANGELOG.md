@@ -1,3 +1,7 @@
+## v2.9.4
+- Fixed a bug with custom effects using DFreds Convenient effects
+- Added token setting Self apply riding effects to make this token apply its own Riding effects while riding
+
 ## v2.9.3
 - Small bug fix regarding the UI mount-toggle button
 
