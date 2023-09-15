@@ -292,6 +292,11 @@
 				"descrp"				: "Überschreibt die Welt-Reiteffekte mit den oben festgelegten (anstatt sie zu erweitern)"
 			},
 			
+			"SelfApplyEffectsFlag" : {
+				"name"					: "Reiteffekte selbst anwenden",
+				"descrp"				: "Ob diese Figur ihre eigenen Reiteffekte anwenden soll, wenn sie anfängt zu reiten"
+			},
+			
 			"canbeGrappledFlag" : {
 				"name"					: "Kann ergriffen werden",
 				"descrp"				: "Ob diese Figur egriffen werden kann"

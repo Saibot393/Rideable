@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -161,6 +161,15 @@ class RideableSheetSettings {
 																vwide : true,
 																vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
 																vflagname : cWorldMEffectOverrideF
+																});
+												
+					//if custom Mounting effects should be self applied
+					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSelfApplyEffectsF +".name"), 
+																vhint : Translate("TokenSettings."+ cSelfApplyEffectsF +".descrp"), 
+																vtype : "checkbox",
+																vwide : true,
+																vvalue : RideableFlags.SelfApplyCustomEffects(pApp.document), 
+																vflagname : cSelfApplyEffectsF
 																});
 				}
 				

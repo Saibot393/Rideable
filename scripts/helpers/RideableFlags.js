@@ -24,12 +24,13 @@ const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Moun
 const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the rideable tile
 const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatically mount this token/tile when they enter it
 const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled tokens are placed
+const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -155,6 +156,8 @@ class RideableFlags {
 	static async MarkasRideableEffect(pEffect) {} //gives pEffect the appropiate Flag
 	
 	static isRideableEffect(pEffect) {} //returns wether pEffect is flagges as RideableFlag
+	
+	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
 	//IMPLEMENTATIONS
 	
@@ -422,6 +425,19 @@ class RideableFlags {
 		}
 		
 		return ""; //default if anything fails		
+	}
+	
+	static #SelfApplyEffectsFlag (pToken) {
+		//returns content of SelfApplyEffectsFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cSelfApplyEffectsF)) {
+				return vFlag.SelfApplyEffectsFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
 	}
 	
 	static async #setRidingFlag (pToken, pContent) {
@@ -942,6 +958,10 @@ class RideableFlags {
 		}
 		
 		return false;
+	}
+	
+	static SelfApplyCustomEffects(pObject) {
+		return this.#SelfApplyEffectsFlag(pObject);
 	}
 }
 

@@ -292,6 +292,11 @@
 				"descrp"				: "Overrides the world standard riding effects with the above set effects (instead of appending them)"
 			},
 			
+			"SelfApplyEffectsFlag" : {
+				"name"					: "Self apply riding effects",
+				"descrp"				: "If this token should apply its own riding effects while while riding"
+			},
+			
 			"canbeGrappledFlag" : {
 				"name"					: "Can be grappled",
 				"descrp"				: "If this token can be grappled"

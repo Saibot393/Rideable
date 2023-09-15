@@ -40,6 +40,10 @@ class EffectManager {
 							vEffectNames.push(cMountedPf2eEffectID);
 						}
 					}
+					
+					if (RideableFlags.SelfApplyCustomEffects(pRider)) {
+						vEffectNames.push(RideableFlags.MountingEffects(pRider));
+					}
 				}
 				else {
 					if (game.settings.get(cModuleName, "GrapplingSystemEffects")) {
