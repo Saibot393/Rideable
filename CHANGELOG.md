@@ -1,3 +1,6 @@
+## v2.9.2
+- Small bug fix
+
 ## v2.9.1
 - Token settings will no longer be wide
 
