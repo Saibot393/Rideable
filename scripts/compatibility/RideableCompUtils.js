@@ -199,6 +199,7 @@ class RideableCompUtils {
 	//specific: dfreds-convenient-effects
 	static async AddDfredEffect(pEffects, pToken) {
 		for (let i = 0; i < pEffects.length; i++) {
+			console.log(pEffects[i]);
 			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
 			  effect: pEffects[i].toObject(),
 			  uuid : pToken.actor.uuid,
@@ -241,8 +242,12 @@ class RideableCompUtils {
 			else {
 				vBuffer = game.dfreds.effects._customEffectsHandler._findCustomEffectsItem().effects.get(pNameIDs[i]);
 				
+				if (!vBuffer) {
+					vBuffer = game.dfreds.effects._customEffectsHandler._findCustomEffectsItem().effects.find(v => v.name == pNameIDs[i]);
+				}
+				
 				if (vBuffer) {
-					vNameIDs.psuh(vBuffer.name);
+					vNameIDs.push(vBuffer);
 				}
 			}
 		}
