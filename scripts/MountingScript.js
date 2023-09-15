@@ -386,7 +386,9 @@ class MountingManager {
 									<i class="${cRideableIcon}"></i>
 							   </div>`;
 				
-				let vButton = pHTML.find("div.col."+vButtonPosition).append(vButtonHTML);
+				pHTML.find("div.col."+vButtonPosition).append(vButtonHTML);
+				
+				let vButton = pHTML.find(`div[data-action="mount"]`);
 				
 				vButton.click((pEvent) => {MountingManager.RequestToggleMount(RideableUtils.selectedTokens(), RideableUtils.TokenfromID(pToken._id))});
 			}
