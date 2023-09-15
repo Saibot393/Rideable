@@ -1,3 +1,6 @@
+## v2.9.3
+- Small bug fix regarding the UI mount-toggle button
+
 ## v2.9.2
 - Small bug fix
 
