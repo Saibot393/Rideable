@@ -52,6 +52,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Spawn riders (GM only): to set with which riders this token spawns
 - Riding effects (GM only): to set effects tokens gain when they start riding this token
 - Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
+- Self apply riding effects (GM only): to make this token apply its own Riding effects while riding
 - Can be grappled(GM only): to enabled/disable the grapple feature on this token
 
 ### Compatibility:
