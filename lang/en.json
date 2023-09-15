@@ -294,7 +294,7 @@
 			
 			"SelfApplyEffectsFlag" : {
 				"name"					: "Self apply riding effects",
-				"descrp"				: "If this token should apply its own riding effects while while riding"
+				"descrp"				: "If this token should apply its own riding effects while riding"
 			},
 			
 			"canbeGrappledFlag" : {
