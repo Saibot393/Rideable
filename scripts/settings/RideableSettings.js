@@ -259,7 +259,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   game.settings.register(cModuleName, "MountButtonPosition", {
 	name: Translate("Settings.MountButtonPosition.name"),
 	hint: Translate("Settings.MountButtonPosition.descrp"),
-	scope: "world",
+	scope: "client",
 	config: true,
 	type: String,
 	choices: {
