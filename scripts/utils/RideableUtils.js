@@ -310,7 +310,7 @@ class RideableUtils {
 	}
 	
 	static Ridingheight(pRidden) {
-		if (RideableCompUtils.isactiveModule(cWallHeight) && pRidden && game.settings.get(cModuleName, "useRiddenTokenHeight")) {
+		if (RideableCompUtils.isactiveModule(cWallHeight) && pRidden && game.settings.get(cModuleName, "useRiddenTokenHeight") && (pRidden.documentName == "Token")) {
 			return RideableCompUtils.guessWHTokenHeight(pRidden)
 		}
 		else {
