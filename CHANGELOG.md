@@ -1,3 +1,9 @@
+## v2.10.0
+- Added token setting Mount on enter blacklist to prevent certain tokens or actors from mounting on entering
+- Added compatibility with Token Attacher
+  - "Riding loops" should no longer be possible when using Token Attacher
+- Added feature to make sure that rider tokens will stay atop of their mount even when no riding height is set
+
 ## v2.9.5
 - Bug fix for Tile riding when Wall-Height is active
 
