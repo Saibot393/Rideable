@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF} from "../helpers/RideableFlags.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -67,12 +67,20 @@ class RideableSheetSettings {
 			}
 			
 			if (game.settings.get(cModuleName, "allowMountingonEntering")) {
-			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountonEnterF +".name"), 
-														vhint : Translate("TokenSettings."+ cMountonEnterF +".descrp"), 
-														vtype : "checkbox", 
-														vvalue : RideableFlags.MountonEnter(pApp.document, true),
-														vflagname : cMountonEnterF
-														});				
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountonEnterF +".name"), 
+															vhint : Translate("TokenSettings."+ cMountonEnterF +".descrp"), 
+															vtype : "checkbox", 
+															vvalue : RideableFlags.MountonEnter(pApp.document, true),
+															vflagname : cMountonEnterF
+															});	
+
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cAutoMountBlackListF +".name"), 
+															vhint : Translate("TokenSettings."+ cAutoMountBlackListF +".descrp"), 
+															vtype : "text", 
+															vwide : true,
+															vvalue : RideableFlags.AutomountBlackList(pApp.document, true),
+															vflagname : cAutoMountBlackListF
+															});				
 			}
 														
 			//Max Riders Setting
@@ -162,15 +170,17 @@ class RideableSheetSettings {
 																vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
 																vflagname : cWorldMEffectOverrideF
 																});
-												
-					//if custom Mounting effects should be self applied
-					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSelfApplyEffectsF +".name"), 
-																vhint : Translate("TokenSettings."+ cSelfApplyEffectsF +".descrp"), 
-																vtype : "checkbox",
-																vwide : true,
-																vvalue : RideableFlags.SelfApplyCustomEffects(pApp.document), 
-																vflagname : cSelfApplyEffectsF
-																});
+							
+					if (!pisTile) {
+						//if custom Mounting effects should be self applied
+						RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSelfApplyEffectsF +".name"), 
+																	vhint : Translate("TokenSettings."+ cSelfApplyEffectsF +".descrp"), 
+																	vtype : "checkbox",
+																	vwide : true,
+																	vvalue : RideableFlags.SelfApplyCustomEffects(pApp.document), 
+																	vflagname : cSelfApplyEffectsF
+																	});
+					}
 				}
 				
 				//if custom Mounting effects should override world stndard

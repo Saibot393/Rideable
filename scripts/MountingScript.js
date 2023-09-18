@@ -540,7 +540,9 @@ class MountingManager {
 				vMoEobjects = vMoEobjects.concat(canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => RideableFlags.MountonEnter(vTile)));
 			}
 			
-			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition));
+			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition)); //filter entered MoE objects
+			
+			vMoEobjects = vMoEobjects.filter(vMoEObject => !RideableFlags.isAutomountBlacklisted(vMoEObject, pToken));
 			
 			if (vMoEobjects.length) {
 				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {MountbyEnter : true});

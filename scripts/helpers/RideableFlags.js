@@ -31,7 +31,7 @@ const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -745,7 +745,7 @@ class RideableFlags {
 			vCheckArray.push(pRider._source.actorId);
 		}
 		
-		return Boolean(RideableFlags.AutomountBlackList.find(vElement => vCheckArray.includes(vElement)));
+		return Boolean(RideableFlags.AutomountBlackList(pRidden).find(vElement => vCheckArray.includes(vElement)));
 	}
 	
 	//additional infos

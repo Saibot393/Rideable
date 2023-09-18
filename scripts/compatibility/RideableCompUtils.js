@@ -13,6 +13,8 @@ const cArmReachold = "arms-reach";
 const cLocknKey = "LocknKey"; //self promotion
 const cLibWrapper = "lib-wrapper";
 const cDfredCE = "dfreds-convenient-effects";
+const cTokenAttacher = "token-attacher";
+const cTokenZ = "token-z";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -24,7 +26,7 @@ const cRideableTag = "Rideable:"; //For tagger
 
 const cGrabbedEffectName = "Grappled"; //For convenient effects
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE }
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ }
 export { cRideableTag, cGrabbedEffectName }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
@@ -62,6 +64,9 @@ class RideableCompUtils {
 	static async RemoveRideableDfredEffect(pEffects, pToken) {} //uses dfreds api to remove effects with pEffectNames to pToken
 	
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
+	
+	//specific: token attacher
+	static isTAAttached(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -253,6 +258,11 @@ class RideableCompUtils {
 		}
 		
 		return vNameIDs;
+	}
+	
+	//specific: token attacher
+	static isTAAttached(pToken, pObject) {
+		
 	}
 }
 
