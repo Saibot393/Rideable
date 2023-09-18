@@ -25,6 +25,7 @@ const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the ri
 const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatically mount this token/tile when they enter it
 const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled tokens are placed
 const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
+const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -79,11 +80,17 @@ class RideableFlags {
 	
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
 	
+	static RiderLevel(pRider) {} //returns the Riderlevel of pRider, 0 if not riding
+	
 	static MountonEnter(pRidden, pRaw = false) {} //returns of tokens should mount pRidden if they enter it
 	
 	static GrapplePlacement(pRidden) {} //returns the Grappleplacement of pRidden
 	
 	static async setGrapplePlacement(pRidden, pPlacement) {} //sets the grappleplacement of pRidden
+	
+	static AutomountBlackList(pRidden, pRaw = false) {} //returns an array of names or ids (token or actor) belonging to black listed Tokens
+
+	static isAutomountBlacklisted(pRidden, pRider) {} //if pRider is automount blacklisted for pRidden
 	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
@@ -440,6 +447,19 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
+	static #AutoMountBlackListFlag (pToken) {
+		//returns content of AutoMountBlackListFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cAutoMountBlackListF)) {
+				return vFlag.AutoMountBlackListFlag;
+			}
+		}
+		
+		return ""; //default if anything fails		
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -678,6 +698,26 @@ class RideableFlags {
 		return vToken;
 	}
 	
+	static RiderLevel(pRider, pStopToken = null) {
+		//stop token to prevent recursion infinity loop
+		if (pRider == pStopToken) {
+			return -Infinity;
+		}
+		
+		let vStopToken = pStopToken;
+		
+		if (!vStopToken) {
+			vStopToken = pRider;
+		}
+		
+		if (!RideableFlags.isRider(pRider)) {
+			return 0;
+		}
+		else {
+			return RideableFlags.RiderLevel(RideableFlags.RiddenToken(pRider), vStopToken) + 1;
+		}
+	}
+	
 	static MountonEnter(pRidden, pRaw = false) {
 		return (pRaw || RideableFlags.TokenisRideable(pRidden)) && this.#MountonEnterFlag(pRidden);
 	}
@@ -688,6 +728,24 @@ class RideableFlags {
 	
 	static async setGrapplePlacement(pRidden, pPlacement) {
 		return await this.#setGrapplePlacementFlag(pRidden, pPlacement);
+	}
+	
+	static AutomountBlackList(pRidden, pRaw = false) {
+		return this.#AutoMountBlackListFlag(pRidden).split(cDelimiter);
+	}
+
+	static isAutomountBlacklisted(pRidden, pRider) {
+		let vCheckArray = [pRider.name, pRider.id];
+		
+		if (pRider.actorId) {
+			vCheckArray.push(pRider.actorId);
+		}
+		
+		if (pRider._source?.actorId) {
+			vCheckArray.push(pRider._source.actorId);
+		}
+		
+		return Boolean(RideableFlags.AutomountBlackList.find(vElement => vCheckArray.includes(vElement)));
 	}
 	
 	//additional infos
