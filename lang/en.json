@@ -228,6 +228,11 @@
 				"descrp"				: "Tokens that enter this tokens/tiles space mount it"
 			},
 			
+			"AutoMountBlackListFlag" : {
+				"name"					: "Mount on enter blacklist",
+				"descrp"				: "Token names, IDs and actor IDs which will not be mounted on enter (seperated with \";\")"
+			},
+			
 			"RiderPositioningFlag" : {
 				"name"					: "Rider positioning",
 				"descrp"				: "The pattern in which the rider tokens will be placed",

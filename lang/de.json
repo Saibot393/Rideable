@@ -228,6 +228,11 @@
 				"descrp"				: "Figuren welche den Bereich dieser Figur/Fliese betreten steigen auf"
 			},
 			
+			"AutoMountBlackListFlag" : {
+				"name"					: "Reiten bei betreten Blacklist",
+				"descrp"				: "Figuren Namen, IDs und Actor IDs welche bei betreten nicht Reiten (mit \";\" getrennt)"
+			},
+			
 			"RiderPositioningFlag" : {
 				"name"					: "Reiterplatzierung",
 				"descrp"				: "Das Muster in welchem die Reiterfiguren platziert werden",
