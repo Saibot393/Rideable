@@ -24,6 +24,8 @@ export { cRowplacement, cPlacementPatterns, cGrapplePlacements };
 
 const cSizeFactor = 2/3;
 
+const cSortDifference = 10; //sort difference between ridden and rider
+
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
@@ -346,6 +348,8 @@ class Ridingmanager {
 			if (pRiderTokenList[i].elevation != vTargetz) {
 				pRiderTokenList[i].update({elevation: vTargetz}, {RidingMovement : true});
 			}	
+			
+			pRiderTokenList[i].sort = pRiddenToken.sort + cSortDifference;
 		}
 	}
 	
@@ -490,16 +494,20 @@ class Ridingmanager {
 	
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 		for (let i = 0; i < pRiderTokens.length; i++) {
-			if (pRiderTokens[i] && pRiderTokens[i]) {
+			if (pRiderTokens[i]) {
 				let vTargetz = 0;
 				
 				if (pRiddenTokens[i]) {
 					//set to height or previously ridden token
 					vTargetz = pRiddenTokens[i].elevation;
+					
+					pRiderTokens[i].sort = pRiddenTokens[i].sort;
 				}
 				else {
 					//reduce height by riding height
 					vTargetz = pRiderTokens[i].elevation - RideableUtils.Ridingheight();
+					
+					pRiderTokens[i].sort = pRiderTokens[i].sort - cSortDifference;
 				} 
 
 				pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
