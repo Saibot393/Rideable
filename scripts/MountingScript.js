@@ -554,7 +554,7 @@ class MountingManager {
 	
 	static TokencanMount (pRider, pRidden, pRidingOptions) {
 		
-		if (!RideableFlags.RidingLoop(pRider, pRidden)) {
+		if (!RideableFlags.RidingLoop(pRider, pRidden) && !RideableUtils.isConnected(pRider, pRidden)) {
 			//prevent riding loops
 			
 			if (RideableFlags.TokenhasRidingPlace(pRidden, pRidingOptions)) {

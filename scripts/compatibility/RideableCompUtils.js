@@ -66,7 +66,7 @@ class RideableCompUtils {
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
+	static isTAAttached(pToken, pObject, pReverseCheck = true) {} //returns if pObject is attached to pToken or vice versa
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -261,8 +261,19 @@ class RideableCompUtils {
 	}
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject) {
+	static isTAAttached(pToken, pObject, pReverseCheck = true) {
+		console.log("check", pToken, pObject);
+		let vAttached = false;
 		
+		if (pObject.flags.hasOwnProperty(cTokenAttacher)) {
+			vAttached = (pObject.flags[cTokenAttacher].parent == pToken.id);
+		}
+		
+		if (!vAttached && pReverseCheck && (pObject.documentName == "Token")) {
+			vAttached = RideableCompUtils.isTAAttached(pObject, pToken, false);
+		}
+	
+		return vAttached;
 	}
 }
 

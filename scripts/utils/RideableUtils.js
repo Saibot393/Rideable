@@ -1,4 +1,4 @@
-import { RideableCompUtils, cArmReach, cArmReachold } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cArmReach, cArmReachold, cTokenAttacher } from "../compatibility/RideableCompUtils.js";
 import { cWallHeight } from "../compatibility/RideableCompUtils.js";
 import { GeometricUtils } from "./GeometricUtils.js";
 
@@ -77,6 +77,8 @@ class RideableUtils {
 	static WithinMountingDistance(pRider, pRidden) {} //returns if pRider is close enought to pRidden to mount
 		
 	static UserofCharacterID(pID) {} //returns all Users which has the character with pID set as their standard character (if any)
+	
+	static isConnected(pToken, pObject) {} //returns of pObject is connected to pToken
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
@@ -347,6 +349,14 @@ class RideableUtils {
 	static UserofCharacterID(pID) {
 		return game.users.filter(vuser => vuser.character).filter(vuser => vuser.character.id == pID);
 	} 
+	
+	static isConnected(pToken, pObject) {
+		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
+			return RideableCompUtils.isTAAttached(pToken, pObject);
+		}
+		
+		return false;
+	}
 	
 	//Pf2e specific
 	static Ridingstring(pToken) {
