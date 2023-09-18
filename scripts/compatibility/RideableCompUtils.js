@@ -1,4 +1,6 @@
-import { cModuleName } from "../utils/RideableUtils.js";
+import * as FCore from "../CoreVersionComp.js";
+
+import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
 import { RideablePopups } from "../helpers/RideablePopups.js";
 import { GeometricUtils } from "../utils/GeometricUtils.js";
@@ -66,7 +68,7 @@ class RideableCompUtils {
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject, pReverseCheck = true) {} //returns if pObject is attached to pToken or vice versa
+	static isTAAttached(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -261,17 +263,30 @@ class RideableCompUtils {
 	}
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject, pReverseCheck = true) {
-		console.log("check", pToken, pObject);
+	static isTAAttached(pToken, pObject) {
+		if (!pToken || !pObject) {
+			return false;
+		}
+		
+		if (pToken == pObject) {
+			return true;
+		}
+		
 		let vAttached = false;
 		
 		if (pObject.flags.hasOwnProperty(cTokenAttacher)) {
 			vAttached = (pObject.flags[cTokenAttacher].parent == pToken.id);
+			
+			if (!vAttached) {
+				vAttached = RideableCompUtils.isTAAttached(pToken, RideableUtils.TokenfromID(pObject.flags[cTokenAttacher].parent, FCore.sceneof(pObject)));
+			}
 		}
 		
+		/*
 		if (!vAttached && pReverseCheck && (pObject.documentName == "Token")) {
 			vAttached = RideableCompUtils.isTAAttached(pObject, pToken, false);
 		}
+		*/
 	
 		return vAttached;
 	}
