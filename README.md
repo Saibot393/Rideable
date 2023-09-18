@@ -42,6 +42,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
 - Mount on enter: to mount tokens that enter this token/tile automatically
+- Mount on enter blacklist: to prevent certain tokens or actors from mounting on entering
 - Tile name [*Tiles only*]: to set the name rideable will use for this tile
 - Maximum riders: to override world default for this token
 - Custom riding height: to set the height used for tokens riding this token
@@ -84,6 +85,8 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Must be activated with the world setting DFreds Convenient Effects Integration
   - Allows for effects to be applied to mounted and grappled tokens
   - Allows for custom mounted effects to be set
+- [Token Attacher](https://foundryvtt.com/packages/token-attacher/):
+  - "Riding loops" should not be possible
 
 ### Languages:
 
