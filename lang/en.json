@@ -11,12 +11,12 @@
 		"Settings" : {
 			"defaultRideable" : {
 				"name" 					: "Tokens rideable by default",
-				"descrp"				: "Wether all tokens should be rideable by default (can be changed for each token in the token settings)"
+				"descrp"				: "Whether all tokens should be rideable by default (can be changed for each token in the token settings)"
 			},
 			
 			"allowTileRiding" : {
 				"name" 					: "Tiles can be mounted",
-				"descrp"				: "Wether tiles can be mounted, just like tokens"
+				"descrp"				: "Whether tiles can be mounted, just like tokens"
 			},
 			
 			"allowMountingonEntering" : {
