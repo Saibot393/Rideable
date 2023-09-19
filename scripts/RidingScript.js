@@ -132,18 +132,18 @@ class Ridingmanager {
 	} 
 	
 	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {
-		let vGMoverride = false;
+		let vElevationOverride = false; //option to override standard behaviour if only the elevation was changed
 					
-		if (psendingUser.isGM) {
+		if (game.users.get(psendingUser).isGM) {
 			if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden")) {
 				//if a dm tried to only change the elevation while "move ridden" is off
-				vGMoverride = true;
+				vElevationOverride = true;
 				
 				RideableFlags.setRiderHeight(pToken, RideableFlags.RiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
 			}
 		}
 		
-		if (!vGMoverride) {
+		if (!vElevationOverride) {
 			let vdeleteChanges = false;
 			
 			
