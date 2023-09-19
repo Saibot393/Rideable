@@ -1,3 +1,6 @@
+## v2.10.1
+- A few typo fixes in the english translation (thanks to [AFigureOfBlue](https://github.com/AFigureOfBlue))
+
 ## v2.10.0
 - Added token setting Mount on enter blacklist to prevent certain tokens or actors from mounting on entering
 - Added compatibility with Token Attacher
