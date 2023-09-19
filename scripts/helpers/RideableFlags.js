@@ -119,7 +119,7 @@ class RideableFlags {
 	static RiderGrappledCount(pRidden) {} //returns the number of "Riders" that are grappled
 
 	//Riding height info
-	static RiderHeight(pRider) {} //returns the addtional Riding height of pToken
+	static addRiderHeight(pRider) {} //returns the addtional Riding height of pToken
 	
 	static HascustomRidingHeight(pRidden) {} //if pRidden has a custom height
 	
@@ -140,7 +140,7 @@ class RideableFlags {
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
-	static setRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
+	static async setaddRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
 	
 	static async savecurrentSize(pToken) {} //saves the current size of pToken into the SizesaveFlag (and makes size changeable if necessary)
 	
@@ -490,10 +490,10 @@ class RideableFlags {
 		return false;
 	}
 	
-	static #setaddRiderHeightFlag (pToken, pContent) {
+	static async #setaddRiderHeightFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be array of strings)
 		if ((pToken) && (typeof pContent === "number")) {
-			pToken.setFlag(cModuleName, caddRiderHeightF, pContent);
+			await pToken.setFlag(cModuleName, caddRiderHeightF, pContent);
 			
 			return true;
 		}
@@ -821,7 +821,7 @@ class RideableFlags {
 	}
 	
 	//Riding height info
-	static RiderHeight(pRider) {
+	static addRiderHeight(pRider) {
 		return this.#RidingHeightFlag(pRider);
 	}
 	
@@ -939,11 +939,9 @@ class RideableFlags {
 		return this.isRidden(pRiddenToken);
 	}
 	
-	static setRiderHeight(pToken, pHeight) {
-		if (game.user.isGM) {
-			if (pToken) {
-				this.#setaddRiderHeightFlag(pToken, pHeight);
-			}
+	static async setaddRiderHeight(pToken, pHeight) {
+		if (pToken) {
+			await this.#setaddRiderHeightFlag(pToken, pHeight);
 		}
 	}
 

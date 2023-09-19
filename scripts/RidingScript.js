@@ -83,7 +83,10 @@ class Ridingmanager {
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {
 		//Check if Token is Rider
 		if (RideableFlags.isRider(pToken)) {
-			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
+			let vPositionChange = pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"));
+			let vElevationChange = pchanges.hasOwnProperty("elevation");
+			
+			if (vPositionChange || vElevationChange) {
 				if (!pInfos.RidingMovement) {
 					let vRidden = RideableFlags.RiddenToken(pToken);
 					let vindependentRiderLeft = true;
@@ -94,8 +97,15 @@ class Ridingmanager {
 						if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
 							vindependentRiderLeft = false;
 							
-							//update relativ position of Rider
-							RideableFlags.setRelativPosition(pToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation));
+							if (vPositionChange) {
+								//update relativ position of Rider
+								RideableFlags.setRelativPosition(pToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation));
+							}
+							
+							if (vElevationChange) {
+								//update relative elevation of Rider
+								RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
+							}
 						}
 					}
 					
@@ -139,7 +149,7 @@ class Ridingmanager {
 				//if a dm tried to only change the elevation while "move ridden" is off
 				vElevationOverride = true;
 				
-				RideableFlags.setRiderHeight(pToken, RideableFlags.RiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
+				RideableFlags.setRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
 			}
 		}
 		
@@ -172,7 +182,7 @@ class Ridingmanager {
 						
 						let vztarget = pRidden.elevation;		
 						if (pchanges.hasOwnProperty("elevation")) {
-							vztarget = pchanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.RiderHeight(pToken);
+							vztarget = pchanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.addRiderHeight(pToken);
 						}
 						
 						let vrotationtarget = pRidden.rotation;	
@@ -341,7 +351,7 @@ class Ridingmanager {
 					vTargetz = vTargetz + RideableFlags.customRidingHeight(pRiddenToken);
 				}
 				else {
-					vTargetz = vTargetz + RideableUtils.Ridingheight(pRiddenToken)/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.RiderHeight(pRiderTokenList[i]);
+					vTargetz = vTargetz + RideableUtils.Ridingheight(pRiddenToken)/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pRiderTokenList[i]);
 				}
 			}
 				
