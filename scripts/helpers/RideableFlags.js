@@ -8,7 +8,7 @@ const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding
 const cRidersF = "RidersFlag"; //Flag name for informations regarding Riders of Tokens
 const caddRiderHeightF = "addRiderHeightFlag"; //Flag name for additional Riderheight set ONYL by a GM
 const cMaxRiderF = "MaxRiderFlag"; //Flag name for the maximum amount of Riders on this Token
-const cissetRideableF = "issetRideableFlag"; //Flag name for setting wether or not a token is Rideable
+const cissetRideableF = "issetRideableFlag"; //Flag name for setting whether or not a token is Rideable
 const cTokenFormF = "TokenFormFlag"; //described the (border) form of the token
 const cInsideMovementF = "InsideMovementFlag"; //Flag that allows riders of this token to move freely within this token
 const cRelativPositionF = "RelativPositionFlag"; //Flag that describes a relativ position for a given token
@@ -162,7 +162,7 @@ class RideableFlags {
 	
 	static async MarkasRideableEffect(pEffect) {} //gives pEffect the appropiate Flag
 	
-	static isRideableEffect(pEffect) {} //returns wether pEffect is flagges as RideableFlag
+	static isRideableEffect(pEffect) {} //returns whether pEffect is flagged as RideableFlag
 	
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
