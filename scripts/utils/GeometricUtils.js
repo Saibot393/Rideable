@@ -311,11 +311,7 @@ class GeometricUtils {
 					let vCurrentDistance;
 					
 					for (let i = 0; i < vTiles.length; i++) {
-						vCurrentDistance = GeometricUtils.TokenDistanceto(pRider, GeometricUtils.Summ(GeometricUtils.CenterPosition(vTiles[i]), GeometricUtils.Rotated(vTileBorderPositions[i], vTiles[i].rotation)));
-
-						console.log(RideableFlags.RideableName(vTiles[i]));
-						console.log(vCurrentDistance);
-						
+						vCurrentDistance = GeometricUtils.TokenDistanceto(pRider, GeometricUtils.Summ(GeometricUtils.CenterPosition(vTiles[i]), GeometricUtils.Rotated(vTileBorderPositions[i], vTiles[i].rotation)));					
 
 						if (vCurrentDistance < vMinDistance) {
 							vMinDistance = vCurrentDistance;

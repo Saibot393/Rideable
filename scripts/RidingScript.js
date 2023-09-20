@@ -387,7 +387,7 @@ class Ridingmanager {
 					vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, pRiderTokenList[i]);					
 				}
 				else {
-					vTargetPosition = GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken);
+					vTargetPosition = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken), -pRiddenToken.rotation);
 				}
 				
 				vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRiddenToken).grid, [(pRiddenToken.width+pRiderTokenList[i].width)%2,(pRiddenToken.height+pRiderTokenList[i].height)%2]);
