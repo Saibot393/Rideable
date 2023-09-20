@@ -327,7 +327,7 @@ class GeometricUtils {
 					
 					if (vMinDistance < Infinity) {
 						//if not, something failed horrible
-						return GeometricUtils.Summ(vMinDistancePosition, GeometricUtils.TokenDifference(vMinDistanceTile, pToken));
+						return GeometricUtils.Summ(vMinDistancePosition, GeometricUtils.Rotated(GeometricUtils.TokenDifference(vMinDistanceTile, pToken), -pToken.rotation));
 					}
 				}
 				
