@@ -1,5 +1,8 @@
 import * as FCore from "../CoreVersionComp.js";
 
+import {RideableCompUtils, cTokenAttacher, cTokenFormAttachedTiles} from "../compatibility/RideableCompUtils.js";
+import {RideableFlags} from "../helpers/RideableFlags.js";
+
 //CONSTANTS
 const cGradtoRad = Math.PI/180;
 
@@ -14,10 +17,12 @@ const cAlphaTreshhold = 5;
 const cTokenFormCircle = "TokenFormCircle";
 const cTokenFormRectangle = "TokenFormRectangle";
 const cTokenFormTransparency = "TokenTransparency";
+const cTileFormNone = "TileFormNone";
 
 const cTokenForms = [cTokenFormCircle, cTokenFormRectangle];
+const cTileForms = [cTokenFormCircle, cTokenFormRectangle];
 
-export {cTokenForms, cGradtoRad}
+export {cTokenForms, cTileForms, cGradtoRad}
 
 class GeometricUtils {
 	//DECLARATIONS
@@ -29,6 +34,8 @@ class GeometricUtils {
 	static NewCenterPosition(pDocument, pChanges) {} //returns the new position of the Center of pDocument (usefull for updates)
 	
 	static Difference(pPositionA, pPositionB) {} //returns the x and y differenc of pPositionA to pPositionB (x-y arrays)
+	
+	static Summ(pPositionA, pPositionB) {} //returns the x and y summ of pPositionA to pPositionB (x-y arrays)
 	
 	static TokenDifference(pTokenA, pTokenB) {} //returns the x and y differenc of pTokenA to pTokenB (x-y arrays)
 	
@@ -52,6 +59,8 @@ class GeometricUtils {
 	
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
+	static TokenDistanceto(pToken, pPosition) {} //returns the distance of pToken to pPosition
+	
 	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
 	
 	static insceneWidth(pToken) {} //returns the tokens width in its scene
@@ -64,7 +73,7 @@ class GeometricUtils {
 	static sortbymaxdim(pTokens) {} //sorts pTokens array by their largest dimensions, returns sorted array and array with their values
 	
 	//advanced
-	static closestrelativBorderposition(pToken, pTokenForm, pDirection) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
+	static closestBorderposition(pToken, pTokenForm, pRider) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
@@ -109,6 +118,10 @@ class GeometricUtils {
 	static Difference(pPositionA, pPositionB) {
 		return [pPositionA[0] - pPositionB[0], pPositionA[1] - pPositionB[1]];
 	} 
+	
+	static Summ(pPositionA, pPositionB) {
+		return [pPositionA[0] + pPositionB[0], pPositionA[1] + pPositionB[1]];
+	}
 	
 	static TokenDifference(pTokenA, pTokenB) {
 		return GeometricUtils.Difference(GeometricUtils.CenterPosition(pTokenA), GeometricUtils.CenterPosition(pTokenB));
@@ -163,6 +176,14 @@ class GeometricUtils {
 		}
 		
 		return 0;
+	}
+	
+	static TokenDistanceto(pToken, pPosition) {
+		if (pToken) {
+			return Math.sqrt( ((pToken.x+GeometricUtils.insceneWidth(pToken)/2)-pPosition[0])**2 + ((pToken.y+GeometricUtils.insceneHeight(pToken)/2)-pPosition[1])**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+		}
+		
+		return 0;		
 	}
 	
 	static TokenBorderDistance(pTokenA, pTokenB) {
@@ -220,9 +241,9 @@ class GeometricUtils {
 	} 
 	
 	//advanced
-	static closestBorderposition(pToken, pTokenForm, pDirection) {
+	static closestBorderposition(pToken, pTokenForm, pRider) {
 		//unrotate direction to calculate relative position
-		let vDirection = GeometricUtils.Rotated(pDirection, -pToken.rotation);
+		let vDirection = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRider, pToken), -pToken.rotation);
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
@@ -278,7 +299,40 @@ class GeometricUtils {
 				}
 			
 				return [0,0];
+			case cTokenFormAttachedTiles:
+				let vTiles = RideableCompUtils.TAAttachedTiles(pToken);
+				let vTileBorderPositions = vTiles.map(vTile => GeometricUtils.closestBorderposition(vTile, RideableFlags.TokenForm(vTile), pRider))
 				
+				if (vTiles.length > 0) {
+					let vMinDistance = Infinity;
+					let vMinDistancePosition = vTileBorderPositions[0];
+					let vMinDistanceTile = vTiles[0];
+					
+					let vCurrentDistance;
+					
+					for (let i = 0; i < vTiles.length; i++) {
+						vCurrentDistance = GeometricUtils.TokenDistanceto(vTiles[i], GeometricUtils.Summ(GeometricUtils.CenterPosition(vTiles[i]), GeometricUtils.Rotated(vTileBorderPositions[i], vTiles[i].rotation)));
+
+						console.log(RideableFlags.RideableName(vTiles[i]));
+						console.log(vCurrentDistance);
+						
+
+						if (vCurrentDistance < vMinDistance) {
+							vMinDistance = vCurrentDistance;
+							
+							vMinDistancePosition = vTileBorderPositions[i];
+							vMinDistanceTile = vTiles[i];
+						}
+					}
+					
+					if (vMinDistance < Infinity) {
+						//if not, something failed horrible
+						return GeometricUtils.Summ(vMinDistancePosition, GeometricUtils.TokenDifference(vMinDistanceTile, pToken));
+					}
+				}
+				
+				return [0,0]; //if anything fails
+			case cTileFormNone:
 			default:
 				return [0,0];
 		}
@@ -321,6 +375,9 @@ class GeometricUtils {
 				let vpixels = GeometricUtils.Pixelsof(pToken);
 				
 				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken) > cAlphaTreshhold;
+			case cTokenFormAttachedTiles:
+				return RideableCompUtils.TAAttachedTiles(pToken).find(vTile => GeometricUtils.withinBoundaries(vTile, RideableFlags.TokenForm(vTile), pPosition));
+			case cTileFormNone:
 			default:
 				return false;
 		}
@@ -429,6 +486,14 @@ Hooks.once("ready", () => {
 	if (FCore.Fversion() >= 11) {
 		//only works in foundry 11 and higher
 		cTokenForms.push(cTokenFormTransparency);
+		cTileForms.push(cTokenFormTransparency);
+		
+		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
+			//if token attacher is activated
+			cTokenForms.push(cTokenFormAttachedTiles);
+			
+			cTileForms.push(cTileFormNone); //only has purpose with Token attacher
+		}	
 	}
 });
 

@@ -1,6 +1,6 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
 import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF} from "../helpers/RideableFlags.js";
-import { cTokenForms } from "../utils/GeometricUtils.js";
+import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
 const cRideableIcon = "fas fa-horse";
@@ -120,10 +120,19 @@ class RideableSheetSettings {
 			}
 
 			//Token Form
+			let vForms;
+			
+			if (pisTile) {
+				vForms = cTileForms;
+			}
+			else {
+				vForms = cTokenForms;
+			}
+			
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTokenFormF +".name"), 
 														vhint : Translate("TokenSettings."+ cTokenFormF +".descrp"), 
 														vtype : "select", 
-														voptions : cTokenForms,
+														voptions : vForms,
 														vvalue : RideableFlags.TokenForm(pApp.document), 
 														vflagname : cTokenFormF
 														});

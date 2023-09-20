@@ -28,8 +28,10 @@ const cRideableTag = "Rideable:"; //For tagger
 
 const cGrabbedEffectName = "Grappled"; //For convenient effects
 
+const cTokenFormAttachedTiles = "TokenFormAttachedTiles"; //For Token Attacher
+
 export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ }
-export { cRideableTag, cGrabbedEffectName }
+export { cRideableTag, cGrabbedEffectName, cTokenFormAttachedTiles }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
 //RideableCompUtil will take care of compatibility with other modules in regards to information handling, currently supported:
@@ -68,7 +70,13 @@ class RideableCompUtils {
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
+	static isTAAttachedto(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
+	
+	static TAAttachedTiles(pToken) {} //returns the tiles attached to pToken
+	
+	static isTAAttached(pObject) {} //returns of pObject is attached to a token
+	
+	static hasTAAttachedTiles(pToken) {} //returns if pToken has attached tiles
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -263,7 +271,7 @@ class RideableCompUtils {
 	}
 	
 	//specific: token attacher
-	static isTAAttached(pToken, pObject) {
+	static isTAAttachedto(pToken, pObject) {
 		if (!pToken || !pObject) {
 			return false;
 		}
@@ -289,6 +297,25 @@ class RideableCompUtils {
 		*/
 	
 		return vAttached;
+	}
+	
+	static TAAttachedTiles(pToken) {
+		let vTiles = FCore.sceneof(pToken)?.tiles.filter(vTile => vTile.flags[cTokenAttacher]?.parent == pToken.id);
+		
+		if (vTiles && vTiles.length) {
+			return vTiles;
+		}
+		else {
+			return []
+		}
+	}
+	
+	static isTAAttached(pObject) {
+		return Boolean(pObject.flags[cTokenAttacher]?.parent);
+	}
+	
+	static hasTAAttachedTiles(pToken) {
+		return Boolean(FCore.sceneof(pToken)?.tiles.find(vTile => vTile.flags[cTokenAttacher]?.parent == pToken.id));
 	}
 }
 

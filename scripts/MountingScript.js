@@ -562,7 +562,7 @@ class MountingManager {
 			
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM || pRidingOptions.Grappled) {
 				//Prevents enemy riding if enabled (override as GM and for grapples)
-					if (RideableUtils.WithinMountingDistance(pRider, pRidden)) {
+					if (pRidingOptions.MountbyEnter || RideableUtils.WithinMountingDistance(pRider, pRidden)) {
 						return true;
 					}
 					else {
