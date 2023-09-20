@@ -81,7 +81,7 @@ class MountingManager {
 		let vSelected = RideableUtils.selectedTokens();
 		
 		if (pTargetHovered || !vTarget) {
-			vTarget = RideableUtils.hoveredToken();
+			vTarget = RideableUtils.hoveredRideableToken();
 			
 			if (game.settings.get(cModuleName, "allowTileRiding")) {
 				if (!vTarget) {
@@ -307,7 +307,7 @@ class MountingManager {
 		let vfromRidden = false;
 					
 		if (pTargetHovered || !vTargets.length) {
-			vTargets = vTargets.concat([RideableUtils.hoveredToken()]);
+			vTargets = vTargets.concat([RideableUtils.hoveredRideableToken()]);
 			
 			if (game.settings.get(cModuleName, "allowTileRiding")) {
 				if (!vTargets.length) {

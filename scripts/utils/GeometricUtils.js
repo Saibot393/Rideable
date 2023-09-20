@@ -300,7 +300,7 @@ class GeometricUtils {
 			
 				return [0,0];
 			case cTokenFormAttachedTiles:
-				let vTiles = RideableCompUtils.TAAttachedTiles(pToken);
+				let vTiles = RideableCompUtils.TAAttachedTiles(pToken).filter(vTile => RideableFlags.TokenForm(vTile) != cTileFormNone);
 				let vTileBorderPositions = vTiles.map(vTile => GeometricUtils.closestBorderposition(vTile, RideableFlags.TokenForm(vTile), pRider))
 				
 				if (vTiles.length > 0) {

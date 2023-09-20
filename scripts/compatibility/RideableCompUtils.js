@@ -74,6 +74,8 @@ class RideableCompUtils {
 	
 	static TAAttachedTiles(pToken) {} //returns the tiles attached to pToken
 	
+	static TAparentToken(pObject) {} //returns the token pObject is attached to (if any)
+	
 	static isTAAttached(pObject) {} //returns of pObject is attached to a token
 	
 	static hasTAAttachedTiles(pToken) {} //returns if pToken has attached tiles
@@ -308,6 +310,14 @@ class RideableCompUtils {
 		else {
 			return []
 		}
+	}
+	
+	static TAparentToken(pObject) {
+		if (pObject) {
+			return FCore.sceneof(pObject)?.tokens.get(pObject.flags[cTokenAttacher]?.parent);
+		}
+		
+		return;
 	}
 	
 	static isTAAttached(pObject) {

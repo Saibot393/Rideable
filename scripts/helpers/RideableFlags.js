@@ -266,6 +266,10 @@ class RideableFlags {
 			}
 		}
 		
+		if (pToken.documentName == "Tile") {
+			return cTokenForms[1]; //Tiles are normally rectangles
+		}
+		
 		return cTokenForms[0]; //default if anything fails		
 	}
 	

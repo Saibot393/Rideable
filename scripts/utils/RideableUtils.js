@@ -1,6 +1,8 @@
-import { RideableCompUtils, cArmReach, cArmReachold, cTokenAttacher } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cArmReach, cArmReachold, cTokenAttacher, cTokenFormAttachedTiles } from "../compatibility/RideableCompUtils.js";
 import { cWallHeight } from "../compatibility/RideableCompUtils.js";
 import { GeometricUtils } from "./GeometricUtils.js";
+import { TileUtils } from "./TileUtils.js";
+import { RideableFlags} from "../helpers/RideableFlags.js";
 
 //CONSTANTS
 const cModuleName = "Rideable"; //name of Module
@@ -57,6 +59,8 @@ class RideableUtils {
 	
 	static hoveredToken() {} //get first hovered token
 	
+	static hoveredRideableToken() {} //get the first hovered token or the first proxy hovered token
+	
 	static getRiderMovementsetting() {} //returns the setting belonging to the RiderMovement setting of the player
 	
 	//Additional Token Infos
@@ -74,7 +78,7 @@ class RideableUtils {
 	
 	static MountingDistance() {} //returns the maximal Riding distance
 	
-	static WithinMountingDistance(pRider, pRidden) {} //returns if pRider is close enought to pRidden to mount
+	static WithinMountingDistance(pRider, pRidden, pCustomDistance = null) {} //returns if pRider is close enought to pRidden to mount
 		
 	static UserofCharacterID(pID) {} //returns all Users which has the character with pID set as their standard character (if any)
 	
@@ -251,6 +255,16 @@ class RideableUtils {
 		}
 	}
 	
+	static hoveredRideableToken() {
+		let vHovered = RideableUtils.hoveredToken();
+		
+		if (!vHovered) {
+			vHovered = TileUtils.hoveredProxyToken();
+		}
+		
+		return vHovered;
+	}
+	
 	static getRiderMovementsetting() {
 		switch (game.settings.get(cModuleName, "RiderMovement")) {
 			case "RiderMovement-worlddefault":
@@ -333,16 +347,26 @@ class RideableUtils {
 		}
 	}
 	
-	static WithinMountingDistance(pRider, pRidden) {
-		if ((RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)) && game.settings.get(cModuleName, "UseArmReachDistance")) {
-			return RideableCompUtils.ARWithinMountingDistance(pRider, pRidden);
+	static WithinMountingDistance(pRider, pRidden, pCustomDistance = null) {
+		if (RideableCompUtils.isactiveModule(cTokenAttacher) && (RideableFlags.TokenForm(pRidden) == cTokenFormAttachedTiles)) {
+			return Boolean(RideableCompUtils.TAAttachedTiles(pRidden).find(vTile => RideableUtils.WithinMountingDistance(pRider, vTile, pCustomDistance)));
+		}
+		
+		let vCheckDistance = pCustomDistance;
+		
+		if (vCheckDistance == null) {
+			if ((RideableCompUtils.isactiveModule(cArmReach) || RideableCompUtils.isactiveModule(cArmReachold)) && game.settings.get(cModuleName, "UseArmReachDistance")) {
+				return RideableCompUtils.ARWithinMountingDistance(pRider, pRidden);
+			}
+			
+			vCheckDistance = RideableUtils.MountingDistance();
 		}
 						
 		if (game.settings.get(cModuleName, "BorderDistance")) {
-			return GeometricUtils.TokenBorderDistance(pRidden, pRider) <= RideableUtils.MountingDistance();
+			return GeometricUtils.TokenBorderDistance(pRidden, pRider) <= vCheckDistance;
 		}
 		else {
-			return GeometricUtils.TokenDistance(pRidden, pRider) <= RideableUtils.MountingDistance();
+			return GeometricUtils.TokenDistance(pRidden, pRider) <= vCheckDistance;
 		}
 	}
 	
@@ -352,7 +376,7 @@ class RideableUtils {
 	
 	static isConnected(pToken, pObject) {
 		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
-			return RideableCompUtils.isTAAttachedto(pToken, pObject);
+			return RideableCompUtils.isTAAttached(pToken, pObject);
 		}
 		
 		return false;
