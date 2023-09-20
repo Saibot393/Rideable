@@ -1,3 +1,7 @@
+## v2.10.2
+- Player can now freely change their tokens elevation while riding a token/tile with "Riders can move freely"
+  - This change should improve the compatibility with multi level mounts/vehicles, especially in regard to level stairs
+
 ## v2.10.1
 - A few typo fixes in the english translation (thanks to [AFigureOfBlue](https://github.com/AFigureOfBlue))
 
