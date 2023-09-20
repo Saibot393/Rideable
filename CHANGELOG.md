@@ -6,6 +6,7 @@
   - Added token form from attached tiles to use attached tiles as the form of this token
     - The attached tiles should NOT be set as rideable, will not directly cause any bugs but strange behaviour
     - The attached tiles set token form will be respected
+    - The when using keys or macros to mount the attached tiles will have to be hovered instead of the token
   - Added tile form none to enhance above feature
 
 ## v2.10.2
