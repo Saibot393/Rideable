@@ -1,3 +1,13 @@
+## v2.11.0 (unreleased)
+- Mount on enter will no longer check the distance since the token is already on the mount
+- Fixed bug with closest point on border calculation for rotated objects
+- Fixed bug with mount on enter placement for rotated objects
+- Added additional support for token attacher
+  - Added token form from attached tiles to use attached tiles as the form of this token
+    - The attached tiles should NOT be set as rideable, will not directly cause any bugs but strange behaviour
+    - The attached tiles set token form will be respected
+  - Added tile form none to enhance above feature
+
 ## v2.10.2
 - Player can now freely change their tokens elevation while riding a token/tile with "Riders can move freely"
   - This change should improve the compatibility with multi level mounts/vehicles, especially in regard to level stairs
