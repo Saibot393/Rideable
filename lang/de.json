@@ -197,7 +197,12 @@
 			"ToggleGrapplePlacement" : {
 				"name"					: "Wechsle Ergriffenen Platzierung",
 				"descrp"				: "Wechselts zwischen den Ergriffenen Platzierungsoptionen der ausgewählten Figuren"
-			}
+			},
+			
+			"TogglePiloting" : {
+				"name" 					: "Steuern starten/stoppen",
+				"descrp"				: "Lässt die kontrollierten Figuren die gerittene Figur steuern bzw. hört damit auf"
+			}			
 		},
 		
 		"Popup" : {
@@ -214,7 +219,12 @@
 			
 			"Grappling"					: "Von {pRiddenName} gepackt",
 			"UnGrappling"				: "Von {pRiddenName} freigelassen",
-			"PreventedGrappledMove"		: "Von {pRiddenName} gepackt"
+			"PreventedGrappledMove"		: "Von {pRiddenName} gepackt",
+			
+			"cantPilot"					: "{pRiddenName} kann nicht gesteuert werden",
+			"startPiloting"				: "Steuere nun {pRiddenName}",
+			"stopPiloting"				: "Steuere {pRiddenName} nicht mehr",
+			"cantbeMoved"				: "{cantbeMoved} kann nicht bewegt werden (könnte mit etwas verbunden sein)"
 		},	
 		
 		"TokenSettings" : {
@@ -269,6 +279,8 @@
 					"TokenFormCircle"	: "Kreis/Ellipse",
 					"TokenFormRectangle": "Rechteck",
 					"TokenTransparency"	: "von Transparenz"
+					"TokenFormAttachedTiles" : "von verbundenen (attached) Figuren/Fliesen",
+					"TileFormNone"		: "Keine Form/ignorieren"
 				}
 			},
 			
@@ -305,6 +317,11 @@
 			"canbeGrappledFlag" : {
 				"name"					: "Kann ergriffen werden",
 				"descrp"				: "Ob diese Figur egriffen werden kann"
+			},
+			
+			"CanbePilotedFlag" : {
+				"name"					: "Kann gesteuert werden",
+				"descrp"				: "Spieler können diese Figur Steuern, was es ihnen erlaubt sie zu bewegen ohne sie zu besitzen"
 			}
 		},
 		

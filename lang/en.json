@@ -197,7 +197,12 @@
 			"ToggleGrapplePlacement" : {
 				"name"					: "Switch Grapple placement",
 				"descrp"				: "Switches between the placements options of grapple tokens for the selected tokens"
-			}
+			},
+			
+			"TogglePiloting" : {
+				"name" 					: "Toggle piloting",
+				"descrp"				: "Start of stop piloting the currently mounted token"
+			}	
 		},
 		
 		"Popup" : {
@@ -214,7 +219,12 @@
 			
 			"Grappling"					: "Grappled by {pRiddenName}",
 			"UnGrappling"				: "Released from {pRiddenName}",
-			"PreventedGrappledMove"		: "Still grappled by {pRiddenName}"
+			"PreventedGrappledMove"		: "Still grappled by {pRiddenName}",
+			
+			"cantPilot"					: "{pRiddenName} can't be piloted",
+			"startPiloting"				: "Now piloting {pRiddenName}",
+			"stopPiloting"				: "No longer piloting {pRiddenName}",
+			"cantbeMoved"				: "{cantbeMoved} cant be moved (may be attached to something)"
 		},	
 		
 		"TokenSettings" : {
@@ -268,7 +278,9 @@
 				"options" : {
 					"TokenFormCircle"	: "Circle/Ellipse",
 					"TokenFormRectangle": "Rectangle",
-					"TokenTransparency"	: "from transparency"
+					"TokenTransparency"	: "from transparency",
+					"TokenFormAttachedTiles" : "from attached tokens/tiles",
+					"TileFormNone"		: "No form/ignore"
 				}
 			},
 			
@@ -305,6 +317,11 @@
 			"canbeGrappledFlag" : {
 				"name"					: "Can be grappled",
 				"descrp"				: "If this token can be grappled"
+			},
+			
+			"CanbePilotedFlag" : {
+				"name"					: "Can be piloted",
+				"descrp"				: "Players can pilot this token, allowing them to move it even if they don't own it"
 			}
 		},
 		

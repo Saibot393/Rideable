@@ -29,7 +29,7 @@ class GeometricUtils {
 	//basics
 	static Rotated(pPosition, protation) {} //gives px, py rotated by protation[degrees]
 	
-	static CenterPosition(pToken) {} //returns the position of the Center of pToken
+	static CenterPosition(pToken, pTokenReplacementPosition = {}) {} //returns the position of the Center of pToken
 	
 	static NewCenterPosition(pDocument, pChanges) {} //returns the new position of the Center of pDocument (usefull for updates)
 	
@@ -37,7 +37,7 @@ class GeometricUtils {
 	
 	static Summ(pPositionA, pPositionB) {} //returns the x and y summ of pPositionA to pPositionB (x-y arrays)
 	
-	static TokenDifference(pTokenA, pTokenB) {} //returns the x and y differenc of pTokenA to pTokenB (x-y arrays)
+	static TokenDifference(pTokenA, pTokenB, pTokenAReplacementPosition = {}) {} //returns the x and y differenc of pTokenA to pTokenB (x-y arrays)
 	
 	static value(pVector) {} //returns the pythagoras value
 	
@@ -59,7 +59,7 @@ class GeometricUtils {
 	
 	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
 	
-	static TokenDistanceto(pToken, pPosition) {} //returns the distance of pToken to pPosition
+	static TokenDistanceto(pToken, pPosition, pTokenReplacementPosition = {}) {} //returns the distance of pToken to pPosition
 	
 	static TokenBorderDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens from their respective borders
 	
@@ -73,7 +73,7 @@ class GeometricUtils {
 	static sortbymaxdim(pTokens) {} //sorts pTokens array by their largest dimensions, returns sorted array and array with their values
 	
 	//advanced
-	static closestBorderposition(pToken, pTokenForm, pRider) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
+	static closestBorderposition(pToken, pTokenForm, pRider, pRiderReplacementPosition = {}) {} //gives the closest position on the border of pToken in directions of (x-y array) pDirection
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
@@ -91,8 +91,13 @@ class GeometricUtils {
 		return [Math.cos(cGradtoRad * protation) * pPosition[0] - Math.sin(cGradtoRad * protation) * pPosition[1], Math.sin(cGradtoRad * protation) * pPosition[0] + Math.cos(cGradtoRad * protation) * pPosition[1]];
 	}
 	
-	static CenterPosition(pToken) {
-		return [pToken.x + GeometricUtils.insceneWidth(pToken)/2, pToken.y + GeometricUtils.insceneHeight(pToken)/2];
+	static CenterPosition(pToken, pTokenReplacementPosition = {}) {
+		if (pTokenReplacementPosition.hasOwnProperty("x") && pTokenReplacementPosition.hasOwnProperty("y")) {
+			return [pTokenReplacementPosition.x + GeometricUtils.insceneWidth(pToken)/2, pTokenReplacementPosition.y + GeometricUtils.insceneHeight(pToken)/2];
+		}
+		else {
+			return [pToken.x + GeometricUtils.insceneWidth(pToken)/2, pToken.y + GeometricUtils.insceneHeight(pToken)/2];
+		}
 	} 
 	
 	static NewCenterPosition(pDocument, pChanges) {
@@ -123,8 +128,8 @@ class GeometricUtils {
 		return [pPositionA[0] + pPositionB[0], pPositionA[1] + pPositionB[1]];
 	}
 	
-	static TokenDifference(pTokenA, pTokenB) {
-		return GeometricUtils.Difference(GeometricUtils.CenterPosition(pTokenA), GeometricUtils.CenterPosition(pTokenB));
+	static TokenDifference(pTokenA, pTokenB, pTokenAReplacementPosition = {}) {
+		return GeometricUtils.Difference(GeometricUtils.CenterPosition(pTokenA, pTokenAReplacementPosition), GeometricUtils.CenterPosition(pTokenB));
 	}
 	
 	static value(pVector) {
@@ -178,9 +183,14 @@ class GeometricUtils {
 		return 0;
 	}
 	
-	static TokenDistanceto(pToken, pPosition) {
+	static TokenDistanceto(pToken, pPosition, pTokenReplacementPosition = {}) {
 		if (pToken) {
-			return Math.sqrt( ((pToken.x+GeometricUtils.insceneWidth(pToken)/2)-pPosition[0])**2 + ((pToken.y+GeometricUtils.insceneHeight(pToken)/2)-pPosition[1])**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			if (pTokenReplacementPosition.hasOwnProperty("x") && pTokenReplacementPosition.hasOwnProperty("y")) {
+				return Math.sqrt( ((pTokenReplacementPosition.x+GeometricUtils.insceneWidth(pToken)/2)-pPosition[0])**2 + ((pTokenReplacementPosition.y+GeometricUtils.insceneHeight(pToken)/2)-pPosition[1])**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			}
+			else {
+				return Math.sqrt( ((pToken.x+GeometricUtils.insceneWidth(pToken)/2)-pPosition[0])**2 + ((pToken.y+GeometricUtils.insceneHeight(pToken)/2)-pPosition[1])**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			}
 		}
 		
 		return 0;		
@@ -241,9 +251,11 @@ class GeometricUtils {
 	} 
 	
 	//advanced
-	static closestBorderposition(pToken, pTokenForm, pRider) {
+	static closestBorderposition(pToken, pTokenForm, pRider, pRiderReplacementPosition = {}) {
 		//unrotate direction to calculate relative position
-		let vDirection = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRider, pToken), -pToken.rotation);
+		let vDirection;
+		
+		vDirection = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRider, pToken, pRiderReplacementPosition), -pToken.rotation);
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
@@ -280,7 +292,7 @@ class GeometricUtils {
 				
 			case cTokenFormTransparency:
 				//jump empty distance
-				let vStartingPosition = GeometricUtils.closestBorderposition(pToken, cTokenFormRectangle, pDirection);
+				let vStartingPosition = GeometricUtils.closestBorderposition(pToken, cTokenFormRectangle, pRider, pRiderReplacementPosition);
 				
 				if (!pToken.object.texture) {
 					return vStartingPosition;
@@ -301,7 +313,7 @@ class GeometricUtils {
 				return [0,0];
 			case cTokenFormAttachedTiles:
 				let vTiles = RideableCompUtils.TAAttachedTiles(pToken).filter(vTile => RideableFlags.TokenForm(vTile) != cTileFormNone);
-				let vTileBorderPositions = vTiles.map(vTile => GeometricUtils.closestBorderposition(vTile, RideableFlags.TokenForm(vTile), pRider))
+				let vTileBorderPositions = vTiles.map(vTile => GeometricUtils.closestBorderposition(vTile, RideableFlags.TokenForm(vTile), pRider, pRiderReplacementPosition))
 				
 				if (vTiles.length > 0) {
 					let vMinDistance = Infinity;
@@ -311,7 +323,7 @@ class GeometricUtils {
 					let vCurrentDistance;
 					
 					for (let i = 0; i < vTiles.length; i++) {
-						vCurrentDistance = GeometricUtils.TokenDistanceto(pRider, GeometricUtils.Summ(GeometricUtils.CenterPosition(vTiles[i]), GeometricUtils.Rotated(vTileBorderPositions[i], vTiles[i].rotation)));					
+						vCurrentDistance = GeometricUtils.TokenDistanceto(pRider, GeometricUtils.Summ(GeometricUtils.CenterPosition(vTiles[i]), GeometricUtils.Rotated(vTileBorderPositions[i], vTiles[i].rotation)), pRiderReplacementPosition);					
 
 						if (vCurrentDistance < vMinDistance) {
 							vMinDistance = vCurrentDistance;

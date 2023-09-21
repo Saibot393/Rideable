@@ -37,7 +37,7 @@ class Ridingmanager {
 	
 	static UpdateRidderTokens(priddenToken, pRiderTokenList = [], pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
+	static async OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
 	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
@@ -175,7 +175,7 @@ class Ridingmanager {
 		}
 	} 
 	
-	static OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {
+	static async OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {
 		let vElevationOverride = false; //option to override standard behaviour if only the elevation was changed
 					
 		if (game.users.get(psendingUser).isGM) {
@@ -191,11 +191,23 @@ class Ridingmanager {
 			let vdeleteChanges = false;
 			
 			
-			if ((RideableUtils.getRiderMovementsetting() === "RiderMovement-disallow")) {	
-				//suppress movement
+			if ((RideableUtils.getRiderMovementsetting() === "RiderMovement-disallow")) {
 				vdeleteChanges = true;
 				
-				RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+				if (RideableFlags.RiderscanMoveWithin(pRidden)) {
+					//move to closest border position
+					let vTargetPosition = GeometricUtils.closestBorderposition(pRidden, RideableFlags.TokenForm(pRidden), pToken, RideableUtils.CompleteProperties(["x","y"], pchanges, pToken));
+
+					vTargetPosition = GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRidden).grid, [(pRidden.width+pToken.width)%2,(pRidden.height+pToken.height)%2]);
+					
+					await RideableFlags.setRelativPosition(pToken, vTargetPosition);
+					
+					Ridingmanager.UpdateRidderTokens(pRidden, [pToken]);
+				}
+				else {
+					//suppress movement
+					RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+				}
 			}
 			
 			if (RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden") {	
@@ -567,16 +579,24 @@ class Ridingmanager {
 				
 				let vPilot = vScene.tokens.get(pInfos.PilotID);
 				
-				if (vPilot && RideableFlags.isPilotedby(pRidden, vPilot)) {
-					let vTarget = {};
-					
-					for (let i = 0; i < cMotionProperties.length; i++) {
-						if (pRelativChanges.hasOwnProperty(cMotionProperties[i]) && (cMotionProperties[i] != "rotation" || game.settings.get(cModuleName, "RiderRotation"))) {
-							vTarget[cMotionProperties[i]] = pRidden[cMotionProperties[i]] + pRelativChanges[cMotionProperties[i]];
+				if (RideableUtils.canbeMoved(pRidden)) {
+					if (vPilot && RideableFlags.isPilotedby(pRidden, vPilot)) {
+						let vTarget = {};
+						
+						for (let i = 0; i < cMotionProperties.length; i++) {
+							if (pRelativChanges.hasOwnProperty(cMotionProperties[i]) && (cMotionProperties[i] != "rotation" || game.settings.get(cModuleName, "RiderRotation"))) {
+								vTarget[cMotionProperties[i]] = pRidden[cMotionProperties[i]] + pRelativChanges[cMotionProperties[i]];
+							}
 						}
+						
+						pRidden.update(vTarget);
 					}
-					
-					pRidden.update(vTarget);
+					else {
+						RideablePopups.TextPopUpID(vPilot ,"cantPilot", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
+					}					
+				}
+				else {
+					RideablePopups.TextPopUpID(vPilot ,"cantbeMoved", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
 				}
 			}
 		}

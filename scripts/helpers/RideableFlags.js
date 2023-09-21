@@ -153,7 +153,7 @@ class RideableFlags {
 	
 	static RelativPosition(pToken) {} //the current relativ Position
 	
-	static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
+	static async setRelativPosition(pToken, pPosition) {} //sets a new relativ position
 	
 	//pilots
 	static canbePiloted(pToken) {} //returns of pToken can be piloted
@@ -545,10 +545,10 @@ class RideableFlags {
 		return false;
 	}
 	
-	static #setRelativPositionFlag (pToken, pContent) {
+	static async #setRelativPositionFlag (pToken, pContent) {
 	//sets content of RelativPosition (must be array of two numbers)
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.setFlag(cModuleName, cRelativPositionF, pContent);
+			await pToken.setFlag(cModuleName, cRelativPositionF, pContent);
 			
 			return true;
 		}
@@ -1038,9 +1038,9 @@ class RideableFlags {
 		}
 	}
 	
-	static setRelativPosition(pToken, pPosition) {
+	static async setRelativPosition(pToken, pPosition) {
 		if (pPosition.length == 2) {
-			this.#setRelativPositionFlag(pToken, pPosition);
+			await this.#setRelativPositionFlag(pToken, pPosition);
 		}
 	} 
 	

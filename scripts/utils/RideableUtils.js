@@ -84,6 +84,11 @@ class RideableUtils {
 	
 	static isConnected(pToken, pObject) {} //returns of pObject is connected to pToken
 	
+	static canbeMoved(pObject) {} //returns if pObject can be moved
+	
+	//support
+	static CompleteProperties(pProperties, pSource1, pSource2) {} //returns an object containing properties defined in pProperties, first filled with pSource1, then with pSource2
+	
 	//Pf2e specific
 	static Ridingstring(pToken) {} //returns a string describing a Token being ridden by pToken
 		
@@ -380,6 +385,32 @@ class RideableUtils {
 		}
 		
 		return false;
+	}
+	
+	static canbeMoved(pObject) {
+		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
+			return !RideableCompUtils.isTAAttached(pObject);
+		}
+		
+		return true;
+	}
+	
+	//support
+	static CompleteProperties(pProperties, pSource1, pSource2) {
+		let vResult = {};
+		
+		for (let i = 0; i < pProperties.length; i++) {
+			if (pSource1.hasOwnProperty(pProperties[i])) {
+				vResult[pProperties[i]] = pSource1[pProperties[i]];
+			}
+			else {
+				if (pSource2.hasOwnProperty(pProperties[i])) {
+					vResult[pProperties[i]] = pSource2[pProperties[i]];
+				}				
+			}
+		}
+		
+		return vResult;
 	}
 	
 	//Pf2e specific
