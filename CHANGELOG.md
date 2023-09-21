@@ -12,7 +12,7 @@
     - The attached tiles set token form will be respected and combined to create the full rideable area
     - When using keys or macros to mount the attached tiles can be hovered instead of the token
     - The mounting distance will be measured from all attached tiles (only one has to be in range)
-  - Added tile form none to enhance above feature
+  - Added tile form No form/ignore to enhance above feature
 
 ## v2.10.2
 - Player can now freely change their tokens elevation while riding a token/tile with "Riders can move freely"
