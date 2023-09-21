@@ -495,7 +495,9 @@ class MountingManager {
 			if (pRidden) {
 				RideablePopups.TextPopUpID(pRider ,"startPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 			}
-		}		
+		}	
+
+		Hooks.callAll(cModuleName + "." + "startPiloting", pRider, pRidden, pRidingOptions);
 	}
 	
 	static async onstopPiloting(pRider, pRidden, pRidingOptions) {
@@ -504,6 +506,8 @@ class MountingManager {
 				RideablePopups.TextPopUpID(pRider ,"stopPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 			}
 		}
+		
+		Hooks.callAll(cModuleName + "." + "stopPiloting", pRider, pRidden, pRidingOptions);
 	}
 
 	static async onpasteToken(pOriginal, pCopyData) {

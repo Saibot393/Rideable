@@ -1073,7 +1073,7 @@ class RideableFlags {
 	static isPilotedby(pRidden, pPilot) {
 		let vRidden = RideableFlags.RiddenToken(pPilot);
 		
-		return this.#isPilotingFlag(pToken) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
+		return this.#isPilotingFlag(pPilot) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
 	}
 	
 	//pf2e specific

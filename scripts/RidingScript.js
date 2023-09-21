@@ -26,6 +26,8 @@ const cSizeFactor = 2/3;
 
 const cSortDifference = 10; //sort difference between ridden and rider
 
+const cMotionProperties = ["x", "y", "rotation", "elevation"]; //collection of valied motion key words
+
 //Ridingmanager will do all the work for placing riders and handling the z-Height
 class Ridingmanager {
 	//DECLARATIONS
@@ -58,6 +60,13 @@ class Ridingmanager {
 	
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
+	//external movement
+	static MoveRiddenGM(pRidden, pRelativChanges, pInfos) {} //change the position of a riden token as a GM
+	
+	static RequestMoveRidden(pRidden, pRelativChanges, pInfos) {} //request the position change of a Ridden token from the GM
+	
+	static MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos) {} //answers a request to move a ridden token 
+	
 	//IMPLEMENTATIONS
 	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {
 		if (game.user.isGM) {
@@ -89,39 +98,64 @@ class Ridingmanager {
 			if (vPositionChange || vElevationChange) {
 				if (!pInfos.RidingMovement) {
 					let vRidden = RideableFlags.RiddenToken(pToken);
-					let vindependentRiderLeft = true;
 					
-					if (RideableFlags.RiderscanMoveWithin(vRidden) && !RideableFlags.isFamiliarRider(pToken) && !RideableFlags.isGrappled(pToken)) {
-						let vNewPosition = GeometricUtils.NewCenterPosition(pToken, pchanges);
+					let vDeleteChanges = false;
+					
+					if (RideableFlags.isPilotedby(vRidden, pToken)) {
+						vDeleteChanges = true;
 						
-						if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
+						let vRelativChanges = {}
+						
+						for (let i = 0; i < cMotionProperties.length; i++) {
+							if (pchanges.hasOwnProperty(cMotionProperties[i])) {
+								vRelativChanges[cMotionProperties[i]] = pchanges[cMotionProperties[i]] - pToken[cMotionProperties[i]];
+							}
+						}
+												
+						Ridingmanager.RequestMoveRidden(vRidden, vRelativChanges, {MovedbyPilot : true, PilotID : pToken.id});
+					}
+					else {
+						let vindependentRiderLeft = true;
+						
+						if (RideableFlags.RiderscanMoveWithin(vRidden) && !RideableFlags.isFamiliarRider(pToken) && !RideableFlags.isGrappled(pToken)) {
+							let vNewPosition = GeometricUtils.NewCenterPosition(pToken, pchanges);
+							
+							if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
+								vindependentRiderLeft = false;
+								
+								if (vPositionChange) {
+									//update relativ position of Rider
+									RideableFlags.setRelativPosition(pToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation));
+								}
+								
+								if (vElevationChange) {
+									//update relative elevation of Rider
+									RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
+								}
+							}
+						}
+						
+						if (RideableFlags.isGrappled(pToken)) {
 							vindependentRiderLeft = false;
+					
+							vDeleteChanges = true;
 							
-							if (vPositionChange) {
-								//update relativ position of Rider
-								RideableFlags.setRelativPosition(pToken, GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation));
-							}
-							
-							if (vElevationChange) {
-								//update relative elevation of Rider
-								RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
-							}
+							RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+						}
+						
+						if (vindependentRiderLeft) {
+							Ridingmanager.OnIndependentRidermovement(pToken, pchanges, pInfos, vRidden, psendingUser);
 						}
 					}
 					
-					if (RideableFlags.isGrappled(pToken)) {
-						vindependentRiderLeft = false;
-						
+					if (vDeleteChanges) {
 						delete pchanges.x;
 						delete pchanges.y;
 						delete pchanges.elevation;
-						delete pchanges.rotation;
-				
-						RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
-					}
-					
-					if (vindependentRiderLeft) {
-						Ridingmanager.OnIndependentRidermovement(pToken, pchanges, pInfos, vRidden, psendingUser);
+						
+						if (game.settings.get(cModuleName, "RiderRotation")) {
+							delete pchanges.rotation;
+						}
 					}
 				}
 			}
@@ -524,6 +558,48 @@ class Ridingmanager {
 			}
 		}
 	}
+	
+	//external movement
+	static MoveRiddenGM(pRidden, pRelativChanges, pInfos) {
+		if (pRidden) {
+			if (pInfos.MovedbyPilot) {
+				let vScene = FCore.sceneof(pRidden);
+				
+				let vPilot = vScene.tokens.get(pInfos.PilotID);
+				
+				if (vPilot && RideableFlags.isPilotedby(pRidden, vPilot)) {
+					let vTarget = {};
+					
+					for (let i = 0; i < cMotionProperties.length; i++) {
+						if (pRelativChanges.hasOwnProperty(cMotionProperties[i]) && (cMotionProperties[i] != "rotation" || game.settings.get(cModuleName, "RiderRotation"))) {
+							vTarget[cMotionProperties[i]] = pRidden[cMotionProperties[i]] + pRelativChanges[cMotionProperties[i]];
+						}
+					}
+					
+					pRidden.update(vTarget);
+				}
+			}
+		}
+	}
+	
+	static RequestMoveRidden(pRidden, pRelativChanges, pInfos) {
+		if (game.user.isGM) {
+			Ridingmanager.MoveRiddenGM(pRidden, pRelativChanges, pInfos);
+		}
+		else {
+			if (!game.paused && pRidden) {
+				game.socket.emit("module."+cModuleName, {pFunction : "MoveRiddenRequest", pData : {pRiddenID : pRidden.id, pSceneID : FCore.sceneof(pRidden).id, pRelativChanges : pRelativChanges, pInfos : pInfos}});
+			}
+		}
+	}
+	
+	static MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos) {
+		if (game.user.isGM) {
+			let vScene = game.scenes.get(pSceneID);
+			
+			Ridingmanager.MoveRiddenGM(RideableUtils.TokenfromID(pRiddenID, vScene), pRelativChanges, pInfos);
+		}
+	}
 }
 
 //export
@@ -535,7 +611,11 @@ function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
 }
 
-export { UpdateRidderTokens, UnsetRidingHeight };
+function MoveRiddenRequest({pRiddenID, pSceneID, pRelativChanges, pInfos} = {}) {
+	Ridingmanager.MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos);
+}
+
+export { UpdateRidderTokens, UnsetRidingHeight, MoveRiddenRequest };
 
 //Set Hooks
 Hooks.on("updateToken", (...args) => Ridingmanager.OnTokenupdate(...args));
