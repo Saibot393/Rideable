@@ -158,6 +158,8 @@ class RideableFlags {
 	//pilots
 	static canbePiloted(pToken) {} //returns of pToken can be piloted
 	
+	static canbePilotedby(pRidden, pRider) {} //returns if pRidden can be piloted by pRider
+	
 	static async setPiloting(pToken, pPiloting) {} //sets this pToken piloting
 	
 	static isPiloting(pToken) {} //returns if this pToken is piloting
@@ -900,6 +902,7 @@ class RideableFlags {
 						await this.#setRidingFlag(vValidTokens[i],true);
 						await this.#setFamiliarRidingFlag(vValidTokens[i],pRidingOptions.Familiar);
 						await this.#setGrappledFlag(vValidTokens[i],pRidingOptions.Grappled);
+						await this.#setisPilotingFlag(vValidTokens[i], false);
 					}
 				}				
 			}
@@ -923,6 +926,8 @@ class RideableFlags {
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
 				this.#setRidingFlag(pRiderTokens[i], false);
+				
+				this.#setisPilotingFlag(pRiderTokens[i], false);
 				
 				if (pRemoveRiddenreference) {
 					this.#setRelativPositionFlag(pRiderTokens[i], []);
@@ -963,7 +968,7 @@ class RideableFlags {
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {
-							this.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
+							RideableFlags.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
 						}
 					}
 					else {
@@ -983,7 +988,7 @@ class RideableFlags {
 	
 	static removeallRiding (pRiddenToken) {
 		if (pRiddenToken) {
-			this.removeRiderTokens(pRiddenToken, RideableUtils.TokensfromID(RiderTokenIDs(pRiddenToken)));
+			RideableFlags.removeRiderTokens(pRiddenToken, RideableUtils.TokensfromID(RiderTokenIDs(pRiddenToken)));
 			
 			this.#setRidersFlag(pRiddenToken, []);
 		}
@@ -1044,8 +1049,12 @@ class RideableFlags {
 		return this.#CanbePilotedFlag(pToken);
 	}
 	
+	static canPilotRidden(pToken) {
+		return (!(RideableFlags.isGrappled(pToken) || RideableFlags.isFamiliarRider(pToken)) && RideableFlags.isRider(pToken) && RideableFlags.canbePiloted(RideableFlags.RiddenToken(pToken)));
+	}
+	
 	static async setPiloting(pToken, pPiloting) {
-		if (!pPiloting || RideableFlags.canbePiloted(RideableFlags.RiddenToken(pToken))) {
+		if (!pPiloting || RideableFlags.canPilotRidden(pToken)) {
 			await this.#setisPilotingFlag(pToken, pPiloting);
 			return true;
 		}
@@ -1058,7 +1067,7 @@ class RideableFlags {
 	}
 	
 	static async TogglePiloting(pToken) {
-		return RideableFlags.setPiloting(pToken, !this.#isPilotingFlag(pToken));
+		return await RideableFlags.setPiloting(pToken, !this.#isPilotingFlag(pToken));
 	}
 	
 	static isPilotedby(pRidden, pPilot) {

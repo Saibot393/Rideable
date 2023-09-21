@@ -50,6 +50,11 @@ class MountingManager {
 	
 	static ToggleGrapplePlacementSelected() {} //Taggles the Grapple placements of the selected tokens
 	
+	//piloting
+	static async TogglePiloting(pTokens) {} //Toggles the piloting of pTokens
+	
+	static TogglePilotingSelected() {} //Toggles the piloting of the selected tokens
+	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {} //checks if a button should be added and adds it
 	
@@ -59,6 +64,10 @@ class MountingManager {
 	static async onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
 	
 	static async onUnMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token unmounting (besides the basics)
+	
+	static async onstartPiloting(pRider, pRidden, pRidingOptions) {} //called when pRider starts piloting pRidden
+	
+	static async onstopPiloting(pRider, pRidden, pRidingOptions) {} //called when pRider stops piloting pRidden
 	
 	static async onpasteToken(pOriginal, pCopyData) {} //called when a token is copied, tries to also copy all riding tokens
 	
@@ -372,6 +381,32 @@ class MountingManager {
 		MountingManager.ToggleGrapplePlacement(RideableUtils.selectedTokens());
 	}
 	
+	//piloting
+	static async TogglePiloting(pTokens) {
+		for (let i = 0; i < pTokens.length; i++) {
+			if (pTokens[i].isOwner) {
+				if (await RideableFlags.TogglePiloting(pTokens[i])) {
+					if (RideableFlags.isPiloting(pTokens[i])) {
+						MountingManager.onstartPiloting(pTokens[i], RideableFlags.RiddenToken(pTokens[i]), {});
+					}
+					else {
+						MountingManager.onstopPiloting(pTokens[i], RideableFlags.RiddenToken(pTokens[i]), {});
+					}
+				}
+				else {
+					let vRidden = RideableFlags.RiddenToken(pTokens[i]);
+					if (vRidden) {
+						RideablePopups.TextPopUpID(pTokens[i] ,"cantPilot", {pRiddenName : RideableFlags.RideableName(vRidden)}); //MESSAGE POPUP
+					}
+				}
+			}
+		}		
+	} 
+	
+	static TogglePilotingSelected() {
+		MountingManager.TogglePiloting(RideableUtils.selectedTokens());
+	}
+	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {
 		if (RideableFlags.TokenisRideable(pToken)) {
@@ -453,6 +488,22 @@ class MountingManager {
 		}
 		
 		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
+	}
+	
+	static async onstartPiloting(pRider, pRidden, pRidingOptions) {
+		if (pRider) {	
+			if (pRidden) {
+				RideablePopups.TextPopUpID(pRider ,"startPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+			}
+		}		
+	}
+	
+	static async onstopPiloting(pRider, pRidden, pRidingOptions) {
+		if (pRider) {	
+			if (pRidden) {
+				RideablePopups.TextPopUpID(pRider ,"stopPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+			}
+		}
 	}
 
 	static async onpasteToken(pOriginal, pCopyData) {
@@ -675,11 +726,13 @@ function UnMountallRidersbyID(pRidden, pSceneID = null) { return MountingManager
 
 function ToggleGrapplePlacementSelected() {return MountingManager.ToggleGrapplePlacementSelected()}
 
+function TogglePilotingSelected() {return MountingManager.TogglePilotingSelected()}
+
 //Request Handlers
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
-export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected};
+export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected};
 
 export { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };

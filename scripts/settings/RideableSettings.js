@@ -2,7 +2,7 @@ import * as FCore from "../CoreVersionComp.js";
 
 import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
-import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected} from "../MountingScript.js";
+import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
@@ -354,6 +354,14 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     name: Translate("Keys.ToggleGrapplePlacement.name"),
     hint: Translate("Keys.ToggleGrapplePlacement.descrp"),
     onDown: () => { ToggleGrapplePlacementSelected(); },
+    restricted: false,
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+  
+  game.keybindings.register(cModuleName, "TogglePiloting", {
+    name: Translate("Keys.TogglePiloting.name"),
+    hint: Translate("Keys.TogglePiloting.descrp"),
+    onDown: () => { TogglePilotingSelected(); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
