@@ -26,6 +26,8 @@ const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatica
 const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled tokens are placed
 const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
 const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
+const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
+const cPilotsF = "PilotsFlag"; //flag to store current Pilots
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -152,6 +154,21 @@ class RideableFlags {
 	static RelativPosition(pToken) {} //the current relativ Position
 	
 	static setRelativPosition(pToken, pPosition) {} //sets a new relativ position
+	
+	//pilots
+	static canbePiloted(pToken) {} //returns of pToken can be piloted
+	
+	static PilotIDs(pToken, pRaw = false) {} //returns the pilot IDs of pToken
+	
+	static setPilotIDs(pToken, pIDs) {} //sets the Pilot IDs of pToken
+	
+	static addPilots(pToken, pPilots) {} //adds pPilots to pToken pilots
+	
+	static removePilots(pToken, pPilots) {} //removes pPilots to pToken pilots
+	
+	static isPilotedby(pToken, pPilot) {} //returns of pToken is piloted by pPilot
+	
+	static resetPilots(pToken) {} //resets the pilots of pToken
 	
 	//pf2e specific
 	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
@@ -413,7 +430,7 @@ class RideableFlags {
 	}
 	
 	static #MountonEnterFlag (pToken) { 
-	//returns content of MountonEnterFlag of pToken (if any) (true or false)
+	//returns content of MountonEnterFlag of pToken (if any) (boolean)
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
@@ -458,6 +475,32 @@ class RideableFlags {
 		if (vFlag) {
 			if (vFlag.hasOwnProperty(cAutoMountBlackListF)) {
 				return vFlag.AutoMountBlackListFlag;
+			}
+		}
+		
+		return ""; //default if anything fails		
+	}
+	
+	static #CanbePilotedFlag (pToken) {
+		//returns content of CanbePilotedFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cCanbePilotedF)) {
+				return vFlag.CanbePilotedFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
+	}
+	
+	static #PilotsFlag (pToken) {
+		//returns content of PilotsFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cPilotsF)) {
+				return vFlag.PilotsFlag;
 			}
 		}
 		
@@ -536,6 +579,15 @@ class RideableFlags {
 	static async #setGrapplePlacementFlag(pToken, pContent) {
 		if (pToken) {
 			await pToken.setFlag(cModuleName, cGrapplePlacementF, pContent);
+			
+			return true;
+		}
+		return false;		
+	}
+	
+	static async #setPilotsFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cPilotsF, pContent);
 			
 			return true;
 		}
@@ -990,6 +1042,40 @@ class RideableFlags {
 			this.#setRelativPositionFlag(pToken, pPosition);
 		}
 	} 
+	
+	//pilots
+	static canbePiloted(pToken) {
+		return this.#CanbePilotedFlag(pToken);
+	}
+	
+	static PilotIDs(pToken, pRaw = false) {
+		if (pRaw) {
+			return this.#PilotsFlag(pToken);
+		}
+		else {
+			return this.#PilotsFlag(pToken).split(cDelimiter);
+		}
+	}
+	
+	static setPilotIDs(pToken, pIDs) {
+		this.#setPilotsFlag(pToken, pIDs.join(cDelimiter));
+	}
+	
+	static addPilots(pToken, pPilots) {
+		RideableFlags.setPilotIDs(pToken, RideableFlags.PilotIDs(pToken).concat(pPilots.map(vPilot => vPilot.id)));
+	}
+	
+	static removePilots(pToken, pPilots) {
+		RideableFlags.setPilotIDs(pToken, RideableFlags.PilotIDs(pToken).filter(vID => !pPilots.find(vPilot => vPilot == vID)));
+	}
+	
+	static isPilotedby(pToken, pPilot) {
+		return RideableFlags.PilotIDs(pToken).find(vID => vID == pPilot.id);
+	}
+	
+	static resetPilots(pToken) {
+		RideableFlags.setPilotIDs(pToken, []);
+	}
 	
 	//pf2e specific
 	static MountingEffects(pToken) {
