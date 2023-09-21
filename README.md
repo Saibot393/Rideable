@@ -10,7 +10,7 @@ Upon mounting the module will spread the mounted tokens on the ridden token and 
 
 Ridden tokens can themself ride other tokens.
 
-Since v2.6.0 tiles can be mounted too (v11 upwards only)
+A tutorial for some of the features can be found [here](https://www.youtube.com/watch?v=tzM8pdGqYVg).
 
 ### Settings:
 
