@@ -3,6 +3,8 @@
 - Fixed bug with closest point on border calculation for rotated objects
 - Fixed bug with mount on enter placement for rotated objects
 - Added token/tile setting Can be piloted to allow players to pilot this token/tile
+  - While riding players can use the pilot toggle key or macro
+  - Whenever a piloting token moves the ridden tile/token will move with it
 - Added additional features in combination with [Token Attacher](https://foundryvtt.com/packages/token-attacher/)
   - Added token form from attached tiles to use attached tiles as the form of this token
     - The attached tiles should NOT be set as rideable, it will not directly cause any bugs but strange behaviour
