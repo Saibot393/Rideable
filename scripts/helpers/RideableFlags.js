@@ -27,13 +27,13 @@ const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled
 const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
 const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
-const cPilotsF = "PilotsFlag"; //flag to store current Pilots
+const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -158,17 +158,13 @@ class RideableFlags {
 	//pilots
 	static canbePiloted(pToken) {} //returns of pToken can be piloted
 	
-	static PilotIDs(pToken, pRaw = false) {} //returns the pilot IDs of pToken
+	static async setPiloting(pToken, pPiloting) {} //sets this pToken piloting
 	
-	static setPilotIDs(pToken, pIDs) {} //sets the Pilot IDs of pToken
+	static isPiloting(pToken) {} //returns if this pToken is piloting
 	
-	static addPilots(pToken, pPilots) {} //adds pPilots to pToken pilots
+	static async TogglePiloting(pToken) {} //toggles the isPiloting Flag
 	
-	static removePilots(pToken, pPilots) {} //removes pPilots to pToken pilots
-	
-	static isPilotedby(pToken, pPilot) {} //returns of pToken is piloted by pPilot
-	
-	static resetPilots(pToken) {} //resets the pilots of pToken
+	static isPilotedby(pRidden, pPilot) {} //returns of pRidden is piloted by pPilot
 	
 	//pf2e specific
 	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
@@ -494,17 +490,17 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
-	static #PilotsFlag (pToken) {
-		//returns content of PilotsFlag of pToken (if any) (string)
+	static #isPilotingFlag (pToken) {
+		//returns content of isPilotingFlag of pToken (if any) (boolean)
 		let vFlag = this.#RideableFlags(pToken);
 		
 		if (vFlag) {
-			if (vFlag.hasOwnProperty(cPilotsF)) {
-				return vFlag.PilotsFlag;
+			if (vFlag.hasOwnProperty(cisPilotingF)) {
+				return vFlag.isPilotingFlag;
 			}
 		}
 		
-		return ""; //default if anything fails		
+		return false; //default if anything fails		
 	}
 	
 	static async #setRidingFlag (pToken, pContent) {
@@ -585,9 +581,9 @@ class RideableFlags {
 		return false;		
 	}
 	
-	static async #setPilotsFlag(pToken, pContent) {
+	static async #setisPilotingFlag(pToken, pContent) {
 		if (pToken) {
-			await pToken.setFlag(cModuleName, cPilotsF, pContent);
+			await pToken.setFlag(cModuleName, cisPilotingF, Boolean(pContent));
 			
 			return true;
 		}
@@ -1048,33 +1044,27 @@ class RideableFlags {
 		return this.#CanbePilotedFlag(pToken);
 	}
 	
-	static PilotIDs(pToken, pRaw = false) {
-		if (pRaw) {
-			return this.#PilotsFlag(pToken);
+	static async setPiloting(pToken, pPiloting) {
+		if (!pPiloting || RideableFlags.canbePiloted(RideableFlags.RiddenToken(pToken))) {
+			await this.#setisPilotingFlag(pToken, pPiloting);
+			return true;
 		}
-		else {
-			return this.#PilotsFlag(pToken).split(cDelimiter);
-		}
+		
+		return false;
 	}
 	
-	static setPilotIDs(pToken, pIDs) {
-		this.#setPilotsFlag(pToken, pIDs.join(cDelimiter));
+	static isPiloting(pToken) {
+		return this.#isPilotingFlag(pToken) && RideableFlags.canbePiloted(RideableFlags.RiddenToken(pToken));
 	}
 	
-	static addPilots(pToken, pPilots) {
-		RideableFlags.setPilotIDs(pToken, RideableFlags.PilotIDs(pToken).concat(pPilots.map(vPilot => vPilot.id)));
+	static async TogglePiloting(pToken) {
+		return RideableFlags.setPiloting(pToken, !this.#isPilotingFlag(pToken));
 	}
 	
-	static removePilots(pToken, pPilots) {
-		RideableFlags.setPilotIDs(pToken, RideableFlags.PilotIDs(pToken).filter(vID => !pPilots.find(vPilot => vPilot == vID)));
-	}
-	
-	static isPilotedby(pToken, pPilot) {
-		return RideableFlags.PilotIDs(pToken).find(vID => vID == pPilot.id);
-	}
-	
-	static resetPilots(pToken) {
-		RideableFlags.setPilotIDs(pToken, []);
+	static isPilotedby(pRidden, pPilot) {
+		let vRidden = RideableFlags.RiddenToken(pPilot);
+		
+		return this.#isPilotingFlag(pToken) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
 	}
 	
 	//pf2e specific

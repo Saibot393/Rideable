@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -192,14 +192,23 @@ class RideableSheetSettings {
 					}
 				}
 				
-				//if custom Mounting effects should override world stndard
-				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ ccanbeGrappledF +".name"), 
-															vhint : Translate("TokenSettings."+ ccanbeGrappledF +".descrp"), 
+				if (!pisTile) {
+					//if this token can be grappled
+					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ ccanbeGrappledF +".name"), 
+																vhint : Translate("TokenSettings."+ ccanbeGrappledF +".descrp"), 
+																vtype : "checkbox",
+																vvalue : RideableFlags.canbeGrappled(pApp.document), 
+																vflagname : ccanbeGrappledF
+																});
+				}
+				
+				//if this token can be piloted
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cCanbePilotedF +".name"), 
+															vhint : Translate("TokenSettings."+ cCanbePilotedF +".descrp"), 
 															vtype : "checkbox",
-															vwide : true,
-															vvalue : RideableFlags.canbeGrappled(pApp.document), 
-															vflagname : ccanbeGrappledF
-															});
+															vvalue : RideableFlags.canbePiloted(pApp.document), 
+															vflagname : cCanbePilotedF
+															});				
 			}
 														
 			
