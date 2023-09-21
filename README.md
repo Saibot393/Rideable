@@ -55,6 +55,7 @@ Since v2.6.0 tiles can be mounted too (v11 upwards only)
 - Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
 - Self apply riding effects (GM only): to make this token apply its own Riding effects while riding
 - Can be grappled(GM only): to enabled/disable the grapple feature on this token
+- Can be piloted(GM only): to allow players to pilot this token/tile
 
 ### Compatibility:
 
@@ -87,6 +88,13 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Allows for custom mounted effects to be set
 - [Token Attacher](https://foundryvtt.com/packages/token-attacher/):
   - "Riding loops" should not be possible
+  - Adds token form "from attached tiles" to use attached tiles as the form of this token
+    - The attached tiles should NOT be set as rideable, it will not directly cause any bugs but strange behaviour
+    - The attached tiles set token form will be respected and combined to create the full rideable area
+    - When using keys or macros to mount the attached tiles can be hovered instead of the token
+    - The mounting distance will be measured from all attached tiles (only one has to be in range)
+  - Adds tile form "No form/ignore" to enhance above feature
+
 
 ### Languages:
 
