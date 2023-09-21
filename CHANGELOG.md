@@ -1,5 +1,6 @@
 ## v2.11.0 (unreleased)
 - Mount on enter will no longer check the distance since the token is already on the mount
+- While Rider movement "Prevent movement" is active and a token/tile with Riders can move freely activated is ridden, moving outside of the set form will now move the token to closest border position
 - Fixed bug with closest point on border calculation for rotated objects
 - Fixed bug with mount on enter placement for rotated objects
 - Added token/tile setting Can be piloted to allow players to pilot this token/tile
