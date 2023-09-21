@@ -2,6 +2,7 @@
 - Mount on enter will no longer check the distance since the token is already on the mount
 - Fixed bug with closest point on border calculation for rotated objects
 - Fixed bug with mount on enter placement for rotated objects
+- Added token/tile setting Can be piloted to allow players to pilot this token/tile
 - Added additional features in combination with [Token Attacher](https://foundryvtt.com/packages/token-attacher/)
   - Added token form from attached tiles to use attached tiles as the form of this token
     - The attached tiles should NOT be set as rideable, it will not directly cause any bugs but strange behaviour
