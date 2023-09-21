@@ -1,8 +1,11 @@
 ## v2.11.0 (unreleased)
 - Mount on enter will no longer check the distance since the token is already on the mount
+- While Rider movement "Prevent movement" is active and a token/tile with Riders can move freely activated is ridden, moving outside of the set form will now move the token to closest border position
 - Fixed bug with closest point on border calculation for rotated objects
 - Fixed bug with mount on enter placement for rotated objects
 - Added token/tile setting Can be piloted to allow players to pilot this token/tile
+  - While riding players can use the pilot toggle key or macro
+  - Whenever a piloting token moves the ridden tile/token will move with it
 - Added additional features in combination with [Token Attacher](https://foundryvtt.com/packages/token-attacher/)
   - Added token form from attached tiles to use attached tiles as the form of this token
     - The attached tiles should NOT be set as rideable, it will not directly cause any bugs but strange behaviour
