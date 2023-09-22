@@ -1,3 +1,7 @@
+## v2.11.1
+- Fixed grid snap bug for Ridden tokens moved via move ridden
+- Added macros for Toggle mount and Piloting
+
 ## v2.11.0
 - Mount on enter will no longer check the distance since the token is already on the mount
 - While Rider movement "Prevent movement" is active and a token/tile with Riders can move freely activated is ridden, moving outside of the set form will now move the token to closest border position
