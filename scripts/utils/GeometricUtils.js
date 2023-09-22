@@ -78,7 +78,7 @@ class GeometricUtils {
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
 	//grids
-	static GridSnap(ppositon, pGridType, podd) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
+	static GridSnap(ppositon, pGridType, podd = [0,0]) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
 	
 	//graphics
 	static Pixelsof(pObject) {} //returns the pixels of pObject
@@ -392,7 +392,7 @@ class GeometricUtils {
 	}
 	
 	//grids
-	static GridSnap(ppositon, pGrid, podd) {
+	static GridSnap(ppositon, pGrid, podd = [0,0]) {
 		let vsnapposition = [0,0];
 		//podd: depends on refrence point, if corner => podd == false, if middle => podd == true
 		switch (pGrid.type) {

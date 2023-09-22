@@ -1,8 +1,8 @@
-2023/07/24-20:14:41.165 4abc Recovering log #365
-2023/07/24-20:14:41.169 4abc Delete type=0 #365
-2023/07/24-20:14:41.170 4abc Delete type=3 #363
-2023/07/24-20:15:29.644 2628 Level-0 table #370: started
-2023/07/24-20:15:29.644 2628 Level-0 table #370: 0 bytes OK
-2023/07/24-20:15:29.647 2628 Delete type=0 #368
-2023/07/24-20:15:29.647 2628 Manual compaction at level-0 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
-2023/07/24-20:15:29.647 2628 Manual compaction at level-1 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
+2023/09/22-14:58:01.243 1ad4 Log #373: 0 ops saved to Table #572 OK
+2023/09/22-14:58:01.243 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/000373.log: OK
+2023/09/22-14:58:01.243 1ad4 Log #571: 0 ops saved to Table #573 OK
+2023/09/22-14:58:01.243 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/000571.log: OK
+2023/09/22-14:58:01.249 1ad4 Table #356: 4 entries OK
+2023/09/22-14:58:01.251 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/MANIFEST-000371: OK
+2023/09/22-14:58:01.251 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/MANIFEST-000569: OK
+2023/09/22-14:58:01.255 1ad4 **** Repaired leveldb E:\P&P\Data\modules\Rideable\packs\rideable; recovered 1 files; 1203 bytes. Some data may have been lost. ****

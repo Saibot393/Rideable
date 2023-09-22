@@ -236,6 +236,8 @@ class Ridingmanager {
 							vrotationtarget = pchanges.rotation;
 						}
 						
+						[vxtarget, vytarget] = GeometricUtils.GridSnap([vxtarget, vytarget], FCore.sceneof(pRidden).grid);
+						
 						pRidden.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget}, {animate : pInfos.animate});
 					}
 					
