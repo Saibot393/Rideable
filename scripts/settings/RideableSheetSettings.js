@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -10,6 +10,8 @@ class RideableSheetSettings {
 	static SheetSetting(vApp, vHTML, vData, pisTile = false) {} //settings for sheets
 	
 	static AddHTMLOption(pHTML, pInfos) {} //adds a new HTML option to pHTML
+	
+	static FixSheetWindow(pHTML) {} //fixes the formating of pHTML sheet window
 	
 	//IMPLEMENTATIONS
 	
@@ -67,6 +69,7 @@ class RideableSheetSettings {
 			}
 			
 			if (game.settings.get(cModuleName, "allowMountingonEntering")) {
+				//to set mount on enter
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountonEnterF +".name"), 
 															vhint : Translate("TokenSettings."+ cMountonEnterF +".descrp"), 
 															vtype : "checkbox", 
@@ -74,6 +77,7 @@ class RideableSheetSettings {
 															vflagname : cMountonEnterF
 															});	
 
+				//to set the mount on enter black list
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cAutoMountBlackListF +".name"), 
 															vhint : Translate("TokenSettings."+ cAutoMountBlackListF +".descrp"), 
 															vtype : "text", 
@@ -189,6 +193,15 @@ class RideableSheetSettings {
 																	vvalue : RideableFlags.SelfApplyCustomEffects(pApp.document), 
 																	vflagname : cSelfApplyEffectsF
 																	});
+
+						//for Mount effects applied to mount
+						RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cforMountEffectsF +".name"), 
+																	vhint : Translate("TokenSettings."+ cforMountEffectsF +".descrp"), 
+																	vtype : "text",
+																	vwide : true,
+																	vvalue : RideableFlags.forMountEffects(pApp.document), 
+																	vflagname : cforMountEffectsF
+																	});																
 					}
 				}
 				
@@ -214,6 +227,8 @@ class RideableSheetSettings {
 			
 			pApp.setPosition({ height: "auto" });
 		}
+		
+		//RideableSheetSettings.FixSheetWindow(pHTML);
 		
 		//pHTML.css("width", "max-content");
 	} 
@@ -312,8 +327,22 @@ class RideableSheetSettings {
 		//pHTML.find('[name="RideableTitle"]').after(vnewHTML);
 		pHTML.find(`div[data-tab="${cModuleName}"]`).append(vnewHTML);
 	}
+	
+	static FixSheetWindow(pHTML) {
+		let vNeededWidth = 0;
+
+		pHTML.find(`nav.sheet-tabs[data-group="main"]`).children().each(function() {
+			vNeededWidth = vNeededWidth + $(this).outerWidth() ;
+		});
+		
+		console.log(pHTML.find(`nav.sheet-tabs[data-group="main"]`).children());
+		
+		if (vNeededWidth > pHTML.width()) {
+			pHTML.width(vNeededWidth);
+		}		
+	}
 }
 
-Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData));
+Hooks.on("renderTokenConfig", (pApp, pHTML, pData) => RideableSheetSettings.SheetSetting(pApp, pHTML, pData));
 
-Hooks.on("renderTileConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData, true));
+Hooks.on("renderTileConfig", (pApp, pHTML, pData) => RideableSheetSettings.SheetSetting(pApp, pHTML, pData, true));

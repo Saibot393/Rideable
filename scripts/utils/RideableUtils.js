@@ -428,7 +428,7 @@ class RideableUtils {
 		
 		for (let i = 0; i < pIdentifications.length; i++) {
 			//world
-			//-uuid
+			//id
 			let vBuffer = await game.items.get(pIdentifications[i]);
 			
 			//-name
@@ -436,7 +436,7 @@ class RideableUtils {
 				vBuffer = await game.items.find(vEffect => vEffect.name == pIdentifications[i]);
 			}
 			
-			//direct id
+			//uu-id
 			if (!vBuffer) {
 				vBuffer = await fromUuid(pIdentifications[i]);
 			}
@@ -446,7 +446,7 @@ class RideableUtils {
 				let vElement;
 				let vPacks = game.packs.filter(vPacks => vPacks.documentName == "Item");//.map(vPack => vPack.index);
 				
-				//-uuid
+				//-id
 				let vPack = vPacks.find(vPack => vPack.index.get(pIdentifications[i]));
 				
 				if (vPack) {
@@ -472,8 +472,16 @@ class RideableUtils {
 				}
 			}
 			
-			if (vBuffer && [cPf2ConditionType, cPf2EffectType].includes(vBuffer.type) ) {
-				vEffects[vEffects.length] = vBuffer.toObject();
+			console.log(vBuffer);
+			console.log(typeof vBuffer);
+			
+			if (vBuffer && [cPf2ConditionType, cPf2EffectType].includes(vBuffer.type)) {
+				if (typeof vBuffer == "object") {
+					vEffects[vEffects.length] = foundry.utils.duplicate(vBuffer);
+				}
+				else {
+					vEffects[vEffects.length] = vBuffer.toObject();
+				}
 			}
 		}
 		

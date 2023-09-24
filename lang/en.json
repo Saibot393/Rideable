@@ -314,6 +314,11 @@
 				"descrp"				: "If this token should apply its own riding effects while riding"
 			},
 			
+			"forMountEffectsFlag" : {
+				"name"					: "Mount effects",
+				"descrp"				: "Effects that are applied to mounts of this token"
+			},
+			
 			"canbeGrappledFlag" : {
 				"name"					: "Can be grappled",
 				"descrp"				: "If this token can be grappled"

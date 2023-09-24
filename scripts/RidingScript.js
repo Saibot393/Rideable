@@ -81,7 +81,7 @@ class Ridingmanager {
 				//check if token position was actually changed
 				if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
 					//check if ridden Token exists
-					let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pToken), FCore.sceneof(pToken));
+					let vRiderTokenList = RideableFlags.RiderTokens(pToken);
 					
 					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, !pisTile && pInfos.animate);
 				}

@@ -19,6 +19,7 @@ const ccanbeGrappledF = "canbeGrappledFlag"; //Flag that describes, that this to
 const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
 const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom riding height of a ridden token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
+const cRideableMountEffectF = "RideableMountEffectFlag"; //Flag that signals, that this is an effect applied to mounts
 const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
 const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the rideable tile
@@ -28,12 +29,13 @@ const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects shoul
 const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
+const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -75,6 +77,8 @@ class RideableFlags {
 	static isGrappledID(pRiderTokenID, pScene = null) {} //returns true if pRiderTokenID matches Token which has Riding flag and Grappled Riding flag true
 	
 	static RiderTokenIDs (pRiddenToken) {} //returns array of Ridder IDs that ride pRiddenToken (empty if it is not ridden)
+	
+	static RiderTokens (pRiddenToken) {} //returns array of Ridder Tokens that ride pRiddenToken (empty if it is not ridden)
 	
 	static async replaceRiderTokenID (pRiddenToken, pOriginalID, pReplacementID) {} //replace pOriginalID with pReplacementID
 	
@@ -168,16 +172,18 @@ class RideableFlags {
 	
 	static isPilotedby(pRidden, pPilot) {} //returns of pRidden is piloted by pPilot
 	
-	//pf2e specific
+	//effects
 	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
 	
 	static MountingEffectsstring(pToken) {} //returns alls the effects pToken gives its Riders
 	
+	static forMountEffects(pRider, pRaw = false) {} //returns the effects pRider applies to its mount
+	
 	static OverrideWorldMEffects(pToken) {} //returns if this Token mounting effects override the world standard (or just add to it)
 	
-	static async MarkasRideableEffect(pEffect) {} //gives pEffect the appropiate Flag
+	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {} //gives pEffect the appropiate Flag
 	
-	static isRideableEffect(pEffect) {} //returns whether pEffect is flagged as RideableFlag
+	static isRideableEffect(pEffect, pforMountEffect = false) {} //returns whether pEffect is flagged as RideableFlag
 	
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
@@ -492,6 +498,19 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
+	static #forMountEffectsFlag (pToken) {
+		//returns content of forMountEffectsFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cforMountEffectsF)) {
+				return vFlag.forMountEffectsFlag;
+			}
+		}
+		
+		return ""; //default if anything fails		
+	}
+	
 	static #isPilotingFlag (pToken) {
 		//returns content of isPilotingFlag of pToken (if any) (boolean)
 		let vFlag = this.#RideableFlags(pToken);
@@ -722,6 +741,10 @@ class RideableFlags {
 		}
 		
 		return true;
+	}
+	
+	static RiderTokens (pRiddenToken) {
+		return RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken));
 	}
 	
 	static async replaceRiderTokenID(pRiddenToken, pOriginalID, pReplacementID) {
@@ -1076,7 +1099,7 @@ class RideableFlags {
 		return this.#isPilotingFlag(pPilot) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
 	}
 	
-	//pf2e specific
+	//effects
 	static MountingEffects(pToken) {
 		return this.#MountingEffectsFlag(pToken).split(cDelimiter);
 	}
@@ -1085,21 +1108,41 @@ class RideableFlags {
 		return this.#MountingEffectsFlag(pToken);
 	}
 	
+	static forMountEffects(pRider, pRaw = false) {
+		if (pRaw) {
+			return this.#forMountEffectsFlag(pRider);
+		}
+		else {
+			return this.#forMountEffectsFlag(pRider).split(cDelimiter);
+		}
+	}
+	
 	static OverrideWorldMEffects(pToken) {
 		return this.#WorldMEffectOverrideFlag(pToken);
 	}
 	
-	static async MarkasRideableEffect(pEffect) {
+	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {
+		let vFlagName = cRideableEffectF;
+		
+		if (pforMountEffect) {
+			vFlagName = cRideableMountEffectF;
+		}
+		
 		if (pEffect) {
-			pEffect.setFlag(cModuleName, cRideableEffectF, true)
+			pEffect.setFlag(cModuleName, vFlagName, true)
 		}
 	}
 	
-	static isRideableEffect(pEffect) {
-		let vFlag = this.#RideableFlags(pEffect);
+	static isRideableEffect(pEffect, pforMountEffect = false) {
+		let vFlags = this.#RideableFlags(pEffect);		
+		let vFlagName = cRideableEffectF;
 		
-		if (vFlag) {
-			return (vFlag.hasOwnProperty(cRideableEffectF) && vFlag.RideableEffectFlag);
+		if (pforMountEffect) {
+			vFlagName = cRideableMountEffectF;
+		}
+		
+		if (vFlags) {
+			return (vFlags.hasOwnProperty(vFlagName) && vFlags[vFlagName]);
 		}
 		
 		return false;

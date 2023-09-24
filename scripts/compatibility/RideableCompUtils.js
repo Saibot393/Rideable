@@ -63,9 +63,9 @@ class RideableCompUtils {
 	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
 	
 	//specific: dfreds-convenient-effects
-	static async AddDfredEffect(pEffects, pToken) {} //uses dfreds api to add effects with pEffectNames to pToken
+	static async AddDfredEffect(pEffects, pToken, pforMountEffect = false) {} //uses dfreds api to add effects with pEffectNames to pToken
 	
-	static async RemoveRideableDfredEffect(pEffects, pToken) {} //uses dfreds api to remove effects with pEffectNames to pToken
+	static async RemoveRideableDfredEffect(pEffects, pToken, pforMountEffect = false) {} //uses dfreds api to remove effects with pEffectNames to pToken
 	
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
@@ -214,13 +214,19 @@ class RideableCompUtils {
 	}
 	
 	//specific: dfreds-convenient-effects
-	static async AddDfredEffect(pEffects, pToken) {
+	static async AddDfredEffect(pEffects, pToken, pforMountEffect = false) {
+		let vPostFix = "";
+		
+		if (pforMountEffect) {
+			vPostFix = ".forMount";
+		}
+		
 		for (let i = 0; i < pEffects.length; i++) {
 			console.log(pEffects[i]);
 			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
 			  effect: pEffects[i].toObject(),
 			  uuid : pToken.actor.uuid,
-			  origin : cModuleName
+			  origin : cModuleName + vPostFix
 			});
 			/*
 			game.dfreds.effectInterface.addEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
@@ -228,7 +234,13 @@ class RideableCompUtils {
 		}
 	}
 	
-	static async RemoveRideableDfredEffect(pEffects, pToken) {
+	static async RemoveRideableDfredEffect(pEffects, pToken, pforMountEffect = false) {
+		let vPostFix = "";
+		
+		if (pforMountEffect) {
+			vPostFix = ".forMount";
+		}
+		
 		for (let i = 0; i < pEffects.length; i++) {
 			let vName = pEffects[i].name;
 			
@@ -239,7 +251,7 @@ class RideableCompUtils {
 			await game.dfreds.effectInterface._socket.executeAsGM('removeEffect', {
 			  effectName: vName,
 			  uuid : pToken.actor.uuid,
-			  origin : cModuleName
+			  origin : cModuleName + vPostFix
 			});
 			//game.dfreds.effectInterface.removeEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
 		}		

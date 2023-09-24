@@ -300,7 +300,7 @@
 			},
 			
 			"MountingEffectsFlag" : {
-				"name"					: "Reiteffekte",
+				"name"					: "Reiter-Effekte",
 				"descrp"				: "Effekte welche auf Reiter dieser Figur angewandt werden"
 			},
 			
@@ -312,6 +312,11 @@
 			"SelfApplyEffectsFlag" : {
 				"name"					: "Reiteffekte selbst anwenden",
 				"descrp"				: "Ob diese Figur ihre eigenen Reiteffekte anwenden soll, wenn sie anfängt zu reiten"
+			},
+			
+			"forMountEffectsFlag" : {
+				"name"					: "Gerittenen-Effekte",
+				"descrp"				: "Effekte welche auf von dieser Figure gerittenen Figuren angewandt werden"
 			},
 			
 			"canbeGrappledFlag" : {

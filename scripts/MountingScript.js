@@ -6,6 +6,7 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
+import { EffectManager } from "./helpers/EffectManager.js";
 
 const cRideableIcon = "fas fa-horse";
 
@@ -463,6 +464,8 @@ class MountingManager {
 			}
 		}
 		
+		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
+		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
@@ -486,6 +489,8 @@ class MountingManager {
 				RideableFlags.resetSize(pRider);
 			}
 		}
+		
+		EffectManager.onRiderUnMount(pRider, pRidden, pRidingOptions);
 		
 		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
 	}
