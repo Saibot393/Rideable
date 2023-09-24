@@ -301,7 +301,7 @@
 			
 			"MountingEffectsFlag" : {
 				"name"					: "Riding effects",
-				"descrp"				: "Effects that are applied to riders of this token"
+				"descrp"				: "Effects that are applied to riders of this token (Names or IDs, seperated with \";\")"
 			},
 			
 			"WorldMEffectOverrideFlag" : {
@@ -316,7 +316,7 @@
 			
 			"forMountEffectsFlag" : {
 				"name"					: "Mount effects",
-				"descrp"				: "Effects that are applied to mounts of this token"
+				"descrp"				: "Effects that are applied to mounts of this token (Names or IDs, seperated with \";\")"
 			},
 			
 			"canbeGrappledFlag" : {

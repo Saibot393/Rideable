@@ -301,7 +301,7 @@
 			
 			"MountingEffectsFlag" : {
 				"name"					: "Reiter-Effekte",
-				"descrp"				: "Effekte welche auf Reiter dieser Figur angewandt werden"
+				"descrp"				: "Effekte welche auf Reiter dieser Figur angewandt werden (Namen oder IDs, getrennt mit \";\")"
 			},
 			
 			"WorldMEffectOverrideFlag" : {
@@ -316,7 +316,7 @@
 			
 			"forMountEffectsFlag" : {
 				"name"					: "Gerittenen-Effekte",
-				"descrp"				: "Effekte welche auf von dieser Figure gerittenen Figuren angewandt werden"
+				"descrp"				: "Effekte welche auf von dieser Figure gerittenen Figuren angewandt werden (Namen oder IDs, getrennt mit \";\")"
 			},
 			
 			"canbeGrappledFlag" : {
