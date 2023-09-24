@@ -1,3 +1,8 @@
+## v2.12.0
+- Added token setting Mount effects to set effects that are applied to the mount of this token
+- Fixed some bugs with the way Pf2e effects are applied
+- The tab bar of token settings should be less likely to overflow when multiple modules add tabs
+
 ## v2.11.1
 - Fixed grid snap bug for Ridden tokens moved via move ridden
 - Added macros for Toggle mount and Piloting
