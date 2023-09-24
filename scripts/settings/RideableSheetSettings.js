@@ -228,7 +228,7 @@ class RideableSheetSettings {
 			pApp.setPosition({ height: "auto" });
 		}
 		
-		//RideableSheetSettings.FixSheetWindow(pHTML);
+		RideableSheetSettings.FixSheetWindow(pHTML);
 		
 		//pHTML.css("width", "max-content");
 	} 
