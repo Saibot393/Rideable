@@ -54,6 +54,7 @@ A tutorial for some of the features can be found [here](https://www.youtube.com/
 - Riding effects (GM only): to set effects tokens gain when they start riding this token
 - Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
 - Self apply riding effects (GM only): to make this token apply its own Riding effects while riding
+- Mount effects (GM only): to set effects that are applied to the mount of this token
 - Can be grappled(GM only): to enabled/disable the grapple feature on this token
 - Can be piloted(GM only): to allow players to pilot this token/tile
 
