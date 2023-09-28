@@ -1,3 +1,6 @@
+## v2.12.1
+- Fixed bug in German translation file (thanks to [Freezor](https://github.com/Freezor))
+
 ## v2.12.0
 - Added token setting Mount effects to set effects that are applied to the mount of this token
 - Fixed some bugs with the way Pf2e effects are applied
