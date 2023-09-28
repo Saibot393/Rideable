@@ -472,9 +472,6 @@ class RideableUtils {
 				}
 			}
 			
-			console.log(vBuffer);
-			console.log(typeof vBuffer);
-			
 			if (vBuffer && [cPf2ConditionType, cPf2EffectType].includes(vBuffer.type)) {
 				if (typeof vBuffer == "object") {
 					vEffects[vEffects.length] = foundry.utils.duplicate(vBuffer);
