@@ -278,7 +278,7 @@
 				"options" : {
 					"TokenFormCircle"	: "Kreis/Ellipse",
 					"TokenFormRectangle": "Rechteck",
-					"TokenTransparency"	: "von Transparenz"
+					"TokenTransparency"	: "von Transparenz",
 					"TokenFormAttachedTiles" : "von verbundenen (attached) Figuren/Fliesen",
 					"TileFormNone"		: "Keine Form/ignorieren"
 				}
