@@ -222,7 +222,6 @@ class RideableCompUtils {
 		}
 		
 		for (let i = 0; i < pEffects.length; i++) {
-			console.log(pEffects[i]);
 			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
 			  effect: pEffects[i].toObject(),
 			  uuid : pToken.actor.uuid,

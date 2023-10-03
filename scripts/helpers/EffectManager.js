@@ -64,8 +64,6 @@ class EffectManager {
 				}
 			}
 			
-			console.log(vRiderEffectNames);
-			
 			EffectManager.applyRideableEffects(pRider, vRiderEffectNames);
 		}
 	}
@@ -82,8 +80,6 @@ class EffectManager {
 			for (let i = 0; i < vRiders.length; i++) {
 				vMountEffectNames = vMountEffectNames.concat(RideableFlags.forMountEffects(vRiders[i]));
 			}
-			
-			console.log(vMountEffectNames);
 			
 			EffectManager.applyRideableEffects(pRidden, vMountEffectNames, true);
 		}

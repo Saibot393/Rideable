@@ -136,13 +136,13 @@ class RideableFlags {
 	
 	static async cleanRiderIDs (pRiddenToken) {} //removes all Rider IDs that are now longer valid
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
+	static async removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {} //removes the IDs of the pRiderTokens from the ridden Flag of pRiddenToken
 	
 	static recheckRiding (pRiderTokens) {} //rechecks to see if Ridden Token still exists
 	
 	static async recheckRiders (pRiddenToken) {} //rechecks to see if riders of pRiddenToken still exist
 	
-	static stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
+	static async stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
 	
@@ -584,9 +584,9 @@ class RideableFlags {
 		return false;
 	}
 	
-	static #setSizesaveFlag(pToken, pContent) {
+	static async #setSizesaveFlag(pToken, pContent) {
 		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
-			pToken.setFlag(cModuleName, cSizesaveF, pContent);
+			await pToken.setFlag(cModuleName, cSizesaveF, pContent);
 			
 			return true;
 		}
@@ -937,20 +937,20 @@ class RideableFlags {
 		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID, FCore.sceneof(pRiddenToken)))));
 	} 
 	
-	static removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {
+	static async removeRiderTokens (pRiddenToken, pRiderTokens, pRemoveRiddenreference = true) {
 		if (pRiddenToken) {
 			let vValidTokens = pRiderTokens.filter(vToken => this.isRiddenby(pRiddenToken, vToken)); //only Tokens riding pRiddenToken can be removed
 			
 			if (pRemoveRiddenreference) {
 				let vnewRiderIDs = this.#RidersFlag(pRiddenToken).filter(vID => !(RideableUtils.IDsfromTokens(vValidTokens).includes(vID)));
 				
-				this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
+				await this.#setRidersFlag(pRiddenToken, vnewRiderIDs);
 			}
 			
 			for (let i = 0; i < pRiderTokens.length; i++) {
-				this.#setRidingFlag(pRiderTokens[i], false);
+				await this.#setRidingFlag(pRiderTokens[i], false);
 				
-				this.#setisPilotingFlag(pRiderTokens[i], false);
+				await this.#setisPilotingFlag(pRiderTokens[i], false);
 				
 				if (pRemoveRiddenreference) {
 					this.#setRelativPositionFlag(pRiderTokens[i], []);
@@ -977,7 +977,7 @@ class RideableFlags {
 		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => FCore.sceneof(pRiddenToken).tokens.get(vID)));
 	} 
 	
-	static stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
+	static async stopRiding (pRidingTokens, pRemoveRiddenreference = true) {
 		if (pRidingTokens) {
 			for (let i = 0; i < pRidingTokens.length; i++) {
 				if (pRidingTokens[i]) {
@@ -991,11 +991,11 @@ class RideableFlags {
 					
 					if (vRiddenTokens.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {
-							RideableFlags.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
+							await RideableFlags.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
 						}
 					}
 					else {
-						this.#setRidingFlag(vRidingToken, false);
+						await this.#setRidingFlag(vRidingToken, false);
 						
 						if (pRemoveRiddenreference) {
 							this.#setRelativPositionFlag(vRidingToken, []);

@@ -25,7 +25,7 @@ class MountingManager {
 	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {} //Answer request for GM user to execute MountSelectedGM with given parameters
 	
 	//Basic Unmounting
-	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
+	static async UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {} //remove all riding flags concerning pselectedTokens
 	
 	static UnMountSelected() {} //works out what tokens should be unmounted and calls request unmount on them
 	
@@ -225,7 +225,7 @@ class MountingManager {
 	}
 	
 	//Basic Unmounting
-	static UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {
+	static async UnMountSelectedGM(pselectedTokens, pfromRidden = false, pRemoveRiddenreference = true) {
 		//verify pselectedToken exists
 		if (pselectedTokens) {
 			let vRiderTokens = pselectedTokens.filter(vToken => RideableFlags.isRider(vToken) && (!RideableFlags.isGrappled(vToken) || pfromRidden));
@@ -237,7 +237,7 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
+			await RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			UnsetRidingHeight(vRiderTokens, vRiddenTokens);
 			
