@@ -1,3 +1,6 @@
+## v2.12.3
+- Fixed bug that prevented the Mount effects of a rider to be removed when this rider dismounts
+
 ## v2.12.2
 - Fixed bug that occurred when a free moving token changed its height when mounting a token/tile with a custom riding height
 
