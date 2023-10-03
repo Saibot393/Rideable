@@ -1,3 +1,6 @@
+## v2.12.2
+- Fixed bug that occurred when a free moving token changed its height when mounting a token/tile with a custom riding height
+
 ## v2.12.1
 - Fixed error in German translation file (thanks to [Freezor](https://github.com/Freezor))
 
