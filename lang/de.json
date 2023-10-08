@@ -258,7 +258,8 @@
 				"descrp"				: "Wo ergriffene Figuren platziert werden",
 				"options" : {
 					"RowBelow"			: "unten",
-					"RowAbove"			: "oben"
+					"RowAbove"			: "oben",
+					"RowMiddle"			: "mitte"
 				}
 			},
 			

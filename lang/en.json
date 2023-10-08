@@ -258,7 +258,8 @@
 				"descrp"				: "Where grappled tokens are placed",
 				"options" : {
 					"RowBelow"			: "below",
-					"RowAbove"			: "above"
+					"RowAbove"			: "above",
+					"RowMiddle"			: "middle"
 				}
 			},
 			

@@ -14,11 +14,12 @@ const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 
 //grapple positioning options
 const cRowBelow = "RowBelow"; //places grappled tokens below
-const cRowAbove = "RowAbove"; //places grappled tokens below
+const cRowAbove = "RowAbove"; //places grappled tokens above
+const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
 
 const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
-const cGrapplePlacements = [cRowBelow, cRowAbove]
+const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle]
 
 export { cRowplacement, cPlacementPatterns, cGrapplePlacements };
 
@@ -298,6 +299,9 @@ class Ridingmanager {
 		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {
 			case cRowAbove:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+				break;
+			case cRowMiddle:
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (0)));
 				break;
 			default:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
