@@ -1,3 +1,6 @@
+## v2.12.6
+- Added world setting Grapple placement default
+
 ## v2.12.5
 - Added "inside" to Grappled placement options
 
