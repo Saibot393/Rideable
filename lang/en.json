@@ -147,6 +147,17 @@
 				"descrp"				: "If a token gets grappled, a system dependent effect will be applied to the token"				
 			},
 			
+			"GrappleplacementDefault" : {
+				"name"					: "Grapple placement default",
+				"descrp"				: "The standard grapple placement of tokens",
+				"options" : {
+					"RowBelow"			: "below",
+					"RowAbove"			: "above",
+					"RowMiddle"			: "middle",
+					"ClosestInside"		: "inside"
+				}
+			},
+			
 			"PreventEnemyRiding" : {
 				"name" 					: "Prevent enemy riding",
 				"descrp"				: "Stops tokens from riding enemy tokens (GMs can still override this)"				

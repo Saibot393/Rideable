@@ -3,6 +3,7 @@ import * as FCore from "../CoreVersionComp.js";
 import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
+import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
@@ -192,6 +193,22 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: Boolean,
 	default: false
   });  
+  
+  let vChoices = {};
+  
+  for (let i = 0; i < cGrapplePlacements.length; i++) {
+	  vChoices[cGrapplePlacements[i]] = Translate("Settings.GrappleplacementDefault.options." + cGrapplePlacements[i])
+  }
+  
+  game.settings.register(cModuleName, "GrappleplacementDefault", {
+	name: Translate("Settings.GrappleplacementDefault.name"),
+	hint: Translate("Settings.GrappleplacementDefault.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: vChoices,
+	default: cGrapplePlacements[0]
+  });
   
   game.settings.register(cModuleName, "PreventEnemyRiding", {
 	name: Translate("Settings.PreventEnemyRiding.name"),

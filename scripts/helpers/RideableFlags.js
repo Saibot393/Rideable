@@ -456,7 +456,7 @@ class RideableFlags {
 			}
 		}
 		
-		return ""; //default if anything fails		
+		return game.settings.get(cModuleName, "GrappleplacementDefault"); //default if anything fails		
 	}
 	
 	static #SelfApplyEffectsFlag (pToken) {
