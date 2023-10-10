@@ -1,3 +1,6 @@
+## v2.12.5
+- Added "inside" to Grappled placement options
+
 ## v2.12.4
 - Added "middle" to Grappled placement options
 
