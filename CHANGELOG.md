@@ -1,3 +1,6 @@
+## v2.12.4
+- Added "middle" to Grappled placement options
+
 ## v2.12.3
 - Fixed bug that prevented the Mount effects of a rider to be removed when this rider dismounts
 
