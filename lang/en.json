@@ -259,7 +259,8 @@
 				"options" : {
 					"RowBelow"			: "below",
 					"RowAbove"			: "above",
-					"RowMiddle"			: "middle"
+					"RowMiddle"			: "middle",
+					"ClosestInside"		: "inside" 
 				}
 			},
 			

@@ -7,7 +7,7 @@ import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
-const cColumnplacement = "ColumnPlacement"; //place all tokens in a RowPlacement
+const cColumnplacement = "ColumnPlacement"; //place all tokens in a column
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
 const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
@@ -16,10 +16,11 @@ const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 const cRowBelow = "RowBelow"; //places grappled tokens below
 const cRowAbove = "RowAbove"; //places grappled tokens above
 const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
+const cClosestInside = "ClosestInside"; //place grappled tokens at the closest Inside position
 
 const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
 
-const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle]
+const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside]
 
 export { cRowplacement, cPlacementPatterns, cGrapplePlacements };
 
@@ -302,6 +303,9 @@ class Ridingmanager {
 				break;
 			case cRowMiddle:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (0)));
+				break;
+			case cClosestInside:
+				Ridingmanager.planRelativRiderTokens(pRiddenToken, vGrappledList, pAnimations);
 				break;
 			default:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
