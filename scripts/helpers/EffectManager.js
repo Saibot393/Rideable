@@ -24,6 +24,8 @@ class EffectManager {
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {} //handle deletion of mounting effects
 	
+	static onRideableEffectDeletion(pEffect, pToken, pInfos, pUserID){} //called when a rideable effect is deleted
+	
 	//IMPLEMENTATION
 	static async applyMountingEffects(pRider, pRidden, pRidingOptions) {
 		//Effects applied to pRider
@@ -133,7 +135,40 @@ class EffectManager {
 			EffectManager.RecheckforMountEffects(pRidden);
 		}
 	}
+	
+	static onRideableEffectDeletion(pEffect, pToken, pInfos, pUserID){
+		let vGrappleEffect = false;
+		
+		if ((pEffect.flags?.core?.sourceId == cGrappledPf2eEffectID) || (pEffect.name == cGrabbedEffectName)) {
+			vGrappleEffect = true;
+		}
+		
+		Hooks.call(cModuleName + ".RideableEffectDeletion", pEffect, game.users.get(pUserID), {GrappleEffect : vGrappleEffect});
+		
+		console.log(vGrappleEffect);
+	}
 }
+
+/*
+Hooks.on("ready", function() {
+	if (RideableUtils.isPf2e()) {
+		Hooks.on("deleteItem", (pItem, pInfos, pUserID) => {
+			if (["condition", "effect"].includes(pItem.type)) {
+				if (RideableFlags.isRideableEffect(pItem)) {
+					EffectManager.onRideableEffectDeletion(pItem, pItem.parent, pInfos, pUserID);
+				}
+			}
+		});
+	}
+	else {
+		Hooks.on("deleteActiveEffect", (pEffect, pInfos, pUserID) => {
+			if (pEffect.origin == cModuleName) {
+				EffectManager.onRideableEffectDeletion(pEffect, pEffect.parent, pInfos, pUserID);
+			}
+		});
+	}
+});
+*/
 
 export { EffectManager }
 

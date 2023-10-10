@@ -709,6 +709,8 @@ Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.o
 
 Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
 
+//Hooks.on(cModuleName+".RideableEffectDeletion", (...args) => MountingManager.onRideableEffectDeletion(...args));
+
 //wrap and export functions
 
 function MountSelected(pTargetHovered = false) { return MountingManager.MountSelected(pTargetHovered); }
