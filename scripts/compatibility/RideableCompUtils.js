@@ -17,6 +17,7 @@ const cLibWrapper = "lib-wrapper";
 const cDfredCE = "dfreds-convenient-effects";
 const cTokenAttacher = "token-attacher";
 const cTokenZ = "token-z";
+const cRoutingLib = "routinglib";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -79,6 +80,11 @@ class RideableCompUtils {
 	static isTAAttached(pObject) {} //returns of pObject is attached to a token
 	
 	static hasTAAttachedTiles(pToken) {} //returns if pToken has attached tiles
+	
+	//specific: routing lib-wrapper
+	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {} //returns the route of pToken to pTarget(x,y)
+	
+	static CutRoute(pRoute, pbeforeEnd, pbeforeEnd = 0) {} //returns round cut pbeforeEnd pixels before the last coordinate
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -337,6 +343,86 @@ class RideableCompUtils {
 	
 	static hasTAAttachedTiles(pToken) {
 		return Boolean(FCore.sceneof(pToken)?.tiles.find(vTile => vTile.flags[cTokenAttacher]?.parent == pToken.id));
+	}
+	
+	//specific: routing lib-wrapper
+	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {
+		let vStart = {x : pToken.x, y : pToken.y};
+		
+		let vTarget = {x : pTarget.x, y : pTarget.y};
+		
+		let vRoute = [];
+		
+		let vGridSize = pToken.parent.grid.size;
+		
+		switch (pToken.parent.grid.type) {
+			case 1:
+				//squares	
+				vStart.x = Math.round((vStart.x)/vGridSize);
+				vStart.y = Math.round((vStart.y)/vGridSize);
+				
+				vTarget.x = Math.round((vTarget.x)/vGridSize);
+				vTarget.y = Math.round((vTarget.y)/vGridSize);
+			case 0: 
+			default:
+				//no grid
+				break;
+		}
+		
+		vRoute = await routinglib.calculatePath(vStart, vTarget, {token : pToken});
+		
+		switch (pToken.parent.grid.type) {
+			case 1:
+				//squares
+				vRoute = vRoute.path.map(vPoint => {x : vPoint.x * vGridSize, y : vPoint.y * vGridSize}
+			case 0: 
+			default:
+				//no grid
+				break;
+		}	
+
+		return RideableCompUtils.CutRoute(vRoute, pbeforeEnd);
+	}
+	
+	static CutRoute(pRoute, pbeforeEnd = 0) {
+		if (pbeforeEnd == 0) {
+			return pRoute;
+		}
+		else {
+			let vDistances = [0];
+			
+			let vCompleteLength = 0;
+			
+			let vPartLength;
+			
+			for (let i = 1; i < pRoute.length; i++) {
+				vPartLength = GeometricUtils.DistanceXY(pRoute[i], pRoute[i-1]);
+				
+				vDistances.push(vPartLength);
+				
+				vCompleteLength = vCompleteLength + vPartLength;
+			}
+			
+			let vResultRoute = [pRoute[0]];
+			
+			for (let i = 0; i < vDistances.length; i++) {
+				if (vCompleteLength > 0) {
+					if (vDistances[i] < vCompleteLength) {
+						vCompleteLength = vCompleteLength - vDistances[i];
+						
+						vResultRoute.push(pRoute[i+1]);
+					}
+					else {
+						vResultRoute.push({x : pRoute[i].x + (pRoute[i+1].x - pRoute[i].x) * (vCompleteLength/vDistances[i])
+										   y : pRoute[i].y + (pRoute[i+1].y - pRoute[i].y) * (vCompleteLength/vDistances[i]);
+						
+						vCompleteLength = 0;
+					}
+				}
+			}	
+
+			return vResultRoute;
+			}
 	}
 }
 

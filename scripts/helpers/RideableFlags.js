@@ -30,6 +30,9 @@ const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
+const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
+const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at which this token follows
+const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -186,6 +189,31 @@ class RideableFlags {
 	static isRideableEffect(pEffect, pforMountEffect = false) {} //returns whether pEffect is flagged as RideableFlag
 	
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
+	
+	//following
+	static isFollowing(pFollower) {} //returns if pFollower is following something
+	
+	static isFollowingToken(pFollower, pToken) {} //returns if pFollower is following pToken
+	
+	static followedID(pFollower) {} //retruns the ID of the token followed by pFollower
+	
+	static followingTokens(pToken) {} //returns array of Tokens following pToken
+	
+	static FollowDistance(pFollower) {} //returns the follow distance of pFollower
+	
+	static async startFollowing(pFollower, pToken, pDistance) {} //start pFollower to follow pToken
+	
+	static async stopFollowing(pFollower) {} //stops pFollower from following
+	
+	static async setplannedRoute(pToken, pRoute) {} //sets the planned route for pToken
+	
+	static hasPlannedRoute(pToken) {} //returns if pToken has planned route
+	
+	static nextRoutePoint(pToken) {} //returns the next point on route of pToken
+	
+	static isnextRoutePoint(pToken, pPoint) {} //returns if pPoint is next route point on pTokens route
+	
+	static async shiftRoute(pToken) {} //shifts the route of pToken one point further
 	
 	//IMPLEMENTATIONS
 	
@@ -524,6 +552,45 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
+	static #followedTokenFlag (pToken) {
+		//returns content of followedTokenFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cfollowedTokenF)) {
+				return vFlag.followedTokenFlag;
+			}
+		}
+		
+		return ""; //default if anything fails			
+	}
+	
+	static #followDistanceFlag (pToken) {
+		//returns content of followDistanceFlag of pToken (if any) (number)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cfollowDistanceF)) {
+				return vFlag.followDistanceFlag;
+			}
+		}
+		
+		return 0; //default if anything fails			
+	}
+	
+	static #plannedRouteFlag (pToken) {
+		//returns content of plannedRouteFlag of pToken (if any) (array of objects)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cplannedRouteF)) {
+				return vFlag.plannedRouteFlag;
+			}
+		}
+		
+		return []; //default if anything fails			
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -605,6 +672,33 @@ class RideableFlags {
 	static async #setisPilotingFlag(pToken, pContent) {
 		if (pToken) {
 			await pToken.setFlag(cModuleName, cisPilotingF, Boolean(pContent));
+			
+			return true;
+		}
+		return false;		
+	}
+	
+	static async #setfollowedTokenFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cfollowedTokenF, pContent);
+			
+			return true;
+		}
+		return false;		
+	}
+	
+	static async #setfollowDistanceFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cfollowDistanceF, pContent);
+			
+			return true;
+		}
+		return false;		
+	}
+	
+	static async #setplannedRouteFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cplannedRouteF, pContent);
 			
 			return true;
 		}
@@ -1150,6 +1244,70 @@ class RideableFlags {
 	
 	static SelfApplyCustomEffects(pObject) {
 		return this.#SelfApplyEffectsFlag(pObject);
+	}
+	
+	//following
+	static isFollowing(pFollower) {
+		return (this.#followedTokenFlag(pFollower).length > 0)
+	}
+	
+	static isFollowingToken(pFollower, pToken) {
+		return this.#followedTokenFlag(pFollower) == pToken.id;
+	}
+	
+	static followedID(pFollower) {
+		return this.#followedTokenFlag(pFollower);
+	}
+	
+	static followingTokens(pToken) {
+		return pToken.parent.tokens.filter(vToken => RideableFlags.isFollowingToken(vToken, pToken));
+	}
+	
+	static FollowDistance(pFollower) {
+		return this.#followDistanceFlag(pFollower);
+	}
+	
+	static async startFollowing(pFollower, pToken, pDistance) {
+		await this.#setfollowedTokenFlag(pFollower, pToken.id);
+		
+		await this.#setfollowDistanceFlag(pFollower, pDistance);
+	}
+	
+	static await stopFollowing(pFollower) {
+		await this.#setfollowedTokenFlag(pFollower, "");
+	}
+	
+	static async setplannedRoute(pToken, pRoute) {
+		await this.#setplannedRouteFlag(pToken, pRoute);
+	}
+	
+	static hasPlannedRoute(pToken) {
+		return this.#plannedRouteFlag(pToken).length > 0;
+	}
+	
+	static nextRoutePoint(pToken) {
+		let vRoute = this.#plannedRouteFlag(pToken);
+		
+		if (vRoute.length > 0) {
+			return vRoute[0];
+		}
+		else {
+			return {};
+		}
+	}
+	
+	static isnextRoutePoint(pToken, pPoint) {
+		let vNextPoint = RideableFlags.nextRoutePoint(pToken);
+		
+		return (vNextPoint.x == pPoint.x && vNextPoint.y == pPoint.y);
+	}
+	
+	static async shiftRoute(pToken) {
+		let vNewRoute = this.#plannedRouteFlag(pToken);
+		
+		vNewRoute.shift();
+		
+		await this.#setplannedRouteFlag(pToken, vNewRoute);
 	}
 }
 

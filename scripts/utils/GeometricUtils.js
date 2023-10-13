@@ -31,6 +31,8 @@ class GeometricUtils {
 	
 	static CenterPosition(pToken, pTokenReplacementPosition = {}) {} //returns the position of the Center of pToken
 	
+	
+	
 	static NewCenterPosition(pDocument, pChanges) {} //returns the new position of the Center of pDocument (usefull for updates)
 	
 	static Difference(pPositionA, pPositionB) {} //returns the x and y differenc of pPositionA to pPositionB (x-y arrays)
@@ -54,6 +56,8 @@ class GeometricUtils {
 	static Direction(pPositionA, pPositionB) {} //returns (x-y array) with the relativ direction of pPositionA to pPositionB(normed to one)
 	
 	static Distance(pPositionA, pPositionB) {} //returns the distance between position A nad B
+	
+	static DistanceXY(pPositionA, pPositionB) {} //returns the distance between position A nad B (with A and B having x,y)
 	
 	static scaledDistance(pPositionA, pPositionB, pfactorarray, protation = 0) {} //returns the distance between position A nad B with the x and y component scaled with pfactorarray (rotates difference before claculation if protation != 0)
 	
@@ -164,6 +168,10 @@ class GeometricUtils {
 	
 	static Distance(pPositionA, pPositionB) {
 		return GeometricUtils.value(GeometricUtils.Difference(pPositionA, pPositionB));
+	}
+	
+	static DistanceXY(pPositionA, pPositionB) {
+		return ((pPositionA.x - pPositionB.x)**2 + (pPositionA.y - pPositionB.y)**2)**0.5;
 	}
 	
 	static scaledDistance(pPositionA, pPositionB, pfactorarray, protation = 0) {

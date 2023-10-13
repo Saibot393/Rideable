@@ -73,10 +73,12 @@ class Ridingmanager {
 	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {
 		if (game.user.isGM) {
 			
+			/*
 			if (!pToken) {
 				//get token from scene if not linked
 				RideableUtils.TokenfromID(pToken.id, FCore.sceneof(pToken))
 			}
+			*/
 			
 			//Check if vToken is ridden
 			if (RideableFlags.isRidden(pToken)) {
