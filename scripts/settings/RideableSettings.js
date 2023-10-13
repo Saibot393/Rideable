@@ -280,6 +280,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "stop"
   });  
   
+  game.settings.register(cModuleName, "OnlyfollowViewed", {
+	name: Translate("Settings.OnlyfollowViewed.name"),
+	hint: Translate("Settings.OnlyfollowViewed.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   //client settings 
   game.settings.register(cModuleName, "RiderMovement", {
 	name: Translate("Settings.RiderMovement.name"),

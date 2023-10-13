@@ -84,7 +84,7 @@ class RideableCompUtils {
 	//specific: routing lib-wrapper
 	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {} //returns the route of pToken to pTarget(x,y)
 	
-	static CutRoute(pRoute, pbeforeEnd = 0) {} //returns round cut pbeforeEnd pixels before the last coordinate
+	static CutRoute(pRoute, pbeforeEnd = 0, pGrid = undefined) {} //returns round cut pbeforeEnd pixels before the last coordinate
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -387,10 +387,10 @@ class RideableCompUtils {
 				break;
 		}	
 
-		return RideableCompUtils.CutRoute(vRoute, pbeforeEnd);
+		return RideableCompUtils.CutRoute(vRoute, pbeforeEnd, pToken.parent.grid);
 	}
 	
-	static CutRoute(pRoute, pbeforeEnd = 0) {
+	static CutRoute(pRoute, pbeforeEnd = 0, pGrid = undefined) {
 		if (pbeforeEnd == 0) {
 			return pRoute;
 		}
@@ -415,15 +415,21 @@ class RideableCompUtils {
 			
 			if (vTargetLength > 0) {
 				for (let i = 1; i < vDistances.length; i++) {
-					if (vCompleteLength > 0) {
+					if (vTargetLength > 0) {
 						if (vDistances[i] < vTargetLength) {
 							vResultRoute.push(pRoute[i]);
 							
 							vTargetLength = vTargetLength - vDistances[i];
 						}
 						else {
-							vResultRoute.push({x : pRoute[i-1].x + (pRoute[i].x - pRoute[i-1].x) * (vTargetLength/vDistances[i]),
-											   y : pRoute[i-1].y + (pRoute[i].y - pRoute[i-1].y) * (vTargetLength/vDistances[i])});
+							let vNewPoint = {x : pRoute[i-1].x + (pRoute[i].x - pRoute[i-1].x) * (vTargetLength/vDistances[i]),
+											y : pRoute[i-1].y + (pRoute[i].y - pRoute[i-1].y) * (vTargetLength/vDistances[i])};
+											
+							if (pGrid) {
+								GeometricUtils.GridSnapxy(vNewPoint, pGrid);
+							}
+							
+							vResultRoute.push(vNewPoint);
 							
 							vTargetLength = 0;
 						}

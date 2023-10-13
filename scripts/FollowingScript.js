@@ -135,15 +135,16 @@ class FollowingManager {
 	
 	//ons
 	static OnTokenupdate(pToken, pchanges, pInfos, pID) {
-		if (game.user.isGM) {
-			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
-				let vFollowers = RideableFlags.followingTokens(pToken);
-				
-				if (vFollowers.length > 0) {
-					FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
-				}
-				
-				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement) {
+		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
+			//only consider owned tokens for which this player is the source of the follow order
+			let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
+			
+			if (vFollowers.length > 0) {
+				FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
+			}
+			
+			if (pToken.isOwner) {
+				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
 					RideableFlags.stopFollowing(pToken);
 					
 					FollowingManager.OnStopFollowing(pToken);
@@ -155,7 +156,7 @@ class FollowingManager {
 	static OnTokenrefresh(pToken, pInfos) {
 		let vToken = pToken.document;
 
-		if (vToken.isOwner) {
+		if (vToken.isOwner && RideableFlags.isFollowOrderSource(vToken)) {
 			if (RideableFlags.hasPlannedRoute(vToken)) {
 				if (vToken.object) {
 					if (RideableFlags.isnextRoutePoint(vToken, vToken.object.position)) {

@@ -82,7 +82,9 @@ class GeometricUtils {
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
 	//grids
-	static GridSnap(ppositon, pGridType, podd = [0,0]) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
+	static GridSnap(ppositon, pGrid, podd = [0,0]) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
+	
+	static GridSnapxy(pposition, pGrid) {} //snaps pposition(x,y) to grid type
 	
 	//graphics
 	static Pixelsof(pObject) {} //returns the pixels of pObject
@@ -421,6 +423,63 @@ class GeometricUtils {
 					vsnapposition[dim] = Math.sign(ppositon[dim]) * (Math.round((Math.abs(ppositon[dim])-voffset-1)/pGrid.size) * pGrid.size + voffset);
 				}
 				
+				return vsnapposition;
+				break;
+			
+			case 2:
+				/*
+				let vgridheight = Math.round(chexfactor*pGrid.size+0.5);
+				
+				console.log(podd);
+				
+				let vyoffset = 0;
+				if (podd && podd[cyid]) {
+					vyoffset = vgridheight/2;
+				}	
+				
+				vsnapposition[cyid] = Math.sign(ppositon[cyid]) * (Math.round((Math.abs(ppositon[cyid])-vyoffset)/(vgridheight)-0.5) * vgridheight + vyoffset);
+				
+				//Check
+				
+				let vxoffset = 0;		
+				
+				if (podd && podd[cxid]) {
+					vxoffset = vxoffset + pGrid.size/2;
+				}		
+				
+				if (((podd && podd[cxid]) && (Math.round(vsnapposition[cyid]/vgridheight+0.5)%2)) || (!(podd && podd[cxid]) && !(Math.round(vsnapposition[cyid]/vgridheight+0.5)%2))) {
+					vxoffset = vxoffset + pGrid.size/2;
+				}	
+
+				console.log((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size);
+				console.log(Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5));
+				console.log(Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5) * pGrid.size + vxoffset);
+				vsnapposition[cxid] = Math.sign(ppositon[cxid]) * (Math.round((Math.abs(ppositon[cxid])-vxoffset)/pGrid.size-0.5) * pGrid.size + vxoffset);
+				console.log(vsnapposition[cxid]);
+				
+				return vsnapposition;
+				*/
+			//add cases for grids(later)
+			default:
+				return vsnapposition;
+		}
+	}
+	
+	static GridSnapxy(pposition, pGrid) {
+		let vsnapposition = pposition;
+		
+		switch (pGrid.type) {
+			case 0:
+				//gridless
+				return vsnapposition;
+				break;
+			
+			case 1:
+				//squares
+				console.log(vsnapposition);
+				vsnapposition.x = Math.round(vsnapposition.x/pGrid.size)*pGrid.size;
+				vsnapposition.y = Math.round(vsnapposition.y/pGrid.size)*pGrid.size;
+				console.log(vsnapposition);
 				return vsnapposition;
 				break;
 			

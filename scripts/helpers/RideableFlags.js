@@ -33,6 +33,7 @@ const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects appl
 const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
 const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at which this token follows
 const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
+const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued the follow order of this token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -202,6 +203,8 @@ class RideableFlags {
 	static FollowDistance(pFollower) {} //returns the follow distance of pFollower
 	
 	static async startFollowing(pFollower, pToken, pDistance) {} //start pFollower to follow pToken
+	
+	static isFollowOrderSource(pFollower) {} //returns if current player is source of follow order
 	
 	static async stopFollowing(pFollower) {} //stops pFollower from following
 	
@@ -591,6 +594,19 @@ class RideableFlags {
 		return []; //default if anything fails			
 	}
 	
+	static #FollowOrderPlayerIDFlag (pToken) {
+		//returns content of FollowOrderPlayerIDFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cFollowOrderPlayerIDF)) {
+				return vFlag.FollowOrderPlayerIDFlag;
+			}
+		}
+		
+		return ""; //default if anything fails			
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -699,6 +715,15 @@ class RideableFlags {
 	static async #setplannedRouteFlag(pToken, pContent) {
 		if (pToken) {
 			await pToken.setFlag(cModuleName, cplannedRouteF, pContent);
+			
+			return true;
+		}
+		return false;		
+	}
+	
+	static async #setFollowOrderPlayerIDFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cFollowOrderPlayerIDF, pContent);
 			
 			return true;
 		}
@@ -1271,6 +1296,12 @@ class RideableFlags {
 		await this.#setfollowedTokenFlag(pFollower, pToken.id);
 		
 		await this.#setfollowDistanceFlag(pFollower, pDistance);
+		
+		await this.#setFollowOrderPlayerIDFlag(pFollower, game.userId);
+	}
+	
+	static isFollowOrderSource(pFollower) {
+		return game.userId == this.#FollowOrderPlayerIDFlag(pFollower);
 	}
 	
 	static async stopFollowing(pFollower) {
