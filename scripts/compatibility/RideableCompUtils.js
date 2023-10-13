@@ -84,7 +84,7 @@ class RideableCompUtils {
 	//specific: routing lib-wrapper
 	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {} //returns the route of pToken to pTarget(x,y)
 	
-	static CutRoute(pRoute, pbeforeEnd, pbeforeEnd = 0) {} //returns round cut pbeforeEnd pixels before the last coordinate
+	static CutRoute(pRoute, pbeforeEnd = 0) {} //returns round cut pbeforeEnd pixels before the last coordinate
 	
 	//IMPLEMENTATIONS
 	//basic
@@ -369,12 +369,18 @@ class RideableCompUtils {
 				break;
 		}
 		
-		vRoute = await routinglib.calculatePath(vStart, vTarget, {token : pToken});
+		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object})).path;
+		
+		let vScalledRoute = [];
 		
 		switch (pToken.parent.grid.type) {
 			case 1:
 				//squares
-				vRoute = vRoute.path.map(vPoint => {x : vPoint.x * vGridSize, y : vPoint.y * vGridSize}
+				vRoute = vRoute.map(vPoint => ({x : vPoint.x * vGridSize, y : vPoint.y * vGridSize}));
+				
+				for (let i = 0; i < vRoute.length; i++) {
+					vScalledRoute.push({x : vRoute[i].x * vGridSize, y : vRoute[i].y * vGridSize});
+				}
 			case 0: 
 			default:
 				//no grid
@@ -405,24 +411,28 @@ class RideableCompUtils {
 			
 			let vResultRoute = [pRoute[0]];
 			
-			for (let i = 0; i < vDistances.length; i++) {
-				if (vCompleteLength > 0) {
-					if (vDistances[i] < vCompleteLength) {
-						vCompleteLength = vCompleteLength - vDistances[i];
-						
-						vResultRoute.push(pRoute[i+1]);
-					}
-					else {
-						vResultRoute.push({x : pRoute[i].x + (pRoute[i+1].x - pRoute[i].x) * (vCompleteLength/vDistances[i])
-										   y : pRoute[i].y + (pRoute[i+1].y - pRoute[i].y) * (vCompleteLength/vDistances[i]);
-						
-						vCompleteLength = 0;
+			let vTargetLength = vCompleteLength - pbeforeEnd;
+			
+			if (vTargetLength > 0) {
+				for (let i = 1; i < vDistances.length; i++) {
+					if (vCompleteLength > 0) {
+						if (vDistances[i] < vTargetLength) {
+							vResultRoute.push(pRoute[i]);
+							
+							vTargetLength = vTargetLength - vDistances[i];
+						}
+						else {
+							vResultRoute.push({x : pRoute[i-1].x + (pRoute[i].x - pRoute[i-1].x) * (vTargetLength/vDistances[i]),
+											   y : pRoute[i-1].y + (pRoute[i].y - pRoute[i-1].y) * (vTargetLength/vDistances[i])});
+							
+							vTargetLength = 0;
+						}
 					}
 				}
-			}	
+			}
 
 			return vResultRoute;
-			}
+		}
 	}
 }
 

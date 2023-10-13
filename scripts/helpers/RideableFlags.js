@@ -1273,7 +1273,7 @@ class RideableFlags {
 		await this.#setfollowDistanceFlag(pFollower, pDistance);
 	}
 	
-	static await stopFollowing(pFollower) {
+	static async stopFollowing(pFollower) {
 		await this.#setfollowedTokenFlag(pFollower, "");
 	}
 	
@@ -1282,7 +1282,7 @@ class RideableFlags {
 	}
 	
 	static hasPlannedRoute(pToken) {
-		return this.#plannedRouteFlag(pToken).length > 0;
+		return this.#plannedRouteFlag(pToken)?.length > 0;
 	}
 	
 	static nextRoutePoint(pToken) {
@@ -1299,7 +1299,11 @@ class RideableFlags {
 	static isnextRoutePoint(pToken, pPoint) {
 		let vNextPoint = RideableFlags.nextRoutePoint(pToken);
 		
-		return (vNextPoint.x == pPoint.x && vNextPoint.y == pPoint.y);
+		if (vNextPoint) {
+			return (vNextPoint.x == pPoint.x && vNextPoint.y == pPoint.y);
+		}
+		
+		return false;
 	}
 	
 	static async shiftRoute(pToken) {

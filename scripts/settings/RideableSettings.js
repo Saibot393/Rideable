@@ -4,6 +4,7 @@ import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTa
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
+import { SelectedToggleFollwing } from "../FollowingScript.js";
 
 Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   //Settings
@@ -379,6 +380,14 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     name: Translate("Keys.TogglePiloting.name"),
     hint: Translate("Keys.TogglePiloting.descrp"),
     onDown: () => { TogglePilotingSelected(); },
+    restricted: false,
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+  
+  game.keybindings.register(cModuleName, "ToggleFollowing", {
+    name: Translate("Keys.ToggleFollowing.name"),
+    hint: Translate("Keys.ToggleFollowing.descrp"),
+    onDown: () => { SelectedToggleFollwing(); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });

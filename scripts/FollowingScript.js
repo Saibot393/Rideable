@@ -6,11 +6,13 @@ import { RideablePopups } from "./helpers/RideablePopups.js";
 
 class FollowingManager {
 	//DECLARATIONS
-	static FollowToken(pFollowers, pTarget) {} //sets pFollowers to follow pTarget
+	static async FollowToken(pFollowers, pTarget) {} //sets pFollowers to follow pTarget
 	
-	static SelectedFollowHovered(pConsiderTargeted = true) {} //lets the selected tokens follow the hovered token
+	static async SelectedFollowHovered(pConsiderTargeted = true) {} //lets the selected tokens follow the hovered token
 	
-	static SelectedStopFollowing() {} //makes the selected tokens stop following
+	static async SelectedStopFollowing() {} //makes the selected tokens stop following
+	
+	static async SelectedToggleFollwing(pConsiderTargeted = true) {} //toggles the selected tokens regarding following
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {} //calculates the new following route of pFollowers
 	
@@ -26,15 +28,15 @@ class FollowingManager {
 	static OnStopFollowing(pToken) {} //called wehn pToken stops following
 	
 	//IMPLEMENTATIONS
-	static FollowToken(pFollowers, pTarget) {
-		let vFollowers = pFollowers;//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
+	static async FollowToken(pFollowers, pTarget) {
+		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget) && !RideableFlags.isFollowingToken(pTarget, vFollower));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
 		
 		let vDistance;
 		
 		for (let i = 0; i < vFollowers.length; i++) {
 			vDistance = GeometricUtils.TokenDistance(vFollowers[i], pTarget);
 			
-			RideableFlags.startFollowing(vFollowers[i], pTarget, vDistance);
+			await RideableFlags.startFollowing(vFollowers[i], pTarget, vDistance);
 			
 			FollowingManager.OnStartFollowing(vFollowers[i], pTarget);
 		}
@@ -42,7 +44,7 @@ class FollowingManager {
 		FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
 	}
 	
-	static SelectedFollowHovered(pConsiderTargeted = true) {
+	static async SelectedFollowHovered(pConsiderTargeted = true) {
 		let vFollowers = RideableUtils.selectedTokens();
 		
 		let vTarget = RideableUtils.hoveredRideableToken();
@@ -52,19 +54,27 @@ class FollowingManager {
 		}
 		
 		if (vFollowers.length > 0 && vTarget) {
-			FollowingManager.FollowToken(vFollowers, vTarget);
+			await FollowingManager.FollowToken(vFollowers, vTarget);
 		}
 	}
 	
-	static SelectedStopFollowing() {
+	static async SelectedStopFollowing() {
 		let vFollowers = RideableUtils.selectedTokens();
 		
 		for (let i = 0; i < vFollowers.length; i++) {
-			RideableFlags.stopFollowing(vFollowers[i]);
-					
-			RideableFlags.OnStopFollowing(vFollowers[i]);
+			if (RideableFlags.isFollowing(vFollowers[i])) {
+				await RideableFlags.stopFollowing(vFollowers[i]);
+						
+				FollowingManager.OnStopFollowing(vFollowers[i]);
+			}
 		}
 	}
+	
+	static async SelectedToggleFollwing(pConsiderTargeted = true) {
+		await SelectedStopFollowing();
+		
+		await SelectedFollowHovered();
+	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {
 		if (pFollowers.length > 0) {
@@ -91,14 +101,16 @@ class FollowingManager {
 				}
 				
 				if (!pInfos.Target) {
-					vTarget = vScene.tokens.get(RideableFlags.(pFollowers[i]));
+					vTarget = vScene.tokens.get(RideableFlags.followedID(pFollowers[i]));
 				}	
 
 				//calculate and start new route
 				await RideableFlags.setplannedRoute(pFollowers[i], await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor));
 
+				await RideableFlags.shiftRoute(pFollowers[i]); //first point is current position
+				
 				if (pInfos.StartRoute) {
-					gotonextPointonRoute(pFollowers[i]);
+					FollowingManager.gotonextPointonRoute(pFollowers[i]);
 				}
 			}
 		}
@@ -106,9 +118,14 @@ class FollowingManager {
 	
 	static async gotonextPointonRoute(pToken) {
 		if (RideableFlags.hasPlannedRoute(pToken)) {
-			await pToken.update({RideableFlags.nextRoutePoint(pToken)});
+			let vPoint = RideableFlags.nextRoutePoint(pToken);
 			
-			await RideableFlags.shiftRoute(pToken);
+			console.log(vPoint);
+			if (vPoint) {
+				await pToken.update(vPoint, {FollowingMovement : true});
+				
+				await RideableFlags.shiftRoute(pToken);
+			}
 		}
 	} 
 	
@@ -122,21 +139,22 @@ class FollowingManager {
 					FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
 				}
 				
-				if (RideableFlags.isFollowing(pToken)) {
+				if (RideableFlags.isFollowing(pToken) && !pInfos.FollowingMovement) {
 					RideableFlags.stopFollowing(pToken);
 					
-					RideableFlags.OnStopFollowing(pToken);
+					FollowingManager.OnStopFollowing(pToken);
 				}
 			}
 		}
 	}
 	
 	static OnTokenrefresh(pToken, pInfos) {
-		if (pToken.isOwner) {
-			if (RideableFlags.hasPlannedRoute(pToken) {
-				if (pToken.object) {
-					if (RideableFlags.isnextRoutePoint(pToken, pToken.object.position)) {
-						FollowingManager.gotonextPointonRoute(pToken);
+		let vToken = pToken.document;
+		if (vToken.isOwner) {
+			if (RideableFlags.hasPlannedRoute(vToken)) {
+				if (vToken.object) {
+					if (RideableFlags.isnextRoutePoint(vToken, vToken.object.position)) {
+						FollowingManager.gotonextPointonRoute(vToken);
 					}
 				}
 			}
@@ -150,7 +168,7 @@ class FollowingManager {
 	} 
 	
 	static OnStopFollowing(pToken) {
-		RideablePopups.TextPopUpID(pRider ,"StopFollowing"); //MESSAGE POPUP
+		RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
 		
 		Hooks.call(cModuleName + ".StopFollowing", pToken);
 	}
@@ -166,3 +184,5 @@ Hooks.once("routinglib.ready", function () {
 export function SelectedFollowHovered(pConsiderTargeted = true) {return FollowingManager.SelectedFollowHovered(true)};
 
 export function SelectedStopFollowing() {return FollowingManager.SelectedStopFollowing()};
+
+export function SelectedToggleFollwing() {return FollowingManager.SelectedToggleFollwing()};
