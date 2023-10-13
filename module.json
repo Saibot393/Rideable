@@ -38,6 +38,7 @@
 	"scripts/helpers/RideableFlags.js",
 	"scripts/RidingScript.js",
 	"scripts/MountingScript.js",
+	"scripts/FollowingScript.js",
 	"scripts/helpers/SocketHandler.js",
 	"scripts/helpers/MacroHooks.js",
 	"scripts/settings/RideableSheetSettings.js",
