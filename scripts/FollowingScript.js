@@ -10,7 +10,7 @@ class FollowingManager {
 	
 	static async SelectedFollowHovered(pConsiderTargeted = true) {} //lets the selected tokens follow the hovered token
 	
-	static async SelectedStopFollowing() {} //makes the selected tokens stop following
+	static async SelectedStopFollowing(pPopup = true) {} //makes the selected tokens stop following
 	
 	static async SelectedToggleFollwing(pConsiderTargeted = true) {} //toggles the selected tokens regarding following
 	
@@ -23,9 +23,9 @@ class FollowingManager {
 	
 	static OnTokenrefresh(pToken, pInfos) {} //called when a token refreshes
 	
-	static OnStartFollowing(pToken, pFollowed) {} //called when pToken starts following
+	static OnStartFollowing(pToken, pFollowed, pPopup = true) {} //called when pToken starts following
 	
-	static OnStopFollowing(pToken) {} //called wehn pToken stops following
+	static OnStopFollowing(pToken, pPopup = true) {} //called wehn pToken stops following
 	
 	//IMPLEMENTATIONS
 	static async FollowToken(pFollowers, pTarget) {
@@ -41,7 +41,7 @@ class FollowingManager {
 			FollowingManager.OnStartFollowing(vFollowers[i], pTarget);
 		}
 		
-		FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
+		//FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
 	}
 	
 	static async SelectedFollowHovered(pConsiderTargeted = true) {
@@ -58,20 +58,27 @@ class FollowingManager {
 		}
 	}
 	
-	static async SelectedStopFollowing() {
+	static async SelectedStopFollowing(pPopup = true) {
 		let vFollowers = RideableUtils.selectedTokens();
 		
 		for (let i = 0; i < vFollowers.length; i++) {
 			if (RideableFlags.isFollowing(vFollowers[i])) {
 				await RideableFlags.stopFollowing(vFollowers[i]);
 						
-				FollowingManager.OnStopFollowing(vFollowers[i]);
+				FollowingManager.OnStopFollowing(vFollowers[i], pPopup);
 			}
 		}
 	}
 	
 	static async SelectedToggleFollwing(pConsiderTargeted = true) {
-		await SelectedStopFollowing();
+		let vTarget = RideableUtils.hoveredRideableToken();
+		
+		if (!vTarget && pConsiderTargeted) {
+			vTarget = RideableUtils.targetedTokens()[0];
+		}
+		
+		//if target present, a new token will be followed => no "stop following" popup
+		await SelectedStopFollowing(!Boolean(vTarget));
 		
 		await SelectedFollowHovered();
 	} 
@@ -106,8 +113,6 @@ class FollowingManager {
 
 				//calculate and start new route
 				await RideableFlags.setplannedRoute(pFollowers[i], await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor));
-
-				await RideableFlags.shiftRoute(pFollowers[i]); //first point is current position
 				
 				if (pInfos.StartRoute) {
 					FollowingManager.gotonextPointonRoute(pFollowers[i]);
@@ -118,13 +123,12 @@ class FollowingManager {
 	
 	static async gotonextPointonRoute(pToken) {
 		if (RideableFlags.hasPlannedRoute(pToken)) {
+			await RideableFlags.shiftRoute(pToken);
+			
 			let vPoint = RideableFlags.nextRoutePoint(pToken);
 			
-			console.log(vPoint);
 			if (vPoint) {
-				await pToken.update(vPoint, {FollowingMovement : true});
-				
-				await RideableFlags.shiftRoute(pToken);
+				await pToken.update(vPoint, {RideableFollowingMovement : true});
 			}
 		}
 	} 
@@ -139,7 +143,7 @@ class FollowingManager {
 					FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
 				}
 				
-				if (RideableFlags.isFollowing(pToken) && !pInfos.FollowingMovement) {
+				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement) {
 					RideableFlags.stopFollowing(pToken);
 					
 					FollowingManager.OnStopFollowing(pToken);
@@ -150,6 +154,7 @@ class FollowingManager {
 	
 	static OnTokenrefresh(pToken, pInfos) {
 		let vToken = pToken.document;
+
 		if (vToken.isOwner) {
 			if (RideableFlags.hasPlannedRoute(vToken)) {
 				if (vToken.object) {
@@ -161,15 +166,19 @@ class FollowingManager {
 		}
 	}
 	
-	static OnStartFollowing(pToken, pFollowed) {
-		RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pRiddenName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
+	static OnStartFollowing(pToken, pFollowed, pPopup = true) {
+		if (pPopup) {
+			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pRiddenName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
+		}
 		
 		Hooks.call(cModuleName + ".StartFollowing", pToken, pFollowed);
 	} 
 	
-	static OnStopFollowing(pToken) {
-		RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
-		
+	static OnStopFollowing(pToken, pPopup = true) {
+		if (pPopup) {
+			RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
+		}
+				
 		Hooks.call(cModuleName + ".StopFollowing", pToken);
 	}
 }

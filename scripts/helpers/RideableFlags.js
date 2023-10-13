@@ -1299,6 +1299,8 @@ class RideableFlags {
 	static isnextRoutePoint(pToken, pPoint) {
 		let vNextPoint = RideableFlags.nextRoutePoint(pToken);
 		
+		console.log({x:vNextPoint.x - pPoint.x, y:vNextPoint.y - pPoint.y});
+		
 		if (vNextPoint) {
 			return (vNextPoint.x == pPoint.x && vNextPoint.y == pPoint.y);
 		}

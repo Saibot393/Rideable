@@ -52,6 +52,16 @@
 	  "type": "Macro"
 	}
   ],
+  "relationships": {
+	  "recommends": [
+            {
+                "id": "routinglib",
+                "type": "module",
+                "reason": "Necessary for the follow token feature to work",
+                "compatibility": {}
+            }
+      ]
+  },
   "url": "https://github.com/Saibot393/Rideable",
   "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v2.12.6.zip",
   "manifest": "https://github.com/Saibot393/Rideable/releases/latest/download/module.json",

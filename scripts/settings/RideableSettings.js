@@ -257,8 +257,30 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "none"
   });
   
-  //client settings
+  game.settings.register(cModuleName, "EnableFollowing", {
+	name: Translate("Settings.EnableFollowing.name"),
+	hint: Translate("Settings.EnableFollowing.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: true
+  });  
   
+  game.settings.register(cModuleName, "FollowingCombatBehaviour", {
+	name: Translate("Settings.FollowingCombatBehaviour.name"),
+	hint: Translate("Settings.FollowingCombatBehaviour.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"stop" : Translate("Settings.FollowingCombatBehaviour.options.stop"),
+		"resumeafter": Translate("Settings.FollowingCombatBehaviour.options.resumeafter"),
+		"continue": Translate("Settings.FollowingCombatBehaviour.options.continue")
+	},
+	default: "stop"
+  });  
+  
+  //client settings 
   game.settings.register(cModuleName, "RiderMovement", {
 	name: Translate("Settings.RiderMovement.name"),
 	hint: Translate("Settings.RiderMovement.descrp"),
@@ -305,6 +327,19 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	config: true,
 	type: Boolean,
 	default: false
+  });  
+  
+   game.settings.register(cModuleName, "FollowerMovement", {
+	name: Translate("Settings.FollowerMovement.name"),
+	hint: Translate("Settings.FollowerMovement.descrp"),
+	scope: "client",
+	config: true,
+	type: String,
+	choices: {
+		"stopfollowing" : Translate("Settings.FollowerMovement.options.stopfollowing"),
+		"updatedistance": Translate("Settings.FollowerMovement.options.updatedistance")
+	},
+	default: "stopfollowing"
   });  
   
   //Keys
