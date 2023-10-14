@@ -31,7 +31,7 @@ const cGrabbedEffectName = "Grappled"; //For convenient effects
 
 const cTokenFormAttachedTiles = "TokenFormAttachedTiles"; //For Token Attacher
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ }
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib }
 export { cRideableTag, cGrabbedEffectName, cTokenFormAttachedTiles }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
@@ -345,11 +345,11 @@ class RideableCompUtils {
 		return Boolean(FCore.sceneof(pToken)?.tiles.find(vTile => vTile.flags[cTokenAttacher]?.parent == pToken.id));
 	}
 	
-	//specific: routing lib-wrapper
+	//specific: routinglib-wrapper
 	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {
-		let vStart = {x : pToken.x, y : pToken.y};
+		let vStart = {};
 		
-		let vTarget = {x : pTarget.x, y : pTarget.y};
+		let vTarget = {};
 		
 		let vRoute = [];
 		
@@ -358,34 +358,48 @@ class RideableCompUtils {
 		switch (pToken.parent.grid.type) {
 			case 1:
 				//squares	
-				vStart.x = Math.round((vStart.x)/vGridSize);
-				vStart.y = Math.round((vStart.y)/vGridSize);
+				vStart.x = Math.round((pToken.x)/vGridSize);
+				vStart.y = Math.round((pToken.y)/vGridSize);
 				
-				vTarget.x = Math.round((vTarget.x)/vGridSize);
-				vTarget.y = Math.round((vTarget.y)/vGridSize);
+				vTarget.x = Math.round((pTarget.x)/vGridSize);
+				vTarget.y = Math.round((pTarget.y)/vGridSize);
+				break;
 			case 0: 
-			default:
 				//no grid
+				vStart = GeometricUtils.CenterPositionXY(pToken);
+				
+				if (pTarget.documentName == "Token") {
+					vTarget = GeometricUtils.CenterPositionXY(pTarget);
+				}
+				else {
+					vTarget = {x : pTarget.x, y : pTarget.y};
+				}
+				break;
+			default:
 				break;
 		}
 		
-		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object})).path;
+		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object}))?.path;	
 		
-		let vScalledRoute = [];
-		
-		switch (pToken.parent.grid.type) {
-			case 1:
-				//squares
-				vRoute = vRoute.map(vPoint => ({x : vPoint.x * vGridSize, y : vPoint.y * vGridSize}));
-				
-				for (let i = 0; i < vRoute.length; i++) {
-					vScalledRoute.push({x : vRoute[i].x * vGridSize, y : vRoute[i].y * vGridSize});
-				}
-			case 0: 
-			default:
-				//no grid
-				break;
-		}	
+		if (vRoute) {
+			switch (pToken.parent.grid.type) {
+				case 1:
+					//squares
+					vRoute = vRoute.map(vPoint => ({x : vPoint.x * vGridSize, y : vPoint.y * vGridSize}));
+					break;
+				case 0: 
+					//no grid
+					vRoute = GeometricUtils.CenterRoutetoXY(vRoute, pToken);
+					break;
+				default:
+					break;
+			}
+			
+			vRoute = vRoute.filter(vPoint => vPoint);
+		}
+		else {
+			vRoute = [];
+		}
 
 		return RideableCompUtils.CutRoute(vRoute, pbeforeEnd, pToken.parent.grid);
 	}
@@ -417,16 +431,16 @@ class RideableCompUtils {
 				for (let i = 1; i < vDistances.length; i++) {
 					if (vTargetLength > 0) {
 						if (vDistances[i] < vTargetLength) {
-							vResultRoute.push(pRoute[i]);
+							vResultRoute.push({x : pRoute[i].x, y : pRoute[i].y});
 							
 							vTargetLength = vTargetLength - vDistances[i];
 						}
 						else {
-							let vNewPoint = {x : pRoute[i-1].x + (pRoute[i].x - pRoute[i-1].x) * (vTargetLength/vDistances[i]),
-											y : pRoute[i-1].y + (pRoute[i].y - pRoute[i-1].y) * (vTargetLength/vDistances[i])};
+							let vNewPoint = {x : Math.round(pRoute[i-1].x + (pRoute[i].x - pRoute[i-1].x) * (vTargetLength/vDistances[i])),
+											y : Math.round(pRoute[i-1].y + (pRoute[i].y - pRoute[i-1].y) * (vTargetLength/vDistances[i]))};
 											
 							if (pGrid) {
-								GeometricUtils.GridSnapxy(vNewPoint, pGrid);
+								vNewPoint = GeometricUtils.GridSnapxy(vNewPoint, pGrid);
 							}
 							
 							vResultRoute.push(vNewPoint);

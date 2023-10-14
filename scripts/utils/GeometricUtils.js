@@ -31,7 +31,11 @@ class GeometricUtils {
 	
 	static CenterPosition(pToken, pTokenReplacementPosition = {}) {} //returns the position of the Center of pToken
 	
+	static CenterPositionXY(pToken) {} //returns the center position (x,y) of pToken
 	
+	static CentertoXY(pPoint, pToken) {} //maps a center point to a tl-corner point
+	
+	static CenterRoutetoXY(pRoute, pToken) {} //maps a center point route to a tl-corner point route
 	
 	static NewCenterPosition(pDocument, pChanges) {} //returns the new position of the Center of pDocument (usefull for updates)
 	
@@ -104,7 +108,32 @@ class GeometricUtils {
 		else {
 			return [pToken.x + GeometricUtils.insceneWidth(pToken)/2, pToken.y + GeometricUtils.insceneHeight(pToken)/2];
 		}
-	} 
+	}
+
+	static CenterPositionXY(pToken) {
+		if (pToken) {
+			return {x: pToken.x + GeometricUtils.insceneWidth(pToken)/2, y: pToken.y + GeometricUtils.insceneHeight(pToken)/2};
+		}
+		else {
+			return {};
+		}
+	}
+	
+	static CentertoXY(pPoint, pToken) {
+		if (pToken) {
+			return {x: pPoint.x - GeometricUtils.insceneWidth(pToken)/2, y: pPoint.y - GeometricUtils.insceneHeight(pToken)/2};
+		}
+		else {
+			return {};
+		}		
+	}
+	
+	static CenterRoutetoXY(pRoute, pToken) {
+		let vWidthhalf = GeometricUtils.insceneWidth(pToken)/2;
+		let vHeighthalf = GeometricUtils.insceneHeight(pToken)/2;
+		
+		return pRoute.map(vPoint => ({x: vPoint.x - vWidthhalf, y: vPoint.y - vHeighthalf}));
+	}
 	
 	static NewCenterPosition(pDocument, pChanges) {
 		let vPosition = [GeometricUtils.insceneWidth(pDocument)/2, GeometricUtils.insceneHeight(pDocument)/2];
@@ -476,10 +505,9 @@ class GeometricUtils {
 			
 			case 1:
 				//squares
-				console.log(vsnapposition);
 				vsnapposition.x = Math.round(vsnapposition.x/pGrid.size)*pGrid.size;
 				vsnapposition.y = Math.round(vsnapposition.y/pGrid.size)*pGrid.size;
-				console.log(vsnapposition);
+				
 				return vsnapposition;
 				break;
 			

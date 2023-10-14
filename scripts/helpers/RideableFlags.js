@@ -38,6 +38,8 @@ const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued
 //limits
 const cCornermaxRiders = 4; //4 corners
 
+const cPointEpsilon = 1;
+
 export {cCornermaxRiders};
 export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF}
 
@@ -198,9 +200,13 @@ class RideableFlags {
 	
 	static followedID(pFollower) {} //retruns the ID of the token followed by pFollower
 	
+	static followedToken(pFollower) {} //retruns the Token followed by pFollower
+	
 	static followingTokens(pToken) {} //returns array of Tokens following pToken
 	
 	static FollowDistance(pFollower) {} //returns the follow distance of pFollower
+	
+	static async UpdateFollowDistance(pFollower, pDistance) {} //updates the set follow distance
 	
 	static async startFollowing(pFollower, pToken, pDistance) {} //start pFollower to follow pToken
 	
@@ -869,12 +875,9 @@ class RideableFlags {
 	static async replaceRiderTokenID(pRiddenToken, pOriginalID, pReplacementID) {
 		let vIndex = RideableFlags.RiderTokenIDs(pRiddenToken).indexOf(pOriginalID);
 		
-		console.log(RideableFlags.RiderTokenIDs(pRiddenToken));
-		console.log(vIndex);
 		if (vIndex >= 0) {
 			pRiddenToken.flags[cModuleName][cRidersF][vIndex] = pReplacementID;
 			
-			console.log(pRiddenToken);
 			//await this.#setRidersFlag(pRiddenToken, vNewIDs);
 			
 			return true;
@@ -1284,12 +1287,20 @@ class RideableFlags {
 		return this.#followedTokenFlag(pFollower);
 	}
 	
+	static followedToken(pFollower) {
+		return pFollower.parent.tokens.get(this.#followedTokenFlag(pFollower));
+	}
+	
 	static followingTokens(pToken) {
 		return pToken.parent.tokens.filter(vToken => RideableFlags.isFollowingToken(vToken, pToken));
 	}
 	
 	static FollowDistance(pFollower) {
 		return this.#followDistanceFlag(pFollower);
+	}
+	
+	static async UpdateFollowDistance(pFollower, pDistance) {
+		await this.#setfollowDistanceFlag(pFollower, pDistance);
 	}
 	
 	static async startFollowing(pFollower, pToken, pDistance) {
@@ -1330,10 +1341,8 @@ class RideableFlags {
 	static isnextRoutePoint(pToken, pPoint) {
 		let vNextPoint = RideableFlags.nextRoutePoint(pToken);
 		
-		console.log({x:vNextPoint.x - pPoint.x, y:vNextPoint.y - pPoint.y});
-		
 		if (vNextPoint) {
-			return (vNextPoint.x == pPoint.x && vNextPoint.y == pPoint.y);
+			return (Math.abs(vNextPoint.x - pPoint.x) < cPointEpsilon && Math.abs(vNextPoint.y - pPoint.y) < cPointEpsilon);
 		}
 		
 		return false;

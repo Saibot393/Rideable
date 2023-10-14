@@ -1,6 +1,6 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE, cRoutingLib } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
@@ -261,16 +261,17 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.EnableFollowing.name"),
 	hint: Translate("Settings.EnableFollowing.descrp"),
 	scope: "world",
-	config: true,
+	config: RideableCompUtils.isactiveModule(cRoutingLib),
 	type: Boolean,
-	default: true
+	default: true,
+	requiresReload: true
   });  
   
   game.settings.register(cModuleName, "FollowingCombatBehaviour", {
 	name: Translate("Settings.FollowingCombatBehaviour.name"),
 	hint: Translate("Settings.FollowingCombatBehaviour.descrp"),
 	scope: "world",
-	config: true,
+	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
 	type: String,
 	choices: {
 		"stop" : Translate("Settings.FollowingCombatBehaviour.options.stop"),
@@ -284,7 +285,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.OnlyfollowViewed.name"),
 	hint: Translate("Settings.OnlyfollowViewed.descrp"),
 	scope: "world",
-	config: true,
+	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
 	type: Boolean,
 	default: false
   });  
@@ -338,15 +339,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
-   game.settings.register(cModuleName, "FollowerMovement", {
-	name: Translate("Settings.FollowerMovement.name"),
-	hint: Translate("Settings.FollowerMovement.descrp"),
+   game.settings.register(cModuleName, "OnFollowerMovement", {
+	name: Translate("Settings.OnFollowerMovement.name"),
+	hint: Translate("Settings.OnFollowerMovement.descrp"),
 	scope: "client",
-	config: true,
+	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
 	type: String,
 	choices: {
-		"stopfollowing" : Translate("Settings.FollowerMovement.options.stopfollowing"),
-		"updatedistance": Translate("Settings.FollowerMovement.options.updatedistance")
+		"stopfollowing" : Translate("Settings.OnFollowerMovement.options.stopfollowing"),
+		"updatedistance": Translate("Settings.OnFollowerMovement.options.updatedistance")
 	},
 	default: "stopfollowing"
   });  
@@ -431,6 +432,11 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   game.keybindings.register(cModuleName, "ToggleFollowing", {
     name: Translate("Keys.ToggleFollowing.name"),
     hint: Translate("Keys.ToggleFollowing.descrp"),
+	editable: [
+      {
+        key: "KeyF"
+      }
+    ],
     onDown: () => { SelectedToggleFollwing(); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
@@ -455,5 +461,11 @@ Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
 					`;
 		 
 		pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
+		
+		if (!RideableCompUtils.isactiveModule(cRoutingLib)) {
+			vnewHTML = `<p>${Translate("Titles.RequiresRL")}</p>`;
+			
+			pHTML.find('select[name="' + cModuleName + '.MountButtonDefaultPosition"]').closest(".form-group").after(vnewHTML);
+		}
 	}
 });

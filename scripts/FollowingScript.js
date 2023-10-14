@@ -1,14 +1,16 @@
 import { RideableFlags } from "./helpers/RideableFlags.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
-import { RideableCompUtils } from "./compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cRoutingLib } from "./compatibility/RideableCompUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 
 class FollowingManager {
 	//DECLARATIONS
-	static async FollowToken(pFollowers, pTarget) {} //sets pFollowers to follow pTarget
+	static FollowingActive() {} //returns if the token following feature is active
 	
-	static async SelectedFollowHovered(pConsiderTargeted = true) {} //lets the selected tokens follow the hovered token
+	static async FollowToken(pFollowers, pTarget, pDistance = -1) {} //sets pFollowers to follow pTarget
+	
+	static async SelectedFollowHovered(pConsiderTargeted = true, pDistance = -1) {} //lets the selected tokens follow the hovered token
 	
 	static async SelectedStopFollowing(pPopup = true) {} //makes the selected tokens stop following
 	
@@ -28,59 +30,81 @@ class FollowingManager {
 	static OnStopFollowing(pToken, pPopup = true) {} //called wehn pToken stops following
 	
 	//IMPLEMENTATIONS
-	static async FollowToken(pFollowers, pTarget) {
+	static FollowingActive() {
+		return RideableCompUtils.isactiveModule(cRoutingLib) && game.settings.get(cModuleName, "EnableFollowing");
+	}
+	
+	static async FollowToken(pFollowers, pTarget, pDistance = -1) {
 		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget) && !RideableFlags.isFollowingToken(pTarget, vFollower));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
 		
 		let vDistance;
 		
+		let vDefaultDistance = pDistance * (pTarget.parent.dimensions.size)/(pTarget.parent.dimensions.distance);
+		
 		for (let i = 0; i < vFollowers.length; i++) {
-			vDistance = GeometricUtils.TokenDistance(vFollowers[i], pTarget);
-			
-			await RideableFlags.startFollowing(vFollowers[i], pTarget, vDistance);
-			
-			FollowingManager.OnStartFollowing(vFollowers[i], pTarget);
+			if (!vFollowers[i].inCombat || game.settings.get(cModuleName, "FollowingCombatBehaviour") == "continue") {
+				if (pDistance >= 0) {
+					vDistance = vDefaultDistance;
+				}
+				else {
+					vDistance = GeometricUtils.TokenDistance(vFollowers[i], pTarget);
+				}
+				
+				await RideableFlags.startFollowing(vFollowers[i], pTarget, vDistance);
+				
+				FollowingManager.OnStartFollowing(vFollowers[i], pTarget);
+			}
+			else {
+				RideablePopups.TextPopUpID(vFollowers[i] ,"CantFollowinCombat"); //MESSAGE POPUP
+			}
 		}
 		
 		//FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
 	}
 	
-	static async SelectedFollowHovered(pConsiderTargeted = true) {
-		let vFollowers = RideableUtils.selectedTokens();
-		
-		let vTarget = RideableUtils.hoveredRideableToken();
-		
-		if (!vTarget && pConsiderTargeted) {
-			vTarget = RideableUtils.targetedTokens()[0];
-		}
-		
-		if (vFollowers.length > 0 && vTarget) {
-			await FollowingManager.FollowToken(vFollowers, vTarget);
+	static async SelectedFollowHovered(pConsiderTargeted = true, pDistance = -1) {
+		if (FollowingManager.FollowingActive()) {
+			let vFollowers = RideableUtils.selectedTokens();
+			
+			let vTarget = RideableUtils.hoveredRideableToken();
+			
+			if (!vTarget && pConsiderTargeted) {
+				vTarget = RideableUtils.targetedTokens()[0];
+			}
+			
+			if (vFollowers.length > 0 && vTarget) {
+				await FollowingManager.FollowToken(vFollowers, vTarget, pDistance);
+			}
 		}
 	}
 	
 	static async SelectedStopFollowing(pPopup = true) {
-		let vFollowers = RideableUtils.selectedTokens();
-		
-		for (let i = 0; i < vFollowers.length; i++) {
-			if (RideableFlags.isFollowing(vFollowers[i])) {
-				await RideableFlags.stopFollowing(vFollowers[i]);
-						
-				FollowingManager.OnStopFollowing(vFollowers[i], pPopup);
+		if (FollowingManager.FollowingActive()) {
+			let vFollowers = RideableUtils.selectedTokens();
+			
+			for (let i = 0; i < vFollowers.length; i++) {
+				if (RideableFlags.isFollowing(vFollowers[i])) {
+					await RideableFlags.stopFollowing(vFollowers[i]);
+							
+					FollowingManager.OnStopFollowing(vFollowers[i], pPopup);
+				}
 			}
 		}
 	}
 	
 	static async SelectedToggleFollwing(pConsiderTargeted = true) {
-		let vTarget = RideableUtils.hoveredRideableToken();
-		
-		if (!vTarget && pConsiderTargeted) {
-			vTarget = RideableUtils.targetedTokens()[0];
+		if (FollowingManager.FollowingActive()) {
+			let vTarget = RideableUtils.hoveredRideableToken();
+			
+			if (!vTarget && pConsiderTargeted) {
+				vTarget = RideableUtils.targetedTokens()[0];
+			}
+			
+			//if target present, a new token will be followed => no "stop following" popup
+			await SelectedStopFollowing(!Boolean(vTarget));
+			
+			await SelectedFollowHovered();
 		}
-		
-		//if target present, a new token will be followed => no "stop following" popup
-		await SelectedStopFollowing(!Boolean(vTarget));
-		
-		await SelectedFollowHovered();
 	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {
@@ -112,7 +136,9 @@ class FollowingManager {
 				}	
 
 				//calculate and start new route
-				await RideableFlags.setplannedRoute(pFollowers[i], await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor));
+				let vRoute = await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+				
+				await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
 				
 				if (pInfos.StartRoute) {
 					FollowingManager.gotonextPointonRoute(pFollowers[i]);
@@ -136,18 +162,49 @@ class FollowingManager {
 	//ons
 	static OnTokenupdate(pToken, pchanges, pInfos, pID) {
 		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
-			//only consider owned tokens for which this player is the source of the follow order
-			let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
-			
-			if (vFollowers.length > 0) {
-				FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
+			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
+				//only consider owned tokens for which this player is the source of the follow order
+				let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
+				
+				//check combat behaviour
+				if (["stop", "resumeafter"].includes(game.settings.get(cModuleName, "FollowingCombatBehaviour"))) {
+					let vnonCombatants = vFollowers.filter(vFollower => !vFollower.inCombat);
+					
+					if (game.settings.get(cModuleName, "FollowingCombatBehaviour") == "stop") {
+						console.log("check1");
+						let vCombatants = vFollowers.filter(vFollower => vFollower.inCombat);
+						
+						for (let i = 0; i < vCombatants.length; i++) {
+							//stop combatant followers
+							RideableFlags.stopFollowing(vCombatants[i]);
+							
+							FollowingManager.OnStopFollowing(vCombatants[i], false);
+						}
+					}
+					
+					vFollowers = vnonCombatants;
+				}
+				
+				//plan new routes to target
+				if (vFollowers.length > 0) {
+					FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
+				}
 			}
 			
 			if (pToken.isOwner) {
 				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
-					RideableFlags.stopFollowing(pToken);
-					
-					FollowingManager.OnStopFollowing(pToken);
+					switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
+						case "updatedistance":
+							console.log(GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
+							RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
+							break;
+						case "stopfollowing":
+						default:
+							RideableFlags.stopFollowing(pToken);
+						
+							FollowingManager.OnStopFollowing(pToken);
+							break;
+					}
 				}
 			}
 		}
@@ -185,13 +242,17 @@ class FollowingManager {
 }
 
 Hooks.once("routinglib.ready", function () {
-	Hooks.on("updateToken", (...args) => FollowingManager.OnTokenupdate(...args));
-	
-	Hooks.on("refreshToken", (...args) => FollowingManager.OnTokenrefresh(...args));
+	if (FollowingManager.FollowingActive()) {
+		Hooks.on("updateToken", (...args) => FollowingManager.OnTokenupdate(...args));
+		
+		Hooks.on("refreshToken", (...args) => FollowingManager.OnTokenrefresh(...args));
+	}
 });
 
 //exports
-export function SelectedFollowHovered(pConsiderTargeted = true) {return FollowingManager.SelectedFollowHovered(true)};
+export function SelectedFollowHovered(pConsiderTargeted = true) {return FollowingManager.SelectedFollowHovered(pConsiderTargeted)};
+
+export function SelectedFollowHoveredatDistance(pDistance) {return FollowingManager.SelectedFollowHovered(true, pDistance)}
 
 export function SelectedStopFollowing() {return FollowingManager.SelectedStopFollowing()};
 
