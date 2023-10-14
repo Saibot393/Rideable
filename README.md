@@ -34,6 +34,7 @@ A tutorial for some of the features can be found [here](https://www.youtube.com/
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Rider movement default setting: to set the default Rider movement behaviour for new players
 - Mount button default position: to set the world default position for the mount button
+- Enable Token following (requires [routinglib](https://foundryvtt.com/packages/routinglib)): to use the Token following feature
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Mount button position: to set the position of the mount button or disable it
@@ -64,6 +65,11 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 
 #### Explicit compatability:
 
+- [routinglib](https://foundryvtt.com/packages/routinglib) (required for Token following):
+  - Additional world setting Enable Token following
+  - Additional world setting In combat follow behaviour: to set the behaviour of following tokens in combat
+  - Additional world setting Only follow visible: to restrict following to visible tokens
+  - Additional client setting Follower movement: to set what happens when a following tokens moves independently
 - [FoundryVTT Arms Reach](https://foundryvtt.com/packages/foundryvtt-arms-reach)/[Arms Reach](https://foundryvtt.com/packages/arms-reach):
   - Additional setting "Use Arms Reach distance": to use the "Arms Reach" distance instead of the set Mounting distance
 - [Stairways](https://foundryvtt.com/packages/stairways):
