@@ -1,3 +1,11 @@
+## v2.13.0
+- Added new feature Token following (requires [routinglib](https://foundryvtt.com/packages/routinglib))
+  - Added world setting Enable Token following to enable this feature
+  - Added world setting In combat follow behaviour to set the behaviour of following tokens in combat
+  - Added world setting Only follow visible to restrict following to visible tokens
+  - Added client setting Follower movement to set what happens when a following tokens moves independently
+  - Added key controlls and macros to control this feature
+
 ## v2.12.6
 - Added world setting Grapple placement default
 
