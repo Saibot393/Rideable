@@ -14,7 +14,7 @@ class FollowingManager {
 	
 	static async SelectedStopFollowing(pPopup = true) {} //makes the selected tokens stop following
 	
-	static async SelectedToggleFollwing(pConsiderTargeted = true) {} //toggles the selected tokens regarding following
+	static async SelectedToggleFollwing(pConsiderTargeted = true, pDistance = -1) {} //toggles the selected tokens regarding following
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {} //calculates the new following route of pFollowers
 	
@@ -35,15 +35,22 @@ class FollowingManager {
 	}
 	
 	static async FollowToken(pFollowers, pTarget, pDistance = -1) {
-		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget) && !RideableFlags.isFollowingToken(pTarget, vFollower));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
+		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
+		
+		for (let i = 0; i < vFollowers.length; i++) {
+			if (RideableFlags.isFollowingToken(pTarget, vFollowers[i])) {
+				RideablePopups.TextPopUpID(vFollowers[i] ,"TargetisFollowingMe", {pFollowedName : RideableFlags.RideableName(pTarget)}); //MESSAGE POPUP
+			}
+		}
+		vFollowers = vFollowers.filter(vFollower => !RideableFlags.isFollowingToken(pTarget, vFollower));
 		
 		let vDistance;
 		
-		let vDefaultDistance = pDistance * (pTarget.parent.dimensions.size)/(pTarget.parent.dimensions.distance);
+		let vDefaultDistance = pDistance;
 		
 		for (let i = 0; i < vFollowers.length; i++) {
 			if (!vFollowers[i].inCombat || game.settings.get(cModuleName, "FollowingCombatBehaviour") == "continue") {
-				if (pDistance >= 0) {
+				if (vDefaultDistance >= 0) {
 					vDistance = vDefaultDistance;
 				}
 				else {
@@ -92,7 +99,7 @@ class FollowingManager {
 		}
 	}
 	
-	static async SelectedToggleFollwing(pConsiderTargeted = true) {
+	static async SelectedToggleFollwing(pConsiderTargeted = true, pDistance = -1) {
 		if (FollowingManager.FollowingActive()) {
 			let vTarget = RideableUtils.hoveredRideableToken();
 			
@@ -101,9 +108,9 @@ class FollowingManager {
 			}
 			
 			//if target present, a new token will be followed => no "stop following" popup
-			await SelectedStopFollowing(!Boolean(vTarget));
+			await FollowingManager.SelectedStopFollowing(!Boolean(vTarget));
 			
-			await SelectedFollowHovered();
+			await FollowingManager.SelectedFollowHovered(pConsiderTargeted, pDistance);
 		}
 	} 
 	
@@ -171,7 +178,6 @@ class FollowingManager {
 					let vnonCombatants = vFollowers.filter(vFollower => !vFollower.inCombat);
 					
 					if (game.settings.get(cModuleName, "FollowingCombatBehaviour") == "stop") {
-						console.log("check1");
 						let vCombatants = vFollowers.filter(vFollower => vFollower.inCombat);
 						
 						for (let i = 0; i < vCombatants.length; i++) {
@@ -195,7 +201,6 @@ class FollowingManager {
 				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
 					switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
 						case "updatedistance":
-							console.log(GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
 							RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
 							break;
 						case "stopfollowing":
@@ -226,7 +231,7 @@ class FollowingManager {
 	
 	static OnStartFollowing(pToken, pFollowed, pPopup = true) {
 		if (pPopup) {
-			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pRiddenName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
+			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pFollowedName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
 		}
 		
 		Hooks.call(cModuleName + ".StartFollowing", pToken, pFollowed);
@@ -256,4 +261,6 @@ export function SelectedFollowHoveredatDistance(pDistance) {return FollowingMana
 
 export function SelectedStopFollowing() {return FollowingManager.SelectedStopFollowing()};
 
-export function SelectedToggleFollwing() {return FollowingManager.SelectedToggleFollwing()};
+export function SelectedToggleFollwing() {return FollowingManager.SelectedToggleFollwing(true)};
+
+export function SelectedToggleFollwingatDistance(pDistance) {return FollowingManager.SelectedToggleFollwing(true, pDistance)};

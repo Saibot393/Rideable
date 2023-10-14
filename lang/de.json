@@ -5,7 +5,8 @@
 			"WorldSettings"				: "Welt-Einstellungen (nur SL)",
 			"ClientSettings"			: "Nutzer-Einstellungen",
 			"GMonly"					: "Nur Spielleitung",
-			"Tile"						: "Fliese"
+			"Tile"						: "Fliese",
+			"RequiresRL"				: "Rideable benötigt <a href=\"https://foundryvtt.com/packages/routinglib\">routinglib</a> um Figur folgen aktivieren zu können" 
 		},
 		
 		"Settings" : {
@@ -176,7 +177,36 @@
 			"OnlyownedMessagePopUps" : {
 				"name" 					: "Nur eigene Pop-up Meldungen",
 				"descrp"				: "Zeigt nur die Pop-up Meldungen der Figuren unter eigener Kontrolle"				
-			}		
+			},
+			
+			"EnableFollowing" : {
+				"name"					: "Figur folgen aktivieren",
+				"descrp"				: "Ob Figur folgen in der Welt erlaubt ist (benötigt routinglib)"
+			},
+			
+			"FollowingCombatBehaviour" : {
+				"name"					: "Folgen Kampf verhalten",
+				"descrp"				: "Wie sich folgende Figuren im Kampf verhalten sollen",
+				"options" : {
+					"stop"				: "Nichtmehr folgen",
+					"resumeafter"		: "Nach dem Kampf weiter folgen",
+					"continue"			: "Weiter folgen"
+				}
+			},
+			
+			"OnlyfollowViewed" : {
+				"name"					: "Nur sichtbaren folgen",
+				"descrp"				: "Ob Figuren nur momentan sichbaren Figuren folgen sollen"
+			},			
+			
+			"OnFollowerMovement" : {
+				"name" 					: "Folger-Bewegung",
+				"descrp"				: "Was passieren soll, wenn eine folgende Figur sich eigenständig bewegt",
+				"options" : {
+					"stopfollowing"		: "Nichtmehr folgen",
+					"updatedistance"	: "Folgen Distanz anpassen"
+				}
+			}	
 		},
 		
 		"Keys" : {
@@ -213,7 +243,12 @@
 			"TogglePiloting" : {
 				"name" 					: "Steuern starten/stoppen",
 				"descrp"				: "Lässt die kontrollierten Figuren die gerittene Figur steuern bzw. hört damit auf"
-			}			
+			},
+
+			"ToggleFollowing" : {
+				"name"					: "Folgen starten/stoppen",
+				"descrp"				: "Lässt die kontrollierten Figuren der angezielten Figur folgen bzw. hört damit auf"
+			}
 		},
 		
 		"Popup" : {
@@ -235,7 +270,12 @@
 			"cantPilot"					: "{pRiddenName} kann nicht gesteuert werden",
 			"startPiloting"				: "Steuere nun {pRiddenName}",
 			"stopPiloting"				: "Steuere {pRiddenName} nicht mehr",
-			"cantbeMoved"				: "{cantbeMoved} kann nicht bewegt werden (könnte mit etwas verbunden sein)"
+			"cantbeMoved"				: "{cantbeMoved} kann nicht bewegt werden (könnte mit etwas verbunden sein)",
+			
+			"StopFollowing"				: "Folge nicht mehr",
+			"StartFollowing"			: "Folge nun {pFollowedName}",
+			"CantFollowinCombat"		: "Kann nicht während Kämpfen folgen",
+			"TargetisFollowingMe"		: "{pFollowedName} folgt mir bereits"
 		},	
 		
 		"TokenSettings" : {

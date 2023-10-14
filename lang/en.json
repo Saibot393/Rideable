@@ -5,7 +5,8 @@
 			"WorldSettings"				: "World settings (GM only)",
 			"ClientSettings"			: "Client settings",
 			"GMonly"					: "GM only",
-			"Tile"						: "Tile"
+			"Tile"						: "Tile",
+			"RequiresRL"				: "Rideable requires <a href=\"https://foundryvtt.com/packages/routinglib\">routinglib</a> to be active for the token following feature to work" 
 		},
 		
 		"Settings" : {
@@ -176,7 +177,36 @@
 			"OnlyownedMessagePopUps" : {
 				"name" 					: "Own message popups only",
 				"descrp"				: "Only shows the message popups from tokens you control"				
-			}
+			},
+			
+			"EnableFollowing" : {
+				"name"					: "Enable Token following",
+				"descrp"				: "If Token following is active in this world (requires routinglib)"
+			},
+			
+			"FollowingCombatBehaviour" : {
+				"name"					: "In combat follow behaviour",
+				"descrp"				: "How following tokens behave in combat",
+				"options" : {
+					"stop"				: "Stop following",
+					"resumeafter"		: "Stop and resume after fight",
+					"continue"			: "Continue following"
+				}
+			},
+			
+			"OnlyfollowViewed" : {
+				"name"					: "Only follow visible",
+				"descrp"				: "If only currently visible tokens should be followed"
+			},	
+			
+			"OnFollowerMovement" : {
+				"name" 					: "Follower movement",
+				"descrp"				: "What should happen if a following token tries to move on its own",
+				"options" : {
+					"stopfollowing"		: "Stop following",
+					"updatedistance"	: "Update following distance"
+				}
+			}			
 		},
 		
 		"Keys" : {
@@ -213,6 +243,11 @@
 			"TogglePiloting" : {
 				"name" 					: "Toggle piloting",
 				"descrp"				: "Start of stop piloting the currently mounted token"
+			},
+
+			"ToggleFollowing" : {
+				"name"					: "Toggle following",
+				"descrp"				: "Start of stop the selected tokens from following the targeted or followed token"
 			}	
 		},
 		
@@ -235,7 +270,12 @@
 			"cantPilot"					: "{pRiddenName} can't be piloted",
 			"startPiloting"				: "Now piloting {pRiddenName}",
 			"stopPiloting"				: "No longer piloting {pRiddenName}",
-			"cantbeMoved"				: "{cantbeMoved} cant be moved (may be attached to something)"
+			"cantbeMoved"				: "{cantbeMoved} cant be moved (may be attached to something)",
+			
+			"StopFollowing"				: "Stopped following",
+			"StartFollowing"			: "Started following {pFollowedName}",
+			"CantFollowinCombat"		: "Can't follow during combat",
+			"TargetisFollowingMe"		: "{pFollowedName} is already following me"
 		},	
 		
 		"TokenSettings" : {

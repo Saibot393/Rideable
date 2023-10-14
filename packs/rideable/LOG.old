@@ -1,8 +1,12 @@
-2023/09/22-14:58:01.243 1ad4 Log #373: 0 ops saved to Table #572 OK
-2023/09/22-14:58:01.243 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/000373.log: OK
-2023/09/22-14:58:01.243 1ad4 Log #571: 0 ops saved to Table #573 OK
-2023/09/22-14:58:01.243 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/000571.log: OK
-2023/09/22-14:58:01.249 1ad4 Table #356: 4 entries OK
-2023/09/22-14:58:01.251 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/MANIFEST-000371: OK
-2023/09/22-14:58:01.251 1ad4 Archiving E:\P&P\Data\modules\Rideable\packs\rideable/MANIFEST-000569: OK
-2023/09/22-14:58:01.255 1ad4 **** Repaired leveldb E:\P&P\Data\modules\Rideable\packs\rideable; recovered 1 files; 1203 bytes. Some data may have been lost. ****
+2023/09/22-14:58:01.267 48d8 Delete type=3 #1
+2023/09/22-15:06:59.219 20f8 Level-0 table #577: started
+2023/09/22-15:06:59.227 20f8 Level-0 table #577: 1528 bytes OK
+2023/09/22-15:06:59.229 20f8 Delete type=0 #575
+2023/09/22-15:06:59.231 20f8 Manual compaction at level-0 from '!macros!2r29DRF00Tzc2K82' @ 72057594037927935 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at '!macros!j63gX1zPzMYXu5fD' @ 16 : 1
+2023/09/22-15:06:59.231 20f8 Compacting 2@0 + 0@1 files
+2023/09/22-15:06:59.245 20f8 Generated table #578@0: 6 keys, 1358 bytes
+2023/09/22-15:06:59.245 20f8 Compacted 2@0 + 0@1 files => 1358 bytes
+2023/09/22-15:06:59.248 20f8 compacted to: files[ 0 1 0 0 0 0 0 ]
+2023/09/22-15:06:59.248 20f8 Delete type=2 #356
+2023/09/22-15:06:59.249 20f8 Delete type=2 #577
+2023/09/22-15:06:59.249 20f8 Manual compaction at level-0 from '!macros!j63gX1zPzMYXu5fD' @ 16 : 1 .. '!macros!j63gX1zPzMYXu5fD' @ 0 : 0; will stop at (end)
