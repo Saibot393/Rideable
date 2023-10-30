@@ -397,7 +397,7 @@
 		"monks-active-tiles" : {
 			"actions" : {
 				"mount-this-tile" : {
-					"name"				: "Mount this tile"
+					"name"				: "Mount to this tile"
 				}
 			}
 		}

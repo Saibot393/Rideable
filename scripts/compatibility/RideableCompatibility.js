@@ -255,17 +255,17 @@ Hooks.once("init", async () => {
 	};
 });
 
-Hooks.once("ready", async() => {
+Hooks.once("setupTileActions", (pMatt) => {
 	if (RideableCompUtils.isactiveModule(cMATT)) {
-		let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
+		//let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
 		
-		let vMATT = vMATTmodule?.MonksActiveTiles;
+		//let vMATT = vMATTmodule?.MonksActiveTiles;
 		
-		if (vMATT) {
-			vMATT.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
+		if (pMatt) {
+			pMatt.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
 			
 			//mount this tile action
-			vMATT.registerTileAction(cModuleName, 'mount-this-tile', {
+			pMatt.registerTileAction(cModuleName, 'mount-this-tile', {
 				name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
 				ctrls: [
 					{
@@ -288,7 +288,8 @@ Hooks.once("ready", async() => {
 					}
 				},
 				content: async (trigger, action) => {
-					return `<span class="logic-style">${Translate(trigger.name, false)}</span>`;
+					let entityName = await pMatt.entityName(action.data?.entity);
+					return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
 				}
 			});
 		}
