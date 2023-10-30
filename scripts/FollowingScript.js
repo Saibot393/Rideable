@@ -179,35 +179,38 @@ class FollowingManager {
 	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {
-		let vPathHistory = RideableFlags.GetPathHistory(pTarget);
-		
-		let vRoute = [];
-		
-		let vLOSPointfound = false;
-		
-		let i = vPathHistory.length-1;//it is i, who is looping here
-		
-		while (!vLOSPointfound && i > 0) {
-			let vRay = new Ray(pFollower.center, vPathHistory[i]);
+		if (pFollower?.object?.center) {
+			let vPathHistory = RideableFlags.GetPathHistory(pTarget);
 			
-			if (canvas.walls.checkCollision(vRay, {type: "move", mode: "any"})) {
-				vLOSPointfound = true;
-			}
-			else {
-				vRoute.push(vPathHistory[i]);
+			let vRoute = [];
+			
+			let vLOSPointfound = false;
+			
+			let i = vPathHistory.length-1;//it is i, who is looping here
+			
+			while (!vLOSPointfound && i > 0) {
+				vRoute.unshift(vPathHistory[i]);
 				
-				i = i - 1;
+				if (!CONFIG.Canvas.polygonBackends["move"].testCollision(pFollower.object.center, vPathHistory[i], {type : "move", mode: "any"})) {
+					vLOSPointfound = true;
+				}
+				else {
+					i = i - 1;
+				}
+			}
+			
+			vRoute.unshift(pFollower.object.center);
+			
+			if (vLOSPointfound) {
+				vRoute = GeometricUtils.CenterRoutetoXY(vRoute, pFollower);
+				
+				vRoute = GeometricUtils.CutRoute(vRoute, pDistance, pFollower.parent.grid);
+				
+				return vRoute;
 			}
 		}
 		
-		if (vLOSPointfound) {
-			//cut route here
-			
-			return vRoute;
-		}
-		else {
-			return []; //no route found
-		}
+		return []; //no route found
 	} 
 	
 	//ons

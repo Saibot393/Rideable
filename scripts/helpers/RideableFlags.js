@@ -2,6 +2,7 @@ import * as FCore from "../CoreVersionComp.js";
 
 import { RideableUtils, cModuleName, cDelimiter, Translate } from "../utils/RideableUtils.js";
 import { cTokenForms } from "../utils/GeometricUtils.js";
+import { GeometricUtils } from "../utils/GeometricUtils.js";
 
 const cRidingF = "RidingFlag"; //Flag for informations regarding if Token is Riding
 const cFamiliarRidingF = "FamiliarRidingFlag"; //Flag for informations regarding if Token is Riding its Master as a Familiar
@@ -1404,7 +1405,7 @@ class RideableFlags {
 				vHistory.shift();
 			}
 			
-			await this.setPathHistoryFlag(pToken, vHistory);
+			await this.#setPathHistoryFlag(pToken, vHistory);
 			
 			return true;
 		}
@@ -1417,7 +1418,7 @@ class RideableFlags {
 	}
 	
 	static async ResetPathHistory(pToken) {
-		await this.setPathHistoryFlag(pToken, []);
+		await this.#setPathHistoryFlag(pToken, []);
 	}
 }
 
