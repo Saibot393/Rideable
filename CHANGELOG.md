@@ -1,3 +1,8 @@
+## v2.14.0
+- Added world setting Following algorithm to choose the algorithm used for the following feature (now routinglib independent)
+- Added compatibility with [Monk's Active Tile Triggers](https://foundryvtt.com/packages/monks-active-tiles)
+  - Adds Rideable action "Mount this tile" to mount the triggering tokens to this tile
+
 ## v2.13.0
 - Added new feature Token following (requires [routinglib](https://foundryvtt.com/packages/routinglib))
   - Added world setting Enable Token following to enable this feature
