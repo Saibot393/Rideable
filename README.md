@@ -12,6 +12,8 @@ Ridden tokens can themself ride other tokens.
 
 A tutorial for some of the features can be found [here](https://www.youtube.com/watch?v=tzM8pdGqYVg).
 
+Since v2.13.0 Rideable also has a feature for Token following.
+
 ### Settings:
 
 #### World:
