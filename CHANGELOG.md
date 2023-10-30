@@ -1,3 +1,6 @@
+## v2.14.1
+- Small bug fix for forge users (maybe)
+
 ## v2.14.0
 - Added world setting Following algorithm to choose the algorithm used for the following feature (now routinglib independent)
 - Added compatibility with [Monk's Active Tile Triggers](https://foundryvtt.com/packages/monks-active-tiles)
