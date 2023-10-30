@@ -249,43 +249,48 @@ Hooks.once("init", async () => {
 		Hooks.on("preUpdateTile", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
 	}
 	
-	if (RideableCompUtils.isactiveModule(cMATT)) {
-		let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
-		
-		let vMATT = vMATTmodule.MonksActiveTiles;
-		
-		vMATT.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
-		//mount this tile action
-		vMATT.registerTileAction(cModuleName, 'mount-this-tile', {
-			name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
-			ctrls: [
-				{
-					id: "entity",
-					name: "MonksActiveTiles.ctrl.select-entity",
-					type: "select",
-					subtype: "entity",
-					options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
-					restrict: (entity) => { return (entity instanceof Token); }
-                }
-			],
-			group: cModuleName,
-			fn: async (args = {}) => {
-				let vTriggerTokens = args.tokens;
-				
-				let vTile = args.tile;
-				
-				if (vTile && vTriggerTokens.length > 0) {
-					game.Rideable.Mount(vTriggerTokens, vTile);
-				}
-			},
-			content: async (trigger, action) => {
-				return `<span class="logic-style">${Translate(trigger.name, false)}</span>`;
-			}
-		});
-	}
-	
 	//compatibility exports
 	game.modules.get(cModuleName).api = {
 		isRider
 	};
+});
+
+Hooks.once("ready", async() => {
+	if (RideableCompUtils.isactiveModule(cMATT)) {
+		let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
+		
+		let vMATT = vMATTmodule?.MonksActiveTiles;
+		
+		if (vMATT) {
+			vMATT.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
+			
+			//mount this tile action
+			vMATT.registerTileAction(cModuleName, 'mount-this-tile', {
+				name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					}
+				],
+				group: cModuleName,
+				fn: async (args = {}) => {
+					let vTriggerTokens = args.tokens;
+					
+					let vTile = args.tile;
+					
+					if (vTile && vTriggerTokens.length > 0) {
+						game.Rideable.Mount(vTriggerTokens, vTile);
+					}
+				},
+				content: async (trigger, action) => {
+					return `<span class="logic-style">${Translate(trigger.name, false)}</span>`;
+				}
+			});
+		}
+	}
 });
