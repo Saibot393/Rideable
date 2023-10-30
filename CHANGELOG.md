@@ -1,3 +1,7 @@
+## v2.14.2
+- Fixed small bug for forge users, really this time (hopefully)
+- Improved MATT Mount this tile action translation
+
 ## v2.14.1
 - Small bug fix for forge users (maybe)
 
