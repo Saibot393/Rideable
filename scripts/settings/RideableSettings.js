@@ -280,7 +280,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.FollowingAlgorithm.name"),
 	hint: Translate("Settings.FollowingAlgorithm.descrp"),
 	scope: "world",
-	config: true,
+	config: game.settings.get(cModuleName, "EnableFollowing"),
 	type: String,
 	choices: vFollowOptions,
 	default: Object.keys(vFollowOptions)[0]
@@ -290,7 +290,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.FollowingCombatBehaviour.name"),
 	hint: Translate("Settings.FollowingCombatBehaviour.descrp"),
 	scope: "world",
-	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
+	config: game.settings.get(cModuleName, "EnableFollowing"),
 	type: String,
 	choices: {
 		"stop" : Translate("Settings.FollowingCombatBehaviour.options.stop"),
@@ -304,7 +304,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.OnlyfollowViewed.name"),
 	hint: Translate("Settings.OnlyfollowViewed.descrp"),
 	scope: "world",
-	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
+	config: game.settings.get(cModuleName, "EnableFollowing"),
 	type: Boolean,
 	default: false
   });  
@@ -362,7 +362,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.OnFollowerMovement.name"),
 	hint: Translate("Settings.OnFollowerMovement.descrp"),
 	scope: "client",
-	config: game.settings.get(cModuleName, "EnableFollowing") && RideableCompUtils.isactiveModule(cRoutingLib),
+	config: game.settings.get(cModuleName, "EnableFollowing"),
 	type: String,
 	choices: {
 		"stopfollowing" : Translate("Settings.OnFollowerMovement.options.stopfollowing"),
