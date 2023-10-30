@@ -36,12 +36,16 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Rider movement default setting: to set the default Rider movement behaviour for new players
 - Mount button default position: to set the world default position for the mount button
-- Enable Token following (requires [routinglib](https://foundryvtt.com/packages/routinglib)): to use the Token following feature
+- Enable Token following: to use the Token following feature
+- Following algorithm: to choose the algorithm used for the following feature
+- In combat follow behaviour: to set how following tokens should behave once combat starts
+- Only follow visible: to set wether tokens can only follow tokens they can see
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Mount button position: to set the position of the mount button or disable it
 - Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
+- Follower movement: to set how followers should behave when they are moved independently of the token they follow
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
 - Mount on enter: to mount tokens that enter this token/tile automatically
@@ -67,11 +71,8 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 
 #### Explicit compatability:
 
-- [routinglib](https://foundryvtt.com/packages/routinglib) (required for Token following):
-  - Additional world setting Enable Token following
-  - Additional world setting In combat follow behaviour: to set the behaviour of following tokens in combat
-  - Additional world setting Only follow visible: to restrict following to visible tokens
-  - Additional client setting Follower movement: to set what happens when a following tokens moves independently
+- [routinglib](https://foundryvtt.com/packages/routinglib):
+  - Additional option for world setting Following algorithm: routinglib
 - [FoundryVTT Arms Reach](https://foundryvtt.com/packages/foundryvtt-arms-reach)/[Arms Reach](https://foundryvtt.com/packages/arms-reach):
   - Additional setting "Use Arms Reach distance": to use the "Arms Reach" distance instead of the set Mounting distance
 - [Stairways](https://foundryvtt.com/packages/stairways):
@@ -103,6 +104,8 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
     - When using keys or macros to mount the attached tiles can be hovered instead of the token
     - The mounting distance will be measured from all attached tiles (only one has to be in range)
   - Adds tile form "No form/ignore" to enhance above feature
+- [Monk's Active Tile Triggers](https://foundryvtt.com/packages/monks-active-tiles)
+  - Adds Rideable action "Mount this tile" to mount the triggering tokens to this tile
 
 
 ### Languages:
