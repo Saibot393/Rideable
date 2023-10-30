@@ -181,7 +181,16 @@
 			
 			"EnableFollowing" : {
 				"name"					: "Enable Token following",
-				"descrp"				: "If Token following is active in this world (requires routinglib)"
+				"descrp"				: "If Token following is active in this world"
+			},
+			
+			"FollowingAlgorithm" : {
+				"name"					: "Following algorithm",
+				"descrp"				: "Which following algorithm is used (install routinglib for more options)",
+				"options" : {
+					"SimplePathHistory" : "Simple path history (simple, resource light)",
+					"routinglib"		: "routinglib (advanced, resource heavy, recommended)"
+				}
 			},
 			
 			"FollowingCombatBehaviour" : {
@@ -383,6 +392,14 @@
 			}
 		},
 		
-		"RideableTag.str"				: "rideable"	
+		"RideableTag.str"				: "rideable",
+		
+		"monks-active-tiles" : {
+			"actions" : {
+				"mount-this-tile" : {
+					"name"				: "Mount this tile"
+				}
+			}
+		}
 	}
 }

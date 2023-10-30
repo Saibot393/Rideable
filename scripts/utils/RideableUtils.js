@@ -491,8 +491,13 @@ class RideableUtils {
 }
 
 //for easy translation
-function Translate(pName){
-  return game.i18n.localize(cModuleName+"."+pName);
+function Translate(pName, pWithModuleTag = true){
+	if (pWithModuleTag) {
+		return game.i18n.localize(cModuleName+"."+pName);
+	}
+	else {
+		return game.i18n.localize(pName);
+	}
 }
 
 //for view switching

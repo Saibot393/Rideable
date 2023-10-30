@@ -184,6 +184,15 @@
 				"descrp"				: "Ob Figur folgen in der Welt erlaubt ist (benötigt routinglib)"
 			},
 			
+			"FollowingAlgorithm" : {
+				"name"					: "Folgen Algorithmus",
+				"descrp"				: "Welcher Algorithmus für das Folgen benutz wird (installiere routinglib für mehr optionen)",
+				"options" : {
+					"SimplePathHistory" : "Einfache Pfad auszeichnung (einfach, Ressourcen schonend)",
+					"routinglib"		: "routinglib (komplex, Ressourcen intensiv, empfohlen)"
+				}
+			},
+			
 			"FollowingCombatBehaviour" : {
 				"name"					: "Folgen Kampf verhalten",
 				"descrp"				: "Wie sich folgende Figuren im Kampf verhalten sollen",
@@ -383,6 +392,14 @@
 			}
 		},
 		
-		"RideableTag.str"				: "rideable"	
+		"RideableTag.str"				: "rideable",
+		
+		"monks-active-tiles" : {
+			"actions" : {
+				"mount-this-tile" : {
+					"name"				: "Besteige diese Fliese"
+				}
+			}
+		}
 	}
 }

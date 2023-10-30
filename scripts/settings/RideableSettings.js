@@ -481,10 +481,12 @@ Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
 		 
 		pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
 		
+		/*
 		if (!RideableCompUtils.isactiveModule(cRoutingLib)) {
 			vnewHTML = `<p>${Translate("Titles.RequiresRL")}</p>`;
 			
 			pHTML.find('select[name="' + cModuleName + '.MountButtonDefaultPosition"]').closest(".form-group").after(vnewHTML);
 		}
+		*/
 	}
 });

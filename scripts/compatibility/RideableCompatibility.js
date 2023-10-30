@@ -1,4 +1,4 @@
-import { RideableUtils, cModuleName } from "../utils/RideableUtils.js";
+import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
 import { isRider } from "../helpers/RideableFlags.js";
 import { UpdateRidderTokens } from "../RidingScript.js";
@@ -6,7 +6,7 @@ import { RideablePopups } from "../helpers/RideablePopups.js";
 import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID } from "../MountingScript.js";
 
 import { RideableCompUtils, cLockTypeRideable, cRideableTag } from "./RideableCompUtils.js";
-import { cStairways, cTagger, cWallHeight, cLocknKey } from "./RideableCompUtils.js";
+import { cStairways, cTagger, cWallHeight, cLocknKey, cMATT } from "./RideableCompUtils.js";
 //			SW			TGG		WH
 
 //RideableCompatibility will take care of compatibility with other modules in regards to calls, currently supported:
@@ -218,7 +218,7 @@ function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pS
 export { RequestRideableTeleport };
 
 //Hook into other modules
-Hooks.once("init", () => {
+Hooks.once("init", async () => {
 	
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
@@ -247,6 +247,41 @@ Hooks.once("init", () => {
 		Hooks.on("preUpdateToken", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
 		
 		Hooks.on("preUpdateTile", (...args) => RideableCompatibility.onTGGTokenpreupdate(...args));
+	}
+	
+	if (RideableCompUtils.isactiveModule(cMATT)) {
+		let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
+		
+		let vMATT = vMATTmodule.MonksActiveTiles;
+		
+		vMATT.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
+		//mount this tile action
+		vMATT.registerTileAction(cModuleName, 'mount-this-tile', {
+			name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
+			ctrls: [
+				{
+					id: "entity",
+					name: "MonksActiveTiles.ctrl.select-entity",
+					type: "select",
+					subtype: "entity",
+					options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+					restrict: (entity) => { return (entity instanceof Token); }
+                }
+			],
+			group: cModuleName,
+			fn: async (args = {}) => {
+				let vTriggerTokens = args.tokens;
+				
+				let vTile = args.tile;
+				
+				if (vTile && vTriggerTokens.length > 0) {
+					game.Rideable.Mount(vTriggerTokens, vTile);
+				}
+			},
+			content: async (trigger, action) => {
+				return `<span class="logic-style">${Translate(trigger.name, false)}</span>`;
+			}
+		});
 	}
 	
 	//compatibility exports
