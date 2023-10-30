@@ -34,11 +34,14 @@ const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
 const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at which this token follows
 const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
 const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued the follow order of this token
+const cPathHistoryF = "PathHistoryFlag"; //FLag to store the Path history of a token
 
 //limits
 const cCornermaxRiders = 4; //4 corners
 
 const cPointEpsilon = 1;
+
+const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
 export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF}
@@ -223,6 +226,12 @@ class RideableFlags {
 	static isnextRoutePoint(pToken, pPoint) {} //returns if pPoint is next route point on pTokens route
 	
 	static async shiftRoute(pToken) {} //shifts the route of pToken one point further
+	
+	static async AddtoPathHistory(pToken, pPoint = undefined) {} //adds pPoint to path history of pToken (adds center if no point is defined)
+	
+	static GetPathHistory(pToken) {} //returns the path history of pToken (array of points)
+	
+	static async ResetPathHistory(pToken) {} //resets the path history of pToken
 	
 	//IMPLEMENTATIONS
 	
@@ -613,6 +622,19 @@ class RideableFlags {
 		return ""; //default if anything fails			
 	}
 	
+	static #PathHistoryFlag (pToken) {
+		//returns content of PathHistoryFlag of pToken (if any) (array of {x,y})
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cPathHistoryF)) {
+				return vFlag.PathHistoryFlag;
+			}
+		}
+		
+		return []; //default if anything fails			
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -734,6 +756,15 @@ class RideableFlags {
 			return true;
 		}
 		return false;		
+	}
+	
+	static async #setPathHistoryFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cPathHistoryF, pContent);
+			
+			return true;
+		}
+		return false;			
 	}
 	
 	static #resetFlags (pToken) {
@@ -1354,6 +1385,39 @@ class RideableFlags {
 		vNewRoute.shift();
 		
 		await this.#setplannedRouteFlag(pToken, vNewRoute);
+	}
+	
+		
+	static async AddtoPathHistory(pToken, pPoint = undefined) {
+		let vPoint = pPoint;
+		
+		if (!vPoint) {
+			vPoint = GeometricUtils.CenterPositionXY(pToken);
+		}
+		
+		if (vPoint) {
+			let vHistory = this.#PathHistoryFlag(pToken);
+			
+			vHistory.push(vPoint);
+			
+			if (vHistory.length > cPathMaxHistory) {
+				vHistory.shift();
+			}
+			
+			await this.setPathHistoryFlag(pToken, vHistory);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	static GetPathHistory(pToken) {
+		return this.#PathHistoryFlag(pToken);
+	}
+	
+	static async ResetPathHistory(pToken) {
+		await this.setPathHistoryFlag(pToken, []);
 	}
 }
 

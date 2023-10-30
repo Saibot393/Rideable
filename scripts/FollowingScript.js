@@ -20,8 +20,11 @@ class FollowingManager {
 	
 	static async gotonextPointonRoute(pToken) {} //updates pTokens to new point on Route
 	
+	//support
+	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
+	
 	//ons
-	static OnTokenupdate(pToken, pchanges, pInfos, pID) {} //called when a token updates
+	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {} //called when a token updates
 	
 	static OnTokenrefresh(pToken, pInfos) {} //called when a token refreshes
 	
@@ -143,7 +146,15 @@ class FollowingManager {
 				}	
 
 				//calculate and start new route
-				let vRoute = await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+				let vRoute;
+				switch(game.settings.get(cModuleName, "FollowingAlgorithm")) {
+					case "SimplePathHistory":
+						vRoute = await FollowingManager.SimplePathHistoryRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+						break;
+					case cRoutingLib:
+						vRoute = await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+						break;
+				}
 				
 				await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
 				
@@ -166,10 +177,48 @@ class FollowingManager {
 		}
 	} 
 	
+	//support
+	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {
+		let vPathHistory = RideableFlags.GetPathHistory(pTarget);
+		
+		let vRoute = [];
+		
+		let vLOSPointfound = false;
+		
+		let i = vPathHistory.length-1;//it is i, who is looping here
+		
+		while (!vLOSPointfound && i > 0) {
+			let vRay = new Ray(pFollower.center, vPathHistory[i]);
+			
+			if (canvas.walls.checkCollision(vRay, {type: "move", mode: "any"})) {
+				vLOSPointfound = true;
+			}
+			else {
+				vRoute.push(vPathHistory[i]);
+				
+				i = i - 1;
+			}
+		}
+		
+		if (vLOSPointfound) {
+			//cut route here
+			
+			return vRoute;
+		}
+		else {
+			return []; //no route found
+		}
+	} 
+	
 	//ons
-	static OnTokenupdate(pToken, pchanges, pInfos, pID) {
+	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {
 		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
+				if (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
+					//update path history of pToken
+					await RideableFlags.AddtoPathHistory(pToken);
+				}
+				
 				//only consider owned tokens for which this player is the source of the follow order
 				let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
 				

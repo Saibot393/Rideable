@@ -267,6 +267,25 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	requiresReload: true
   });  
   
+  //
+  let vFollowOptions = {
+	  "SimplePathHistory" : Translate("Settings.FollowingAlgorithm.options.SimplePathHistory")
+  };
+  
+  if (RideableCompUtils.isactiveModule(cRoutingLib)) {
+	  vFollowOptions[cRoutingLib] = Translate("Settings.FollowingAlgorithm.options." + cRoutingLib);
+  }
+  
+  game.settings.register(cModuleName, "FollowingAlgorithm", {
+	name: Translate("Settings.FollowingAlgorithm.name"),
+	hint: Translate("Settings.FollowingAlgorithm.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: vFollowOptions,
+	default: Object.keys(vFollowOptions)[0]
+  });  
+  
   game.settings.register(cModuleName, "FollowingCombatBehaviour", {
 	name: Translate("Settings.FollowingCombatBehaviour.name"),
 	hint: Translate("Settings.FollowingCombatBehaviour.descrp"),

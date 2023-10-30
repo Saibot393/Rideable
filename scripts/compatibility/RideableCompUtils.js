@@ -379,7 +379,7 @@ class RideableCompUtils {
 				break;
 		}
 		
-		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object}))?.path;	
+		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object}))?.path;
 		
 		if (vRoute) {
 			switch (pToken.parent.grid.type) {
