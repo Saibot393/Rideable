@@ -217,7 +217,7 @@ class FollowingManager {
 	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {
 		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-				if (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
+				if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 					//update path history of pToken
 					await RideableFlags.AddtoPathHistory(pToken);
 				}

@@ -279,6 +279,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 				],
 				group: cModuleName,
 				fn: async (args = {}) => {
+					console.log(args);
 					let vtoMountTokens = await pMATT.getEntities(args);
 					
 					let vTile = args.tile;
