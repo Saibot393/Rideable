@@ -1,3 +1,6 @@
+## v2.14.4
+- Fixed bug that caused errors to show up for players when not owned tokens
+
 ## v2.14.3
 - Improvement to the MATT Mount this tile action
 
