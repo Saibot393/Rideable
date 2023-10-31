@@ -196,15 +196,17 @@ class RideableCompatibility {
 						vOriginalTags = vOriginalToken.flags[cTagger].tags;
 					}
 					
-					//figure out which tokens have been added and which have been deleted
-					vAddedIDs = vCurrentTags.filter(vTag => !vOriginalTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));
-					
-					vRemovedIDs = vOriginalTags.filter(vTag => !vCurrentTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));		
+					if (vCurrentTags && vOriginalTags) {
+						//figure out which tokens have been added and which have been deleted
+						vAddedIDs = vCurrentTags.filter(vTag => !vOriginalTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));
+						
+						vRemovedIDs = vOriginalTags.filter(vTag => !vCurrentTags.includes(vTag)).filter(vTag => vTag.startsWith(cRideableTag)).map(vTag => vTag.substr(cRideableTag.length));		
 
-					//mount new ones and unmount old ones
-					MountbyID(vAddedIDs, vOriginalToken.id);
-					
-					UnMountbyID(vRemovedIDs);
+						//mount new ones and unmount old ones
+						MountbyID(vAddedIDs, vOriginalToken.id);
+						
+						UnMountbyID(vRemovedIDs);
+					}
 				}
 			}
 		}
