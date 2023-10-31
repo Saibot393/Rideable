@@ -255,17 +255,17 @@ Hooks.once("init", async () => {
 	};
 });
 
-Hooks.once("setupTileActions", (pMatt) => {
+Hooks.once("setupTileActions", (pMATT) => {
 	if (RideableCompUtils.isactiveModule(cMATT)) {
 		//let vMATTmodule = await import("../../../monks-active-tiles/monks-active-tiles.js"); //Help, this is ugly, i don't want to do this, why, oh why?
 		
 		//let vMATT = vMATTmodule?.MonksActiveTiles;
 		
-		if (pMatt) {
-			pMatt.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
+		if (pMATT) {
+			pMATT.registerTileGroup(cModuleName, Translate("Titles." + cModuleName));
 			
 			//mount this tile action
-			pMatt.registerTileAction(cModuleName, 'mount-this-tile', {
+			pMATT.registerTileAction(cModuleName, 'mount-this-tile', {
 				name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
 				ctrls: [
 					{
@@ -279,16 +279,16 @@ Hooks.once("setupTileActions", (pMatt) => {
 				],
 				group: cModuleName,
 				fn: async (args = {}) => {
-					let vTriggerTokens = args.tokens;
+					let vtoMountTokens = await pMATT.getEntities(args);
 					
 					let vTile = args.tile;
 					
-					if (vTile && vTriggerTokens.length > 0) {
-						game.Rideable.Mount(vTriggerTokens, vTile);
+					if (vTile && vtoMountTokens.length > 0) {
+						game.Rideable.Mount(vtoMountTokens, vTile);
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMatt.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity);
 					return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
 				}
 			});
