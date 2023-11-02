@@ -72,6 +72,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "5"
   });
   
+  game.settings.register(cModuleName, "useRidingHeight", {
+	name: Translate("Settings.useRidingHeight.name"),
+	hint: Translate("Settings.useRidingHeight.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: true
+  });
+  
   game.settings.register(cModuleName, "useRiddenTokenHeight", {
 	name: Translate("Settings.useRiddenTokenHeight.name"),
 	hint: Translate("Settings.useRiddenTokenHeight.descrp"),

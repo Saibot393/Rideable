@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -101,6 +101,14 @@ class RideableSheetSettings {
 														vtype : "number", 
 														vvalue : RideableFlags.customRidingHeight(pApp.document), 
 														vflagname : cCustomRidingheightF
+														});
+														
+			//use riding height setting
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cUseRidingHeightF +".name"), 
+														vhint : Translate("TokenSettings."+ cUseRidingHeightF +".descrp"), 
+														vtype : "checkbox", 
+														vvalue : RideableFlags.UseRidingHeight(pApp.document), 
+														vflagname : cUseRidingHeightF
 														});
 														
 			//RiderPositioning

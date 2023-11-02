@@ -36,6 +36,7 @@ const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at w
 const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
 const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued the follow order of this token
 const cPathHistoryF = "PathHistoryFlag"; //FLag to store the Path history of a token
+const cUseRidingHeightF = "UseRidingHeightFlag"; //Flag to store wether the riding height should be used
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -45,7 +46,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -137,9 +138,13 @@ class RideableFlags {
 	//Riding height info
 	static addRiderHeight(pRider) {} //returns the addtional Riding height of pToken
 	
+	static async setaddRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
+	
 	static HascustomRidingHeight(pRidden) {} //if pRidden has a custom height
 	
 	static customRidingHeight(pRidden) {} //custom height of pRidden
+	
+	static UseRidingHeight(pRidden) {} //if the riding height should be used for pRidden
 		
 	//flag setting
 	static async addRiderTokens (pRiddenToken, pRiderTokens, pRidingOptions = {Familiar: false, Grappled: false}, pforceset = false) {} //adds the IDs of the pRiderTokens to the ridden Flag of pRiddenToken (!pforceset skips safety measure!)
@@ -155,8 +160,6 @@ class RideableFlags {
 	static async stopRiding(pRidingTokens, pRemoveRiddenreference = true) {} //tries to remove pRidingToken from all Riders Flags
 	
 	static removeallRiding(pRiddenToken) {} //stops all Tokens riding pRiddenToken from riding pRiddenToken
-	
-	static async setaddRiderHeight(pToken, pHeight) {} //sets the addtional Riding Height of pToken to pHeight ONLY BY GM!
 	
 	static async savecurrentSize(pToken) {} //saves the current size of pToken into the SizesaveFlag (and makes size changeable if necessary)
 	
@@ -636,6 +639,19 @@ class RideableFlags {
 		return []; //default if anything fails			
 	}
 	
+	static #UseRidingHeightFlag (pToken) {
+		//returns content of UseRidingHeightFlag of pToken (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cUseRidingHeightF)) {
+				return vFlag.UseRidingHeightFlag;
+			}
+		}
+		
+		return game.settings.get(cModuleName, "useRidingHeight"); //default if anything fails			
+	}
+	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
 		if (pToken) {
@@ -1056,6 +1072,13 @@ class RideableFlags {
 		return this.#RidingHeightFlag(pRider);
 	}
 	
+	
+	static async setaddRiderHeight(pToken, pHeight) {
+		if (pToken) {
+			await this.#setaddRiderHeightFlag(pToken, pHeight);
+		}
+	}
+	
 	static HascustomRidingHeight(pRidden) {
 		return this.#CustomRidingheightFlag(pRidden) >= 0;
 	}
@@ -1066,6 +1089,10 @@ class RideableFlags {
 		}
 		
 		return;
+	}
+	
+	static UseRidingHeight(pRidden) {
+		return this.#UseRidingHeightFlag(pRidden);
 	}
 	
 	//flag setting
@@ -1171,12 +1198,6 @@ class RideableFlags {
 		}
 		
 		return this.isRidden(pRiddenToken);
-	}
-	
-	static async setaddRiderHeight(pToken, pHeight) {
-		if (pToken) {
-			await this.#setaddRiderHeightFlag(pToken, pHeight);
-		}
 	}
 
 	static async savecurrentSize(pToken) {

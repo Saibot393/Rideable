@@ -199,14 +199,16 @@ class MountingManager {
 	
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
 		//starts a mount reequest
-		if (game.user.isGM) {
-			MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
-		}
-		else {
-			if (!game.paused) {
-				game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
+		if (pTarget) {
+			if (game.user.isGM) {
+				MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
 			}
-		}		
+			else {
+				if (!game.paused) {
+					game.socket.emit("module.Rideable", {pFunction : "MountRequest", pData : {pTargetID: pTarget.id, pselectedTokensID: RideableUtils.IDsfromTokens(pselectedTokens), pSceneID : FCore.sceneof(pTarget).id, pRidingOptions : pRidingOptions}});
+				}
+			}
+		}
 	} 
 	
 	static RequestMountbyID(pselectedTokens, pTarget, pRidingOptions, pSceneID = null) {
@@ -302,7 +304,7 @@ class MountingManager {
 	
 	static UnMountallRiders(pRiddenToken) {
 		if (pRiddenToken) {
-			MountingManager.UnMountRiders(RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken)));
+			MountingManager.UnMountRiders(pRiddenToken, RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken)));
 		}
 	} 
 	

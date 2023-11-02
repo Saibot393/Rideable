@@ -62,6 +62,11 @@ class Ridingmanager {
 	
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
+	//static
+	static SyncSort(pDocument, pSort, pInfos = {}) {} //requests all clients to synch sort value of pDocument only GM
+	
+	static SyncSortRequest(pData) {} //answers a requests a sort sync
+	
 	//external movement
 	static MoveRiddenGM(pRidden, pRelativChanges, pInfos) {} //change the position of a riden token as a GM
 	
@@ -155,7 +160,10 @@ class Ridingmanager {
 					if (vDeleteChanges) {
 						delete pchanges.x;
 						delete pchanges.y;
-						delete pchanges.elevation;
+						
+						if (RideableFlags.UseRidingHeight(vRidden)) {
+							delete pchanges.elevation;
+						}
 						
 						if (game.settings.get(cModuleName, "RiderRotation")) {
 							delete pchanges.rotation;
@@ -187,7 +195,7 @@ class Ridingmanager {
 				//if a dm tried to only change the elevation while "move ridden" is off
 				vElevationOverride = true;
 				
-				RideableFlags.setRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
+				RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
 			}
 		}
 		
@@ -253,7 +261,11 @@ class Ridingmanager {
 			if (vdeleteChanges) {
 				delete pchanges.x;
 				delete pchanges.y;
-				delete pchanges.elevation;
+				
+				if (RideableFlags.UseRidingHeight(pRidden)) {
+					delete pchanges.elevation;
+				}
+				
 				delete pchanges.rotation;
 			}
 			
@@ -402,26 +414,28 @@ class Ridingmanager {
 	static placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			
-			let vTargetz = pRiddenToken.elevation;
-			
-			if (!pPlaceSameheight) {
-				let vRidingHeight;		
+			if (RideableFlags.UseRidingHeight(pRiddenToken)) {
+				let vTargetz = pRiddenToken.elevation;
 				
-				if (RideableFlags.HascustomRidingHeight(pRiddenToken)) {
-					vRidingHeight = RideableFlags.customRidingHeight(pRiddenToken);
+				if (!pPlaceSameheight) {
+					let vRidingHeight;		
+					
+					if (RideableFlags.HascustomRidingHeight(pRiddenToken)) {
+						vRidingHeight = RideableFlags.customRidingHeight(pRiddenToken);
+					}
+					else {
+						vRidingHeight = RideableUtils.Ridingheight(pRiddenToken);
+					}
+					
+					vTargetz = vTargetz + vRidingHeight/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pRiderTokenList[i]);
 				}
-				else {
-					vRidingHeight = RideableUtils.Ridingheight(pRiddenToken);
-				}
-				
-				vTargetz = vTargetz + vRidingHeight/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pRiderTokenList[i]);
+					
+				if (pRiderTokenList[i].elevation != vTargetz) {
+					pRiderTokenList[i].update({elevation: vTargetz}, {RidingMovement : true});
+				}	
 			}
-				
-			if (pRiderTokenList[i].elevation != vTargetz) {
-				pRiderTokenList[i].update({elevation: vTargetz}, {RidingMovement : true});
-			}	
 			
-			pRiderTokenList[i].sort = pRiddenToken.sort + cSortDifference;
+			Ridingmanager.SyncSort(pRiderTokenList[i], pRiddenToken.sort + cSortDifference);
 		}
 	}
 	
@@ -573,16 +587,49 @@ class Ridingmanager {
 					//set to height or previously ridden token
 					vTargetz = pRiddenTokens[i].elevation;
 					
-					pRiderTokens[i].sort = pRiddenTokens[i].sort;
+					Ridingmanager.SyncSort(pRiderTokens[i], pRiddenTokens[i].sort);
 				}
 				else {
 					//reduce height by riding height
 					vTargetz = pRiderTokens[i].elevation - RideableUtils.Ridingheight();
 					
-					pRiderTokens[i].sort = pRiderTokens[i].sort - cSortDifference;
+					Ridingmanager.SyncSort(pRiderTokens[i], 0);
 				} 
 
-				pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
+				if (!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) {
+					pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
+				}
+			}
+		}
+	}
+	
+	//static
+	static SyncSort(pDocument, pSort) {
+		if (game.user.isGM) {
+			pDocument.sort = pSort;
+			
+			let vData = {};
+			
+			vData.pSceneID = pDocument.parent.id;
+			vData.pCollectionName = pDocument.parentCollection;
+			vData.pDocumentID = pDocument.id;
+			
+			vData.pSort = pSort;
+			
+			game.socket.emit("module."+cModuleName, {pFunction : "SyncSortRequest", pData : vData});
+		}
+	}
+	
+	static SyncSortRequest(pDocumentID, pCollectionName, pSceneID, pSort) {
+		console.log(pDocumentID, pCollectionName, pSceneID, pSort);
+		
+		let vScene = game.scenes.get(pSceneID);
+		
+		if (vScene) {
+			let vDocument = vScene[pCollectionName].get(pDocumentID);
+			
+			if (vDocument) {
+				vDocument.sort = pSort;
 			}
 		}
 	}
@@ -651,7 +698,11 @@ function MoveRiddenRequest({pRiddenID, pSceneID, pRelativChanges, pInfos} = {}) 
 	Ridingmanager.MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos);
 }
 
-export { UpdateRidderTokens, UnsetRidingHeight, MoveRiddenRequest };
+function SyncSortRequest({pDocumentID, pCollectionName, pSceneID, pSort} = {}) {
+	Ridingmanager.SyncSortRequest(pDocumentID, pCollectionName, pSceneID, pSort);
+}
+
+export { UpdateRidderTokens, UnsetRidingHeight, MoveRiddenRequest, SyncSortRequest };
 
 //Set Hooks
 Hooks.on("updateToken", (...args) => Ridingmanager.OnTokenupdate(...args));
