@@ -1,4 +1,4 @@
-## v2.15.0
+## v2.15.1
 - Small tile settings ui fix
 
 ## v2.15.0
