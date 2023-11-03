@@ -20,7 +20,8 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Tokens rideable by default: to change if tokens are rideable by default
 - Tiles can be mounted[*v11 upwards*]: to enable tile mounting feature
 - Allow mount on enter: to activate the mount on enter feature in this world (*turn off to increase performance*)
-- Riding Height: to change the relative z-height of the riders 
+- Riding Height: to change the relative z-height of the riders
+- Use riding height by default: to set wether tokens/tiles should use the riding height per default for their riders
 - Mounting distance: to limit the distance from which a token can mount another token
 - Border to border distance: distance to change the way the distance for the above option is calculated
 - Maximum riders per token: to limit the amounts of tokens that can ride the same token
@@ -53,6 +54,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Tile name [*Tiles only*]: to set the name rideable will use for this tile
 - Maximum riders: to override world default for this token
 - Custom riding height: to set the height used for tokens riding this token
+- Use riding height: to set wether this token should use the riding height per default for its riders
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
 - Grappled placement: to set where tokens grappled by this token are placed
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
@@ -106,6 +108,13 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Adds tile form "No form/ignore" to enhance above feature
 - [Monk's Active Tile Triggers](https://foundryvtt.com/packages/monks-active-tiles)
   - Adds Rideable action "Mount this tile" to mount the triggering tokens to this tile
+  - Adds Rideable action "Mount" to mount a set of tokens to specified token/tile
+  - Adds Rideable action "Unmount" to unmount a set of tokens
+  - Adds Rideable action "Unmount riders" to unmount the riders of a given token/tile
+  - Adds Rideable action "Toggle mount" to change teh riding state of a set of tokens regarding a given token/tile
+  - Adds Rideable filter "Filter riders of mount" to filter the riders of a given token/tile
+  - Adds Rideable filter "Filter riders" to filter tokens that currently are riding
+  - Adds Rideable filter "Filter ridden" to filter tokens that currently are ridden
 
 
 ### Languages:
