@@ -425,7 +425,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: Translate(cMATT + ".actions." + "mount-target" + ".settings." + "target" + ".name"),
 						type: "select",
 						subtype: "entity",
-						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						options: { show: ['token', 'tile', 'within', 'players', 'previous', 'tagger'] },
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					}
 				],
