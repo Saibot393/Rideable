@@ -1,3 +1,6 @@
+## v2.15.1
+- Small tile settings ui fix
+
 ## v2.15.0
 - Added api (`game.modules.get("Rideable").api`)
 - Fixed several small bugs
