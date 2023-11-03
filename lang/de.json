@@ -45,6 +45,11 @@
 				"descrp"				: "Die Z-Höhe welche eine reitende Figur im Vergleich zur getrittenen Figur hat (es wird ein Wert über 0 empfohlen)"
 			},
 			
+			"useRidingHeight" : {
+				"name" 					: "Reithöhe standardmäßig genutzt",
+				"descrp"				: "Ob Figuren die Reithöhe standardmäßig nutzen"
+			},
+			
 			"useRiddenTokenHeight" : {
 				"name" 					: "Nutze Figurhöhe",
 				"descrp"				: "Nutzt die Höhe der gerittenen Figur (hinzugefügt durch das Modul \"Wall-Height\") anstatt der eingestellten \"Reithöhe\""
@@ -351,6 +356,11 @@
 				"descrp"				: "Reithöhe der Figur welche für die Reiter verwendet wird (leer lassen um Standardwert zu nutzen)"
 			},
 			
+			"UseRidingHeightFlag" : {
+				"name"					: "Nutze Reithöhe",
+				"descrp"				: "Ob die Erhöhung der Reiter dieser Figur verwaltet werden soll"
+			},
+			
 			"InsideMovementFlag" : {
 				"name"					: "Reiter können sich frei bewegen",
 				"descrp"				: "Ob Reiter sich frei in den Grenzen dieser Figur bewegen können"
@@ -395,9 +405,90 @@
 		"RideableTag.str"				: "rideable",
 		
 		"monks-active-tiles" : {
+			"filters" : {
+				"name"					: "Filter",
+				
+				"riders-of" : {
+					"name"				: "Filter Reiter von Reitziel",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition} von <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"mount" : {
+							"name"		: "Reitziel"
+						},
+						
+						"filterCondition" : {
+							"name"		: "Reitstatus Bedingung:",
+							"options" : {
+								"rider": "reitet",
+								"notrider" : "reitet nicht"
+							}	
+						}
+					}
+				},
+				
+				"is-rider" : {
+					"name"				: "Filter Reiter",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Reitstatus Bedingung:",
+							"options" : {
+								"rider": "reitet",
+								"notrider" : "reitet nicht"
+							}	
+						}
+					}					
+				},
+				
+				"is-ridden" : {
+					"name"				: "Filter Gerittene",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Reitstatus Bedingung:",
+							"options" : {
+								"ridden": "wird geritten",
+								"notridden" : "wird nicht geritten"
+							}	
+						}
+					}					
+				}
+			},
+			
 			"actions" : {
 				"mount-this-tile" : {
-					"name"				: "Besteige diese Fliese"
+					"name"				: "Besteige diese Fliese",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"mount-target" : {
+					"name"				: "Besteige",
+					"descrp"			: "mit <span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Reittier"
+						}
+					}
+				},
+				
+				"unmount" : {
+					"name"				: "Steige ab",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"unmount-riders" : {
+					"name"				: "Lasse Reiter absteigen",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"toggle-mount-target" : {
+					"name"				: "Steige auf/ab",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> mot <span class=\"entity-style\">{pEntities}</span> von <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Mount"
+						}
+					}
 				}
 			}
 		}

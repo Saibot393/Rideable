@@ -729,6 +729,8 @@ function Mount(pselectedTokens, pTarget, pRidingOptions = {}) { return MountingM
 
 function UnMount(pTokens) { return MountingManager.RequestUnmount(pTokens)};
 
+function ToggleMount(pRiders, pTarget, pRidingOptions = {}) {return MountingManager.RequestToggleMount(pRiders, pTarget, pRidingOptions);};
+
 function UnMountallRiders(pRidden) { return MountingManager.UnMountallRiders(pRidden)};
 
 function MountbyID(pselectedTokens, pTarget, pRidingOptions = {}, pSceneID = null) { return MountingManager.RequestMountbyID(pselectedTokens, pTarget, pRidingOptions, pSceneID)};
@@ -748,4 +750,4 @@ function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} 
 
 export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected};
 
-export { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };
+export { Mount, UnMount, ToggleMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };

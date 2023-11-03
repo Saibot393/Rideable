@@ -1,5 +1,5 @@
 import { MountSelected, MountSelectedFamiliar, UnMountSelected, GrappleTargeted, ToggleMountselected } from "../MountingScript.js";
-import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID, TogglePilotingSelected } from "../MountingScript.js";
+import { Mount, UnMount, ToggleMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID, TogglePilotingSelected } from "../MountingScript.js";
 import { SelectedFollowHovered, SelectedFollowHoveredatDistance, SelectedStopFollowing, SelectedToggleFollwing, SelectedToggleFollwingatDistance } from "../FollowingScript.js";
 
 //functions for macros
@@ -11,6 +11,7 @@ Hooks.on("init",() => {
 		GrappleTargeted,
 		Mount,
 		UnMount,
+		ToggleMount,
 		UnMountallRiders,
 		MountbyID,
 		UnMountbyID,

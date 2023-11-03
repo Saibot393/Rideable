@@ -42,7 +42,8 @@
 	"scripts/helpers/SocketHandler.js",
 	"scripts/helpers/MacroHooks.js",
 	"scripts/settings/RideableSheetSettings.js",
-	"scripts/compatibility/RideableCompatibility.js"
+	"scripts/compatibility/RideableCompatibility.js",
+	"scripts/compatibility/APIHandler.js"
   ],
   "packs": [
 	{

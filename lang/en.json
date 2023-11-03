@@ -45,6 +45,11 @@
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
 			},
 			
+			"useRidingHeight" : {
+				"name" 					: "Use riding height by default",
+				"descrp"				: "If tokens use riding height by default"
+			},
+			
 			"useRiddenTokenHeight" : {
 				"name" 					: "Use token height",
 				"descrp"				: "Uses a the riddens token height (added through the \"Wall-Height\" module) instead of the set \"Riding height\""
@@ -351,6 +356,11 @@
 				"descrp"				: "Custom height of this token, used for its riders (leave empty for default value)"
 			},
 			
+			"UseRidingHeightFlag" : {
+				"name"					: "Use riding height",
+				"descrp"				: "If the elevation of this tokens riders should be managed"
+			},
+			
 			"InsideMovementFlag" : {
 				"name"					: "Riders can move freely",
 				"descrp"				: "If riders can move freely within the boundaries of this token"
@@ -395,9 +405,90 @@
 		"RideableTag.str"				: "rideable",
 		
 		"monks-active-tiles" : {
+			"filters" : {
+				"name"					: "Filter",
+				
+				"riders-of" : {
+					"name"				: "Filter riders of mount",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition} of <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"mount" : {
+							"name"		: "Mount"
+						},
+						
+						"filterCondition" : {
+							"name"		: "Riding state condition:",
+							"options" : {
+								"rider": "is rider",
+								"notrider" : "is not rider"
+							}	
+						}
+					}
+				},
+				
+				"is-rider" : {
+					"name"				: "Filter riders",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Riding state condition:",
+							"options" : {
+								"rider": "is rider",
+								"notrider" : "is not rider"
+							}	
+						}
+					}					
+				},
+				
+				"is-ridden" : {
+					"name"				: "Filter ridden",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Ridden state condition:",
+							"options" : {
+								"ridden": "is ridden",
+								"notridden" : "is not ridden"
+							}	
+						}
+					}					
+				}
+			},
+			
 			"actions" : {
 				"mount-this-tile" : {
-					"name"				: "Mount to this tile"
+					"name"				: "Mount to this tile",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"mount-target" : {
+					"name"				: "Mount",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> to <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Mount"
+						}
+					}
+				},
+				
+				"unmount" : {
+					"name"				: "Unmount",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"unmount-riders" : {
+					"name"				: "Unmount riders",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> of <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"toggle-mount-target" : {
+					"name"				: "Toggle mount",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> to <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Mount"
+						}
+					}
 				}
 			}
 		}

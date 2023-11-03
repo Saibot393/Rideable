@@ -500,6 +500,16 @@ function Translate(pName, pWithModuleTag = true){
 	}
 }
 
+function TranslateandReplace(pName, pWords = {}){
+	let vContent = Translate(pName);
+	
+	for (let vWord of Object.keys(pWords)) {
+		vContent = vContent.replace("{" + vWord + "}", pWords[vWord]);
+	}
+ 
+	return vContent;
+}
+
 //for view switching
 async function switchScene( {pUserID, pSceneID, px, py} = {}) {
 	if ((game.user.id == pUserID) && (canvas.scene.id != pSceneID)) {
@@ -511,4 +521,4 @@ async function switchScene( {pUserID, pSceneID, px, py} = {}) {
 }
 
 //Export RideableFlags Class
-export{ RideableUtils, Translate, switchScene };
+export{ RideableUtils, Translate, TranslateandReplace, switchScene };

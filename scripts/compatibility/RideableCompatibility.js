@@ -1,4 +1,4 @@
-import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
+import { RideableUtils, cModuleName, Translate, TranslateandReplace } from "../utils/RideableUtils.js";
 import { RideableFlags } from "../helpers/RideableFlags.js";
 import { isRider } from "../helpers/RideableFlags.js";
 import { UpdateRidderTokens } from "../RidingScript.js";
@@ -269,6 +269,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 			//mount this tile action
 			pMATT.registerTileAction(cModuleName, 'mount-this-tile', {
 				name: Translate(cMATT + ".actions." + "mount-this-tile" + ".name"),
+				requiresGM: true,
 				ctrls: [
 					{
 						id: "entity",
@@ -281,7 +282,6 @@ Hooks.once("setupTileActions", (pMATT) => {
 				],
 				group: cModuleName,
 				fn: async (args = {}) => {
-					console.log(args);
 					let vtoMountTokens = await pMATT.getEntities(args);
 					
 					let vTile = args.tile;
@@ -292,7 +292,427 @@ Hooks.once("setupTileActions", (pMATT) => {
 				},
 				content: async (trigger, action) => {
 					let entityName = await pMATT.entityName(action.data?.entity);
-					return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
+					console.log(trigger);
+					console.log(action);
+					return TranslateandReplace(cMATT + ".actions." + "mount-this-tile" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
+					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
+				}
+			});
+			
+			//mount target
+			pMATT.registerTileAction(cModuleName, 'mount-target', {
+				name: Translate(cMATT + ".actions." + "mount-target" + ".name"),
+				requiresGM: true,
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					},
+					{
+						id: "target",
+						name: Translate(cMATT + ".actions." + "mount-target" + ".settings." + "target" + ".name"),
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
+					}
+				],
+				group: cModuleName,
+				fn: async (args = {}) => {
+					const { action } = args;
+					
+					let vtoMountTokens = await pMATT.getEntities(args);
+					
+					let vMount = (await pMATT.getEntities(args, "tokens", action.data?.target));
+					
+					if (vMount.length) {
+						vMount = vMount[0];
+					}
+					
+					if (vMount && vtoMountTokens.length > 0) {
+						game.Rideable.Mount(vtoMountTokens, vMount);
+					}
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					let vMountName = await pMATT.entityName(action.data?.target);
+					
+					return TranslateandReplace(cMATT + ".actions." + "mount-target" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName, pMount : vMountName})
+					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
+				}
+			});
+			
+			//unmount all tokens
+			pMATT.registerTileAction(cModuleName, 'unmount', {
+				name: Translate(cMATT + ".actions." + "unmount" + ".name"),
+				requiresGM: true,
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					}
+				],
+				group: cModuleName,
+				fn: async (args = {}) => {
+					const { action } = args;
+					
+					let vtoUnMountTokens = await pMATT.getEntities(args);
+					
+					if (vtoUnMountTokens.length > 0) {
+						game.Rideable.UnMount(vtoUnMountTokens);
+					}
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					return TranslateandReplace(cMATT + ".actions." + "unmount" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
+					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
+				}
+			});
+			
+			//unmount all riders
+			pMATT.registerTileAction(cModuleName, 'unmount-riders', {
+				name: Translate(cMATT + ".actions." + "unmount-riders" + ".name"),
+				requiresGM: true,
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
+					}
+				],
+				group: cModuleName,
+				fn: async (args = {}) => {
+					const { action } = args;
+					
+					let vRiddenTokens = await pMATT.getEntities(args);
+					
+					for (let i = 0; i < vRiddenTokens.length; i++) {
+						game.Rideable.UnMountallRiders(vRiddenTokens[i]);
+					}
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					return TranslateandReplace(cMATT + ".actions." + "unmount-riders" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
+				}
+			});
+			
+			//toggle mount target
+			pMATT.registerTileAction(cModuleName, 'toggle-mount-target', {
+				name: Translate(cMATT + ".actions." + "toggle-mount-target" + ".name"),
+				requiresGM: true,
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					},
+					{
+						id: "target",
+						name: Translate(cMATT + ".actions." + "mount-target" + ".settings." + "target" + ".name"),
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
+					}
+				],
+				group: cModuleName,
+				fn: async (args = {}) => {
+					const { action } = args;
+					
+					let vtoChangeTokens = await pMATT.getEntities(args);
+					
+					let vMount = (await pMATT.getEntities(args, "tokens", action.data?.target));
+					
+					if (vMount.length) {
+						vMount = vMount[0];
+					}
+					
+					if (vMount && vtoChangeTokens.length > 0) {
+						game.Rideable.ToggleMount(vtoChangeTokens, vMount);
+					}
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					let vMountName  = await pMATT.entityName(action.data?.target);
+					
+					return TranslateandReplace(cMATT + ".actions." + "toggle-mount-target" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName, pMount : vMountName})
+				}
+			});
+			
+			//filter riders of
+			pMATT.registerTileAction(cModuleName, 'riders-of', {
+				name: Translate(cMATT + ".filters." + "riders-of" + ".name"),
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					},
+					{
+						id: "mount",
+						name: Translate(cMATT + ".filters." + "riders-of" + ".settings." + "mount" + ".name"),
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)) }
+					},
+					{
+						id: "filterCondition",
+						name: Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".name"),
+						list: "filterCondition",
+						type: "list",
+						defvalue: 'yes'
+					},
+					{
+						id: "continue",
+						name: "Continue if",
+						list: "continue",
+						type: "list",
+						defvalue: 'always'
+					}
+				],
+				values: {
+					"filterCondition": {
+						"rider": Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "rider"),
+						"notrider": Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "notrider"),
+					},
+					'continue': {
+						"always": "Always",
+						"any": "Any Matches",
+						"all": "All Matches",
+					}
+				},
+				fn: async (args = {}) => {
+
+					const { action } = args;
+
+					const entities = await pMATT.getEntities(args);
+					
+					let vMount = await pMATT.getEntities(args, "tokens", action.data?.mount);
+					
+					if (vMount.length) {
+						vMount = vMount[0];
+					}
+					
+					let vEntityCount = entities.length;
+					
+					let vFiltered;
+					
+					if (vMount) {
+						switch(action.data?.filterCondition) {
+							case "rider":
+								vFiltered = entities.filter(vObject => game.modules.get("Rideable").api.RideableFlags.isRiddenby(vMount, vObject));
+								break;
+							case "notrider":
+								vFiltered = entities.filter(vObject => !game.modules.get("Rideable").api.RideableFlags.isRiddenby(vMount, vObject));
+								break;
+						}
+					}
+					else {
+						vFiltered = [];
+					}
+
+					const vContinue = (action.data?.continue === 'always'
+						|| (action.data?.continue === 'any' && vFiltered.length > 0)
+						|| (action.data?.continue === 'all' && vFiltered.length == vEntityCount && vFiltered.length > 0));
+
+					return { continue: vContinue, tokens: vFiltered };
+
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					let vMountName  = await pMATT.entityName(action.data?.target);
+					
+					let vCondition;
+					switch(action.data.filterCondition) {
+						case "rider" :
+							vCondition = Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "rider");
+							break;
+						case "notrider" : 
+							vCondition = Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "notrider");
+							break;
+					}
+					
+					return TranslateandReplace(cMATT + ".filters." + "riders-of" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pMount : vMountName, pCondition : vCondition});
+				}
+			});
+			
+			//filter is rider
+			pMATT.registerTileAction(cModuleName, 'is-rider', {
+				name: Translate(cMATT + ".filters." + "is-rider" + ".name"),
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return (entity instanceof Token); }
+					},
+					{
+						id: "filterCondition",
+						name: Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".name"),
+						list: "filterCondition",
+						type: "list",
+						defvalue: 'yes'
+					},
+					{
+						id: "continue",
+						name: "Continue if",
+						list: "continue",
+						type: "list",
+						defvalue: 'always'
+					}
+				],
+				values: {
+					"filterCondition": {
+						"rider": Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "rider"),
+						"notrider": Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "notrider"),
+					},
+					'continue': {
+						"always": "Always",
+						"any": "Any Matches",
+						"all": "All Matches",
+					}
+				},
+				fn: async (args = {}) => {
+
+					const { action } = args;
+
+					const entities = await pMATT.getEntities(args);
+					
+					let vEntityCount = entities.length;
+					
+					let vFiltered;
+		
+					switch(action.data?.filterCondition) {
+						case "rider":
+							vFiltered = entities.filter(vObject => game.modules.get("Rideable").api.RideableFlags.isRider(vObject));
+							break;
+						case "notrider":
+							vFiltered = entities.filter(vObject => !game.modules.get("Rideable").api.RideableFlags.isRider(vObject));
+							break;
+					}
+
+					const vContinue = (action.data?.continue === 'always'
+						|| (action.data?.continue === 'any' && vFiltered.length > 0)
+						|| (action.data?.continue === 'all' && vFiltered.length == vEntityCount && vFiltered.length > 0));
+
+					return { continue: vContinue, tokens: vFiltered };
+
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					
+					let vCondition;
+					switch(action.data.filterCondition) {
+						case "rider" :
+							vCondition = Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "rider");
+							break;
+						case "notrider" : 
+							vCondition = Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "notrider");
+							break;
+					}
+					
+					return TranslateandReplace(cMATT + ".filters." + "is-rider" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pCondition : vCondition});
+				}
+			});
+			
+			//filter is ridden
+			pMATT.registerTileAction(cModuleName, 'is-ridden', {
+				name: Translate(cMATT + ".filters." + "is-ridden" + ".name"),
+				ctrls: [
+					{
+						id: "entity",
+						name: "MonksActiveTiles.ctrl.select-entity",
+						type: "select",
+						subtype: "entity",
+						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
+					},
+					{
+						id: "filterCondition",
+						name: Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".name"),
+						list: "filterCondition",
+						type: "list",
+						defvalue: 'yes'
+					},
+					{
+						id: "continue",
+						name: "Continue if",
+						list: "continue",
+						type: "list",
+						defvalue: 'always'
+					}
+				],
+				values: {
+					"filterCondition": {
+						"ridden": Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "ridden"),
+						"notridden": Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "notridden"),
+					},
+					'continue': {
+						"always": "Always",
+						"any": "Any Matches",
+						"all": "All Matches",
+					}
+				},
+				fn: async (args = {}) => {
+
+					const { action } = args;
+
+					const entities = await pMATT.getEntities(args);
+					
+					let vEntityCount = entities.length;
+					
+					let vFiltered;
+		
+					switch(action.data?.filterCondition) {
+						case "ridden":
+							vFiltered = entities.filter(vObject => game.modules.get("Rideable").api.RideableFlags.isRidden(vObject));
+							break;
+						case "notridden":
+							vFiltered = entities.filter(vObject => !game.modules.get("Rideable").api.RideableFlags.isRidden(vObject));
+							break;
+					}
+
+					const vContinue = (action.data?.continue === 'always'
+						|| (action.data?.continue === 'any' && vFiltered.length > 0)
+						|| (action.data?.continue === 'all' && vFiltered.length == vEntityCount && vFiltered.length > 0));
+
+					return { continue: vContinue, tokens: vFiltered };
+
+				},
+				content: async (trigger, action) => {
+					let entityName = await pMATT.entityName(action.data?.entity);
+					
+					let vCondition;
+					switch(action.data.filterCondition) {
+						case "ridden" :
+							vCondition = Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "ridden");
+							break;
+						case "notridden" : 
+							vCondition = Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "notridden");
+							break;
+					}
+					
+					return TranslateandReplace(cMATT + ".filters." + "is-ridden" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pCondition : vCondition});
 				}
 			});
 		}
