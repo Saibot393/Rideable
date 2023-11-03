@@ -1,4 +1,7 @@
 ## v2.15.0
+- Small tile settings ui fix
+
+## v2.15.0
 - Added api (`game.modules.get("Rideable").api`)
 - Fixed several small bugs
 - Fixed bug with sort, the riding height can now be set to 0 and riders should still appear above their mounts
