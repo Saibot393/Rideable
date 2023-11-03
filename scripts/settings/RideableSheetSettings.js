@@ -236,7 +236,12 @@ class RideableSheetSettings {
 			pApp.setPosition({ height: "auto" });
 		}
 		
-		RideableSheetSettings.FixSheetWindow(pHTML);
+		if (pisTile) {
+			RideableSheetSettings.FixSheetWindow(pHTML, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
+		}
+		else {
+			RideableSheetSettings.FixSheetWindow(pHTML, `nav.sheet-tabs[data-group="main"]`);
+		}
 		
 		//pHTML.css("width", "max-content");
 	} 
@@ -336,10 +341,10 @@ class RideableSheetSettings {
 		pHTML.find(`div[data-tab="${cModuleName}"]`).append(vnewHTML);
 	}
 	
-	static FixSheetWindow(pHTML) {
+	static FixSheetWindow(pHTML , pIndentifier) {
 		let vNeededWidth = 0;
 
-		pHTML.find(`nav.sheet-tabs[data-group="main"]`).children().each(function() {
+		pHTML.find(pIndentifier).children().each(function() {
 			vNeededWidth = vNeededWidth + $(this).outerWidth() ;
 		});
 		
