@@ -1,3 +1,19 @@
+## v2.15.0
+- Added api (`game.modules.get("Rideable").api`)
+- Fixed several small bugs
+- Fixed bug with sort, the riding height can now be set to 0 and riders should still appear above their mounts
+- Added world setting Use riding height by default to set wether tokens/tiles should use the riding height per default for their riders
+- Added token(tile) setting Use riding height to set wether this token/tile should use the riding height per default for its riders
+- Added several example macros to show a few things that can be done
+- Added custom MATT actions and filters
+  - Added action Mount to mount a set of tokens to specified token/tile
+  - Added action Unmount to unmount a set of tokens
+  - Added action Unmount riders to unmount the riders of a given token/tile
+  - Added action Toggle mount to change teh riding state of a set of tokens regarding a given token/tile
+  - Added filter Filter riders of mount to filter the riders of a given token/tile
+  - Added filter Filter riders to filter tokens that currently are riding
+  - Added filter Filter ridden to filter tokens that currently are ridden
+
 ## v2.14.5
 - Fixed bug in connection with tagger
 
