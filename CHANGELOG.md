@@ -1,3 +1,6 @@
+## v2.15.4
+- Added api function
+
 ## v2.15.3
 - Fixed MATT ui bug
 - Added this tile option to a few MATT actions
