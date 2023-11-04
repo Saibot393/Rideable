@@ -95,6 +95,8 @@ class RideableFlags {
 	
 	static RidingLoop(pRider, pRidden) {} //returns true if a riding loop would be created should pRider mount pRidden
 	
+	static RidingConnection(pObjecta, pObjectb) {} //returns true if there is ariding connection between pObjecta and pObjectb
+	
 	static RiddenToken(pRider) {} //returns the token pRider rides (if any)
 	
 	static RiderLevel(pRider) {} //returns the Riderlevel of pRider, 0 if not riding
@@ -914,6 +916,36 @@ class RideableFlags {
 		}
 		
 		return true;
+	}
+	
+	static RidingConnection(pObjecta, pObjectb, pSimple = false) {
+		if (RideableFlags.isRiddenby(pObjecta, pObjectb)) {
+			return true;
+		}
+	
+		if (RideableFlags.isRiddenby(pObjectb, pObjecta)) {
+			return true;
+		}
+		
+		var vConnection = false;
+		
+		let i = 0;
+		
+		while ((i < RideableFlags.RiderTokenIDs(pObjecta).length) && (!vConnection)) {
+			vConnection = RideableFlags.RidingConnection(RideableUtils.TokenfromID(RideableFlags.RiderTokenIDs(pObjecta)[i], FCore.sceneof(pObjecta)), pObjectb);
+		
+			i++;
+		}
+		
+		i = 0;
+		
+		while ((i < RideableFlags.RiderTokenIDs(pObjectb).length) && (!vConnection)) {
+			vConnection = RideableFlags.RidingConnection(RideableUtils.TokenfromID(RideableFlags.RiderTokenIDs(pObjectb)[i], FCore.sceneof(pObjectb)), pObjecta);
+		
+			i++;
+		}
+		
+		return vConnection;	
 	}
 	
 	static RiderTokens (pRiddenToken) {
