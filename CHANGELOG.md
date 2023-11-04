@@ -1,3 +1,6 @@
+## v2.15.2
+- Added this tile as an option for the mount setting of the MATT toggle mount action
+
 ## v2.15.1
 - Small tile settings ui fix
 
