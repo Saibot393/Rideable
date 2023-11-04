@@ -1,3 +1,7 @@
+## v2.15.3
+- Fixed MATT ui bug
+- Added this tile option to a few MATT actions
+
 ## v2.15.2
 - Added this tile as an option for the mount setting of the MATT toggle mount action
 
