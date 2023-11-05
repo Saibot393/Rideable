@@ -1,3 +1,6 @@
+## v2.15.5
+- Added api for compatibility with [Alternative Token Visibility](https://foundryvtt.com/packages/tokenvisibility)
+
 ## v2.15.4
 - Added api function
 
