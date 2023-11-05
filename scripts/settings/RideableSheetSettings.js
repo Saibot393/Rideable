@@ -11,7 +11,7 @@ class RideableSheetSettings {
 	
 	static AddHTMLOption(pHTML, pInfos) {} //adds a new HTML option to pHTML
 	
-	static FixSheetWindow(pHTML) {} //fixes the formating of pHTML sheet window
+	static FixSheetWindow(pHTML, pApp, pIndentifier) {} //fixes the formating of pHTML sheet window
 	
 	//IMPLEMENTATIONS
 	
@@ -237,10 +237,10 @@ class RideableSheetSettings {
 		}
 		
 		if (pisTile) {
-			RideableSheetSettings.FixSheetWindow(pHTML, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
+			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
 		}
 		else {
-			RideableSheetSettings.FixSheetWindow(pHTML, `nav.sheet-tabs[data-group="main"]`);
+			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[data-group="main"]`);
 		}
 		
 		//pHTML.css("width", "max-content");
@@ -341,19 +341,21 @@ class RideableSheetSettings {
 		pHTML.find(`div[data-tab="${cModuleName}"]`).append(vnewHTML);
 	}
 	
-	static FixSheetWindow(pHTML , pIndentifier) {
+	static FixSheetWindow(pHTML , pApp, pIndentifier) {
 		let vNeededWidth = 0;
 
 		pHTML.find(pIndentifier).children().each(function() {
-			vNeededWidth = vNeededWidth + $(this).outerWidth() ;
+			vNeededWidth = vNeededWidth + $(this).outerWidth();
 		});
 		
 		let vWindow = pHTML.find(pIndentifier).closest(`div.app.window-app`);
 		
 		if (vNeededWidth > vWindow.width()) {
-			vWindow.width(vNeededWidth);
+			//vWindow.width(vNeededWidth);
 			
-			vWindow.find(`form`).removeAttr(`style`);
+			//vWindow.find(`form`).removeAttr(`style`);
+			
+			pApp.setPosition({"width" : vNeededWidth});
 		}			
 	}
 }
