@@ -1,3 +1,6 @@
+## v2.15.6
+- Fixed ui bug caused by minimizing the object settings window
+
 ## v2.15.5
 - Added api for compatibility with [Alternative Token Visibility](https://foundryvtt.com/packages/tokenvisibility)
 
