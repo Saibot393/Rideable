@@ -1,3 +1,6 @@
+## v2.15.9
+- Added this tile to some MATT filters for mounts
+
 ## v2.15.8
 - Fixed bug that occurred when a ridden tiles elevation was set to +-infinity, again, this time for real (hopefully)
   
