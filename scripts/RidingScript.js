@@ -238,7 +238,12 @@ class Ridingmanager {
 							vytarget = pRidden.y + (pchanges.y - pToken.y);
 						}
 						
-						let vztarget = pRidden.elevation;		
+						let vztarget = pRidden.elevation;
+
+						if (!isFinite(vztarget)) {
+							vztarget = 0;
+						}
+						
 						if (pchanges.hasOwnProperty("elevation")) {
 							vztarget = pchanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.addRiderHeight(pToken);
 						}
@@ -417,6 +422,10 @@ class Ridingmanager {
 			if (RideableFlags.UseRidingHeight(pRiddenToken)) {
 				let vTargetz = pRiddenToken.elevation;
 				
+				if (!isFinite(vTargetz)) {
+					vTargetz = 0;
+				}
+				
 				if (!pPlaceSameheight) {
 					let vRidingHeight;		
 					
@@ -585,6 +594,12 @@ class Ridingmanager {
 				
 				if (pRiddenTokens[i]) {
 					//set to height or previously ridden token
+					let vRiddenHeight = pRiddenTokens[i].elevation;
+					
+					if (!isFinite(vRiddenHeight)) {
+						vRiddenHeight = 0;
+					}
+					
 					vTargetz = pRiddenTokens[i].elevation;
 					
 					Ridingmanager.SyncSort(pRiderTokens[i], pRiddenTokens[i].sort);
