@@ -470,7 +470,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: Translate(cMATT + ".filters." + "riders-of" + ".settings." + "mount" + ".name"),
 						type: "select",
 						subtype: "entity",
-						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						options: { show: ['tile', 'token', 'within', 'players', 'previous', 'tagger'] },
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)) }
 					},
 					{
@@ -644,7 +644,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: "MonksActiveTiles.ctrl.select-entity",
 						type: "select",
 						subtype: "entity",
-						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						options: { show: ['tile', 'token', 'within', 'players', 'previous', 'tagger'] },
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					},
 					{
