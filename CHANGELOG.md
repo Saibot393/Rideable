@@ -1,3 +1,6 @@
+## v2.15.7
+- Fixed bug that occurred when a ridden tiles elevation was set to +-infinity
+
 ## v2.15.6
 - Fixed ui bug caused by minimizing the object settings window
 
