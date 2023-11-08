@@ -206,7 +206,13 @@ class RideableCompUtils {
 				}
 				
 				if (pWithElevation) {
-					return pToken.elevation + vHeightdiff / vdivider;
+					let vElevation = pToken.elevation;
+					
+					if (!isFinite(vElevation)) {
+						vElevation = 0;
+					}
+					
+					return vElevation + vHeightdiff / vdivider;
 				}
 				else {
 					return vHeightdiff / vdivider;

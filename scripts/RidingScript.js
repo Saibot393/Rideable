@@ -594,13 +594,11 @@ class Ridingmanager {
 				
 				if (pRiddenTokens[i]) {
 					//set to height or previously ridden token
-					let vRiddenHeight = pRiddenTokens[i].elevation;
-					
-					if (!isFinite(vRiddenHeight)) {
-						vRiddenHeight = 0;
-					}
-					
 					vTargetz = pRiddenTokens[i].elevation;
+					
+					if (!isFinite(vTargetz)) {
+						vTargetz = 0;
+					}
 					
 					Ridingmanager.SyncSort(pRiderTokens[i], pRiddenTokens[i].sort);
 				}

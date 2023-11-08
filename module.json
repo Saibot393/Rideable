@@ -7,7 +7,7 @@
     "name": "saibot"
     }
   ],
-  "version": "2.15.7",
+  "version": "2.15.8",
   "compatibility": {
     "minimum": "10",
     "verified": "11"
@@ -58,13 +58,13 @@
             {
                 "id": "routinglib",
                 "type": "module",
-                "reason": "Necessary for the follow token feature to work",
+                "reason": "Recommended for the follow token feature (not necessary)",
                 "compatibility": {}
             }
       ]
   },
   "url": "https://github.com/Saibot393/Rideable",
-  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v2.15.7.zip",
+  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v2.15.8.zip",
   "manifest": "https://github.com/Saibot393/Rideable/releases/latest/download/module.json",
   "readme": "https://github.com/Saibot393/Rideable/blob/main/README.md",
   "changelog": "https://github.com/Saibot393/Rideable/blob/main/CHANGELOG.md",
