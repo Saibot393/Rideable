@@ -11,6 +11,8 @@ const cColumnplacement = "ColumnPlacement"; //place all tokens in a column
 const cCircleplacement = "CirclePlacement"; //place all tokens in a circle
 const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
 const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
+const cRowplacementTop = "RowPlacementTop"; //place all tokens in a row at the top of the ridden
+const cRowplacementBottom = "RowPlacementBottom"; //place all tokens in a row at the bottom of the ridden
 
 //grapple positioning options
 const cRowBelow = "RowBelow"; //places grappled tokens below
@@ -18,7 +20,7 @@ const cRowAbove = "RowAbove"; //places grappled tokens above
 const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
 const cClosestInside = "ClosestInside"; //place grappled tokens at the closest Inside position
 
-const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement];
+const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom];
 
 const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside]
 
@@ -408,7 +410,12 @@ class Ridingmanager {
 						}
 						
 					break;
-					
+				case cRowplacementTop:
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+					break;
+				case cRowplacementBottom:
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+					break;
 				case cRowplacement:
 				default:
 					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations);

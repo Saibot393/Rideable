@@ -315,6 +315,8 @@
 					"CirclePlacement"	: "Kreis",
 					"RowPlacement"		: "Reihe",
 					"ClusterPlacement"	: "Bündel"
+					"RowPlacementTop"	: "Reihe oben",
+					"RowPlacementBottom": "Reihe unten"
 				}
 			},
 			

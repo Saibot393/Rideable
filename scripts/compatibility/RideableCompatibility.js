@@ -277,6 +277,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					}
 				],
@@ -291,9 +292,8 @@ Hooks.once("setupTileActions", (pMATT) => {
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
-					console.log(trigger);
-					console.log(action);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
+					
 					return TranslateandReplace(cMATT + ".actions." + "mount-this-tile" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
 					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
 				}
@@ -310,6 +310,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					},
 					{
@@ -318,6 +319,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'tile', 'within', 'players', 'previous', 'tagger'] },
+						required: true,
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					}
 				],
@@ -338,7 +340,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					let vMountName = await pMATT.entityName(action.data?.target);
 					
 					return TranslateandReplace(cMATT + ".actions." + "mount-target" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName, pMount : vMountName})
@@ -357,6 +359,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					}
 				],
@@ -371,7 +374,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					return TranslateandReplace(cMATT + ".actions." + "unmount" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
 					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;
 				}
@@ -388,6 +391,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'tile', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					}
 				],
@@ -402,7 +406,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					return TranslateandReplace(cMATT + ".actions." + "unmount-riders" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName})
 				}
 			});
@@ -418,6 +422,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					},
 					{
@@ -426,6 +431,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'tile', 'within', 'players', 'previous', 'tagger'] },
+						required: true,
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					}
 				],
@@ -446,7 +452,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					}
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					let vMountName  = await pMATT.entityName(action.data?.target);
 					
 					return TranslateandReplace(cMATT + ".actions." + "toggle-mount-target" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName, pMount : vMountName})
@@ -463,6 +469,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					},
 					{
@@ -471,6 +478,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['tile', 'token', 'within', 'players', 'previous', 'tagger'] },
+						required: true,
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)) }
 					},
 					{
@@ -478,7 +486,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".name"),
 						list: "filterCondition",
 						type: "list",
-						defvalue: 'yes'
+						defvalue: 'rider'
 					},
 					{
 						id: "continue",
@@ -537,18 +545,10 @@ Hooks.once("setupTileActions", (pMATT) => {
 
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					let vMountName  = await pMATT.entityName(action.data?.target);
 					
-					let vCondition;
-					switch(action.data.filterCondition) {
-						case "rider" :
-							vCondition = Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "rider");
-							break;
-						case "notrider" : 
-							vCondition = Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + "notrider");
-							break;
-					}
+					let vCondition = Translate(cMATT + ".filters." + "riders-of" + ".settings." + "filterCondition" + ".options." + action.data.filterCondition);
 					
 					return TranslateandReplace(cMATT + ".filters." + "riders-of" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pMount : vMountName, pCondition : vCondition});
 				}
@@ -564,6 +564,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return (entity instanceof Token); }
 					},
 					{
@@ -571,7 +572,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".name"),
 						list: "filterCondition",
 						type: "list",
-						defvalue: 'yes'
+						defvalue: 'rider'
 					},
 					{
 						id: "continue",
@@ -619,17 +620,9 @@ Hooks.once("setupTileActions", (pMATT) => {
 
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					
-					let vCondition;
-					switch(action.data.filterCondition) {
-						case "rider" :
-							vCondition = Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "rider");
-							break;
-						case "notrider" : 
-							vCondition = Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + "notrider");
-							break;
-					}
+					let vCondition = Translate(cMATT + ".filters." + "is-rider" + ".settings." + "filterCondition" + ".options." + action.data.filterCondition);
 					
 					return TranslateandReplace(cMATT + ".filters." + "is-rider" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pCondition : vCondition});
 				}
@@ -645,6 +638,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						type: "select",
 						subtype: "entity",
 						options: { show: ['tile', 'token', 'within', 'players', 'previous', 'tagger'] },
+						defvalue : "previous",
 						restrict: (entity) => { return ((entity instanceof Token) || (entity instanceof Tile)); }
 					},
 					{
@@ -652,7 +646,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						name: Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".name"),
 						list: "filterCondition",
 						type: "list",
-						defvalue: 'yes'
+						defvalue: 'ridden'
 					},
 					{
 						id: "continue",
@@ -700,17 +694,9 @@ Hooks.once("setupTileActions", (pMATT) => {
 
 				},
 				content: async (trigger, action) => {
-					let entityName = await pMATT.entityName(action.data?.entity);
+					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					
-					let vCondition;
-					switch(action.data.filterCondition) {
-						case "ridden" :
-							vCondition = Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "ridden");
-							break;
-						case "notridden" : 
-							vCondition = Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + "notridden");
-							break;
-					}
+					let vCondition = Translate(cMATT + ".filters." + "is-ridden" + ".settings." + "filterCondition" + ".options." + action.data.filterCondition);
 					
 					return TranslateandReplace(cMATT + ".filters." + "is-ridden" + ".descrp", {pname : Translate(cMATT + ".filters.name"), pEntities : entityName, pCondition : vCondition});
 				}

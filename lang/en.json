@@ -314,7 +314,9 @@
 				"options" : {
 					"CirclePlacement"	: "Circle",
 					"RowPlacement"		: "Row",
-					"ClusterPlacement"	: "Cluster"
+					"ClusterPlacement"	: "Cluster",
+					"RowPlacementTop"	: "Row top",
+					"RowPlacementBottom": "Row bottom"
 				}
 			},
 			

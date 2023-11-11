@@ -9,10 +9,7 @@ function withinBoundaries (pObject, pObjectForm, pPosition) {
 
 function RidingConnection(pObjecta, pObjectb, pSimple = false) {
 	//returns wether pObject1, pObject2 are connected via RideableConnected
-	if (pObjecta?.document && pObjectb?.document) {
-		console.log(pObjecta, pObjectb);
-		console.log(RideableFlags.RidingConnection(pObjecta.document, pObjectb.document, pSimple));
-		
+	if (pObjecta?.document && pObjectb?.document) {		
 		return RideableFlags.RidingConnection(pObjecta.document, pObjectb.document, pSimple);
 	}
 	
