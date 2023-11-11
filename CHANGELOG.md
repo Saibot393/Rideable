@@ -1,3 +1,7 @@
+## v2.15.10
+- Improvements for MATT actions
+- Added Row top and Row bottom as rider placement options
+
 ## v2.15.9
 - Added this tile to some MATT filters for mounts
 
