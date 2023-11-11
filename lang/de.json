@@ -314,7 +314,7 @@
 				"options" : {
 					"CirclePlacement"	: "Kreis",
 					"RowPlacement"		: "Reihe",
-					"ClusterPlacement"	: "Bündel"
+					"ClusterPlacement"	: "Bündel",
 					"RowPlacementTop"	: "Reihe oben",
 					"RowPlacementBottom": "Reihe unten"
 				}
