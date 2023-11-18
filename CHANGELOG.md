@@ -1,3 +1,6 @@
+## v2.15.11
+- Small bug fix
+
 ## v2.15.10
 - Improvements for MATT actions
 - Added Row top and Row bottom as rider placement options
