@@ -120,7 +120,7 @@ class MountingManager {
 		}
 		
 		//Make sure all riders can even ride the target
-		await RideableFlags.recheckRiders(vTarget);
+		//await RideableFlags.recheckRiders(vTarget);
 		
 		/*
 		//fork dependent on GM status of user (either direct mount or mount request through Token ID send via socket)
@@ -337,9 +337,11 @@ class MountingManager {
 		}
 		
 		//Make sure all riders can even ride the target
+		/*
 		if (vTargets.length) {
 			await RideableFlags.recheckRiders(vTargets[0]);
 		}
+		*/
 		
 		MountingManager.RequestToggleMount(vSelected, vTargets[0], pRidingOptions, vfromRidden);
 		
