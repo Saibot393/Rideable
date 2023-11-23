@@ -135,7 +135,7 @@ class GeometricUtils {
 		let vWidthhalf = GeometricUtils.insceneWidth(pToken)/2;
 		let vHeighthalf = GeometricUtils.insceneHeight(pToken)/2;
 		
-		return pRoute.map(vPoint => ({x: vPoint.x - vWidthhalf, y: vPoint.y - vHeighthalf}));
+		return pRoute.map(vPoint => ({x: vPoint.x - vWidthhalf, y: vPoint.y - vHeighthalf, elevation : vPoint.elevation}));
 	}
 	
 	static NewCenterPosition(pDocument, pChanges) {
@@ -615,7 +615,7 @@ class GeometricUtils {
 				for (let i = 1; i < vDistances.length; i++) {
 					if (vTargetLength > 0) {
 						if (vDistances[i] < vTargetLength) {
-							vResultRoute.push({x : pRoute[i].x, y : pRoute[i].y});
+							vResultRoute.push({x : pRoute[i].x, y : pRoute[i].y, elevation : Math.round(pRoute[i].elevation)});
 							
 							vTargetLength = vTargetLength - vDistances[i];
 						}
@@ -625,6 +625,12 @@ class GeometricUtils {
 											
 							if (pGrid) {
 								vNewPoint = GeometricUtils.GridSnapxy(vNewPoint, pGrid);
+							}
+							
+							vNewPoint.elevation = Math.round(pRoute[i-1].elevation + (pRoute[i].elevation - pRoute[i-1].elevation) * (vTargetLength/vDistances[i]));
+							
+							if (isNaN(vNewPoint.elevation)) {
+								vNewPoint.elevation = undefined;
 							}
 							
 							vResultRoute.push(vNewPoint);

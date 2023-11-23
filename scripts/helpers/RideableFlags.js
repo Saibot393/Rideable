@@ -1448,7 +1448,8 @@ class RideableFlags {
 		let vPoint = pPoint;
 		
 		if (!vPoint) {
-			vPoint = GeometricUtils.CenterPositionXY(pToken);
+			vPoint = {...GeometricUtils.CenterPositionXY(pToken)};
+			vPoint.elevation = pToken.elevation;
 		}
 		
 		if (vPoint) {

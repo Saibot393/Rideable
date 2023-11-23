@@ -10,6 +10,8 @@ class FollowingManager {
 	
 	static async FollowToken(pFollowers, pTarget, pDistance = -1) {} //sets pFollowers to follow pTarget
 	
+	static async StopFollowing(pFollowers) {} //stops pFollowers from following
+	
 	static async SelectedFollowHovered(pConsiderTargeted = true, pDistance = -1) {} //lets the selected tokens follow the hovered token
 	
 	static async SelectedStopFollowing(pPopup = true) {} //makes the selected tokens stop following
@@ -69,7 +71,17 @@ class FollowingManager {
 			}
 		}
 		
-		//FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
+		FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pTarget, Scene : pTarget.parent});
+	}
+	
+	static async StopFollowing(pFollowers, pPopup) {
+		for (let i = 0; i < pFollowers.length; i++) {
+			if (RideableFlags.isFollowing(pFollowers[i])) {
+				await RideableFlags.stopFollowing(pFollowers[i]);
+						
+				FollowingManager.OnStopFollowing(pFollowers[i], pPopup);
+			}
+		}
 	}
 	
 	static async SelectedFollowHovered(pConsiderTargeted = true, pDistance = -1) {
@@ -92,13 +104,7 @@ class FollowingManager {
 		if (FollowingManager.FollowingActive()) {
 			let vFollowers = RideableUtils.selectedTokens();
 			
-			for (let i = 0; i < vFollowers.length; i++) {
-				if (RideableFlags.isFollowing(vFollowers[i])) {
-					await RideableFlags.stopFollowing(vFollowers[i]);
-							
-					FollowingManager.OnStopFollowing(vFollowers[i], pPopup);
-				}
-			}
+			FollowingManager.StopFollowing(vFollowers, pPopup);
 		}
 	}
 	
@@ -199,7 +205,7 @@ class FollowingManager {
 				}
 			}
 			
-			vRoute.unshift(pFollower.object.center);
+			vRoute.unshift({...pFollower.object.center, elevation : pFollower.elevation});
 			
 			if (vLOSPointfound) {
 				vRoute = GeometricUtils.CenterRoutetoXY(vRoute, pFollower);
@@ -316,3 +322,8 @@ export function SelectedStopFollowing() {return FollowingManager.SelectedStopFol
 export function SelectedToggleFollwing() {return FollowingManager.SelectedToggleFollwing(true)};
 
 export function SelectedToggleFollwingatDistance(pDistance) {return FollowingManager.SelectedToggleFollwing(true, pDistance)};
+
+export function FollowbyID(pTargetID, pFollowerIDs, pSceneID = null, pDistance = -1) {FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
+
+export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
+

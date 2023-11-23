@@ -405,6 +405,10 @@ class RideableCompUtils {
 		else {
 			vRoute = [];
 		}
+		
+		if (pTarget.elevation != pToken.elevation) {
+			vRoute.forEach((vPoint, i) => vPoint.elevation = pToken.elevation + (pTarget.elevation - pToken.elevation)/vRoute.length * (i+1));
+		}
 
 		return GeometricUtils.CutRoute(vRoute, pbeforeEnd, pToken.parent.grid);
 	}
