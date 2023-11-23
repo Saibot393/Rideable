@@ -1,3 +1,7 @@
+## v2.15.12
+- Added api to start/stop following via ID (`game.Rideable.FollowbyID` and `game.Rideable.StopFollowbyID`)
+- The following feature will now take the token elevation into account
+
 ## v2.15.11
 - Small bug fix
 
