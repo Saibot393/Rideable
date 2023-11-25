@@ -213,6 +213,11 @@
 				"descrp"				: "If only currently visible tokens should be followed"
 			},	
 			
+			"PreventFollowerStacking" : {
+				"name"					: "Prevent Follower stacking",
+				"descrp"				: "If followers of the same token should be prevented from stacking, they might still stack in tight areas"
+			},	
+			
 			"OnFollowerMovement" : {
 				"name" 					: "Follower movement",
 				"descrp"				: "What should happen if a following token tries to move on its own",

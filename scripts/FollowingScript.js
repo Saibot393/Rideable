@@ -22,6 +22,8 @@ class FollowingManager {
 	
 	static async gotonextPointonRoute(pToken) {} //updates pTokens to new point on Route
 	
+	static async PlanDestack(pToken) {} //plans a new position for pToken that does not collide with other followers of same target
+	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
 	
@@ -177,11 +179,61 @@ class FollowingManager {
 			
 			let vPoint = RideableFlags.nextRoutePoint(pToken);
 			
-			if (vPoint) {
+			if (vPoint && Object.keys(vPoint).length) {
 				await pToken.update(vPoint, {RideableFollowingMovement : true});
 			}
+			else {
+				if (game.settings.get(cModuleName, "PreventFollowerStacking")) {
+					FollowingManager.PlanDestack(pToken);
+				}
+			}
 		}
-	} 
+	}
+
+	static async PlanDestack(pToken) {
+		let vColliders = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.isFllowingSameToken(vToken, pToken) && vToken != pToken);
+		
+		vColliders = vColliders.filter(vToken => !RideableFlags.RidingConnection(vToken, pToken));
+		
+		let vCollided = vColliders.find(vToken => GeometricUtils.DistanceXY(vToken.object?.center, pToken.object?.center) < Math.min(vToken.object.w + pToken.object.w, vToken.object.h + pToken.object.h)/2);
+		
+		if (vCollided) {
+			let vCorrectionLength = Math.min(vCollided.object.w + pToken.object.w, vCollided.object.h + pToken.object.h)/8;
+			
+			let vCorrectionVector;
+			
+			if (pToken.object.center.x != vCollided.object.center.x || pToken.object.center.y != vCollided.object.center.y) {
+				vCorrectionVector = [pToken.object.center.x - vCollided.object.center.x, pToken.object.center.y - vCollided.object.center.y];
+			}
+			else {
+				//move Token with higher ID in random direction
+				if (pToken.id > vCollided.id) {
+					let vXDir = Math.random()-0.5;
+					let vYDir = Math.random()-0.5;
+					
+					vCorrectionVector = [vXDir, vYDir];
+				}
+			}
+			if (vCorrectionVector) {
+				let vMinScale = 0;
+				
+				if (canvas.grid.type > 0) {
+					//increase move vector for grid snap
+					vMinScale = canvas.grid.size;
+				}
+				
+				vCorrectionVector = GeometricUtils.scaleto(vCorrectionVector, Math.max(vCorrectionLength, vMinScale));
+				
+				vCorrectionVector = GeometricUtils.GridSnapxy({x : pToken.x + vCorrectionVector[0], y : pToken.y + vCorrectionVector[1]});
+				
+				if (!CONFIG.Canvas.polygonBackends["move"].testCollision(pToken.object.center, {x : vCorrectionVector.x + pToken.object.w/2, y : vCorrectionVector.y + pToken.object.h/2}, {type : "move", mode: "any"})) {
+					await RideableFlags.setplannedRoute(pToken, [{pToken}, vCorrectionVector]);
+					
+					FollowingManager.gotonextPointonRoute(pToken);
+				}
+			}
+		}
+	}
 	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {

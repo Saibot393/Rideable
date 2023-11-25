@@ -211,7 +211,12 @@
 			"OnlyfollowViewed" : {
 				"name"					: "Nur sichtbaren folgen",
 				"descrp"				: "Ob Figuren nur momentan sichbaren Figuren folgen sollen"
-			},			
+			},	
+			
+			"PreventFollowerStacking" : {
+				"name"					: "Verhindere Folger Stapelung",
+				"descrp"				: "Ob Folger der gleichen Figur am Stapeln gehindert werden sollen, Stapelungen können in engen Bereichen trotzdem vorkommen"
+			},		
 			
 			"OnFollowerMovement" : {
 				"name" 					: "Folger-Bewegung",

@@ -207,6 +207,8 @@ class RideableFlags {
 	
 	static isFollowingToken(pFollower, pToken) {} //returns if pFollower is following pToken
 	
+	static isFllowingSameToken(pFollowerA, pFollowerB) {} //returns wether pFollowerA, pFollowerB are following the same target
+	
 	static followedID(pFollower) {} //retruns the ID of the token followed by pFollower
 	
 	static followedToken(pFollower) {} //retruns the Token followed by pFollower
@@ -1368,6 +1370,10 @@ class RideableFlags {
 	
 	static isFollowingToken(pFollower, pToken) {
 		return this.#followedTokenFlag(pFollower) == pToken.id;
+	}
+	
+	static isFllowingSameToken(pFollowerA, pFollowerB) {
+		return this.#followedTokenFlag(pFollowerA) == this.#followedTokenFlag(pFollowerB);
 	}
 	
 	static followedID(pFollower) {

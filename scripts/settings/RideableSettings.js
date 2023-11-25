@@ -318,6 +318,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "PreventFollowerStacking", {
+	name: Translate("Settings.PreventFollowerStacking.name"),
+	hint: Translate("Settings.PreventFollowerStacking.descrp"),
+	scope: "world",
+	config: game.settings.get(cModuleName, "EnableFollowing"),
+	type: Boolean,
+	default: false
+  });  
+  
   //client settings 
   game.settings.register(cModuleName, "RiderMovement", {
 	name: Translate("Settings.RiderMovement.name"),

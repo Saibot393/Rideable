@@ -88,7 +88,7 @@ class GeometricUtils {
 	//grids
 	static GridSnap(ppositon, pGrid, podd = [0,0]) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
 	
-	static GridSnapxy(pposition, pGrid) {} //snaps pposition(x,y) to grid type
+	static GridSnapxy(pposition, pGrid = undefined) {} //snaps pposition(x,y) to grid type
 	
 	//graphics
 	static Pixelsof(pObject) {} //returns the pixels of pObject
@@ -205,6 +205,10 @@ class GeometricUtils {
 	}
 	
 	static DistanceXY(pPositionA, pPositionB) {
+		if (!pPositionA || !pPositionB) {
+			return;
+		}
+		
 		return ((pPositionA.x - pPositionB.x)**2 + (pPositionA.y - pPositionB.y)**2)**0.5;
 	}
 	
@@ -497,10 +501,16 @@ class GeometricUtils {
 		}
 	}
 	
-	static GridSnapxy(pposition, pGrid) {
+	static GridSnapxy(pposition, pGrid = undefined) {
 		let vsnapposition = pposition;
 		
-		switch (pGrid.type) {
+		let vGrid = pGrid;
+		
+		if (!vGrid) {
+			vGrid = canvas.grid;
+		}
+		
+		switch (vGrid.type) {
 			case 0:
 				//gridless
 				return vsnapposition;
@@ -508,8 +518,8 @@ class GeometricUtils {
 			
 			case 1:
 				//squares
-				vsnapposition.x = Math.round(vsnapposition.x/pGrid.size)*pGrid.size;
-				vsnapposition.y = Math.round(vsnapposition.y/pGrid.size)*pGrid.size;
+				vsnapposition.x = Math.round(vsnapposition.x/vGrid.size)*vGrid.size;
+				vsnapposition.y = Math.round(vsnapposition.y/vGrid.size)*vGrid.size;
 				
 				return vsnapposition;
 				break;
