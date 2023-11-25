@@ -1,3 +1,6 @@
+## v2.16.0
+- Added world setting Prevent Follower stacking to prevent followers of the same token from stacking ontop of one another
+
 ## v2.15.13
 - Small change for internal consistancy
 
