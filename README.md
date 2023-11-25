@@ -41,6 +41,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Following algorithm: to choose the algorithm used for the following feature
 - In combat follow behaviour: to set how following tokens should behave once combat starts
 - Only follow visible: to set wether tokens can only follow tokens they can see
+- Prevent Follower stacking: to prevent followers of the same token from stacking ontop of one another
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Mount button position: to set the position of the mount button or disable it
