@@ -1,3 +1,6 @@
+## v2.16.1
+- Added icons for some macros
+
 ## v2.16.0
 - Added world setting Prevent Follower stacking to prevent followers of the same token from stacking ontop of one another
 
