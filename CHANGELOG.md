@@ -1,3 +1,6 @@
+## v2.16.2
+- Added Grappled placement "following" to let grappled tokens follow this token
+
 ## v2.16.1
 - Added icons for some macros
 
