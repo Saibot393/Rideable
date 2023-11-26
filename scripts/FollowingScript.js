@@ -126,8 +126,6 @@ class FollowingManager {
 	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {
-		console.log(pFollowers);
-		console.log(pInfos);
 		
 		if (pFollowers.length > 0) {
 			let vScene = pInfos.Scene;
@@ -170,8 +168,6 @@ class FollowingManager {
 						break;
 				}
 				
-				console.log(pFollowers[i], vTarget, vDistance);
-				
 				vRoute.forEach(vPoint => vPoint.RidingMovement = pInfos.RidingMovement);
 				
 				await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
@@ -205,7 +201,11 @@ class FollowingManager {
 		
 		vColliders = vColliders.filter(vToken => !RideableFlags.RidingConnection(vToken, pToken));
 		
-		let vCollided = vColliders.find(vToken => GeometricUtils.DistanceXY(vToken.object?.center, pToken.object?.center) < Math.min(vToken.object.w + pToken.object.w, vToken.object.h + pToken.object.h)/2);
+		vColliders.push(canvas.tokens.placeables.find(vToken => RideableFlags.isFollowingToken(pToken, vToken.document))?.document);
+		
+		vColliders.push(canvas.tokens.placeables.find(vToken => RideableFlags.isGrappledby(pToken, vToken.document))?.document); //for grapple
+		
+		let vCollided = vColliders.find(vToken => GeometricUtils.DistanceXY(vToken?.object?.center, pToken.object?.center) < Math.min(vToken?.object.w + pToken.object.w, vToken?.object.h + pToken.object.h)/2);
 		
 		if (vCollided) {
 			let vCorrectionLength = Math.min(vCollided.object.w + pToken.object.w, vCollided.object.h + pToken.object.h)/8;
@@ -235,6 +235,8 @@ class FollowingManager {
 				vCorrectionVector = GeometricUtils.scaleto(vCorrectionVector, Math.max(vCorrectionLength, vMinScale));
 				
 				vCorrectionVector = GeometricUtils.GridSnapxy({x : pToken.x + vCorrectionVector[0], y : pToken.y + vCorrectionVector[1]});
+				
+				vCorrectionVector.RidingMovement = RideableFlags.isGrappled(pToken); //for grapple
 				
 				if (!CONFIG.Canvas.polygonBackends["move"].testCollision(pToken.object.center, {x : vCorrectionVector.x + pToken.object.w/2, y : vCorrectionVector.y + pToken.object.h/2}, {type : "move", mode: "any"})) {
 					await RideableFlags.setplannedRoute(pToken, [{pToken}, vCorrectionVector]);

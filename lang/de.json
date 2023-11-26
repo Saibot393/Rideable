@@ -160,7 +160,8 @@
 					"RowBelow"			: "unten",
 					"RowAbove"			: "oben",
 					"RowMiddle"			: "mitte",
-					"ClosestInside"		: "innen"
+					"ClosestInside"		: "innen",
+					"Following"			: "folgen"
 				}
 			},
 			
