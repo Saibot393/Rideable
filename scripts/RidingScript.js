@@ -4,6 +4,7 @@ import { RideableFlags, cCornermaxRiders } from "./helpers/RideableFlags.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
+import { calculatenewRoute } from "./FollowingScript.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -19,10 +20,11 @@ const cRowBelow = "RowBelow"; //places grappled tokens below
 const cRowAbove = "RowAbove"; //places grappled tokens above
 const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
 const cClosestInside = "ClosestInside"; //place grappled tokens at the closest Inside position
+const cFollowing = "Following";
 
 const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom];
 
-const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside]
+const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside, cFollowing]
 
 export { cRowplacement, cPlacementPatterns, cGrapplePlacements };
 
@@ -327,6 +329,9 @@ class Ridingmanager {
 				break;
 			case cClosestInside:
 				Ridingmanager.planRelativRiderTokens(pRiddenToken, vGrappledList, pAnimations);
+				break;
+			case cFollowing:
+				calculatenewRoute(vGrappledList, {StartRoute : true, Distance : Math.max(pRiddenToken.width, pRiddenToken.height) * pRiddenToken.parent.dimensions.distance, Target : pRiddenToken, Scene : pRiddenToken.parent, RidingMovement : true});
 				break;
 			default:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));

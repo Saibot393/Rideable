@@ -18,7 +18,7 @@ class FollowingManager {
 	
 	static async SelectedToggleFollwing(pConsiderTargeted = true, pDistance = -1) {} //toggles the selected tokens regarding following
 	
-	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {} //calculates the new following route of pFollowers
+	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {} //calculates the new following route of pFollowers
 	
 	static async gotonextPointonRoute(pToken) {} //updates pTokens to new point on Route
 	
@@ -125,22 +125,23 @@ class FollowingManager {
 		}
 	} 
 	
-	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Target : undefined, Scene : undefined}) {
+	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {
+		console.log(pFollowers);
+		console.log(pInfos);
+		
 		if (pFollowers.length > 0) {
-			let vScene;
+			let vScene = pInfos.Scene;
 			
 			let vSceneDistanceFactor;
 			
-			let vTarget;
+			let vTarget = pInfos.Target;
 			
-			vScene = pInfos.Scene;
+			let vDistance = pInfos.Distance;
 				
 			if (vScene) {
 				vSceneDistanceFactor = (vScene.dimensions.size)/(vScene.dimensions.distance);
 			}
-			
-			vTarget = pInfos.Target;
-			
+
 			for (let i = 0; i < pFollowers.length; i++) {
 				//calculate target and scene (if necessary)
 				if (!pInfos.Scene) {
@@ -152,17 +153,26 @@ class FollowingManager {
 				if (!pInfos.Target) {
 					vTarget = vScene.tokens.get(RideableFlags.followedID(pFollowers[i]));
 				}	
+				
+				if (vDistance == undefined) {
+					vDistance = RideableFlags.FollowDistance(pFollowers[i]);
+				}
 
 				//calculate and start new route
 				let vRoute;
+				
 				switch(game.settings.get(cModuleName, "FollowingAlgorithm")) {
 					case "SimplePathHistory":
-						vRoute = await FollowingManager.SimplePathHistoryRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+						vRoute = await FollowingManager.SimplePathHistoryRoute(pFollowers[i], vTarget, vDistance * vSceneDistanceFactor);
 						break;
 					case cRoutingLib:
-						vRoute = await RideableCompUtils.RLRoute(pFollowers[i], vTarget, RideableFlags.FollowDistance(pFollowers[i]) * vSceneDistanceFactor);
+						vRoute = await RideableCompUtils.RLRoute(pFollowers[i], vTarget, vDistance * vSceneDistanceFactor);
 						break;
 				}
+				
+				console.log(pFollowers[i], vTarget, vDistance);
+				
+				vRoute.forEach(vPoint => vPoint.RidingMovement = pInfos.RidingMovement);
 				
 				await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
 				
@@ -180,7 +190,7 @@ class FollowingManager {
 			let vPoint = RideableFlags.nextRoutePoint(pToken);
 			
 			if (vPoint && Object.keys(vPoint).length) {
-				await pToken.update(vPoint, {RideableFollowingMovement : true});
+				await pToken.update(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
 			}
 			else {
 				if (game.settings.get(cModuleName, "PreventFollowerStacking")) {
@@ -378,4 +388,6 @@ export function SelectedToggleFollwingatDistance(pDistance) {return FollowingMan
 export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1) {FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
 
 export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
+
+export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) { FollowingManager.calculatenewRoute(pFollowers, pInfos)};
 
