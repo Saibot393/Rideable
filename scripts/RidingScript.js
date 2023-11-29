@@ -306,7 +306,7 @@ class Ridingmanager {
 		
 		//reduce size if necessary
 		if (game.settings.get(cModuleName, "FitRidersize")) {
-			await Ridingmanager.fitRiders(pRiddenToken, vRiderTokenList);
+			await Ridingmanager.fitRiders(pRiddenToken, vRiderTokenList, game.settings.get(cModuleName, "FitRiderSizeFactor"));
 		}
     
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {

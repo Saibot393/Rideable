@@ -238,6 +238,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "FitRiderSizeFactor", {
+	name: Translate("Settings.FitRiderSizeFactor.name"),
+	hint: Translate("Settings.FitRiderSizeFactor.descrp"),
+	scope: "world",
+	config: true,
+	type: Number,
+	range: {
+		min: 0,
+		max: 1,
+		step: 0.05
+	},
+	default: 0.65
+  });  
+  
   game.settings.register(cModuleName, "RiderMovementworlddefault", {
 	name: Translate("Settings.RiderMovementworlddefault.name"),
 	hint: Translate("Settings.RiderMovementworlddefault.descrp"),
