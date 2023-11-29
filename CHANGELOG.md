@@ -1,3 +1,6 @@
+## v2.16.3
+- Added world setting Adjusted rider size factor to set the factor by which the size of riders of smaller tokens is adjusted
+
 ## v2.16.2
 - Added Grappled placement "following" to let grappled tokens follow this token
 
