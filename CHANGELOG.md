@@ -1,3 +1,7 @@
+## v2.16.4
+- Added missing translation
+- Added option `MountingEffectsOverride` to RidingOptions in api to verride the effects applied to the rider
+
 ## v2.16.3
 - Added world setting Adjusted rider size factor to set the factor by which the size of riders of smaller tokens is adjusted
 
