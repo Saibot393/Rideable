@@ -35,9 +35,9 @@ class EffectManager {
 			//for riders effects
 			await EffectManager.removeRideableEffects(pRider, {grappleEffect : pRidingOptions.Grappled});
 			
-			if (pRidingOptions.MountingEffectsOverride) {
-				if (pRidingOptions.MountingEffectsOverride instanceof Array) {
-					vRiderEffectNames = pRidingOptions.MountingEffectsOverride;
+			if (pRidingOptions.MountingEffectOverride) {
+				if (pRidingOptions.MountingEffectOverride instanceof Array) {
+					vRiderEffectNames = pRidingOptions.MountingEffectOverride;
 				}
 			}
 			else {
