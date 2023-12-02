@@ -35,32 +35,39 @@ class EffectManager {
 			//for riders effects
 			await EffectManager.removeRideableEffects(pRider);
 			
-			if (!pRidingOptions.Familiar) {
-				if (!pRidingOptions.Grappled) {
-					vRiderEffectNames = RideableFlags.MountingEffects(pRidden);
-					
-					if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
-						//World Mounting effects
-						vRiderEffectNames = vRiderEffectNames.concat(RideableUtils.CustomWorldRidingEffects());
-						
-						//Standard mounting effect
-						if (RideableUtils.isPf2e() && game.settings.get(cModuleName, "RidingSystemEffects")) {
-							vRiderEffectNames.push(cMountedPf2eEffectID);
-						}
-					}
-					
-					if (RideableFlags.SelfApplyCustomEffects(pRider)) {
-						vRiderEffectNames.push(RideableFlags.MountingEffects(pRider));
-					}
+			if (pRidingOptions.MountingEffectOverride) {
+				if (pRidingOptions.MountingEffectOverride instanceof Array) {
+					vRiderEffectNames = pRidingOptions.MountingEffectOverride;
 				}
-				else {
-					if (game.settings.get(cModuleName, "GrapplingSystemEffects")) {
-						if (RideableUtils.isPf2e()) {
-							vRiderEffectNames.push(cGrappledPf2eEffectID);
+			}
+			else {
+				if (!pRidingOptions.Familiar) {
+					if (!pRidingOptions.Grappled) {
+						vRiderEffectNames = RideableFlags.MountingEffects(pRidden);
+						
+						if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
+							//World Mounting effects
+							vRiderEffectNames = vRiderEffectNames.concat(RideableUtils.CustomWorldRidingEffects());
+							
+							//Standard mounting effect
+							if (RideableUtils.isPf2e() && game.settings.get(cModuleName, "RidingSystemEffects")) {
+								vRiderEffectNames.push(cMountedPf2eEffectID);
+							}
 						}
 						
-						if (RideableCompUtils.isactiveModule(cDfredCE)) {
-							vRiderEffectNames.push(cGrabbedEffectName);
+						if (RideableFlags.SelfApplyCustomEffects(pRider)) {
+							vRiderEffectNames.push(RideableFlags.MountingEffects(pRider));
+						}
+					}
+					else {
+						if (game.settings.get(cModuleName, "GrapplingSystemEffects")) {
+							if (RideableUtils.isPf2e()) {
+								vRiderEffectNames.push(cGrappledPf2eEffectID);
+							}
+							
+							if (RideableCompUtils.isactiveModule(cDfredCE)) {
+								vRiderEffectNames.push(cGrabbedEffectName);
+							}
 						}
 					}
 				}
@@ -70,7 +77,7 @@ class EffectManager {
 		}
 	}
 	
-	static async RecheckforMountEffects(pRidden) {
+	static async RecheckforMountEffects(pRidden, pRidingOptions) {
 		//Effects applied to Mount
 		let vMountEffectNames = [];
 		
@@ -124,7 +131,7 @@ class EffectManager {
 		if (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration"))) {
 			EffectManager.applyMountingEffects(pRider, pRidden, pRidingOptions); //add additional systems here if necessary
 			
-			EffectManager.RecheckforMountEffects(pRidden);
+			EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
 		}
 	}
 	
@@ -132,7 +139,7 @@ class EffectManager {
 		if (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration"))) {
 			EffectManager.removeRideableEffects(pRider); //add additional systems here if necessary
 			
-			EffectManager.RecheckforMountEffects(pRidden);
+			EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
 		}
 	}
 	

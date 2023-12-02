@@ -338,7 +338,8 @@
 					"RowBelow"			: "below",
 					"RowAbove"			: "above",
 					"RowMiddle"			: "middle",
-					"ClosestInside"		: "inside" 
+					"ClosestInside"		: "inside",
+					"Follow"			: "follow"
 				}
 			},
 			
