@@ -33,6 +33,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Familiar riding position: to set the corner familiars will be positioned first
 - Grappling: to allow tokens to grapple one another
 - Apply "Grappled" effect to: apply a system dependent effect on grappled tokens
+- Stop grapple on effect removal: to stop the grapple when the as soon as the effect is removed
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Adjusted rider size factor: to set the factor by which the size of riders of smaller tokens is adjusted
