@@ -1,3 +1,6 @@
+## v2.16.6
+- Improved grapple effect recognition
+
 ## v2.16.5
 - Added world setting Stop grapple on effect removal to stop the grapple when the as soon as the effect is removed
 
