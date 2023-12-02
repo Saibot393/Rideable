@@ -35,6 +35,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Apply "Grappled" effect to: apply a system dependent effect on grappled tokens
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
+- Adjusted rider size factor: to set the factor by which the size of riders of smaller tokens is adjusted
 - Rider movement default setting: to set the default Rider movement behaviour for new players
 - Mount button default position: to set the world default position for the mount button
 - Enable Token following: to use the Token following feature
