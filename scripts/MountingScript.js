@@ -74,6 +74,8 @@ class MountingManager {
 	
 	static async createCopywithRiders(pData, pSourceScene) {} //creates copies of pData at current scene with riders from pSourceScene
 	
+	static onRideableEffectDeletion(pTokens, pEffects, pInfos) {} //called when a rideable effects is removed
+	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
 	
 	//Aditional Informations
@@ -595,6 +597,18 @@ class MountingManager {
 		return vCreations;
 	}
 	
+	static onRideableEffectDeletion(pTokens, pEffects, pInfos) {
+		if (pInfos.GrappleEffect) {
+			if (game.settings.get(cModuleName, "StopGrappleonEffectRemoval")) {
+				if (game.user.isGM) {
+					let vGrappled = pTokens.filter(vToken => RideableFlags.isGrappled(vToken));
+					
+					MountingManager.RequestUnmount(vGrappled);
+				}
+			}
+		}
+	}
+	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {
 		if ((pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
 			let vNewPosition = GeometricUtils.CenterPosition(pToken);
@@ -710,6 +724,8 @@ Hooks.on("updateToken", (...args) => MountingManager.CheckEntering(...args));
 Hooks.on("renderTokenHUD", (...args) => MountingManager.addMountingButton(...args));
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
+
+Hooks.on(cModuleName+".RideableEffectRemoval", (...args) => MountingManager.onRideableEffectDeletion(...args));
 
 Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
 

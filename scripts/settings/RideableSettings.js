@@ -204,6 +204,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "StopGrappleonEffectRemoval", {
+	name: Translate("Settings.StopGrappleonEffectRemoval.name"),
+	hint: Translate("Settings.StopGrappleonEffectRemoval.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   let vChoices = {};
   
   for (let i = 0; i < cGrapplePlacements.length; i++) {

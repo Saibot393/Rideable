@@ -104,7 +104,7 @@ class EffectManager {
 				let vEffects = await pTarget.actor.createEmbeddedDocuments("Item", vEffectDocuments);
 				
 				for (let i = 0; i < vEffects.length; i++) {
-					await RideableFlags.MarkasRideableEffect(vEffects[i], pForMountEffect);
+					await RideableFlags.MarkasRideableEffect(vEffects[i], {ForMountEffect : pForMountEffect});
 				}
 			}
 			
@@ -156,26 +156,17 @@ class EffectManager {
 	}
 }
 
-/*
 Hooks.on("ready", function() {
-	if (RideableUtils.isPf2e()) {
-		Hooks.on("deleteItem", (pItem, pInfos, pUserID) => {
-			if (["condition", "effect"].includes(pItem.type)) {
-				if (RideableFlags.isRideableEffect(pItem)) {
-					EffectManager.onRideableEffectDeletion(pItem, pItem.parent, pInfos, pUserID);
-				}
-			}
-		});
-	}
-	else {
-		Hooks.on("deleteActiveEffect", (pEffect, pInfos, pUserID) => {
-			if (pEffect.origin == cModuleName) {
-				EffectManager.onRideableEffectDeletion(pEffect, pEffect.parent, pInfos, pUserID);
-			}
-		});
-	}
+	Hooks.on("deleteActiveEffect", (pEffect, pInfos, pUser) => {
+		if (RideableFlags.isRideableEffect(pEffect)) {
+			let vGrappleEffect = RideableFlags.isGrappleEffect(pEffect);
+			
+			let vTokens = canvas.tokens.placeables.filter(vToken => vToken.actor == pEffect.parent).map(vToken => vToken.document);
+			
+			Hooks.call(cModuleName + ".RideableEffectRemoval", vTokens, pEffect, {GrappleEffect : vGrappleEffect});
+		}
+	});
 });
-*/
 
 export { EffectManager }
 
