@@ -236,6 +236,9 @@ class RideableCompUtils {
 			vPostFix = ".grapple";
 		}
 		
+		console.log(vPostFix);
+		console.log(pInfos);
+		
 		for (let i = 0; i < pEffects.length; i++) {
 			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
 			  effect: pEffects[i].toObject(),
@@ -258,6 +261,9 @@ class RideableCompUtils {
 		if (pInfos.grappleEffect) {
 			vPostFix = ".grapple";
 		}
+		
+		console.log(vPostFix);
+		console.log(pInfos);
 		
 		for (let i = 0; i < pEffects.length; i++) {
 			let vName = pEffects[i].name;

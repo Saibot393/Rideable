@@ -14,9 +14,9 @@ class EffectManager {
 	
 	static async RecheckforMountEffects(pRidden) {} //rechecks the effect pRidden gains from its riders
 	
-	static async applyRideableEffects(pTarget, pEffectNames, pForMountEffect = false) {} //applies effects defined by pEffects to pTarget
+	static async applyRideableEffects(pTarget, pEffectNames, pInfos = {}) {} //applies effects defined by pEffects to pTarget
 	
-	static async removeRideableEffects(pRider, pForMountEffect = false) {} //remove all effects flaged as Rideable effect
+	static async removeRideableEffects(pRider, pInfos = {}) {} //remove all effects flaged as Rideable effect
 	
 	//Hooks
 	
@@ -33,7 +33,7 @@ class EffectManager {
 		
 		if (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration"))) {
 			//for riders effects
-			await EffectManager.removeRideableEffects(pRider);
+			await EffectManager.removeRideableEffects(pRider, {grappleEffect : pRidingOptions.Grappled});
 			
 			if (pRidingOptions.MountingEffectsOverride) {
 				if (pRidingOptions.MountingEffectsOverride instanceof Array) {
@@ -73,7 +73,7 @@ class EffectManager {
 				}
 			}
 			
-			EffectManager.applyRideableEffects(pRider, vRiderEffectNames);
+			EffectManager.applyRideableEffects(pRider, vRiderEffectNames, {grappleEffect : pRidingOptions.Grappled});
 		}
 	}
 	
@@ -82,7 +82,7 @@ class EffectManager {
 		let vMountEffectNames = [];
 		
 		if ((pRidden.documentName == "Token") && (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")))) {
-			await EffectManager.removeRideableEffects(pRidden, true);
+			await EffectManager.removeRideableEffects(pRidden, {forMountEffect : true});
 			
 			let vRiders = RideableFlags.RiderTokens(pRidden).filter(vRider => !(RideableFlags.isGrappled(vRider)));
 			
@@ -90,11 +90,11 @@ class EffectManager {
 				vMountEffectNames = vMountEffectNames.concat(RideableFlags.forMountEffects(vRiders[i]));
 			}
 			
-			EffectManager.applyRideableEffects(pRidden, vMountEffectNames, true);
+			EffectManager.applyRideableEffects(pRidden, vMountEffectNames, {forMountEffect : true});
 		}
 	} 
 	
-	static async applyRideableEffects(pTarget, pEffectNames, pForMountEffect = false) {
+	static async applyRideableEffects(pTarget, pEffectNames, pInfos) {
 		if (pEffectNames.length > 0) {
 			let vEffectDocuments;
 			
@@ -111,23 +111,23 @@ class EffectManager {
 			if (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
 				vEffectDocuments = RideableCompUtils.FilterEffects(pEffectNames);
 				
-				RideableCompUtils.AddDfredEffect(vEffectDocuments, pTarget, pForMountEffect);
+				RideableCompUtils.AddDfredEffect(vEffectDocuments, pTarget, pInfos);
 			}
 		}
 	}
 	
-	static async removeRideableEffects(pRider, pForMountEffect = false) {
+	static async removeRideableEffects(pRider, pInfos = {}) {
 		if (RideableUtils.isPf2e()) {
 			await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.concat(pRider.actor.itemTypes.condition).filter(vElement => RideableFlags.isRideableEffect(vElement, pForMountEffect)).map(vElement => vElement.id));
 		}
 		
 		if (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
-			await RideableCompUtils.RemoveRideableDfredEffect(pRider.actor.effects.map(vElement => vElement), pRider, pForMountEffect);
+			await RideableCompUtils.RemoveRideableDfredEffect(pRider.actor.effects.map(vElement => vElement), pRider, pInfos);
 		}
 	}
 	
 	//Hooks
-	static onRiderMount(pRider, pRidden, pRidingOptions) {
+	static onRiderMount(pRider, pRidden, pRidingOptions = {}) {
 		if (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration"))) {
 			EffectManager.applyMountingEffects(pRider, pRidden, pRidingOptions); //add additional systems here if necessary
 			
@@ -137,7 +137,7 @@ class EffectManager {
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {
 		if (RideableUtils.isPf2e() || (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration"))) {
-			EffectManager.removeRideableEffects(pRider); //add additional systems here if necessary
+			EffectManager.removeRideableEffects(pRider, {grappleEffect : pRidingOptions.Grappled}); //add additional systems here if necessary
 			
 			EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
 		}
@@ -149,6 +149,12 @@ class EffectManager {
 		if ((pEffect.flags?.core?.sourceId == cGrappledPf2eEffectID) || (pEffect.name == cGrabbedEffectName)) {
 			vGrappleEffect = true;
 		}
+		
+		if (pEffect.origin?.includes("grapple")) {
+			vGrappleEffect = true;
+		}
+		
+		console.log(pEffect.origin);
 		
 		Hooks.call(cModuleName + ".RideableEffectDeletion", pEffect, game.users.get(pUserID), {GrappleEffect : vGrappleEffect});
 	}
@@ -169,7 +175,7 @@ Hooks.on("ready", function() {
 	*/
 	
 	Hooks.on("deleteActiveEffect", (pEffect, pInfos, pUserID) => {
-		if (pEffect.origin.includes(cModuleName)) {
+		if (pEffect.origin?.includes(cModuleName)) {
 			EffectManager.onRideableEffectDeletion(pEffect, pEffect.parent, pInfos, pUserID);
 		}
 	});
