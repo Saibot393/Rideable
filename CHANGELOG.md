@@ -1,3 +1,6 @@
+## v2.16.5
+- Added world setting Stop grapple on effect removal to stop the grapple when the as soon as the effect is removed
+
 ## v2.16.4
 - Added missing translation
 - Added option `MountingEffectsOverride` to RidingOptions in api to verride the effects applied to the rider
