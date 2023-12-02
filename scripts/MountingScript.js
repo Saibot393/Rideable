@@ -72,9 +72,9 @@ class MountingManager {
 	
 	static async onpasteToken(pOriginal, pCopyData) {} //called when a token is copied, tries to also copy all riding tokens
 	
-	static async createCopywithRiders(pData, pSourceScene) {} //creates copies of pData at current scene with riders from pSourceScene
+	static onRideableEffectDeletion(pEffect, pUser, pInfos) {} //called when a Rideable effect is deleted
 	
-	static onRideableEffectDeletion(pTokens, pEffects, pInfos) {} //called when a rideable effects is removed
+	static async createCopywithRiders(pData, pSourceScene) {} //creates copies of pData at current scene with riders from pSourceScene
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
 	
@@ -566,6 +566,22 @@ class MountingManager {
 		}
 	}
 	
+	static onRideableEffectDeletion(pEffect, pUser, pInfos) {
+		if (pInfos.GrappleEffect) {
+			if (game.settings.get(cModuleName, "StopGrappleonEffectRemoval")) {
+				if (game.user.isGM) {
+					let vGrappled = canvas.tokens.placeables.filter(vToken => vToken.actor == pEffect.parent);
+					
+					vGrappled = vGrappled.map(vToken => vToken.document);
+					
+					vGrappled = vGrappled.filter(vToken => RideableFlags.isGrappled(vToken));
+					
+					MountingManager.RequestUnmount(vGrappled, true);
+				}
+			}
+		}
+	}
+	
 	static async createCopywithRiders(pData, pSourceScene) {
 		let vCreations = [];
 		
@@ -595,18 +611,6 @@ class MountingManager {
 		}
 		
 		return vCreations;
-	}
-	
-	static onRideableEffectDeletion(pTokens, pEffects, pInfos) {
-		if (pInfos.GrappleEffect) {
-			if (game.settings.get(cModuleName, "StopGrappleonEffectRemoval")) {
-				if (game.user.isGM) {
-					let vGrappled = pTokens.filter(vToken => RideableFlags.isGrappled(vToken));
-					
-					MountingManager.RequestUnmount(vGrappled);
-				}
-			}
-		}
 	}
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {
@@ -725,7 +729,7 @@ Hooks.on("renderTokenHUD", (...args) => MountingManager.addMountingButton(...arg
 
 Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.onIndependentRiderMovement(...args));
 
-Hooks.on(cModuleName+".RideableEffectRemoval", (...args) => MountingManager.onRideableEffectDeletion(...args));
+Hooks.on(cModuleName + ".RideableEffectDeletion", (pEffect, pUser, pInfos) => MountingManager.onRideableEffectDeletion(pEffect, pUser, pInfos));
 
 Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
 

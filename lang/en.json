@@ -153,6 +153,11 @@
 				"descrp"				: "If a token gets grappled, a system dependent effect will be applied to the token"				
 			},
 			
+			"StopGrappleonEffectRemoval" : {
+				"name"					: "Stop grapple on effect removal",
+				"descrp"				: "If a token should be released as soon as the grapple effect is removed"
+			},
+			
 			"GrappleplacementDefault" : {
 				"name"					: "Grapple placement default",
 				"descrp"				: "The standard grapple placement of tokens",
