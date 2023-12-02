@@ -21,7 +21,6 @@ const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
 const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom riding height of a ridden token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
 const cRideableMountEffectF = "RideableMountEffectFlag"; //Flag that signals, that this is an effect applied to mounts
-const cRideableGrappleEffectF = "RideableGrappleEffectFlag"; //Flag that signals, that this is an effect applied by a grapple
 const cMountingEffectsF = "MountingEffectsFlag"; //Flag that contains all effects this token gives its Riders (only Pf2e relevant)
 const cWorldMEffectOverrideF = "WorldMEffectOverrideFlag"; //if this Tokens Mounting effects override the Worlds Mounting effects
 const cTileRideableNameF = "TileRideableNameFlag"; //Flag for the name of the rideable tile
@@ -191,17 +190,15 @@ class RideableFlags {
 	//effects
 	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
 	
-	static isGrappleEffect(pEffect) {} //returns if pEffect is a Rideable Grapple Effect
-	
 	static MountingEffectsstring(pToken) {} //returns alls the effects pToken gives its Riders
 	
 	static forMountEffects(pRider, pRaw = false) {} //returns the effects pRider applies to its mount
 	
 	static OverrideWorldMEffects(pToken) {} //returns if this Token mounting effects override the world standard (or just add to it)
 	
-	static async MarkasRideableEffect(pEffect, pInfos = {forMountEffect : false, grappleEffect : false}) {} //gives pEffect the appropiate Flag
+	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {} //gives pEffect the appropiate Flag
 	
-	static isRideableEffect(pEffect, pInfos = {forMountEffect : false}) {} //returns whether pEffect is flagged as RideableFlag
+	static isRideableEffect(pEffect, pforMountEffect = false) {} //returns whether pEffect is flagged as RideableFlag
 	
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
@@ -1318,16 +1315,6 @@ class RideableFlags {
 		return this.#MountingEffectsFlag(pToken).split(cDelimiter);
 	}
 	
-	static isGrappleEffect(pEffect) {
-		let vFlags = this.#RideableFlags(pEffect);	
-		
-		if (vFlags) {
-			return (vFlags.hasOwnProperty(cRideableGrappleEffectF) && vFlags[cRideableGrappleEffectF]);
-		}
-		
-		return false;
-	}
-	
 	static MountingEffectsstring(pToken) {
 		return this.#MountingEffectsFlag(pToken);
 	}
@@ -1345,25 +1332,23 @@ class RideableFlags {
 		return this.#WorldMEffectOverrideFlag(pToken);
 	}
 	
-	static async MarkasRideableEffect(pEffect, pInfos = {forMountEffect : false, grappleEffect : false}) {
+	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {
 		let vFlagName = cRideableEffectF;
 		
-		if (pInfos.forMountEffect) {
+		if (pforMountEffect) {
 			vFlagName = cRideableMountEffectF;
 		}
 		
 		if (pEffect) {
-			pEffect.setFlag(cModuleName, vFlagName, true);
-			
-			pEffect.setFlag(cModuleName, cRideableGrappleEffectF, pInfos.grappleEffect);
+			pEffect.setFlag(cModuleName, vFlagName, true)
 		}
 	}
 	
-	static isRideableEffect(pEffect, pInfos = {forMountEffect : false}) {
+	static isRideableEffect(pEffect, pforMountEffect = false) {
 		let vFlags = this.#RideableFlags(pEffect);		
 		let vFlagName = cRideableEffectF;
 		
-		if (pInfos.forMountEffect) {
+		if (pforMountEffect) {
 			vFlagName = cRideableMountEffectF;
 		}
 		

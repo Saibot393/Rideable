@@ -65,9 +65,9 @@ class RideableCompUtils {
 	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
 	
 	//specific: dfreds-convenient-effects
-	static async AddDfredEffect(pEffects, pToken, pforMountEffect = false) {} //uses dfreds api to add effects with pEffectNames to pToken
+	static async AddDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses dfreds api to add effects with pEffectNames to pToken
 	
-	static async RemoveRideableDfredEffect(pEffects, pToken, pforMountEffect = false) {} //uses dfreds api to remove effects with pEffectNames to pToken
+	static async RemoveRideableDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses dfreds api to remove effects with pEffectNames to pToken
 	
 	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
@@ -225,11 +225,15 @@ class RideableCompUtils {
 	}
 	
 	//specific: dfreds-convenient-effects
-	static async AddDfredEffect(pEffects, pToken, pforMountEffect = false) {
+	static async AddDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
 		let vPostFix = "";
 		
-		if (pforMountEffect) {
+		if (pInfos.forMountEffect) {
 			vPostFix = ".forMount";
+		}
+		
+		if (pInfos.grappleEffect) {
+			vPostFix = ".grapple";
 		}
 		
 		for (let i = 0; i < pEffects.length; i++) {
@@ -244,11 +248,15 @@ class RideableCompUtils {
 		}
 	}
 	
-	static async RemoveRideableDfredEffect(pEffects, pToken, pforMountEffect = false) {
+	static async RemoveRideableDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
 		let vPostFix = "";
 		
-		if (pforMountEffect) {
+		if (pInfos.forMountEffect) {
 			vPostFix = ".forMount";
+		}
+		
+		if (pInfos.grappleEffect) {
+			vPostFix = ".grapple";
 		}
 		
 		for (let i = 0; i < pEffects.length; i++) {
