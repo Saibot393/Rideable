@@ -37,6 +37,7 @@ const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for t
 const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued the follow order of this token
 const cPathHistoryF = "PathHistoryFlag"; //FLag to store the Path history of a token
 const cUseRidingHeightF = "UseRidingHeightFlag"; //Flag to store wether the riding height should be used
+const cRegisteredActorEffectsF = "RegisteredActorEffectsFlag"; //FLag that stores the names of special effects for this actor
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -201,6 +202,8 @@ class RideableFlags {
 	static isRideableEffect(pEffect, pforMountEffect = false) {} //returns whether pEffect is flagged as RideableFlag
 	
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
+	
+	static IsActorEffect(pActor, pEffect) {} //returns if pEffect is registered as special effect of pActor and if so, which kind ["riding", "grapple", "forMount"]
 	
 	//following
 	static isFollowing(pFollower) {} //returns if pFollower is following something
@@ -654,6 +657,19 @@ class RideableFlags {
 		}
 		
 		return game.settings.get(cModuleName, "useRidingHeight"); //default if anything fails			
+	}
+	
+	static #RegisteredActorEffectsFlag (pActor) {
+		//returns content of RegisteredActorEffectsFlag of pActor ()
+		let vFlag = this.#RideableFlags(pActor);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRegisteredActorEffectsF)) {
+				return vFlag.RegisteredActorEffectsFlag;
+			}
+		}
+		
+		return {}; //default if anything fails			
 	}
 	
 	static async #setRidingFlag (pToken, pContent) {
@@ -1361,6 +1377,22 @@ class RideableFlags {
 	
 	static SelfApplyCustomEffects(pObject) {
 		return this.#SelfApplyEffectsFlag(pObject);
+	}
+	
+	static IsActorEffect(pActor, pEffect) {
+		if (pActor && pEffect) {
+			let vEffects = RideableFlags.#RegisteredActorEffectsFlag(pActor);
+			
+			for (let vtype of Object.keys(vEffects)) {
+				let vTypeEffects = vEffects[vtype];
+				
+				vTypeEffects.split(cDelimiter);
+				
+				if (vTypeEffects.includes(pEffect.name) || vTypeEffects.includes(pEffect.id)) {
+					return vtype;
+				}
+			}
+		}
 	}
 	
 	//following

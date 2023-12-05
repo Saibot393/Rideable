@@ -24,7 +24,7 @@ class EffectManager {
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {} //handle deletion of mounting effects
 	
-	static onRideableEffectDeletion(pEffect, pToken, pInfos, pUserID){} //called when a rideable effect is deleted
+	static onRideableEffectDeletion(pEffect, pActor, pInfos, pUserID){} //called when a rideable effect is deleted
 	
 	//IMPLEMENTATION
 	static async applyMountingEffects(pRider, pRidden, pRidingOptions) {
@@ -143,8 +143,10 @@ class EffectManager {
 		}
 	}
 	
-	static onRideableEffectDeletion(pEffect, pToken, pInfos, pUserID){
+	static onRideableEffectDeletion(pEffect, pActor, pInfos, pUserID){
+		let vRidingEffect = false;
 		let vGrappleEffect = false;
+		let vforMountEffect = false;
 		
 		if ((pEffect.flags?.core?.sourceId == cGrappledPf2eEffectID) || (pEffect.name == cGrabbedEffectName)) {
 			vGrappleEffect = true;
@@ -154,9 +156,19 @@ class EffectManager {
 			vGrappleEffect = true;
 		}
 		
-		console.log(pEffect.origin);
+		switch (RideableFlags.IsActorEffect(pActor, pEffect)) {
+			case "riding":
+				vRidingEffect = true;
+				break;
+			case "grapple":
+				vGrappleEffect = true;
+				break;
+			case "forMount":
+				vforMountEffect = true;
+				break;
+		}
 		
-		Hooks.call(cModuleName + ".RideableEffectDeletion", pEffect, game.users.get(pUserID), {GrappleEffect : vGrappleEffect});
+		Hooks.call(cModuleName + ".RideableEffectDeletion", pEffect, game.users.get(pUserID), {RidingEffect : vRidingEffect, GrappleEffect : vGrappleEffect, forMountEffect : vforMountEffect});
 	}
 }
 
@@ -174,8 +186,8 @@ Hooks.on("ready", function() {
 	}
 	*/
 	
-	Hooks.on("deleteActiveEffect", (pEffect, pInfos, pUserID) => {
-		if (pEffect.origin?.includes(cModuleName)) {
+	Hooks.on("preDeleteActiveEffect", (pEffect, pInfos, pUserID) => {
+		if (pEffect.origin?.includes(cModuleName) || RideableFlags.IsActorEffect(pEffect.parent, pEffect)) {
 			EffectManager.onRideableEffectDeletion(pEffect, pEffect.parent, pInfos, pUserID);
 		}
 	});
