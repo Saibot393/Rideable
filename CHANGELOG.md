@@ -1,3 +1,6 @@
+## v2.16.7
+- Added flags to register new active effects as rideable grapple effect (stops grapple when removed)
+
 ## v2.16.6
 - Improved grapple effect recognition
 
