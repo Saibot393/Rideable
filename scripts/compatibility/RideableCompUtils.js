@@ -236,9 +236,6 @@ class RideableCompUtils {
 			vPostFix = ".grapple";
 		}
 		
-		console.log(vPostFix);
-		console.log(pInfos);
-		
 		for (let i = 0; i < pEffects.length; i++) {
 			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
 			  effect: pEffects[i].toObject(),
@@ -262,9 +259,6 @@ class RideableCompUtils {
 			vPostFix = ".grapple";
 		}
 		
-		console.log(vPostFix);
-		console.log(pInfos);
-		
 		for (let i = 0; i < pEffects.length; i++) {
 			let vName = pEffects[i].name;
 			
@@ -287,7 +281,7 @@ class RideableCompUtils {
 		let vBuffer;
 		
 		for (let i = 0; i < pNameIDs.length; i++) {
-			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i] || vEffect.label == pNameIDs[i]);
+			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i] || vEffect.name == pNameIDs[i]);
 			
 			if (vBuffer) {
 				vNameIDs.push(vBuffer);

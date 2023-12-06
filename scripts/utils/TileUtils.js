@@ -38,7 +38,7 @@ class TileUtils {
 	
 	static hoveredProxyToken() {
 		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
-			let vvalidTiles = canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => !vTile.hidden && RideableCompUtils.isTAAttached(vTile));
+			let vvalidTiles = canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => !vTile.hidden && RideableCompUtils.isTAAttached(vTile) &&  RideableCompUtils.TAparentToken(vTile));
 			let vMousePosition = canvas.mousePosition;
 			let vhoveredTile;
 
