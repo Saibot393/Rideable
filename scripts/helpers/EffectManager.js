@@ -104,7 +104,7 @@ class EffectManager {
 				let vEffects = await pTarget.actor.createEmbeddedDocuments("Item", vEffectDocuments);
 				
 				for (let i = 0; i < vEffects.length; i++) {
-					await RideableFlags.MarkasRideableEffect(vEffects[i], pForMountEffect);
+					await RideableFlags.MarkasRideableEffect(vEffects[i], pInfos.forMountEffect);
 				}
 			}
 			
@@ -118,7 +118,7 @@ class EffectManager {
 	
 	static async removeRideableEffects(pRider, pInfos = {}) {
 		if (RideableUtils.isPf2e()) {
-			await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.concat(pRider.actor.itemTypes.condition).filter(vElement => RideableFlags.isRideableEffect(vElement, pForMountEffect)).map(vElement => vElement.id));
+			await pRider.actor.deleteEmbeddedDocuments("Item", pRider.actor.itemTypes.effect.concat(pRider.actor.itemTypes.condition).filter(vElement => RideableFlags.isRideableEffect(vElement, pInfos.forMountEffect)).map(vElement => vElement.id));
 		}
 		
 		if (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
