@@ -1,3 +1,6 @@
+## v2.16.8
+- Small bug fiex for Pf2e effects
+
 ## v2.16.7
 - Added flags to register new active effects as rideable grapple effect (stops grapple when removed)
 
