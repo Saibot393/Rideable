@@ -714,7 +714,7 @@ class RideableFlags {
 	
 	static async #setRelativPositionFlag (pToken, pContent) {
 	//sets content of RelativPosition (must be array of two numbers)
-		if ((pToken) && ((pContent.length == 2) || (pContent.length == 0))) {
+		if ((pToken) && ((pContent.length >= 2) || (pContent.length == 0))) {
 			await pToken.setFlag(cModuleName, cRelativPositionF, pContent);
 			
 			return true;
@@ -1276,20 +1276,27 @@ class RideableFlags {
 	
 	//relativ Position handling
 	static HasrelativPosition(pToken) {
-		return (this.#RelativPositionFlag(pToken).length == 2);
+		return (this.#RelativPositionFlag(pToken).length >= 2);
 	} 
 	
 	static RelativPosition(pToken) {
 		if (RideableFlags.HasrelativPosition(pToken)) {
+			let vrelativePosition = this.#RelativPositionFlag(pToken);
+			
+			if (vrelativePosition.length == 2) {
+				vrelativePosition = [...vrelativePosition, 0];
+			}
+			
 			return this.#RelativPositionFlag(pToken);
 		}
 		else {
-			return [0,0];
+			return [0,0,0];
 		}
 	}
 	
 	static async setRelativPosition(pToken, pPosition) {
-		if (pPosition.length == 2) {
+		console.log(pPosition);
+		if (pPosition.length >= 2) {
 			await this.#setRelativPositionFlag(pToken, pPosition);
 		}
 	} 
