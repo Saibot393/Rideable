@@ -1,3 +1,7 @@
+## v2.16.9
+- Added missing translation
+- Fixed small bug in connection with Token Attacher
+
 ## v2.16.8
 - Small bug fiex for Pf2e effects
 
