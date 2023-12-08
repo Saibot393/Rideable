@@ -1,7 +1,8 @@
 ## v2.0.17
 - Improved linked rotation logic when "Riders can move freely" is active
 - Improved piloting calculations
-- New 
+- New rider positioning "Block"
+- New rider positioning "Mount position"
 
 ## v2.16.9
 - Added missing translation
