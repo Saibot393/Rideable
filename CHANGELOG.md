@@ -1,3 +1,9 @@
+## v2.17.0
+- Improved linked rotation logic when "Riders can move freely" is active
+- Improved piloting calculations
+- New rider positioning "Block"
+- New rider positioning "Mount position"
+
 ## v2.16.9
 - Added missing translation
 - Fixed small bug in connection with Token Attacher
