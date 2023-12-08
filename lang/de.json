@@ -330,9 +330,11 @@
 				"options" : {
 					"CirclePlacement"	: "Kreis",
 					"RowPlacement"		: "Reihe",
+					"BlockPlacement"	: "Block",
 					"ClusterPlacement"	: "Bündel",
 					"RowPlacementTop"	: "Reihe oben",
-					"RowPlacementBottom": "Reihe unten"
+					"RowPlacementBottom": "Reihe unten",
+					"MountPosition"		: "Aufstieg Position"
 				}
 			},
 			

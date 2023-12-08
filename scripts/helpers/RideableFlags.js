@@ -1295,7 +1295,6 @@ class RideableFlags {
 	}
 	
 	static async setRelativPosition(pToken, pPosition) {
-		console.log(pPosition);
 		if (pPosition.length >= 2) {
 			await this.#setRelativPositionFlag(pToken, pPosition);
 		}

@@ -14,6 +14,7 @@ const cBlockplacement = "BlockPlacement"; //place all tokens in a Block
 const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 const cRowplacementTop = "RowPlacementTop"; //place all tokens in a row at the top of the ridden
 const cRowplacementBottom = "RowPlacementBottom"; //place all tokens in a row at the bottom of the ridden
+const cMountPosition = "MountPosition"; //places token at the position they mounted
 
 //grapple positioning options
 const cRowBelow = "RowBelow"; //places grappled tokens below
@@ -22,7 +23,7 @@ const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
 const cClosestInside = "ClosestInside"; //place grappled tokens at the closest Inside position
 const cFollowing = "Following";
 
-const cPlacementPatterns = [cRowplacement, cCircleplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom];
+const cPlacementPatterns = [cRowplacement, cCircleplacement, cBlockplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom, cMountPosition];
 
 const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside, cFollowing]
 
@@ -370,7 +371,108 @@ class Ridingmanager {
 					}	
 					
 					break;
+				case cBlockplacement:
+					const cSizeFactor = FCore.sceneof(pRiddenToken).dimensions.size/2;
+										
+					let vxsize; 
+					let vysize;
 					
+					switch (pRiddenToken.documentName) {
+						case "Token":
+							vxsize = Math.round(pRiddenToken.width * 2);
+							vysize = Math.round(pRiddenToken.height * 2);
+							break;
+						case "Tile":
+							vxsize = Math.round(pRiddenToken.width / cSizeFactor);
+							vysize = Math.round(pRiddenToken.height / cSizeFactor);
+							break;
+					}
+					
+					let vplanningMatrix = [];
+					
+					for (let x = 0; x < vxsize; x++) {
+						vplanningMatrix[x] = [];
+						for (let y = 0; y < vysize; y++) {
+							vplanningMatrix[x][y] = true;
+						}
+					}
+					
+					function useSpace(vpositionx, vpositiony, vwidth, vheight) {
+						for (let x = vpositionx; x < Math.min(vxsize, vpositionx + vwidth); x++) {
+							for (let y = vpositiony; y < Math.min(vysize, vpositiony + vheight); y++) {
+								vplanningMatrix[x][y] = false;
+							}
+						}
+					}
+					
+					function searchfreeSpace(vwidth, vheight) {	
+						//clean search for fit
+						let vx = 0;
+						let vy = 0;
+						while (vy <= vysize-vheight) {						
+							vx = 0;
+							while (vx <= vxsize-vwidth) {							
+								let vfoundbuffer = true;
+								
+								let vrelativey = 0;
+								while (vfoundbuffer && vrelativey < vheight) {
+									let vrelativex = 0;
+									while (vfoundbuffer && vrelativex < vwidth) {
+										vfoundbuffer = vfoundbuffer && vplanningMatrix[vx + vrelativex][vy + vrelativey];
+										
+										vrelativex = vrelativex + 1;
+									}
+									vrelativey = vrelativey + 1;
+								}
+								
+								if (vfoundbuffer) {
+									return [vx, vy];
+								}
+								
+								vx = vx + 1;
+							}
+							vy = vy + 1;
+						}
+						
+						//no adequate space left, take whats left
+						vx = 0;
+						vy = 0;
+						while (vy < vysize) {						
+							vx = 0;
+							while (vx < vxsize) {								
+								if (vplanningMatrix[vx][vy]) {
+									return [vx, vy];
+								};
+								
+								vx = vx + 1;
+							}
+							vy = vy + 1;
+						}
+						
+						//houston we have a problem
+					}
+					
+					let vsortedRiders = pRiderTokenList.sort((a,b) => {return (a.height * a.width) - (b.height * b.width)}).reverse();
+					
+					const cxOffset = -GeometricUtils.insceneWidth(pRiddenToken)/2;
+					const cyOffset = -GeometricUtils.insceneHeight(pRiddenToken)/2;
+					
+					for (const vrider of vsortedRiders) {
+						let vtargetposition = searchfreeSpace(vrider.width * 2, vrider.height * 2);
+						
+						if (!vtargetposition) {
+							vtargetposition = [0,0]; //fallback
+						}
+						
+						useSpace(vtargetposition[0], vtargetposition[1], vrider.width * 2, vrider.height * 2);
+						
+						let vTargetx = cxOffset + (vtargetposition[0] + vrider.width) * cSizeFactor;
+						let vTargety = cyOffset + (vtargetposition[1] + vrider.height) * cSizeFactor;
+						
+						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx, vTargety, 0, pAnimations);
+					}
+					
+					break;
 				case cClusterplacement:
 						let vSizeFactor = GeometricUtils.insceneSize(pRiddenToken);
 				
@@ -427,6 +529,9 @@ class Ridingmanager {
 					break;
 				case cRowplacementBottom:
 					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+					break;
+				case cMountPosition:
+					Ridingmanager.planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations);
 					break;
 				case cRowplacement:
 				default:

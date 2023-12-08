@@ -330,9 +330,11 @@
 				"options" : {
 					"CirclePlacement"	: "Circle",
 					"RowPlacement"		: "Row",
+					"BlockPlacement"	: "Block",
 					"ClusterPlacement"	: "Cluster",
 					"RowPlacementTop"	: "Row top",
-					"RowPlacementBottom": "Row bottom"
+					"RowPlacementBottom": "Row bottom",
+					"MountPosition"		: "Mounting position"
 				}
 			},
 			
