@@ -16,6 +16,11 @@ const cRowplacementTop = "RowPlacementTop"; //place all tokens in a row at the t
 const cRowplacementBottom = "RowPlacementBottom"; //place all tokens in a row at the bottom of the ridden
 const cMountPosition = "MountPosition"; //places token at the position they mounted
 
+const cupkeys = new Set(["KeyW", "ArrowUp", "Numpad7", "Numpad8", "Numpad9"]);
+const cdownkeys = new Set(["KeyS", "ArrowDown", "Numpad1", "Numpad2", "Numpad3"]);
+const cleftkeys = new Set(["KeyA", "ArrowLeft", "Numpad1", "Numpad4", "Numpad7"]);
+const crightkeys = new Set(["KeyD", "ArrowRight", "Numpad3", "Numpad6", "Numpad9"]);
+
 //grapple positioning options
 const cRowBelow = "RowBelow"; //places grappled tokens below
 const cRowAbove = "RowAbove"; //places grappled tokens above
@@ -82,6 +87,8 @@ class Ridingmanager {
 	//support
 	static MovementDelta(pToken, pchanges) {} //returns the movement delta (x,y,rotation,elevation) of pToken with pchanges
 	
+	static keydownMoveReplacement() {} //returns an xy replacement incase movement keys are down
+	
 	//IMPLEMENTATIONS
 	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {
 		if (game.user.isGM) {
@@ -121,8 +128,7 @@ class Ridingmanager {
 					if (RideableFlags.isPilotedby(vRidden, pToken)) {
 						vDeleteChanges = true;
 						
-						let vRelativChanges = Ridingmanager.MovementDelta(pToken, pchanges);
-						
+						let vRelativChanges = {...Ridingmanager.MovementDelta(pToken, pchanges), ...Ridingmanager.keydownMoveReplacement()};
 						/*
 						for (let i = 0; i < cMotionProperties.length; i++) {
 							if (pchanges.hasOwnProperty(cMotionProperties[i])) {
@@ -833,6 +839,37 @@ class Ridingmanager {
 		vDelta.elevation = (pchanges.elevation != undefined) ? pchanges.elevation-pToken.elevation : 0;
 		
 		return vDelta;
+	}
+	
+	static keydownMoveReplacement() {
+		if (canvas.grid.type == 1) {
+			const csize = canvas.grid.size;
+			let vReplacement = {x : 0, y : 0};
+			
+			if (game.keyboard.downKeys.intersection(cupkeys).size) {
+				vReplacement.y = vReplacement.y - csize;
+			}
+			
+			if (game.keyboard.downKeys.intersection(cdownkeys).size) {
+				vReplacement.y = vReplacement.y + csize;
+			}
+			
+			if (game.keyboard.downKeys.intersection(cleftkeys).size) {
+				vReplacement.x = vReplacement.x - csize;
+			}
+			
+			if (game.keyboard.downKeys.intersection(crightkeys).size) {
+				vReplacement.x = vReplacement.x + csize;
+			}
+			
+			if (!vReplacement.x && !vReplacement.y) {
+				return {};
+			}
+			
+			return vReplacement;
+		}
+		
+		return {};
 	}
 }
 
