@@ -1,3 +1,6 @@
+## v2.17.1
+- Improved autorotate compatibility to prevent wobbling when piloting a token and moving diagonally using keys on gridded maps
+
 ## v2.17.0
 - Improved linked rotation logic when "Riders can move freely" is active
 - Improved piloting calculations
