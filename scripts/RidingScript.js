@@ -151,8 +151,8 @@ class Ridingmanager {
 								if (vPositionChange) {
 									//update relativ position of Rider
 									let vnewRotation = pchanges.hasOwnProperty("rotation") ? pchanges.rotation : pToken.rotation;
-
-									RideableFlags.setRelativPosition(pToken, [...(GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), vRidden.rotation)), vnewRotation - vRidden.rotation]);
+									
+									RideableFlags.setRelativPosition(pToken, [...(GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation)), vnewRotation - vRidden.rotation]);
 								}
 								
 								if (vElevationChange) {
