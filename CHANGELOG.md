@@ -1,3 +1,6 @@
+## v2.17.2
+- Fixed bug that caused position of free riders on rotated token/tile to be calculated wrongly
+
 ## v2.17.1
 - Improved autorotate compatibility to prevent wobbling when piloting a token and moving diagonally using keys on gridded maps
 
