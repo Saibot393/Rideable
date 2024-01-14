@@ -432,7 +432,20 @@ class MountingManager {
 				
 				let vButton = pHTML.find(`div[data-action="mount"]`);
 				
-				vButton.click((pEvent) => {MountingManager.RequestToggleMount(RideableUtils.selectedTokens(), RideableUtils.TokenfromID(pToken._id))});
+				let vRiders = RideableUtils.selectedTokens();
+				
+				let vMount = RideableUtils.TokenfromID(pToken._id);
+				
+				if (vRiders.length == 1 && vMount == vRiders[0]) {
+					//only the "to mount" token is selected
+					if (game.user.character) {
+						vRiders = vRiders.concat(canvas.tokens.placeables.filter(vToken => vToken.actor == game.user.character).map(pToken => pToken.document));
+					}
+				}
+				
+				console.log(vRiders);
+				
+				vButton.click((pEvent) => {MountingManager.RequestToggleMount(vRiders, vMount)});
 			}
 		}
 	}
