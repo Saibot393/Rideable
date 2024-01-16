@@ -38,7 +38,7 @@ class FollowingManager {
 	
 	//IMPLEMENTATIONS
 	static FollowingActive() {
-		return RideableCompUtils.isactiveModule(cRoutingLib) && game.settings.get(cModuleName, "EnableFollowing");
+		return game.settings.get(cModuleName, "EnableFollowing") && (RideableCompUtils.isactiveModule(cRoutingLib) || (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory"));
 	}
 	
 	static async FollowToken(pFollowers, pTarget, pDistance = -1) {
@@ -368,7 +368,7 @@ class FollowingManager {
 	}
 }
 
-Hooks.once("routinglib.ready", function () {
+Hooks.once("ready", function () {
 	if (FollowingManager.FollowingActive()) {
 		Hooks.on("updateToken", (...args) => FollowingManager.OnTokenupdate(...args));
 		
