@@ -1,3 +1,6 @@
+## v2.17.5
+- Fixed bug that prevent Following from working if routinglib was not active
+
 ## v2.17.4
 - Fixed bug that prevented settings from showing up correctly when routinglib was not installed
 
