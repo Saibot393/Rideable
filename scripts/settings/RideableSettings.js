@@ -293,7 +293,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.EnableFollowing.name"),
 	hint: Translate("Settings.EnableFollowing.descrp"),
 	scope: "world",
-	config: RideableCompUtils.isactiveModule(cRoutingLib),
+	config: true,
 	type: Boolean,
 	default: true,
 	requiresReload: true
