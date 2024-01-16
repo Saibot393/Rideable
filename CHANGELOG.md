@@ -1,3 +1,9 @@
+## v2.17.5
+- Fixed bug that prevent Following from working if routinglib was not active
+
+## v2.17.4
+- Fixed bug that prevented settings from showing up correctly when routinglib was not installed
+
 ## v2.17.3
 - When using the rideable mount button without having a token other than the mount selected, tokens belonging to the default character (if present) will now be mounted/unmounted
 
