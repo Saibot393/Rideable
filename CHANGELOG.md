@@ -1,3 +1,6 @@
+## v2.17.3
+- When using the rideable mount button without having a token other than the mount selected, tokens belonging to the default character (if present) will now be mounted/unmounted
+
 ## v2.17.2
 - Fixed bug that caused position of free riders on rotated token/tile to be calculated wrongly
 
