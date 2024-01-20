@@ -54,10 +54,12 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Token is Rideable: to override world default for this token
 - Mount on enter: to mount tokens that enter this token/tile automatically
 - Mount on enter blacklist: to prevent certain tokens or actors from mounting on entering
+- Mount on enter whitelist: to set list tokens that can mount on enter this object
 - Tile name [*Tiles only*]: to set the name rideable will use for this tile
 - Maximum riders: to override world default for this token
 - Custom riding height: to set the height used for tokens riding this token
 - Use riding height: to set wether this token should use the riding height per default for its riders
+- Riders scale: to set a (graphical) scale for riders of this object
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
 - Grappled placement: to set where tokens grappled by this token are placed
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
