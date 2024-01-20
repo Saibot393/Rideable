@@ -305,7 +305,10 @@
 			"StopFollowing"				: "Stopped following",
 			"StartFollowing"			: "Started following {pFollowedName}",
 			"CantFollowinCombat"		: "Can't follow during combat",
-			"TargetisFollowingMe"		: "{pFollowedName} is already following me"
+			"TargetisFollowingMe"		: "{pFollowedName} is already following me",
+			
+			"PositionLocked"			: "Position locked",
+			"PositionUnlocked"			: "Position unlocked"
 		},	
 		
 		"TokenSettings" : {
@@ -322,6 +325,11 @@
 			"AutoMountBlackListFlag" : {
 				"name"					: "Mount on enter blacklist",
 				"descrp"				: "Token names, IDs and actor IDs which will not be mounted on enter (seperated with \";\")"
+			},
+			
+			"AutoMountWhiteListFlag" : {
+				"name"					: "Mount on enter whitelist",
+				"descrp"				: "Token names, IDs and actor IDs which are allowed to be mounted on enter (seperated with \";\", empty to ignore)"
 			},
 			
 			"RiderPositioningFlag" : {
@@ -380,6 +388,11 @@
 			"UseRidingHeightFlag" : {
 				"name"					: "Use riding height",
 				"descrp"				: "If the elevation of this tokens riders should be managed"
+			},
+			
+			"RidersScaleFlag" : {
+				"name"					: "Riders scale",
+				"descrp"				: "Scale applied to riders of this object (only graphical)"
 			},
 			
 			"InsideMovementFlag" : {

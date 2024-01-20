@@ -305,7 +305,10 @@
 			"StopFollowing"				: "Folge nicht mehr",
 			"StartFollowing"			: "Folge nun {pFollowedName}",
 			"CantFollowinCombat"		: "Kann nicht während Kämpfen folgen",
-			"TargetisFollowingMe"		: "{pFollowedName} folgt mir bereits"
+			"TargetisFollowingMe"		: "{pFollowedName} folgt mir bereits",
+			
+			"PositionLocked"			: "Position gesperrt",
+			"PositionUnlocked"			: "Position frei"
 		},	
 		
 		"TokenSettings" : {
@@ -322,6 +325,11 @@
 			"AutoMountBlackListFlag" : {
 				"name"					: "Reiten bei betreten Blacklist",
 				"descrp"				: "Figuren Namen, IDs und Actor IDs welche bei betreten nicht Reiten (mit \";\" getrennt)"
+			},
+			
+			"AutoMountWhiteListFlag" : {
+				"name"					: "Reiten bei betreten Whitelist",
+				"descrp"				: "Figuren Namen, IDs und Actor IDs welche bei betreten Reiten können (mit \";\" getrennt, leer lassen zum ignorieren)"
 			},
 			
 			"RiderPositioningFlag" : {
@@ -380,6 +388,11 @@
 			"UseRidingHeightFlag" : {
 				"name"					: "Nutze Reithöhe",
 				"descrp"				: "Ob die Erhöhung der Reiter dieser Figur verwaltet werden soll"
+			},
+			
+			"RidersScaleFlag" : {
+				"name"					: "Reiter Skalierung",
+				"descrp"				: "Skalierung welche auf Reiter dieses Objekts angewandt wird (nur graphisch)"
 			},
 			
 			"InsideMovementFlag" : {

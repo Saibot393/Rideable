@@ -18,6 +18,8 @@ const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that s
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 const ccanbeGrappledF = "canbeGrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
+const cScaleSizesaveF = "ScaleSizesaveFlag"; //Flag that can sace the scale size of the Token
+const cRidersScaleF = "RidersScaleFlag"; //Flag to store the scale of riders of this token
 const cCustomRidingheightF = "CustomRidingheightFlag"; //Flag to se the custom riding height of a ridden token
 const cRideableEffectF = "RideableEffectFlag"; //Flag that signals that this effect ways applied by rideable (only Pf2e relevant)
 const cRideableMountEffectF = "RideableMountEffectFlag"; //Flag that signals, that this is an effect applied to mounts
@@ -29,6 +31,7 @@ const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled
 const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
 const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
 const cAutoMountWhiteListF = "AutoMountWhiteListFlag"; //flag to contain a white list of tokens that should be mounted on enter (ignored if empty)
+const cPositionLockF = "PositionLockFlag"; //flag to store position lock of a token
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
@@ -48,7 +51,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -121,6 +124,12 @@ class RideableFlags {
 	
 	static isvalidAutomount(pRidden, pRider) {} //returns if pRider can automount pRidden according to white/black lists
 	
+	static async togglePositionLock(pToken) {} //returns if pToken has a position lock (for Riders can move freely)
+	
+	static async resetPositionLock(pToken) {} //set the positionlock of pToken to false
+	
+	static hasPositionLock(pToken) {} //returns position lock state of pToken
+	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
 	
@@ -176,6 +185,14 @@ class RideableFlags {
 	static async savecurrentSize(pToken) {} //saves the current size of pToken into the SizesaveFlag (and makes size changeable if necessary)
 	
 	static resetSize(pToken) {} //resets the size of pToken to the SizesaveFlag if a size is saved
+	
+	static async savecurrentScale(pToken) {} //saves the current scale of pToken into the ScaleSizesaveFlag
+	
+	static async resetScale(pToken) {} //resets the scale of pToken to the ScaleSizesaveFlag if a scale is saved
+	
+	static async ApplyRidersScale(pRidden, pRiders) {} //applies the riders scale of pRidden to pRiders and saves previous scales
+	
+	static RidersScale(pObject) {} //returns riders scale of this pObject
 	
 	//relativ Position handling
 	static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -447,6 +464,32 @@ class RideableFlags {
 		return []; //default if anything fails			
 	}
 	
+	static #ScaleSizesaveFlag(pToken) {
+	//scale value
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cScaleSizesaveF)) {
+				return vFlag.ScaleSizesaveFlag;
+			}
+		}
+		
+		return; //default if anything fails			
+	}
+	
+	static #RidersScaleFlag(pObject) {
+	// riders scale Flag
+		let vFlag = this.#RideableFlags(pObject);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRidersScaleF)) {
+				return vFlag.RidersScaleFlag;
+			}
+		}
+		
+		return 1; //default if anything fails		
+	}
+	
 	static #MountingEffectsFlag(pToken) {
 	//string of tokens mounting effects
 		let vFlag = this.#RideableFlags(pToken);
@@ -562,6 +605,19 @@ class RideableFlags {
 		}
 		
 		return ""; //default if anything fails		
+	}
+	
+	static #PositionLockFlag (pToken) {
+		//returns the position lock state of pToken
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cPositionLockF)) {
+				return vFlag.PositionLockFlag;
+			}
+		}
+		
+		return false; //default if anything fails
 	}
 	
 	static #CanbePilotedFlag (pToken) {
@@ -763,6 +819,15 @@ class RideableFlags {
 		return false;
 	}
 	
+	static async #setScaleSizesaveFlag(pToken, pContent) {
+		if ((pToken)) {
+			await pToken.setFlag(cModuleName, cScaleSizesaveF, pContent);
+			
+			return true;
+		}
+		return false;
+	}
+	
 	static async #setGrapplePlacementFlag(pToken, pContent) {
 		if (pToken) {
 			await pToken.setFlag(cModuleName, cGrapplePlacementF, pContent);
@@ -770,6 +835,15 @@ class RideableFlags {
 			return true;
 		}
 		return false;		
+	}
+	
+	static async #setPositionLockFlag(pToken, pContent) {
+		if (pToken) {
+			await pToken.setFlag(cModuleName, cPositionLockF, Boolean(pContent));
+			
+			return true;
+		}
+		return false;	
 	}
 	
 	static async #setisPilotingFlag(pToken, pContent) {
@@ -1106,6 +1180,18 @@ class RideableFlags {
 		return true;
 	}
 	
+	static async togglePositionLock(pToken) {
+		return await this.#setPositionLockFlag(pToken, !this.#PositionLockFlag(pToken));
+	} 
+	
+	static async resetPositionLock(pToken) {
+		await this.#setPositionLockFlag(pToken, false);
+	}
+	
+	static hasPositionLock(pToken) {
+		return this.#PositionLockFlag(pToken);
+	}
+	
 	//additional infos
 	static TokenForm(pToken) {
 		return this.#TokenFormFlag(pToken);
@@ -1331,6 +1417,38 @@ class RideableFlags {
 				pToken.update({flags : {pf2e : {linkToActorSize : true}}})
 			}
 		}
+	}
+	
+	static async savecurrentScale(pToken) {
+		await this.#setScaleSizesaveFlag(pToken, Math.max(pToken.texture.scaleX, pToken.texture.scaleY));
+	}
+	
+	static async resetScale(pToken) {
+		if (this.#ScaleSizesaveFlag(pToken) != undefined) {
+			let vsavedScale = this.#ScaleSizesaveFlag(pToken);
+			
+			await this.#setScaleSizesaveFlag(pToken, undefined);
+			
+			await pToken.update({texture : {scaleX : vsavedScale, scaleY : vsavedScale}});
+		}
+	}
+	
+	static async ApplyRidersScale(pRidden, pRiders) {
+		let vScale = this.#RidersScaleFlag(pRidden);
+		
+		if (vScale != undefined && vScale != 1) {
+			for (let i = 0; i < pRiders.length; i++) {
+				await RideableFlags.savecurrentScale(pRiders[i]);
+				
+				await pRiders[i].update({texture : {scaleX : pRiders[i].texture.scaleX * vScale, scaleY : pRiders[i].texture.scaleY * vScale}});
+				
+				
+			}
+		}
+	}
+	
+	static RidersScale(pObject) {
+		return this.#RidersScaleFlag(pObject);
 	}
 	
 	//relativ Position handling

@@ -60,6 +60,8 @@ class MountingManager {
 	static addMountingButton(pHUD, pHTML, pToken) {} //checks if a button should be added and adds it
 	
 	//Additional functions
+	static async TogglePositionLock(pTokens, pshowMessage = true) {} //toggles the position lock of pToken and shows an appropiate message
+	
 	static onIndependentRiderMovement(pToken) {} //everything that happens upon a rider moving (besides the basics)
 	
 	static async onMount(pRider, pRidden, pRidingOptions) {} //everything that happens upon a token mounting (besides the basics)
@@ -451,6 +453,21 @@ class MountingManager {
 	}
 	
 	//Additional functions	
+	static async TogglePositionLock(pTokens, pshowMessage = true) {
+		let vTokens = pTokens.filter(vToken => vToken.isOwner);
+		
+		for (let i = 0; i < vTokens.length; i++) {
+			if ((await RideableFlags.togglePositionLock(vTokens[i])) && pshowMessage) {
+				if (RideableFlags.hasPositionLock(vTokens[i])) {
+					RideablePopups.TextPopUpID(pTokens[i] ,"PositionLocked"); //MESSAGE POPUP
+				}
+				else {
+					RideablePopups.TextPopUpID(pTokens[i] ,"PositionUnlocked"); //MESSAGE POPUP
+				}
+			}
+		}
+	} 
+	
 	static onIndependentRiderMovement(pToken, pChanges) {
 		if (RideableFlags.isRider(pToken)) {
 			if (RideableUtils.getRiderMovementsetting() == "RiderMovement-dismount") {
@@ -481,6 +498,8 @@ class MountingManager {
 			if (game.settings.get(cModuleName, "FitRidersize")) {
 				RideableFlags.savecurrentSize(pRider);
 			}
+			
+			RideableFlags.ApplyRidersScale(pRidden, [pRider]);
 		}
 		
 		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
@@ -507,6 +526,10 @@ class MountingManager {
 			if (game.settings.get(cModuleName, "FitRidersize")) {
 				RideableFlags.resetSize(pRider);
 			}
+			
+			RideableFlags.resetScale(pRider);
+			
+			RideableFlags.resetPositionLock(pRider);
 		}
 		
 		EffectManager.onRiderUnMount(pRider, pRidden, pRidingOptions);
@@ -778,11 +801,15 @@ function ToggleGrapplePlacementSelected() {return MountingManager.ToggleGrappleP
 
 function TogglePilotingSelected() {return MountingManager.TogglePilotingSelected()}
 
+function TogglePositionLock(pTokens, pshowMessage = true) {return MountingManager.TogglePositionLock(pTokens, pshowMessage)}
+
+function TogglePositionLockSelected(pshowMessage = true) {return MountingManager.TogglePositionLock(RideableUtils.selectedTokens(), pshowMessage)}
+
 //Request Handlers
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
 
 function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} = {}) { return MountingManager.MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions); }
 
-export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected};
+export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected, TogglePositionLock, TogglePositionLockSelected};
 
 export { Mount, UnMount, ToggleMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };

@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -119,6 +119,16 @@ class RideableSheetSettings {
 														vvalue : RideableFlags.UseRidingHeight(pApp.document), 
 														vflagname : cUseRidingHeightF
 														});
+														
+			//riders scale setting
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRidersScaleF +".name"), 
+														vhint : Translate("TokenSettings."+ cRidersScaleF +".descrp"), 
+														vtype : "range", 
+														vrange : [0.2,3],
+														vvalue : RideableFlags.RidersScale(pApp.document), 
+														vstep : 0.1,
+														vflagname : cRidersScaleF
+														});															
 														
 			//RiderPositioning
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
@@ -286,6 +296,16 @@ class RideableSheetSettings {
 			vunits = pInfos.vunits;
 		} 
 		
+		let vrange = [0, 0];
+		if (pInfos.hasOwnProperty("vrange")) {
+			vrange = pInfos.vrange;
+		} 
+		
+		let vstep = 1;	
+		if (pInfos.hasOwnProperty("vstep")) {
+			vstep = pInfos.vstep;
+		}
+		
 		let voptions = [];
 		if (pInfos.hasOwnProperty("voptions")) {
 			voptions = pInfos.voptions;
@@ -335,6 +355,10 @@ class RideableSheetSettings {
 				}
 				
 				vnewHTML = vnewHTML + `</select>`;
+				break;
+			case "range":
+				vnewHTML = vnewHTML + 	`<input type=${vtype} name="flags.${cModuleName}.${vflagname}" value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}">
+										<span class="${vtype}-value">${vvalue}</span>`;
 				break;
 		}
 			

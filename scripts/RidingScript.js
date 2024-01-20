@@ -143,6 +143,13 @@ class Ridingmanager {
 						let vindependentRiderLeft = true;
 						
 						if (RideableFlags.RiderscanMoveWithin(vRidden) && !RideableFlags.isFamiliarRider(pToken) && !RideableFlags.isGrappled(pToken)) {
+							if (RideableFlags.hasPositionLock) {
+								//apply position lock
+								delete pchanges.x;
+								delete pchanges.y;
+								delete pchanges.elevation;
+							}
+							
 							let vNewPosition = GeometricUtils.NewCenterPosition(pToken, pchanges);
 							
 							if (GeometricUtils.withinBoundaries(vRidden, RideableFlags.TokenForm(vRidden), vNewPosition)) {
@@ -152,6 +159,7 @@ class Ridingmanager {
 									//update relativ position of Rider
 									let vnewRotation = pchanges.hasOwnProperty("rotation") ? pchanges.rotation : pToken.rotation;
 									
+
 									RideableFlags.setRelativPosition(pToken, [...(GeometricUtils.Rotated(GeometricUtils.Difference(vNewPosition, GeometricUtils.CenterPosition(vRidden)), -vRidden.rotation)), vnewRotation - vRidden.rotation]);
 								}
 								

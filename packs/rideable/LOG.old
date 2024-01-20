@@ -1,34 +1,36 @@
-2023/11/03-14:20:00.379 4d3c Recovering log #1350
-2023/11/03-14:20:00.379 4d3c Recovering log #1451
-2023/11/03-14:20:00.384 4d3c Delete type=2 #356
-2023/11/03-14:20:00.384 4d3c Delete type=0 #373
-2023/11/03-14:20:00.384 4d3c Delete type=0 #575
-2023/11/03-14:20:00.385 4d3c Delete type=0 #576
-2023/11/03-14:20:00.385 4d3c Delete type=2 #578
-2023/11/03-14:20:00.385 4d3c Delete type=0 #984
-2023/11/03-14:20:00.385 4d3c Delete type=0 #985
-2023/11/03-14:20:00.385 4d3c Delete type=2 #987
-2023/11/03-14:20:00.385 4d3c Delete type=2 #1338
-2023/11/03-14:20:00.385 4d3c Delete type=0 #1340
-2023/11/03-14:20:00.385 4d3c Delete type=0 #1345
-2023/11/03-14:20:00.386 4d3c Delete type=2 #1347
-2023/11/03-14:20:00.386 4d3c Delete type=0 #1350
-2023/11/03-14:20:00.386 4d3c Delete type=0 #1451
-2023/11/03-14:20:00.386 4d3c Delete type=3 #371
-2023/11/03-14:20:00.386 4d3c Delete type=3 #574
-2023/11/03-14:20:00.386 4d3c Delete type=3 #579
-2023/11/03-14:20:00.386 4d3c Delete type=3 #943
-2023/11/03-14:20:00.387 4d3c Delete type=3 #1339
-2023/11/03-14:20:00.387 4d3c Delete type=3 #1343
-2023/11/03-14:20:00.387 4d3c Delete type=3 #1348
-2023/11/03-14:36:47.940 50c4 Level-0 table #1454: started
-2023/11/03-14:36:47.950 50c4 Level-0 table #1454: 1363 bytes OK
-2023/11/03-14:36:47.951 50c4 Delete type=0 #1452
-2023/11/03-14:36:47.952 50c4 Manual compaction at level-0 from '!folders!D56WAT4iFmC54Vu4' @ 72057594037927935 : 1 .. '!macros!o7uYYJUAzzR6wGVP' @ 0 : 0; will stop at '!macros!lJsyWmDV1HAohXE5' @ 65 : 1
-2023/11/03-14:36:47.952 50c4 Compacting 1@0 + 1@1 files
-2023/11/03-14:36:47.959 50c4 Generated table #1455@0: 20 keys, 5414 bytes
-2023/11/03-14:36:47.959 50c4 Compacted 1@0 + 1@1 files => 5414 bytes
-2023/11/03-14:36:47.962 50c4 compacted to: files[ 0 1 0 0 0 0 0 ]
-2023/11/03-14:36:47.962 50c4 Delete type=2 #1352
-2023/11/03-14:36:47.963 50c4 Delete type=2 #1454
-2023/11/03-14:36:47.963 50c4 Manual compaction at level-0 from '!macros!lJsyWmDV1HAohXE5' @ 65 : 1 .. '!macros!o7uYYJUAzzR6wGVP' @ 0 : 0; will stop at (end)
+2023/11/25-23:08:34.228 3250 Recovering log #1453
+2023/11/25-23:08:34.232 3250 Delete type=2 #356
+2023/11/25-23:08:34.233 3250 Delete type=0 #373
+2023/11/25-23:08:34.233 3250 Delete type=0 #575
+2023/11/25-23:08:34.233 3250 Delete type=0 #576
+2023/11/25-23:08:34.233 3250 Delete type=2 #578
+2023/11/25-23:08:34.233 3250 Delete type=0 #984
+2023/11/25-23:08:34.233 3250 Delete type=0 #985
+2023/11/25-23:08:34.233 3250 Delete type=2 #987
+2023/11/25-23:08:34.234 3250 Delete type=2 #1338
+2023/11/25-23:08:34.234 3250 Delete type=0 #1340
+2023/11/25-23:08:34.234 3250 Delete type=0 #1345
+2023/11/25-23:08:34.234 3250 Delete type=2 #1347
+2023/11/25-23:08:34.234 3250 Delete type=0 #1350
+2023/11/25-23:08:34.234 3250 Delete type=2 #1352
+2023/11/25-23:08:34.234 3250 Delete type=0 #1453
+2023/11/25-23:08:34.235 3250 Delete type=3 #371
+2023/11/25-23:08:34.235 3250 Delete type=3 #574
+2023/11/25-23:08:34.235 3250 Delete type=3 #579
+2023/11/25-23:08:34.235 3250 Delete type=3 #943
+2023/11/25-23:08:34.235 3250 Delete type=3 #1339
+2023/11/25-23:08:34.235 3250 Delete type=3 #1343
+2023/11/25-23:08:34.235 3250 Delete type=3 #1348
+2023/11/25-23:08:34.236 3250 Delete type=3 #1353
+2023/11/25-23:08:34.236 3250 Delete type=3 #1409
+2023/11/25-23:34:19.684 3d9c Level-0 table #1459: started
+2023/11/25-23:34:19.699 3d9c Level-0 table #1459: 3166 bytes OK
+2023/11/25-23:34:19.702 3d9c Delete type=0 #1457
+2023/11/25-23:34:19.702 3d9c Manual compaction at level-0 from '!folders!D56WAT4iFmC54Vu4' @ 72057594037927935 : 1 .. '!macros!o7uYYJUAzzR6wGVP' @ 0 : 0; will stop at '!macros!ltpdGgoq59hCrxfj' @ 79 : 1
+2023/11/25-23:34:19.702 3d9c Compacting 1@0 + 1@1 files
+2023/11/25-23:34:19.709 3d9c Generated table #1460@0: 20 keys, 5795 bytes
+2023/11/25-23:34:19.709 3d9c Compacted 1@0 + 1@1 files => 5795 bytes
+2023/11/25-23:34:19.712 3d9c compacted to: files[ 0 1 0 0 0 0 0 ]
+2023/11/25-23:34:19.712 3d9c Delete type=2 #1455
+2023/11/25-23:34:19.712 3d9c Delete type=2 #1459
+2023/11/25-23:34:19.737 3d9c Manual compaction at level-0 from '!macros!ltpdGgoq59hCrxfj' @ 79 : 1 .. '!macros!o7uYYJUAzzR6wGVP' @ 0 : 0; will stop at (end)
