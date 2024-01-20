@@ -28,6 +28,7 @@ const cMountonEnterF = "MountonEnterFlag"; //Flag to decide if tokens automatica
 const cGrapplePlacementF = "GrapplePlacementFlag"; //Flag to decide how grappled tokens are placed
 const cSelfApplyEffectsF = "SelfApplyEffectsFlag"; //if the custom effects should be applied to this token when it mounts
 const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black list of tokens that should not be mounted on enter
+const cAutoMountWhiteListF = "AutoMountWhiteListFlag"; //flag to contain a white list of tokens that should be mounted on enter (ignored if empty)
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
@@ -47,7 +48,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -109,8 +110,16 @@ class RideableFlags {
 	static async setGrapplePlacement(pRidden, pPlacement) {} //sets the grappleplacement of pRidden
 	
 	static AutomountBlackList(pRidden, pRaw = false) {} //returns an array of names or ids (token or actor) belonging to black listed Tokens
+	
+	static AutomountWhiteList(pRidden, pRaw = false) {} //returns an array of names or ids (token or actor) belonging to white listed Tokens
 
 	static isAutomountBlacklisted(pRidden, pRider) {} //if pRider is automount blacklisted for pRidden
+	
+	static isAutomountWhitelisted(pRidden, pRider) {} //if pRiders is automount whitelisted for pRidden
+	
+	static useWhitelist(pRidden) {} //returns if pRidden has an active automount white list
+	
+	static isvalidAutomount(pRidden, pRider) {} //returns if pRider can automount pRidden according to white/black lists
 	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
@@ -536,6 +545,19 @@ class RideableFlags {
 		if (vFlag) {
 			if (vFlag.hasOwnProperty(cAutoMountBlackListF)) {
 				return vFlag.AutoMountBlackListFlag;
+			}
+		}
+		
+		return ""; //default if anything fails		
+	}
+	
+	static #AutoMountWhiteListFlag (pToken) {
+		//returns content of AutoMountWhiteListFlag of pToken (if any) (string)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cAutoMountWhiteListF)) {
+				return vFlag.AutoMountWhiteListFlag;
 			}
 		}
 		
@@ -1032,6 +1054,10 @@ class RideableFlags {
 	static AutomountBlackList(pRidden, pRaw = false) {
 		return this.#AutoMountBlackListFlag(pRidden).split(cDelimiter);
 	}
+	
+	static AutomountWhiteList(pRidden, pRaw = false) {
+		return this.#AutoMountWhiteListFlag(pRidden).split(cDelimiter);
+	}
 
 	static isAutomountBlacklisted(pRidden, pRider) {
 		let vCheckArray = [pRider.name, pRider.id];
@@ -1045,6 +1071,39 @@ class RideableFlags {
 		}
 		
 		return Boolean(RideableFlags.AutomountBlackList(pRidden).find(vElement => vCheckArray.includes(vElement)));
+	}
+	
+	
+	static isAutomountWhitelisted(pRidden, pRider) {
+		let vCheckArray = [pRider.name, pRider.id];
+		
+		if (pRider.actorId) {
+			vCheckArray.push(pRider.actorId);
+		}
+		
+		if (pRider._source?.actorId) {
+			vCheckArray.push(pRider._source.actorId);
+		}
+		
+		return Boolean(RideableFlags.AutomountWhiteList(pRidden).find(vElement => vCheckArray.includes(vElement)));
+	}
+	
+	static useWhitelist(pRidden) {
+		return this.#AutoMountWhiteListFlag(pRidden).length > 0;
+	}
+	
+	static isvalidAutomount(pRidden, pRider) {
+		if (RideableFlags.isAutomountBlacklisted(pRidden, pRider)) {
+			return false;
+		}
+		
+		if (RideableFlags.useWhitelist(pRidden)) {
+			if (!RideableFlags.isAutomountWhitelisted(pRidden, pRider)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	//additional infos

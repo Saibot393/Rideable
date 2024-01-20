@@ -637,7 +637,7 @@ class MountingManager {
 			
 			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition)); //filter entered MoE objects
 			
-			vMoEobjects = vMoEobjects.filter(vMoEObject => !RideableFlags.isAutomountBlacklisted(vMoEObject, pToken));
+			vMoEobjects = vMoEobjects.filter(vMoEObject => RideableFlags.isvalidAutomount(vMoEObject, pToken));
 			
 			if (vMoEobjects.length) {
 				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {MountbyEnter : true});
