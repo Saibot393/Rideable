@@ -1,3 +1,6 @@
+## v2.18.1
+- Small bug fix for riders can move freely
+
 ## v2.18.0
 - Added token setting Mount on enter whitelist to set list tokens that can mount on enter this object
 - Added token setting Riders scale to set a (graphical) scale for riders of this object
