@@ -1,3 +1,8 @@
+## v2.18.0
+- Added token setting Mount on enter whitelist to set list tokens that can mount on enter this object
+- Added token setting Riders scale to set a (graphical) scale for riders of this object
+- Added macro to lock position of tokens, preventing them from being moved on "tokens can move freely" objects (they may still be rotated)
+
 ## v2.17.5
 - Fixed bug that prevent Following from working if routinglib was not active
 
