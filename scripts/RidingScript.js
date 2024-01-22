@@ -143,7 +143,7 @@ class Ridingmanager {
 						let vindependentRiderLeft = true;
 						
 						if (RideableFlags.RiderscanMoveWithin(vRidden) && !RideableFlags.isFamiliarRider(pToken) && !RideableFlags.isGrappled(pToken)) {
-							if (RideableFlags.hasPositionLock) {
+							if (RideableFlags.hasPositionLock(pToken)) {
 								//apply position lock
 								delete pchanges.x;
 								delete pchanges.y;
