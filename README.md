@@ -47,6 +47,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 #### Client:
 - Rider movement: to decide what shall happen if a rider tries to move while still being mounted, either dismount the rider, stop the movement or move the ridden token
 - Mount button position: to set the position of the mount button or disable it
+- Rider proxy select: to select ridden tokens instead of riders
 - Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
 - Follower movement: to set how followers should behave when they are moved independently of the token they follow
