@@ -4,6 +4,8 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideableCompUtils, cRoutingLib } from "./compatibility/RideableCompUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 
+let vFollowedList;
+
 class FollowingManager {
 	//DECLARATIONS
 	static FollowingActive() {} //returns if the token following feature is active
@@ -27,10 +29,14 @@ class FollowingManager {
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
 	
+	static async FollowedTokenList() {} //returns a list of ids of followed tokens as ordered by this user
+	
 	//ons
 	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {} //called when a token updates
 	
 	static OnTokenrefresh(pToken, pInfos) {} //called when a token refreshes
+	
+	static OnCanvasReady(pCanvas) {} //called when a new canvas is readied
 	
 	static OnStartFollowing(pToken, pFollowed, pPopup = true) {} //called when pToken starts following
 	
@@ -197,7 +203,7 @@ class FollowingManager {
 	}
 
 	static async PlanDestack(pToken) {
-		let vColliders = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.isFllowingSameToken(vToken, pToken) && vToken != pToken);
+		let vColliders = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.isFollowingSameToken(vToken, pToken) && vToken != pToken);
 		
 		vColliders = vColliders.filter(vToken => !RideableFlags.RidingConnection(vToken, pToken));
 		
@@ -283,54 +289,68 @@ class FollowingManager {
 		return []; //no route found
 	} 
 	
+	static FollowedTokenList() {
+		let vTokens = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => vToken.isOwner && RideableFlags.isFollowing(vToken) && RideableFlags.isFollowOrderSource(vToken));
+		
+		let vFollowedIDs = vTokens.map(vToken => RideableFlags.followedID(vToken));
+		
+		let vNewSet = new Set();
+		
+		vFollowedIDs.forEach(vID => vNewSet.add(vID));
+		
+		return vNewSet;
+	}
+	
 	//ons
 	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {
-		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
-			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-				if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
-					//update path history of pToken
-					await RideableFlags.AddtoPathHistory(pToken);
-				}
-				
-				//only consider owned tokens for which this player is the source of the follow order
-				let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
-				
-				//check combat behaviour
-				if (["stop", "resumeafter"].includes(game.settings.get(cModuleName, "FollowingCombatBehaviour"))) {
-					let vnonCombatants = vFollowers.filter(vFollower => !vFollower.inCombat);
-					
-					if (game.settings.get(cModuleName, "FollowingCombatBehaviour") == "stop") {
-						let vCombatants = vFollowers.filter(vFollower => vFollower.inCombat);
-						
-						for (let i = 0; i < vCombatants.length; i++) {
-							//stop combatant followers
-							RideableFlags.stopFollowing(vCombatants[i]);
-							
-							FollowingManager.OnStopFollowing(vCombatants[i], false);
-						}
+		if (vFollowedList?.has(pToken.id)) {
+			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
+				if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
+					if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
+						//update path history of pToken
+						await RideableFlags.AddtoPathHistory(pToken);
 					}
 					
-					vFollowers = vnonCombatants;
+					//only consider owned tokens for which this player is the source of the follow order
+					let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
+					
+					//check combat behaviour
+					if (["stop", "resumeafter"].includes(game.settings.get(cModuleName, "FollowingCombatBehaviour"))) {
+						let vnonCombatants = vFollowers.filter(vFollower => !vFollower.inCombat);
+						
+						if (game.settings.get(cModuleName, "FollowingCombatBehaviour") == "stop") {
+							let vCombatants = vFollowers.filter(vFollower => vFollower.inCombat);
+							
+							for (let i = 0; i < vCombatants.length; i++) {
+								//stop combatant followers
+								RideableFlags.stopFollowing(vCombatants[i]);
+								
+								FollowingManager.OnStopFollowing(vCombatants[i], false);
+							}
+						}
+						
+						vFollowers = vnonCombatants;
+					}
+					
+					//plan new routes to target
+					if (vFollowers.length > 0) {
+						FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
+					}
 				}
 				
-				//plan new routes to target
-				if (vFollowers.length > 0) {
-					FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
-				}
-			}
-			
-			if (pToken.isOwner) {
-				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
-					switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
-						case "updatedistance":
-							RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
-							break;
-						case "stopfollowing":
-						default:
-							RideableFlags.stopFollowing(pToken);
-						
-							FollowingManager.OnStopFollowing(pToken);
-							break;
+				if (pToken.isOwner) {
+					if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
+						switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
+							case "updatedistance":
+								RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
+								break;
+							case "stopfollowing":
+							default:
+								RideableFlags.stopFollowing(pToken);
+							
+								FollowingManager.OnStopFollowing(pToken);
+								break;
+						}
 					}
 				}
 			}
@@ -351,10 +371,16 @@ class FollowingManager {
 		}
 	}
 	
+	static OnCanvasReady(pCanvas) {
+		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
+	}
+	
 	static OnStartFollowing(pToken, pFollowed, pPopup = true) {
 		if (pPopup) {
 			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pFollowedName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
 		}
+		
+		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
 		
 		Hooks.call(cModuleName + ".StartFollowing", pToken, pFollowed);
 	} 
@@ -363,6 +389,8 @@ class FollowingManager {
 		if (pPopup) {
 			RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
 		}
+		
+		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
 				
 		Hooks.call(cModuleName + ".StopFollowing", pToken);
 	}
@@ -373,6 +401,8 @@ Hooks.once("ready", function () {
 		Hooks.on("updateToken", (...args) => FollowingManager.OnTokenupdate(...args));
 		
 		Hooks.on("refreshToken", (...args) => FollowingManager.OnTokenrefresh(...args));
+		
+		Hooks.on("canvasReady", (...args) => FollowingManager.OnCanvasReady(...args));
 	}
 });
 

@@ -107,6 +107,16 @@
 				}
 			},
 			
+			"RiderProxySelect" : {
+				"name"					: "Rider proxy select",
+				"descrp"				: "If the ridden token should be selected instead of the cliecked rider",
+				"options" : {
+					"never"				: "never",
+					"familiar"			: "familiars only",
+					"always"			: "always"
+				}
+			},
+			
 			"RiderRotation" : {
 				"name" 					: "Link rotations",
 				"descrp"				: "Rotates alls riders if a ridden token is rotated (also works with \"Move ridden Token\" option)"				

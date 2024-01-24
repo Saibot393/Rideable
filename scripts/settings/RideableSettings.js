@@ -381,6 +381,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: "default"
   });
   
+  game.settings.register(cModuleName, "RiderProxySelect", {
+	name: Translate("Settings.RiderProxySelect.name"),
+	hint: Translate("Settings.RiderProxySelect.descrp"),
+	scope: "client",
+	config: true,
+	type: String,
+	choices: {
+		"never" : Translate("Settings.RiderProxySelect.options.never"),
+		"familiar": Translate("Settings.RiderProxySelect.options.familiar"),
+		"always": Translate("Settings.RiderProxySelect.options.always")
+	},
+	default: "never"
+  }); 
+  
   game.settings.register(cModuleName, "MessagePopUps", {
 	name: Translate("Settings.MessagePopUps.name"),
 	hint: Translate("Settings.MessagePopUps.descrp"),
@@ -390,7 +404,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
-   game.settings.register(cModuleName, "OnlyownedMessagePopUps", {
+  game.settings.register(cModuleName, "OnlyownedMessagePopUps", {
 	name: Translate("Settings.OnlyownedMessagePopUps.name"),
 	hint: Translate("Settings.OnlyownedMessagePopUps.descrp"),
 	scope: "client",
@@ -399,7 +413,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
-   game.settings.register(cModuleName, "OnFollowerMovement", {
+  game.settings.register(cModuleName, "OnFollowerMovement", {
 	name: Translate("Settings.OnFollowerMovement.name"),
 	hint: Translate("Settings.OnFollowerMovement.descrp"),
 	scope: "client",

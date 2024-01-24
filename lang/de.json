@@ -107,6 +107,16 @@
 				}
 			},
 			
+			"RiderProxySelect" : {
+				"name"					: "Reiter proxy Auswahl",
+				"descrp"				: "Ob die gerittene Figur beim anklicken der reitenden Figur ausgewählt werden soll",
+				"options" : {
+					"never"				: "nie",
+					"familiar"			: "nur begleiter",
+					"always"			: "immer"
+				}
+			},
+			
 			"RiderRotation" : {
 				"name" 					: "Rotations-Verbindung",
 				"descrp"				: "Rotiert alle reitenden Figuren wenn die gerittene Figur rotiert wird (funktioniert auch mit der \"Bewege gerittene Figur\"-Option)"				

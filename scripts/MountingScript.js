@@ -74,11 +74,15 @@ class MountingManager {
 	
 	static async onpasteToken(pOriginal, pCopyData) {} //called when a token is copied, tries to also copy all riding tokens
 	
+	static onTokenControl(pToken, pControlled) {} //called when a token is controlled/uncontrolled
+	
 	static onRideableEffectDeletion(pEffect, pUser, pInfos) {} //called when a Rideable effect is deleted
 	
 	static async createCopywithRiders(pData, pSourceScene) {} //creates copies of pData at current scene with riders from pSourceScene
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
+	
+	static ProxySelect(pToken) {} //called to start a proxy select
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -262,6 +266,9 @@ class MountingManager {
 			let vTarget = RideableUtils.targetedToken();
 			let vfromRidden = false;
 			
+			if (!vTarget) {
+				vTarget = RideableUtils.hoveredRideableToken();
+			}
 			
 			//to allow mounts to unmount targeted rider
 			if (vTarget) {
@@ -504,6 +511,8 @@ class MountingManager {
 		
 		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
 		
+		MountingManager.ProxySelect(pRider);
+		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
@@ -602,6 +611,14 @@ class MountingManager {
 		}
 	}
 	
+	static onTokenControl(pToken, pControlled) {
+		let vToken = pToken.document;
+		
+		if (pControlled) {
+			MountingManager.ProxySelect(vToken);
+		}
+	}
+	
 	static onRideableEffectDeletion(pEffect, pUser, pInfos) {
 		if (pInfos.GrappleEffect) {
 			if (game.settings.get(cModuleName, "StopGrappleonEffectRemoval")) {
@@ -664,6 +681,28 @@ class MountingManager {
 			
 			if (vMoEobjects.length) {
 				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {MountbyEnter : true});
+			}
+		}
+	}
+	
+	static ProxySelect(pToken) {
+		if (canvas.tokens.controlled.length == 1) {
+			if (game.settings.get(cModuleName, "RiderProxySelect") != "never") {
+				if (RideableFlags.isRider(pToken)) {
+					if (!RideableFlags.isGrappled(pToken)) {
+						if (game.settings.get(cModuleName, "RiderProxySelect") == "always" || RideableFlags.isFamiliarRider(vToken)) {
+							let vRidden = RideableFlags.RiddenToken(pToken)?.object;
+							
+							let vToken = pToken?.object;
+							
+							if (vRidden && vToken && vRidden.owner) {
+								vToken.release();
+							
+								vRidden.control();
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -768,6 +807,8 @@ Hooks.on(cModuleName+".IndependentRiderMovement", (...args) => MountingManager.o
 Hooks.on(cModuleName + ".RideableEffectDeletion", (pEffect, pUser, pInfos) => MountingManager.onRideableEffectDeletion(pEffect, pUser, pInfos));
 
 Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
+
+Hooks.on("controlToken", (...args) => MountingManager.onTokenControl(...args));
 
 //Hooks.on(cModuleName+".RideableEffectDeletion", (...args) => MountingManager.onRideableEffectDeletion(...args));
 
