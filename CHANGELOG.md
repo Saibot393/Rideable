@@ -1,3 +1,8 @@
+## v2.19.0
+- Added client setting Rider proxy select to select ridden tokens instead of riders
+- (possible) improved performance of token follower feature
+- Tokens can now be unmounted by a mounts owner by only hovering (in addition to targeting)
+
 ## v2.18.1
 - Small bug fix for riders can move freely
 
