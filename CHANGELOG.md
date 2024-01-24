@@ -1,3 +1,6 @@
+## v2.19.1
+- removed size check for familiar riding
+
 ## v2.19.0
 - Added client setting Rider proxy select to select ridden tokens instead of riders
 - (possible) improved performance of token follower feature
