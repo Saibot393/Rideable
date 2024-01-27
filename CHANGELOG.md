@@ -1,3 +1,6 @@
+## v2.19.2
+- Fixed rider resize bug
+
 ## v2.19.1
 - removed size check for familiar riding
 
