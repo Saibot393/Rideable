@@ -155,7 +155,6 @@ class MountingManager {
 	}
 	
 	static async MountSelectedGM(pTarget, pselectedTokens, pRidingOptions) {
-		console.log(pRidingOptions);
 		//only works directly for GMs
 		if (game.user.isGM) {		
 			//make sure ptarget exists	

@@ -591,7 +591,13 @@ class Ridingmanager {
 			for (let i = 0; i < pRiderTokenList.length; i++) {
 				
 				if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
-					await pRiderTokenList[i].update({width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height});
+					let vUpdate = {width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height};
+					
+					if (RideableUtils.isPf2e()) {
+						vUpdate = {...vUpdate, flags : {pf2e : {linkToActorSize : false}}};
+					}
+					
+					await pRiderTokenList[i].update(vUpdate);
 				}
 			}	
 		}
