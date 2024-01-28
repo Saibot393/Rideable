@@ -72,6 +72,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Mount effects (GM only): to set effects that are applied to the mount of this token
 - Can be grappled(GM only): to enabled/disable the grapple feature on this token
 - Can be piloted(GM only): to allow players to pilot this token/tile
+- Piloted by default(GM only): to make this token piloted by every rider automatically
 
 ### Compatibility:
 
