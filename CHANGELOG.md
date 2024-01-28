@@ -1,3 +1,6 @@
+## 2.19.3
+- Added token setting Piloted by default to make tokens piloted by every rider automatically
+
 ## v2.19.2
 - Fixed rider resize bug
 
