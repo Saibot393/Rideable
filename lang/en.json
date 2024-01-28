@@ -443,6 +443,11 @@
 			"CanbePilotedFlag" : {
 				"name"					: "Can be piloted",
 				"descrp"				: "Players can pilot this token, allowing them to move it even if they don't own it"
+			},
+			
+			"PilotedbyDefaultFlag" : {
+				"name"					: "Piloted by default",
+				"descrp"				: "If everyone riding this token automatically pilots this token (not compatible with \"Riders can move freely\")"
 			}
 		},
 		

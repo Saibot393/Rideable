@@ -33,6 +33,7 @@ const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black
 const cAutoMountWhiteListF = "AutoMountWhiteListFlag"; //flag to contain a white list of tokens that should be mounted on enter (ignored if empty)
 const cPositionLockF = "PositionLockFlag"; //flag to store position lock of a token
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
+const cPilotedbyDefaultF = "PilotedbyDefaultFlag"; //flag to pilot this token/tile by default
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
 const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
@@ -51,7 +52,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cforMountEffectsF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -203,6 +204,8 @@ class RideableFlags {
 	
 	//pilots
 	static canbePiloted(pToken) {} //returns of pToken can be piloted
+	
+	static PilotedbyDefault(pToken) {} //returns if this pToken is piloted by default
 	
 	static canbePilotedby(pRidden, pRider) {} //returns if pRidden can be piloted by pRider
 	
@@ -627,6 +630,19 @@ class RideableFlags {
 		if (vFlag) {
 			if (vFlag.hasOwnProperty(cCanbePilotedF)) {
 				return vFlag.CanbePilotedFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
+	}
+	
+	static #PilotedbyDefaultFlag (pToken) {
+		//returns content of PilotedbyDefaultFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cPilotedbyDefaultF)) {
+				return vFlag.PilotedbyDefaultFlag;
 			}
 		}
 		
@@ -1482,6 +1498,10 @@ class RideableFlags {
 		return this.#CanbePilotedFlag(pToken);
 	}
 	
+	static PilotedbyDefault(pToken) {
+		return this.#PilotedbyDefaultFlag(pToken);
+	}
+	
 	static canPilotRidden(pToken) {
 		return (!(RideableFlags.isGrappled(pToken) || RideableFlags.isFamiliarRider(pToken)) && RideableFlags.isRider(pToken) && RideableFlags.canbePiloted(RideableFlags.RiddenToken(pToken)));
 	}
@@ -1506,7 +1526,7 @@ class RideableFlags {
 	static isPilotedby(pRidden, pPilot) {
 		let vRidden = RideableFlags.RiddenToken(pPilot);
 		
-		return this.#isPilotingFlag(pPilot) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
+		return (this.#isPilotingFlag(pPilot) || RideableFlags.PilotedbyDefault(pRidden)) && RideableFlags.canbePiloted(pRidden) && RideableFlags.isRiddenby(pRidden, pPilot);
 	}
 	
 	//effects

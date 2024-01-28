@@ -443,6 +443,11 @@
 			"CanbePilotedFlag" : {
 				"name"					: "Kann gesteuert werden",
 				"descrp"				: "Spieler können diese Figur Steuern, was es ihnen erlaubt sie zu bewegen ohne sie zu besitzen"
+			},
+			
+			"PilotedbyDefaultFlag" : {
+				"name"					: "standardmäßig gesteuert",
+				"descrp"				: "Ob jeder Spieler der diese Figur reitet sie auch automatisch steuert (nicht kompatibel mit \"Reiter können sich frei bewegen\")"
 			}
 		},
 		
