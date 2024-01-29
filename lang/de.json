@@ -352,6 +352,7 @@
 					"ClusterPlacement"	: "Bündel",
 					"RowPlacementTop"	: "Reihe oben",
 					"RowPlacementBottom": "Reihe unten",
+					"CornerPlacement"	: "Ecken",
 					"MountPosition"		: "Aufstieg Position"
 				}
 			},

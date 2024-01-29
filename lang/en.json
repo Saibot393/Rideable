@@ -352,6 +352,7 @@
 					"ClusterPlacement"	: "Cluster",
 					"RowPlacementTop"	: "Row top",
 					"RowPlacementBottom": "Row bottom",
+					"CornerPlacement"	: "Corners",
 					"MountPosition"		: "Mounting position"
 				}
 			},
