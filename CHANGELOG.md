@@ -1,3 +1,6 @@
+## v2.19.4
+- Added corners as riders placement option
+
 ## v2.19.3
 - Added token setting Piloted by default to make this token piloted by every rider automatically
 
