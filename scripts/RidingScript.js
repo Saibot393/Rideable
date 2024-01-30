@@ -15,6 +15,7 @@ const cClusterplacement = "ClusterPlacement"; //place all tokens in a Cluster
 const cRowplacementTop = "RowPlacementTop"; //place all tokens in a row at the top of the ridden
 const cRowplacementBottom = "RowPlacementBottom"; //place all tokens in a row at the bottom of the ridden
 const cCornerPlacement = "CornerPlacement"; //places all tokens at the corners
+const cCornerPlacementinner = "CornerPlacementinner"; //places all tokens at corners INSIDE of rider
 const cMountPosition = "MountPosition"; //places token at the position they mounted
 
 const cupkeys = new Set(["KeyW", "ArrowUp", "Numpad7", "Numpad8", "Numpad9"]);
@@ -29,7 +30,7 @@ const cRowMiddle = "RowMiddle"; //place grappled tokens in middle
 const cClosestInside = "ClosestInside"; //place grappled tokens at the closest Inside position
 const cFollowing = "Following";
 
-const cPlacementPatterns = [cRowplacement, cCircleplacement, cBlockplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom, cCornerPlacement, cMountPosition];
+const cPlacementPatterns = [cRowplacement, cCircleplacement, cBlockplacement, cClusterplacement, cRowplacementTop, cRowplacementBottom, cCornerPlacement, cCornerPlacementinner, cMountPosition];
 
 const cGrapplePlacements = [cRowBelow, cRowAbove, cRowMiddle, cClosestInside, cFollowing]
 
@@ -67,7 +68,7 @@ class Ridingmanager {
 	
 	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pyoffset = []) {} //works out the position of tokens if they are spread according in a row
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
 	static placeTokenrotated(pRiddenToken, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
 	
@@ -546,8 +547,9 @@ class Ridingmanager {
 					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
 					break;
 				case cCornerPlacement:
+				case cCornerPlacementinner:
 					if (pRiderTokenList.length <= 4) {
-						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations);
+						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations, RideableFlags.RiderPositioning(pRiddenToken) == cCornerPlacementinner);
 					}
 					else {
 						Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations);
@@ -687,31 +689,39 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false) {
 		if (pRiderTokenList.length) {
 			for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
 				let vTargetx = 0;
 				let vTargety = 0;
 				
+				let vXoffset = 0;
+				let vYoffset = 0;
+				
+				if (pInner) {
+					vXoffset = GeometricUtils.insceneWidth(pRiderTokenList[i])/2;
+					vYoffset = GeometricUtils.insceneHeight(pRiderTokenList[i])/2;
+				}
+				
 				switch ((i + Number(game.settings.get(cModuleName, "FamiliarRidingFirstCorner")))%cCornermaxRiders) {
 					case 0: //tl
-						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2;
-						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2;
+						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2 + vXoffset;
+						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2 + vYoffset;
 						break;
 						
 					case 1: //tr
-						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2;
-						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2;
+						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2 - vXoffset;
+						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2 + vYoffset;
 						break;
 						
 					case 2: //bl
-						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2;
-						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2;
+						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2 + vXoffset;
+						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2 - vYoffset;
 						break;
 						
 					case 3: //br
-						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2;
-						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2;
+						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2 - vXoffset;
+						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2 - vYoffset;
 						break;
 				}
 				

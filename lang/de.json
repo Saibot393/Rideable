@@ -353,6 +353,7 @@
 					"RowPlacementTop"	: "Reihe oben",
 					"RowPlacementBottom": "Reihe unten",
 					"CornerPlacement"	: "Ecken",
+					"CornerPlacementinner": "Ecken (innen)",
 					"MountPosition"		: "Aufstieg Position"
 				}
 			},

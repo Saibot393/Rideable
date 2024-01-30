@@ -353,6 +353,7 @@
 					"RowPlacementTop"	: "Row top",
 					"RowPlacementBottom": "Row bottom",
 					"CornerPlacement"	: "Corners",
+					"CornerPlacementinner": "Corners (inner)",
 					"MountPosition"		: "Mounting position"
 				}
 			},
