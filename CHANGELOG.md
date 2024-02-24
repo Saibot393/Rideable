@@ -1,4 +1,4 @@
-## 2.20.0
+## v2.20.0
 - Added token/tile setting riders offset to configure an x,y offset for riders
 
 ## v2.19.5
