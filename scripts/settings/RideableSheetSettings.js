@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -10,6 +10,8 @@ class RideableSheetSettings {
 	static SheetSetting(vApp, vHTML, vData, pisTile = false) {} //settings for sheets
 	
 	static AddHTMLOption(pHTML, pInfos) {} //adds a new HTML option to pHTML
+	
+	static createHTMLOption(pInfos, pto, pwithformgroup = false) {} //creates new html "code"
 	
 	static FixSheetWindow(pHTML, pApp, pIndentifier) {} //fixes the formating of pHTML sheet window
 	
@@ -55,7 +57,7 @@ class RideableSheetSettings {
 														vtype : "checkbox", 
 														vvalue : RideableFlags.TokenissetRideable(pApp.document),
 														vflagname : cissetRideableF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 												
 			if (pisTile) {
 				//Tile name for rideable purposes
@@ -65,7 +67,7 @@ class RideableSheetSettings {
 															vwide : true,
 															vvalue : RideableFlags.RideableName(pApp.document),
 															vflagname : cTileRideableNameF
-															});
+															}, `div[data-tab="${cModuleName}"]`);
 			}
 			
 			if (game.settings.get(cModuleName, "allowMountingonEntering")) {
@@ -75,7 +77,7 @@ class RideableSheetSettings {
 															vtype : "checkbox", 
 															vvalue : RideableFlags.MountonEnter(pApp.document, true),
 															vflagname : cMountonEnterF
-															});	
+															}, `div[data-tab="${cModuleName}"]`);	
 
 				//to set the mount on enter black list
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cAutoMountBlackListF +".name"), 
@@ -84,7 +86,7 @@ class RideableSheetSettings {
 															vwide : true,
 															vvalue : RideableFlags.AutomountBlackList(pApp.document, true),
 															vflagname : cAutoMountBlackListF
-															});			
+															}, `div[data-tab="${cModuleName}"]`);			
 
 				//to set the mount on enter black list
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cAutoMountWhiteListF +".name"), 
@@ -93,7 +95,7 @@ class RideableSheetSettings {
 															vwide : true,
 															vvalue : RideableFlags.AutomountWhiteList(pApp.document, true),
 															vflagname : cAutoMountWhiteListF
-															});																
+															}, `div[data-tab="${cModuleName}"]`);																
 			}
 														
 			//Max Riders Setting
@@ -102,7 +104,7 @@ class RideableSheetSettings {
 														vtype : "number", 
 														vvalue : RideableFlags.MaxRiders(pApp.document), 
 														vflagname : cMaxRiderF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			//Custom Riding height
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cCustomRidingheightF +".name"), 
@@ -110,7 +112,7 @@ class RideableSheetSettings {
 														vtype : "number", 
 														vvalue : RideableFlags.customRidingHeight(pApp.document), 
 														vflagname : cCustomRidingheightF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			//use riding height setting
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cUseRidingHeightF +".name"), 
@@ -118,7 +120,7 @@ class RideableSheetSettings {
 														vtype : "checkbox", 
 														vvalue : RideableFlags.UseRidingHeight(pApp.document), 
 														vflagname : cUseRidingHeightF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			//riders scale setting
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRidersScaleF +".name"), 
@@ -128,7 +130,7 @@ class RideableSheetSettings {
 														vvalue : RideableFlags.RidersScale(pApp.document), 
 														vstep : 0.1,
 														vflagname : cRidersScaleF
-														});															
+														}, `div[data-tab="${cModuleName}"]`);															
 														
 			//RiderPositioning
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderPositioningF +".name"), 
@@ -137,7 +139,15 @@ class RideableSheetSettings {
 														voptions : cPlacementPatterns,
 														vvalue : RideableFlags.RiderPositioning(pApp.document), 
 														vflagname : cRiderPositioningF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
+														
+			//Riders offset
+			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderOffsetF +".name"), 
+														vhint : Translate("TokenSettings."+ cRiderOffsetF +".descrp"), 
+														vtype : "numberxy", 
+														vvalue : RideableFlags.RidersOffset(pApp.document), 
+														vflagname : [cRiderOffsetF, cRiderOffsetF]
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			if (game.settings.get(cModuleName, "Grappling")) {
 				//RiderPositioning
@@ -147,7 +157,7 @@ class RideableSheetSettings {
 															voptions : cGrapplePlacements,
 															vvalue : RideableFlags.GrapplePlacement(pApp.document), 
 															vflagname : cGrapplePlacementF
-															});
+															}, `div[data-tab="${cModuleName}"]`);
 			}
 
 			//Token Form
@@ -166,7 +176,7 @@ class RideableSheetSettings {
 														voptions : vForms,
 														vvalue : RideableFlags.TokenForm(pApp.document), 
 														vflagname : cTokenFormF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			//Riders can move within Setting
 			RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cInsideMovementF +".name"), 
@@ -174,7 +184,7 @@ class RideableSheetSettings {
 														vtype : "checkbox", 
 														vvalue : RideableFlags.RiderscanMoveWithin(pApp.document), 
 														vflagname : cInsideMovementF
-														});
+														}, `div[data-tab="${cModuleName}"]`);
 														
 			if (game.user.isGM) {//GM settings
 				let vGMTittleHTML = `
@@ -190,7 +200,7 @@ class RideableSheetSettings {
 															vwide : true,
 															vvalue : RideableFlags.SpawnRidersstring(pApp.document), 
 															vflagname : cSpawnRidersF
-															});
+															}, `div[data-tab="${cModuleName}"]`);
 				
 				if (RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
 					//Custom Mounting effects applied to Riders
@@ -200,7 +210,7 @@ class RideableSheetSettings {
 																vwide : true,
 																vvalue : RideableFlags.MountingEffectsstring(pApp.document), 
 																vflagname : cMountingEffectsF
-																});
+																}, `div[data-tab="${cModuleName}"]`);
 					
 					//if custom Mounting effects should override world stndard
 					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
@@ -209,7 +219,7 @@ class RideableSheetSettings {
 																vwide : true,
 																vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
 																vflagname : cWorldMEffectOverrideF
-																});
+																}, `div[data-tab="${cModuleName}"]`);
 							
 					if (!pisTile) {
 						//if custom Mounting effects should be self applied
@@ -219,7 +229,7 @@ class RideableSheetSettings {
 																	vwide : true,
 																	vvalue : RideableFlags.SelfApplyCustomEffects(pApp.document), 
 																	vflagname : cSelfApplyEffectsF
-																	});
+																	}, `div[data-tab="${cModuleName}"]`);
 
 						//for Mount effects applied to mount
 						RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cforMountEffectsF +".name"), 
@@ -228,7 +238,7 @@ class RideableSheetSettings {
 																	vwide : true,
 																	vvalue : RideableFlags.forMountEffects(pApp.document), 
 																	vflagname : cforMountEffectsF
-																	});																
+																	}, `div[data-tab="${cModuleName}"]`);																
 					}
 				}
 				
@@ -239,7 +249,7 @@ class RideableSheetSettings {
 																vtype : "checkbox",
 																vvalue : RideableFlags.canbeGrappled(pApp.document), 
 																vflagname : ccanbeGrappledF
-																});
+																}, `div[data-tab="${cModuleName}"]`);
 				}
 				
 				//if this token can be piloted
@@ -248,7 +258,7 @@ class RideableSheetSettings {
 															vtype : "checkbox",
 															vvalue : RideableFlags.canbePiloted(pApp.document), 
 															vflagname : cCanbePilotedF
-															});	
+															}, `div[data-tab="${cModuleName}"]`);	
 
 				//if this token is piloted by default
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cPilotedbyDefaultF +".name"), 
@@ -256,7 +266,7 @@ class RideableSheetSettings {
 															vtype : "checkbox",
 															vvalue : RideableFlags.PilotedbyDefault(pApp.document), 
 															vflagname : cPilotedbyDefaultF
-															});																
+															}, `div[data-tab="${cModuleName}"]`);																
 			}
 														
 			
@@ -273,10 +283,19 @@ class RideableSheetSettings {
 		//pHTML.css("width", "max-content");
 	} 
 	
-	static AddHTMLOption(pHTML, pInfos) {
+	static AddHTMLOption(pHTML, pInfos, pto) {
+		pHTML.find(pto/*`div[data-tab="${cModuleName}"]`*/).append(RideableSheetSettings.createHTMLOption(pInfos))
+	}
+	
+	static createHTMLOption(pInfos, pwithformgroup = false) {
 		let vlabel = "Name";	
 		if (pInfos.hasOwnProperty("vlabel")) {
 			vlabel = pInfos.vlabel;
+		}
+		
+		let vID = "Name";	
+		if (pInfos.hasOwnProperty("vID")) {
+			vID = pInfos.vID;
 		}
 		
 		let vtype = "text";	
@@ -287,6 +306,11 @@ class RideableSheetSettings {
 		let vvalue = "";	
 		if (pInfos.hasOwnProperty("vvalue")) {
 			vvalue = pInfos.vvalue;
+		}
+		
+		let vstep = 1;	
+		if (pInfos.hasOwnProperty("vstep")) {
+			vstep = pInfos.vstep;
 		}
 		
 		let vflagname = "";	
@@ -304,22 +328,32 @@ class RideableSheetSettings {
 			vunits = pInfos.vunits;
 		} 
 		
-		let vrange = [0, 0];
-		if (pInfos.hasOwnProperty("vrange")) {
-			vrange = pInfos.vrange;
-		} 
-		
-		let vstep = 1;	
-		if (pInfos.hasOwnProperty("vstep")) {
-			vstep = pInfos.vstep;
-		}
-		
 		let voptions = [];
 		if (pInfos.hasOwnProperty("voptions")) {
 			voptions = pInfos.voptions;
 		} 
 		
+		let voptionsName = vflagname;
+		if (pInfos.hasOwnProperty("voptionsName")) {
+			voptionsName = pInfos.voptionsName;
+		} 
+		
+		let vrange = [0, 0];
+		if (pInfos.hasOwnProperty("vrange")) {
+			vrange = pInfos.vrange;
+		} 
+		
+		let vlockedstate = "";
+		if (pInfos.hasOwnProperty("vlocked") && pInfos.vlocked) {
+			vlockedstate = "disabled";
+		}
+		
 		let vnewHTML = ``;
+		
+		if (pwithformgroup) {
+			vnewHTML = vnewHTML + `<div class="form-group">`;
+		}
+		
 		if (!(pInfos.hasOwnProperty("vwide") && pInfos.vwide)) {
 			vnewHTML = `
 				<div class="form-group slim">
@@ -335,51 +369,81 @@ class RideableSheetSettings {
 			`;
 		}
 		
+		let vfullflagname;
+		
+		if (pInfos.hasOwnProperty("vfullflagname")) {
+			vfullflagname = pInfos.vfullflagname;
+		}
+		else {
+			vfullflagname = cModuleName + "." + vflagname;
+		}
+		
+		let vNumberSeperator;
+		
+		switch (vtype){
+			case "numberpart":
+				vNumberSeperator = "/";
+				break;
+			case "numberinterval":
+				vNumberSeperator = "-";
+				break;
+		}
+				
 		switch (vtype){
 			case "number":
+				vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${vfullflagname}" id=${vID} value="${vvalue}" step="${vstep}" ${vlockedstate}>`;
+				break;
 			case "text":
-				vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}" value="${vvalue}">`;
+				vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${vfullflagname}" id=${vID} value="${vvalue}" ${vlockedstate}>`;
 				break;
 				
 			case "checkbox":
 				if (vvalue) {
-					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}" checked>`;
+					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${vfullflagname}" id=${vID} checked ${vlockedstate}>`;
 				}
 				else {
-					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${cModuleName}.${vflagname}">`;
+					vnewHTML = vnewHTML + `<input type=${vtype} name="flags.${vfullflagname}" id=${vID} ${vlockedstate}>`;
 				}
 				break;
 				
 			case "select":
-				vnewHTML = vnewHTML + `<select name="flags.${cModuleName}.${vflagname}">`;
+				vnewHTML = vnewHTML + `<select name="flags.${vfullflagname}" ${vlockedstate}>`;
 				
 				for (let i = 0; i < voptions.length; i++) {
 					if (voptions[i] == vvalue) {
-						vnewHTML = vnewHTML + `<option value="${voptions[i]}" selected>${Translate("TokenSettings." + vflagname+ ".options." + voptions[i])}</option>`;
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}" selected>${Translate("TokenSettings." + voptionsName+ ".options." + voptions[i])}</option>`;
 					}
 					else {
-						vnewHTML = vnewHTML + `<option value="${voptions[i]}">${Translate("TokenSettings." + vflagname+ ".options." + voptions[i])}</option>`;
+						vnewHTML = vnewHTML + `<option value="${voptions[i]}">${Translate("TokenSettings." + voptionsName+ ".options." + voptions[i])}</option>`;
 					}
 				}
 				
 				vnewHTML = vnewHTML + `</select>`;
 				break;
 			case "range":
-				vnewHTML = vnewHTML + 	`<input type=${vtype} name="flags.${cModuleName}.${vflagname}" value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}">
+				vnewHTML = vnewHTML + 	`<input type=${vtype} name="flags.${vfullflagname}" id=${vID} value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}" ${vlockedstate}>
 										<span class="${vtype}-value">${vvalue}</span>`;
+				break;
+			case "numberpart":
+			case "numberinterval":
+				vnewHTML = vnewHTML + `<input type=number name="flags.${cModuleName}.${vflagname[0]}" id=${vID} value="${vvalue[0]}" ${vlockedstate}><label>${vNumberSeperator}</label><input type=number name="flags.${cModuleName}.${vflagname[1]}" id=${vID} value="${vvalue[1]}" ${vlockedstate}>`;
+				break;
+			case "numberxy":
+				vnewHTML = vnewHTML + `<label>x:</label><input type=number step="0.01" name="flags.${cModuleName}.${vflagname[0]}" id=${vID} value="${vvalue[0]}" ${vlockedstate}><label>y:</label><input type=number step="0.01" name="flags.${cModuleName}.${vflagname[1]}" id=${vID} value="${vvalue[1]}" ${vlockedstate}>`;
 				break;
 		}
 			
+		vnewHTML = vnewHTML + `</div>`;
+		
 		if (vhint != "") {
-			vnewHTML = vnewHTML + `
-				</div>
-					<p class="hint">${vhint}</p>         
-				</div>
-			`;
+			vnewHTML = vnewHTML + `<p class="hint">${vhint}</p>`;
 		}
 		
+		vnewHTML = vnewHTML + `</div>`;
+		
 		//pHTML.find('[name="RideableTitle"]').after(vnewHTML);
-		pHTML.find(`div[data-tab="${cModuleName}"]`).append(vnewHTML);
+		//pHTML.find(pto/*`div[data-tab="${cModuleName}"]`*/).append(vnewHTML);
+		return vnewHTML;
 	}
 	
 	static FixSheetWindow(pHTML , pApp, pIndentifier) {

@@ -66,9 +66,9 @@ class Ridingmanager {
 	//DEPRICATED:
 	//static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
-	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pyoffset = []) {} //works out the position of tokens if they are spread according in a row
+	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {} //works out the position of tokens if they are spread according in a row
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
 	static placeTokenrotated(pRiddenToken, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
 	
@@ -346,10 +346,10 @@ class Ridingmanager {
 		//Grappled
 		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {
 			case cRowAbove:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
 				break;
 			case cRowMiddle:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (0)));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (0)));
 				break;
 			case cClosestInside:
 				Ridingmanager.planRelativRiderTokens(pRiddenToken, vGrappledList, pAnimations);
@@ -358,13 +358,15 @@ class Ridingmanager {
 				calculatenewRoute(vGrappledList, {StartRoute : true, Distance : Math.max(pRiddenToken.width, pRiddenToken.height) * pRiddenToken.parent.dimensions.distance, Target : pRiddenToken, Scene : pRiddenToken.parent, RidingMovement : true});
 				break;
 			default:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
 		}
 	}
 	
 	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
 		if (pRiderTokenList.length) {
 			let vAngleSteps; //to fix javascript syntax bug
+			
+			let vBasicOffset = RideableFlags.RidersOffset(pRiddenToken, true);
 			
 			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
 				case cCircleplacement:
@@ -383,7 +385,7 @@ class Ridingmanager {
 					vMaxWidth = (GeometricUtils.insceneWidth(pRiddenToken) - vMaxWidth)/2;
 					
 					for (let i = 0; i < pRiderTokenList.length; i++) {
-						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i), -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i), 0, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], 0, pAnimations);
 					}	
 					
 					break;
@@ -485,7 +487,7 @@ class Ridingmanager {
 						let vTargetx = cxOffset + (vtargetposition[0] + vrider.width) * cSizeFactor;
 						let vTargety = cyOffset + (vtargetposition[1] + vrider.height) * cSizeFactor;
 						
-						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx, vTargety, 0, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx  + vBasicOffset[0], vTargety + vBasicOffset[1], 0, pAnimations);
 					}
 					
 					break;
@@ -513,7 +515,7 @@ class Ridingmanager {
 						while (vPlacementInterval[1] < vsortedTokens.length) {
 							//placements						
 							for (let i = vPlacementInterval[0]; i <= vPlacementInterval[1]; i++) {
-								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i), -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i), 0, pAnimations);
+								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], 0, pAnimations);
 							}	
 							
 							vBaseRadius = vBaseRadius + vMaxSize/2;
@@ -541,18 +543,18 @@ class Ridingmanager {
 						
 					break;
 				case cRowplacementTop:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
 					break;
 				case cRowplacementBottom:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
 					break;
 				case cCornerPlacement:
 				case cCornerPlacementinner:
 					if (pRiderTokenList.length <= 4) {
-						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations, RideableFlags.RiderPositioning(pRiddenToken) == cCornerPlacementinner);
+						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations, RideableFlags.RiderPositioning(pRiddenToken) == cCornerPlacementinner, [vBasicOffset[0]], [vBasicOffset[1]]);
 					}
 					else {
-						Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations);
+						Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
 					}
 					break;
 				case cMountPosition:
@@ -560,7 +562,7 @@ class Ridingmanager {
 					break;
 				case cRowplacement:
 				default:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations);
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
 			}
 		}
 	} 
@@ -638,7 +640,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pyoffset = []) {
+	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {
 		if (pRiderTokenList.length) {
 			let vbunchedRiders = true;
 			let vxoffset = 0;
@@ -680,8 +682,12 @@ class Ridingmanager {
 					}
 				}
 				
+				if (pxoffset.length) {
+					vTargetx = vTargetx + pxoffset[i%pxoffset.length];
+				}
+				
 				if (pyoffset.length) {
-					vTargety = pyoffset[i%pyoffset.length];
+					vTargety = vTargety + pyoffset[i%pyoffset.length];
 				}
 				
 				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, 0, pAnimations);		
@@ -689,7 +695,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false) {
+	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {
 		if (pRiderTokenList.length) {
 			for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
 				let vTargetx = 0;
@@ -723,6 +729,14 @@ class Ridingmanager {
 						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2 - vXoffset;
 						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2 - vYoffset;
 						break;
+				}
+				
+				if (pxoffset.length) {
+					vTargetx = vTargetx + pxoffset[i%pxoffset.length];
+				}
+				
+				if (pyoffset.length) {
+					vTargety = vTargety + pyoffset[i%pyoffset.length];
 				}
 				
 				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, 0, pAnimations);		

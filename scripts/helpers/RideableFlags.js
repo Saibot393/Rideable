@@ -36,6 +36,7 @@ const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile ca
 const cPilotedbyDefaultF = "PilotedbyDefaultFlag"; //flag to pilot this token/tile by default
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
+const cRiderOffsetF = "RiderOffsetFlag"; //flag to store the offset of all riders
 const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
 const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at which this token follows
 const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
@@ -52,7 +53,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -194,6 +195,8 @@ class RideableFlags {
 	static async ApplyRidersScale(pRidden, pRiders) {} //applies the riders scale of pRidden to pRiders and saves previous scales
 	
 	static RidersScale(pObject) {} //returns riders scale of this pObject
+	
+	static RidersOffset(pObject, pSceneScales = false) {} //returns the offset for the riders of pObject
 	
 	//relativ Position handling
 	static HasrelativPosition(pToken) {} //if a relativ position has already been Set
@@ -660,6 +663,19 @@ class RideableFlags {
 		}
 		
 		return ""; //default if anything fails		
+	} 
+	
+	static #RiderOffsetFlag (pToken) {
+		//returns content of RiderOffsetFlag of pToken (if any) (array of numbers)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRiderOffsetF)) {
+				return vFlag.RiderOffsetFlag;
+			}
+		}
+		
+		return [0,0]; //default if anything fails		
 	}
 	
 	static #isPilotingFlag (pToken) {
@@ -1465,6 +1481,22 @@ class RideableFlags {
 	
 	static RidersScale(pObject) {
 		return this.#RidersScaleFlag(pObject);
+	}
+	
+	static RidersOffset(pObject, pSceneScales = false) {
+		const cScale = FCore.sceneof(pObject)?.dimensions?.size ?? 1;
+		
+		let offset = this.#RiderOffsetFlag(pObject);
+		
+		for (let i = 0; i <= 1; i++) {
+			if (offset[i] == undefined) offset[i] = 0;
+			
+			if (pSceneScales) {
+				offset[i] = cScale * offset[i];
+			}
+		}
+		
+		return offset;
 	}
 	
 	//relativ Position handling

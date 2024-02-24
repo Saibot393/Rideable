@@ -358,6 +358,11 @@
 				}
 			},
 			
+			"RiderOffsetFlag" : {
+				"name"					: "Riders offset",
+				"descrp"				: "The placement offset for Riders [in scene squares]"
+			},
+			
 			"GrapplePlacementFlag" : {
 				"name"					: "Ergriffenen Platzierung",
 				"descrp"				: "Wo ergriffene Figuren platziert werden",
