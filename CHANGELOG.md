@@ -1,3 +1,6 @@
+## v2.19.5
+- Added corners (inner) as riders placement option
+
 ## v2.19.4
 - Added corners as riders placement option
 
