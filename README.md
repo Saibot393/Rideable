@@ -62,6 +62,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Use riding height: to set wether this token should use the riding height per default for its riders
 - Riders scale: to set a (graphical) scale for riders of this object
 - Rider positioning: to set in which pattern rider tokens should be placed (Row or Circle)
+- Riders offset: to configure an x,y offset for riders
 - Grappled placement: to set where tokens grappled by this token are placed
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
