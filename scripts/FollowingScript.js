@@ -337,20 +337,22 @@ class FollowingManager {
 						FollowingManager.calculatenewRoute(vFollowers, {StartRoute : true, Target : pToken, Scene : pToken.parent});
 					}
 				}
-				
-				if (pToken.isOwner) {
-					if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
-						switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
-							case "updatedistance":
-								RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
-								break;
-							case "stopfollowing":
-							default:
-								RideableFlags.stopFollowing(pToken);
-							
-								FollowingManager.OnStopFollowing(pToken);
-								break;
-						}
+			}
+		}
+		
+		if (pToken.isOwner) {
+			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
+				if (RideableFlags.isFollowing(pToken) && !pInfos.RideableFollowingMovement && RideableFlags.isFollowOrderSource(pToken)) {
+					switch (game.settings.get(cModuleName, "OnFollowerMovement")) {
+						case "updatedistance":
+							RideableFlags.UpdateFollowDistance(pToken, GeometricUtils.TokenDistance(pToken, RideableFlags.followedToken(pToken)));
+							break;
+						case "stopfollowing":
+						default:
+							RideableFlags.stopFollowing(pToken);
+						
+							FollowingManager.OnStopFollowing(pToken);
+							break;
 					}
 				}
 			}
