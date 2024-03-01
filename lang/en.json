@@ -363,6 +363,11 @@
 				"descrp"				: "The placement offset for Riders [in scene squares]"
 			},
 			
+			"RiderRotOffsetFlag" : {
+				"name"					: "Riders rotational offset",
+				"descrp"				: "The rotational offset for Riders"
+			},
+			
 			"GrapplePlacementFlag" : {
 				"name"					: "Grappled placement",
 				"descrp"				: "Where grappled tokens are placed",

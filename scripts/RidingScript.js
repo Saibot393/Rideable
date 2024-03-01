@@ -368,6 +368,8 @@ class Ridingmanager {
 			
 			let vBasicOffset = RideableFlags.RidersOffset(pRiddenToken, true);
 			
+			let vRotOffset = 0;
+			
 			switch (RideableFlags.RiderPositioning(pRiddenToken)) {
 				case cCircleplacement:
 					vAngleSteps = 360/pRiderTokenList.length;
@@ -375,6 +377,8 @@ class Ridingmanager {
 					//calculate maximum placement heights and widths
 					let vMaxHeight = 0;
 					let vMaxWidth = 0;
+					
+					vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
 					
 					for (let i = 0; i < pRiderTokenList.length; i++) {
 						vMaxHeight = Math.max(vMaxHeight, GeometricUtils.insceneHeight(pRiderTokenList[i]));
@@ -385,7 +389,7 @@ class Ridingmanager {
 					vMaxWidth = (GeometricUtils.insceneWidth(pRiddenToken) - vMaxWidth)/2;
 					
 					for (let i = 0; i < pRiderTokenList.length; i++) {
-						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], 0, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
 					}	
 					
 					break;
@@ -394,6 +398,8 @@ class Ridingmanager {
 										
 					let vxsize; 
 					let vysize;
+					
+					vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
 					
 					switch (pRiddenToken.documentName) {
 						case "Token":
@@ -487,13 +493,15 @@ class Ridingmanager {
 						let vTargetx = cxOffset + (vtargetposition[0] + vrider.width) * cSizeFactor;
 						let vTargety = cyOffset + (vtargetposition[1] + vrider.height) * cSizeFactor;
 						
-						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx  + vBasicOffset[0], vTargety + vBasicOffset[1], 0, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx  + vBasicOffset[0], vTargety + vBasicOffset[1], vRotOffset, pAnimations);
 					}
 					
 					break;
 				case cClusterplacement:
 						let vSizeFactor = GeometricUtils.insceneSize(pRiddenToken);
 				
+						vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
+						
 						let vsortedTokens;
 						let vsortedSizes;
 						let vPlacementInterval = [0,0];
@@ -513,9 +521,11 @@ class Ridingmanager {
 						vMaxSize = vsortedSizes[0];
 						
 						while (vPlacementInterval[1] < vsortedTokens.length) {
-							//placements						
+							//placements
+							
+							
 							for (let i = vPlacementInterval[0]; i <= vPlacementInterval[1]; i++) {
-								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], 0, pAnimations);
+								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
 							}	
 							
 							vBaseRadius = vBaseRadius + vMaxSize/2;
@@ -690,7 +700,9 @@ class Ridingmanager {
 					vTargety = vTargety + pyoffset[i%pyoffset.length];
 				}
 				
-				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, 0, pAnimations);		
+				let vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
+				
+				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
 			}
 		}
 	}
@@ -739,7 +751,9 @@ class Ridingmanager {
 					vTargety = vTargety + pyoffset[i%pyoffset.length];
 				}
 				
-				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, 0, pAnimations);		
+				let vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
+				
+				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
 			}
 		}
 	}

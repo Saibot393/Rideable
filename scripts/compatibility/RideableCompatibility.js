@@ -368,6 +368,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					const { action } = args;
 					
 					let vtoUnMountTokens = await pMATT.getEntities(args);
+					console.log(vtoUnMountTokens);
 					
 					if (vtoUnMountTokens.length > 0) {
 						game.Rideable.UnMount(vtoUnMountTokens);
@@ -565,7 +566,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 						subtype: "entity",
 						options: { show: ['token', 'within', 'players', 'previous', 'tagger'] },
 						defvalue : "previous",
-						restrict: (entity) => { return (entity instanceof Token); }
+						restrict: (entity) => {console.log(entity); return (entity instanceof Token); }
 					},
 					{
 						id: "filterCondition",
@@ -603,6 +604,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 					
 					let vFiltered;
 		
+					console.log(entities);
 					switch(action.data?.filterCondition) {
 						case "rider":
 							vFiltered = entities.filter(vObject => game.modules.get("Rideable").api.RideableFlags.isRider(vObject));
@@ -611,6 +613,8 @@ Hooks.once("setupTileActions", (pMATT) => {
 							vFiltered = entities.filter(vObject => !game.modules.get("Rideable").api.RideableFlags.isRider(vObject));
 							break;
 					}
+					
+					console.log(vFiltered);
 
 					const vContinue = (action.data?.continue === 'always'
 						|| (action.data?.continue === 'any' && vFiltered.length > 0)

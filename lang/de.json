@@ -359,8 +359,13 @@
 			},
 			
 			"RiderOffsetFlag" : {
-				"name"					: "Riders offset",
-				"descrp"				: "The placement offset for Riders [in scene squares]"
+				"name"					: "Reiter Offset",
+				"descrp"				: "Der offset für Reiter [in Scenen Qudraten]"
+			},
+			
+			"RiderRotOffsetFlag" : {
+				"name"					: "Reiter rotations Offset",
+				"descrp"				: "Der rotations offset für Reiter"
 			},
 			
 			"GrapplePlacementFlag" : {

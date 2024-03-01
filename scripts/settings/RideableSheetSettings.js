@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 
@@ -148,6 +148,17 @@ class RideableSheetSettings {
 														vvalue : RideableFlags.RidersOffset(pApp.document), 
 														vflagname : [cRiderOffsetF, cRiderOffsetF]
 														}, `div[data-tab="${cModuleName}"]`);
+				
+			if (game.settings.get(cModuleName, "RiderRotation")) {
+				//Riders rotation offset
+				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderRotOffsetF +".name"), 
+															vhint : Translate("TokenSettings."+ cRiderRotOffsetF +".descrp"), 
+															vtype : "number", 
+															vvalue : RideableFlags.RidersRotOffset(pApp.document), 
+															vflagname : cRiderRotOffsetF
+															}, `div[data-tab="${cModuleName}"]`);
+			}
+														
 														
 			if (game.settings.get(cModuleName, "Grappling")) {
 				//RiderPositioning
