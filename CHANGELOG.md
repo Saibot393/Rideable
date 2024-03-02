@@ -1,3 +1,6 @@
+## v2.20.3
+- Fixed small bug in connection with Token Attacher
+
 ## v2.20.2
 - Added token/tile setting riders rotational offset to configure an rotational offset for riders
 
