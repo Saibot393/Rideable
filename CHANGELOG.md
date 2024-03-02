@@ -1,3 +1,6 @@
+## v2.20.2
+- Added token/tile setting riders rotational offset to configure an rotational offset for riders
+
 ## v2.20.1
 - Bug fix for following feature
 
