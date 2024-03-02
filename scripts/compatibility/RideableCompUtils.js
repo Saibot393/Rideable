@@ -318,7 +318,7 @@ class RideableCompUtils {
 			vAttached = (pObject.flags[cTokenAttacher].parent == pToken.id);
 			
 			if (!vAttached) {
-				vAttached = RideableCompUtils.isTAAttached(pToken, RideableUtils.TokenfromID(pObject.flags[cTokenAttacher].parent, FCore.sceneof(pObject)));
+				vAttached = RideableCompUtils.isTAAttachedto(pToken, RideableUtils.TokenfromID(pObject.flags[cTokenAttacher].parent, FCore.sceneof(pObject)));
 			}
 		}
 		

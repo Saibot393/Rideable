@@ -383,7 +383,7 @@ class RideableUtils {
 	
 	static isConnected(pToken, pObject) {
 		if (RideableCompUtils.isactiveModule(cTokenAttacher)) {
-			return RideableCompUtils.isTAAttached(pToken, pObject);
+			return RideableCompUtils.isTAAttachedto(pToken, pObject);
 		}
 		
 		return false;
