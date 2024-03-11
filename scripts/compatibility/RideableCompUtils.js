@@ -59,7 +59,7 @@ class RideableCompUtils {
 	
 	static TokenwithpreviousID(pID, pScene) {} //gives the token in pScene which has the previous id pID (if any)
 	
-	static UpdateRiderIDs(pRidden) {} //tries to fiend the current riders in the currrent scene based on their previous ids
+	static UpdateRiderIDs(pRidden, vCleanIDs = true) {} //tries to fiend the current riders in the currrent scene based on their previous ids
 	
 	//specific: wall-heights
 	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
@@ -163,12 +163,12 @@ class RideableCompUtils {
 		return pScene.tokens.filter(vToken => RideableCompUtils.PreviousID(vToken) == pID)[0];
 	}
 	
-	static async UpdateRiderIDs(pRidden) {
+	static async UpdateRiderIDs(pRidden, vCleanIDs = true) {
 		let vPreviousRiderIDs = RideableFlags.RiderTokenIDs(pRidden);
 		
 		let vNewRiders = await game.scenes.find(vscene => vscene.tokens.get(pRidden.id)).tokens.filter(vToken => vPreviousRiderIDs.includes(RideableCompUtils.PreviousID(vToken)));
 		
-		await RideableFlags.cleanRiderIDs(pRidden);
+		if (vCleanIDs) await RideableFlags.cleanRiderIDs(pRidden);
 		
 		for (let i = 0; i < vNewRiders.length; i++) {
 			//force new riders
