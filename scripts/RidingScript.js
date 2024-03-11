@@ -246,7 +246,9 @@ class Ridingmanager {
 				}
 				else {
 					//suppress movement
-					RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+					if (!canvas.tokens.controlled.map(vToken => vToken.id).includes(RideableFlags.RiddenToken(pToken)?.id)) {
+						RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+					}
 				}
 			}
 			

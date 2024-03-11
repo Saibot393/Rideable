@@ -109,11 +109,12 @@
 			
 			"RiderProxySelect" : {
 				"name"					: "Reiter proxy Auswahl",
-				"descrp"				: "Ob die gerittene Figur beim anklicken der reitenden Figur ausgewählt werden soll",
+				"descrp"				: "Ob die gerittene Figur oder die Reiter beim anklicken der Figur ausgewählt werden soll",
 				"options" : {
 					"never"				: "nie",
 					"familiar"			: "nur begleiter",
-					"always"			: "immer"
+					"always"			: "immer",
+					"allRiders"			: "alle Reiter"
 				}
 			},
 			

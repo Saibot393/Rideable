@@ -390,7 +390,8 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	choices: {
 		"never" : Translate("Settings.RiderProxySelect.options.never"),
 		"familiar": Translate("Settings.RiderProxySelect.options.familiar"),
-		"always": Translate("Settings.RiderProxySelect.options.always")
+		"always": Translate("Settings.RiderProxySelect.options.always"),
+		"allRiders": Translate("Settings.RiderProxySelect.options.allRiders"),
 	},
 	default: "never"
   }); 

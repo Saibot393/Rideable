@@ -686,20 +686,33 @@ class MountingManager {
 	static ProxySelect(pToken) {
 		if (canvas.tokens.controlled.length == 1) {
 			if (game.settings.get(cModuleName, "RiderProxySelect") != "never") {
-				if (RideableFlags.isRider(pToken)) {
-					if (!RideableFlags.isGrappled(pToken)) {
-						if (game.settings.get(cModuleName, "RiderProxySelect") == "always" || RideableFlags.isFamiliarRider(vToken)) {
-							let vRidden = RideableFlags.RiddenToken(pToken)?.object;
-							
-							let vToken = pToken?.object;
-							
-							if (vRidden && vToken && vRidden.owner) {
-								vToken.release();
-							
-								vRidden.control();
+				switch (game.settings.get(cModuleName, "RiderProxySelect")) {
+					case "familiar":
+					case "always":
+						if (RideableFlags.isRider(pToken)) {
+							if (!RideableFlags.isGrappled(pToken)) {
+								if (game.settings.get(cModuleName, "RiderProxySelect") == "always" || RideableFlags.isFamiliarRider(vToken)) {
+									let vRidden = RideableFlags.RiddenToken(pToken)?.object;
+									
+									let vToken = pToken?.object;
+									
+									if (vRidden && vToken && vRidden.owner) {
+										vToken.release();
+									
+										vRidden.control();
+									}
+								}
 							}
 						}
-					}
+						break;
+					case "allRiders":
+						if (RideableFlags.isRidden(pToken)) {
+							let vRiders = RideableFlags.RiderTokens(pToken);
+							
+							for (let vRider of vRiders) {
+								vRider.object.control({releaseOthers : false});
+							}
+						}
 				}
 			}
 		}

@@ -109,11 +109,12 @@
 			
 			"RiderProxySelect" : {
 				"name"					: "Rider proxy select",
-				"descrp"				: "If the ridden token should be selected instead of the cliecked rider",
+				"descrp"				: "If the ridden token or the riders should be selected instead of the selected token",
 				"options" : {
 					"never"				: "never",
 					"familiar"			: "familiars only",
-					"always"			: "always"
+					"always"			: "always",
+					"allRiders"			: "all riders"
 				}
 			},
 			
