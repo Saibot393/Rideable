@@ -315,7 +315,7 @@ class RideableCompUtils {
 		let vAttached = false;
 		
 		if (pObject.flags.hasOwnProperty(cTokenAttacher)) {
-			vAttached = (pObject.flags[cTokenAttacher].parent == pToken.id);
+			vAttached = (pObject.flags[cTokenAttacher].parent == pToken.id) || RideableFlags.RidingConnection(pToken, pObject);
 			
 			if (!vAttached) {
 				vAttached = RideableCompUtils.isTAAttachedto(pToken, RideableUtils.TokenfromID(pObject.flags[cTokenAttacher].parent, FCore.sceneof(pObject)));

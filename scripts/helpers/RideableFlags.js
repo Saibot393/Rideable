@@ -1131,10 +1131,10 @@ class RideableFlags {
 	}
 	
 	static RiddenToken(pRider) {
-		let vToken = FCore.sceneof(pRider).tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+		let vToken = FCore.sceneof(pRider)?.tokens.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 		
 		if (!vToken) {
-			vToken = FCore.sceneof(pRider).tiles.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
+			vToken = FCore.sceneof(pRider)?.tiles.find(vToken => RideableFlags.isRiddenby(vToken, pRider));
 		}
 		
 		return vToken;
@@ -1261,13 +1261,15 @@ class RideableFlags {
 	}
 	
 	static RideableName(pToken) {
-		switch (pToken.documentName) {
-			case "Token":
-				return pToken.name;
-				break;
-			case "Tile":
-				return RideableFlags.#TileRideableNameFlag(pToken);
-				break;
+		if (pToken) {
+			switch (pToken.documentName) {
+				case "Token":
+					return pToken.name;
+					break;
+				case "Tile":
+					return RideableFlags.#TileRideableNameFlag(pToken);
+					break;
+			}
 		}
 		
 		return "";
@@ -1410,11 +1412,11 @@ class RideableFlags {
 					
 					let vScene = FCore.sceneof(pRidingTokens[i]);
 					
-					let vRiddenTokens = vScene.tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
+					let vRiddenTokens = vScene?.tokens.filter(vToken => this.isRiddenby(vToken, vRidingToken));
 					
-					vRiddenTokens = vRiddenTokens.concat(vScene.tiles.filter(vTile => this.isRiddenby(vTile, vRidingToken)));
+					vRiddenTokens = vRiddenTokens?.concat(vScene.tiles.filter(vTile => this.isRiddenby(vTile, vRidingToken)));
 					
-					if (vRiddenTokens.length) {
+					if (vRiddenTokens?.length) {
 						for (let j = 0; j < vRiddenTokens.length; j++) {
 							await RideableFlags.removeRiderTokens(vRiddenTokens[j], pRidingTokens, pRemoveRiddenreference);
 						}

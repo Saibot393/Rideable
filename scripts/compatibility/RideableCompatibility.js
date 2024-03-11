@@ -14,12 +14,17 @@ import { cStairways, cTagger, cWallHeight, cLocknKey, cMATT } from "./RideableCo
 class RideableCompatibility {
 	//DECLARATIONS
 	
+	//specific: MATT
+	static onTileTrigger(pTile, pTrigger, pInfos, pUserID, pData) {} //called when a tile is triggered
+	
+	static onpreTileTrigger(pTile, pTrigger, pInfos, pUserID, pData) {} //called before a tile is triggered
+	
 	//specific: stairways
 	static onSWTeleport(pData) {} //called if stairways module is active and teleport is triggered
 
 	static onSWPreTeleport(pData) {} //called if stairways module is active and pre teleport is triggered
 	
-	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {} //called if Rideable Teleports Tokens
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID) {} //called if Rideable Teleports Tokens
 	
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser) {} //Organises the teleport of all Riders of pTokenID
 	
@@ -32,14 +37,50 @@ class RideableCompatibility {
 	static onTGGTokenpreupdate(pToken, pchanges, pInfos) {} //only called if cTagger is active and a token updates, handels tagger updates for ridden 
 	//IMPLEMENTATIONS
 	
+	//specific: MATT
+	static onTileTrigger(pTile, pTrigger, pInfos, pUserID, pData) {
+		if (pInfos.action == "teleport") {
+			let vData = {
+				selectedTokenIds : pData.tokens.map(vToken => vToken.id),
+				sourceSceneId : pTile.parent.id,
+				targetSceneId : pInfos.data.location.sceneId,
+				targetData : {x : pInfos.data.location.x, y : pInfos.data.location.y},
+				userId : pUserID
+			}
+			
+			RideableCompatibility.onSWTeleport(vData);
+		}
+	}
+	
+	static onpreTileTrigger(pTile, pTrigger, pInfos, pUserID, pData) {
+		console.log(pData);
+		console.log(pData.tokens);
+		console.log(Object.keys(pData));
+		console.log(pData.tokens.map(vToken => vToken.id));
+		
+		if (pInfos.action == "teleport") {
+			let vData = {
+				selectedTokenIds : pData.tokens.map(vToken => vToken.id),
+				sourceSceneId : pTile.parent.id,
+				targetSceneId : pInfos.data.location.sceneId,
+				targetData : {x : pInfos.data.location.x, y : pInfos.data.location.y},
+				userId : pUserID
+			}
+			
+			let vTeleportIDs = RideableCompatibility.onSWPreTeleport(vData);
+			
+			pData.tokens = pData.tokens.filter(vToken => vTeleportIDs.includes(vToken.id));
+		}
+	} 
+	
 	//specific: stairways
 	static onSWTeleport(pData) {
 		//game.socket.emit("module.Rideable", {pFunction : "switchScene", pData : {pUserID : "T0isEfpkKbyG4zis", pSceneID : "6ploh8zOxN1blPVO", px : 0; py : 0}});
 		if (game.user.isGM) {
-			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData._id, game.user.id);
+			RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData, game.user.id);
 		}
 		else {
-			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTargetID : pData.targetData._id, pUserID : pData.userId}});
+			game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : pData.selectedTokenIds, pSourceSceneID : pData.sourceSceneId, pTargetSceneID : pData.targetSceneId, pSWTarget : {x : pData.targetData.x, y : pData.targetData.y}, pUserID : pData.userId}});
 		}
 	}
 	
@@ -65,11 +106,15 @@ class RideableCompatibility {
 					//stop scene change if all tokens are invalid
 					pData.userId = "";
 				}
+				
+				return (pData.selectedTokenIds);
 			}
 		}
+		
+		return pData.selectedTokenIds;
 	}
 	
-	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID) {
+	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID) {
 		if (game.user.isGM) {
 			if ((pSourceSceneID != pTargetSceneID) && pSourceSceneID && pTargetSceneID) {
 				//only necessary for cross scene teleport
@@ -77,7 +122,7 @@ class RideableCompatibility {
 				let vSourceScene = game.scenes.get(pSourceSceneID);
 				let vTargetScene = game.scenes.get(pTargetSceneID);
 				
-				let vTarget = vTargetScene.stairways.get(pSWTargetID);	
+				let vTarget = pSWTarget;	
 				
 				RideableCompatibility.OrganiseTeleport(pTokenIDs, vSourceScene, vTargetScene, vTarget, game.users.get(pUserID));
 			}
@@ -154,7 +199,7 @@ class RideableCompatibility {
 					}
 				}		
 				
-				game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : vValidTokenIDs, pSourceSceneID : pSourceScene.id, pTargetSceneID : pTargetScene.id, pSWTargetID : pSWTarget._id, pUserID : pUser.id}});
+				game.socket.emit("module.Rideable", {pFunction : "RequestRideableTeleport", pData : {pTokenIDs : vValidTokenIDs, pSourceSceneID : pSourceScene.id, pTargetSceneID : pTargetScene.id, pSWTarget : {x : pSWTarget.x, y : pSWTarget.y}, pUserID : pUser.id}});
 			}
 		}
 		
@@ -215,7 +260,7 @@ class RideableCompatibility {
 
 
 //exports
-function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID } = {}) { return RideableCompatibility.RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTargetID, pUserID); }
+function RequestRideableTeleport({ pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID} = {}) { return RideableCompatibility.RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID); }
 
 export { RequestRideableTeleport };
 
@@ -226,7 +271,15 @@ Hooks.once("init", async () => {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
 		
 		Hooks.on("PreStairwayTeleport", (...args) => RideableCompatibility.onSWPreTeleport(...args));
+	}
+	
+	if (RideableCompUtils.isactiveModule(cMATT)) {
+		Hooks.on("triggerTile", (pTile, palsoTile, pTrigger, pInfos, pUserID, pData) => RideableCompatibility.onTileTrigger(pTile, pTrigger, pInfos, pUserID, pData));
 		
+		Hooks.on("preTriggerTile", (pTile, palsoTile, pTrigger, pInfos, pUserID, pData) => RideableCompatibility.onpreTileTrigger(pTile, pTrigger, pInfos, pUserID, pData));
+	}
+	
+	if (RideableCompUtils.isactiveModule(cStairways) || RideableCompUtils.isactiveModule(cMATT)) {
 		Hooks.on(cModuleName + "." + "Teleport", (...args) => RideableCompatibility.RequestRideableTeleport(...args))
 		
 		Hooks.on(cModuleName + "." + "Mount", (pRider, pRidden) => {
