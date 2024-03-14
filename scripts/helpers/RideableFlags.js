@@ -1425,12 +1425,14 @@ class RideableFlags {
 						}
 					}
 					else {
-						await this.#setRidingFlag(vRidingToken, false);
-						
-						if (pRemoveRiddenreference) {
-							this.#setRelativPositionFlag(vRidingToken, []);
+						if (vRidingToken) {
+							await this.#setRidingFlag(vRidingToken, false);
+							
+							if (pRemoveRiddenreference) {
+								this.#setRelativPositionFlag(vRidingToken, []);
+							}
+							//this.#setFamiliarRidingFlag(vRidingToken, false);
 						}
-						//this.#setFamiliarRidingFlag(vRidingToken, false);
 					}
 				}
 			}
