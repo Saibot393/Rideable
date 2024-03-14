@@ -1,3 +1,7 @@
+## v2.21.0
+- Added option to select all rider when selecting a mount to the "Rider proxy select" setting
+- Added compatibility for the [MATT](https://foundryvtt.com/packages/monks-active-tiles) teleport action
+
 ## v2.20.3
 - Fixed small bug in connection with Token Attacher
 
