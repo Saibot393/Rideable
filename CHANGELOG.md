@@ -1,3 +1,6 @@
+## v2.21.2
+- Small fix for pf2e
+
 ## v2.21.1
 - Small bug prevention
 
