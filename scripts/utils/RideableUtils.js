@@ -286,7 +286,7 @@ class RideableUtils {
 			if (game.settings.get(cModuleName, "RideableTag")) {
 				switch (game.system.id) {
 					case cPf2eName:
-						if (pToken.actor.system.traits) {						
+						if (pToken?.actor?.system.traits) {						
 							return Boolean(pToken.actor.system.traits.value.find(vElement => vElement.includes(cRideableTag)));
 						}
 						
