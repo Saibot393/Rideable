@@ -35,7 +35,7 @@ class RideableSheetSettings {
 				vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
 			}
 			else { //Tiles
-				vTabsheet =  pHTML.find(`[aria-role="Form Tab Navigation"].sheet-tabs`);
+				vTabsheet =  pHTML.find(`nav.sheet-tabs:first`);
 				vprevTab = pHTML.find(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
 				vTabContentHTML = `<div class="tab" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
 			}
