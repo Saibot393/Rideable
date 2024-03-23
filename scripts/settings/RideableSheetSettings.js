@@ -18,11 +18,8 @@ class RideableSheetSettings {
 	//IMPLEMENTATIONS
 	
 	static SheetSetting(pApp, pHTML, pData, pisTile = false) {
-		console.log("Check 1");
-		console.log(pisTile);
 		
 		if (!pisTile || game.settings.get(cModuleName, "allowTileRiding")) {
-			console.log("Check 2");
 			//create title (under which all settings are placed)
 			//let vTittleHTML = `<h3 class="border" name="RideableTitle">${Translate("Titles.Rideable")}</h3>`;
 			//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
@@ -38,7 +35,6 @@ class RideableSheetSettings {
 				vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
 			}
 			else { //Tiles
-				console.log("Check 3");
 				vTabsheet =  pHTML.find(`[aria-role="Form Tab Navigation"].sheet-tabs`);
 				vprevTab = pHTML.find(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
 				vTabContentHTML = `<div class="tab" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
@@ -65,7 +61,6 @@ class RideableSheetSettings {
 														}, `div[data-tab="${cModuleName}"]`);
 												
 			if (pisTile) {
-				console.log("Check 4");
 				//Tile name for rideable purposes
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cTileRideableNameF +".name"), 
 															vhint : Translate("TokenSettings."+ cTileRideableNameF +".descrp"), 
@@ -77,7 +72,6 @@ class RideableSheetSettings {
 			}
 			
 			if (game.settings.get(cModuleName, "allowMountingonEntering")) {
-				console.log("Check 5");
 				//to set mount on enter
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountonEnterF +".name"), 
 															vhint : Translate("TokenSettings."+ cMountonEnterF +".descrp"), 
@@ -157,7 +151,6 @@ class RideableSheetSettings {
 														}, `div[data-tab="${cModuleName}"]`);
 				
 			if (game.settings.get(cModuleName, "RiderRotation")) {
-				console.log("Check 6");
 				//Riders rotation offset
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderRotOffsetF +".name"), 
 															vhint : Translate("TokenSettings."+ cRiderRotOffsetF +".descrp"), 
@@ -183,7 +176,6 @@ class RideableSheetSettings {
 			let vForms;
 			
 			if (pisTile) {
-				console.log("Check 7");
 				vForms = cTileForms;
 			}
 			else {
@@ -207,7 +199,6 @@ class RideableSheetSettings {
 														}, `div[data-tab="${cModuleName}"]`);
 														
 			if (game.user.isGM) {//GM settings
-				console.log("Check 8");
 				let vGMTittleHTML = `
 										<hr>
 										<h3 class="border" name="RideableTitle">${Translate("Titles.GMonly")}</h3>
@@ -295,14 +286,11 @@ class RideableSheetSettings {
 		}
 		
 		if (pisTile) {
-			console.log("Check 9");
 			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
 		}
 		else {
 			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[data-group="main"]`);
 		}
-		
-		console.log("Check 10");
 		
 		//pHTML.css("width", "max-content");
 	} 

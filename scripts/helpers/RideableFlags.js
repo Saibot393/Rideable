@@ -1362,7 +1362,6 @@ class RideableFlags {
 	}
 	
 	static async cleanRiderIDs (pRiddenToken) {
-		console.log("cleaned:" + pRiddenToken.name);
 		//will only keep ids for which a token exists that has the Rider flag
 		await this.#setRidersFlag(pRiddenToken, this.#RidersFlag(pRiddenToken).filter(vID => RideableFlags.isRider(RideableUtils.TokenfromID(vID, FCore.sceneof(pRiddenToken)))));
 	} 
