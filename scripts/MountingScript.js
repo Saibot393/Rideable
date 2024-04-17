@@ -208,6 +208,8 @@ class MountingManager {
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
 		//starts a mount reequest
 		if (pTarget) {
+			pRidingOptions.isGM = game.user.isGM;
+			
 			if (game.user.isGM) {
 				MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
 			}
@@ -727,8 +729,7 @@ class MountingManager {
 			
 			if (RideableFlags.TokenhasRidingPlace(pRidden, pRidingOptions)) {
 			//check if Token has place left to be ridden
-			
-				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || game.user.isGM || pRidingOptions.Grappled) {
+				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || pRidingOptions.isGM || pRidingOptions.Grappled) {
 				//Prevents enemy riding if enabled (override as GM and for grapples)
 					if (pRidingOptions.MountbyEnter || RideableUtils.WithinMountingDistance(pRider, pRidden)) {
 						return true;
