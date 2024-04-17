@@ -693,7 +693,7 @@ class MountingManager {
 					case "always":
 						if (RideableFlags.isRider(pToken)) {
 							if (!RideableFlags.isGrappled(pToken)) {
-								if (game.settings.get(cModuleName, "RiderProxySelect") == "always" || RideableFlags.isFamiliarRider(vToken)) {
+								if (game.settings.get(cModuleName, "RiderProxySelect") == "always" || RideableFlags.isFamiliarRider(pToken)) {
 									let vRidden = RideableFlags.RiddenToken(pToken)?.object;
 									
 									let vToken = pToken?.object;
