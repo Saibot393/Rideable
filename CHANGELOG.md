@@ -1,3 +1,6 @@
+## v2.21.5
+- Small bug fix for familiar proxy select
+
 ## v2.21.4
 - Fixed bug regarding prevent enemy riding setting
 
