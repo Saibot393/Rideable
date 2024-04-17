@@ -1,3 +1,6 @@
+## v2.21.4
+- Fixed bug regarding prevent enemy riding setting
+
 ## v2.21.3
 - Fixed bug that prevented the rideable settings from showing up for tiles
 
