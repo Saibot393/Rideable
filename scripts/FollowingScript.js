@@ -26,6 +26,8 @@ class FollowingManager {
 	
 	static async PlanDestack(pToken) {} //plans a new position for pToken that does not collide with other followers of same target
 	
+	static updateFollowedList() {} //updates the followed list
+	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
 	
@@ -132,7 +134,6 @@ class FollowingManager {
 	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {
-		
 		if (pFollowers.length > 0) {
 			let vScene = pInfos.Scene;
 			
@@ -251,6 +252,10 @@ class FollowingManager {
 				}
 			}
 		}
+	}
+	
+	static updateFollowedList() {
+		vFollowedList = FollowingManager.FollowedTokenList();
 	}
 	
 	//support
@@ -424,4 +429,6 @@ export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance =
 export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
 
 export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) { FollowingManager.calculatenewRoute(pFollowers, pInfos)};
+
+export function updateFollowedList() {FollowingManager.updateFollowedList()};
 

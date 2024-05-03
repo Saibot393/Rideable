@@ -622,15 +622,13 @@ class MountingManager {
 	static onRideableEffectDeletion(pEffect, pUser, pInfos) {
 		if (pInfos.GrappleEffect) {
 			if (game.settings.get(cModuleName, "StopGrappleonEffectRemoval")) {
-				if (game.user.isGM) {
-					let vGrappled = canvas.tokens.placeables.filter(vToken => vToken.actor == pEffect.parent);
-					
-					vGrappled = vGrappled.map(vToken => vToken.document);
-					
-					vGrappled = vGrappled.filter(vToken => RideableFlags.isGrappled(vToken));
-					
-					MountingManager.RequestUnmount(vGrappled, true);
-				}
+				let vGrappled = canvas.tokens.placeables.filter(vToken => vToken.actor == pEffect.parent);
+				
+				vGrappled = vGrappled.map(vToken => vToken.document);
+				
+				vGrappled = vGrappled.filter(vToken => RideableFlags.isGrappled(vToken));
+				
+				MountingManager.RequestUnmount(vGrappled, true);
 			}
 		}
 	}
