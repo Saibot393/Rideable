@@ -1,3 +1,6 @@
+## v2.21.7
+- Fixed following algoritm "Simple path history" for grapple following
+
 ## v2.21.6
 - players are now able to stop a grapple by removing the connected effect
 
