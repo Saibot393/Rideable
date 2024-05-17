@@ -28,6 +28,8 @@ class FollowingManager {
 	
 	static updateFollowedList() {} //updates the followed list
 	
+	static async updatePathHistory(pToken) {} //updates the path history for pToken
+	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
 	
@@ -254,8 +256,15 @@ class FollowingManager {
 		}
 	}
 	
-	static updateFollowedList() {
+	static updateFollowedList(pAddTokens) {
 		vFollowedList = FollowingManager.FollowedTokenList();
+	}
+	
+	static async updatePathHistory(pToken) {
+		if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
+			//update path history of pToken
+			await RideableFlags.AddtoPathHistory(pToken);
+		}
 	}
 	
 	//support
@@ -311,10 +320,7 @@ class FollowingManager {
 		if (vFollowedList?.has(pToken.id)) {
 			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 				if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-					if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
-						//update path history of pToken
-						await RideableFlags.AddtoPathHistory(pToken);
-					}
+					await FollowingManager.updatePathHistory(pToken);
 					
 					//only consider owned tokens for which this player is the source of the follow order
 					let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
@@ -379,7 +385,7 @@ class FollowingManager {
 	}
 	
 	static OnCanvasReady(pCanvas) {
-		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
+		FollowingManager.updateFollowedList();
 	}
 	
 	static OnStartFollowing(pToken, pFollowed, pPopup = true) {
@@ -387,7 +393,7 @@ class FollowingManager {
 			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pFollowedName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
 		}
 		
-		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
+		FollowingManager.updateFollowedList();
 		
 		Hooks.call(cModuleName + ".StartFollowing", pToken, pFollowed);
 	} 
@@ -397,7 +403,7 @@ class FollowingManager {
 			RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
 		}
 		
-		vFollowedList = FollowingManager.FollowedTokenList(); //update list of followed tokens
+		FollowingManager.updateFollowedList();
 				
 		Hooks.call(cModuleName + ".StopFollowing", pToken);
 	}
@@ -428,7 +434,9 @@ export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance =
 
 export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
 
-export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) { FollowingManager.calculatenewRoute(pFollowers, pInfos)};
+export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {FollowingManager.calculatenewRoute(pFollowers, pInfos)};
 
 export function updateFollowedList() {FollowingManager.updateFollowedList()};
+
+export async function updatePathHistory(pToken) {await FollowingManager.updatePathHistory(pToken)};
 

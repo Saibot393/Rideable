@@ -4,7 +4,7 @@ import { RideableFlags, cCornermaxRiders } from "./helpers/RideableFlags.js";
 import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
-import { calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
+import { updatePathHistory, calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -357,8 +357,8 @@ class Ridingmanager {
 				Ridingmanager.planRelativRiderTokens(pRiddenToken, vGrappledList, pAnimations);
 				break;
 			case cFollowing:
+				await updatePathHistory(pRiddenToken);
 				calculatenewRoute(vGrappledList, {StartRoute : true, Distance : Math.max(pRiddenToken.width, pRiddenToken.height) * pRiddenToken.parent.dimensions.distance, Target : pRiddenToken, Scene : pRiddenToken.parent, RidingMovement : true});
-				updateFollowedList();
 				break;
 			default:
 				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
