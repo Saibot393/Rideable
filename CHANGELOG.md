@@ -1,3 +1,6 @@
+## v2.21.6
+- players are now able to stop a grapple by removing the connected effect
+
 ## v2.21.5
 - Small bug fix for familiar proxy select
 
