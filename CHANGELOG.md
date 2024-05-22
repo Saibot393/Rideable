@@ -1,3 +1,6 @@
+## v3.0.0
+- v12 Compatibility
+
 ## v2.21.7
 - Fixed following algoritm "Simple path history" for grapple following
 
