@@ -664,9 +664,10 @@ class MountingManager {
 		return vCreations;
 	}
 	
-	static CheckEntering(pToken, pchanges, pInfos, pID) {
-		if ((pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
-			let vNewPosition = GeometricUtils.CenterPosition(pToken);
+	static CheckEntering(pToken, pChanges, pInfos, pID) {
+		if ((pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
+			let vNewPosition = GeometricUtils.updatedGeometry(pToken, pChanges);
+
 			let vMoEobjects = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.MountonEnter(vToken));
 			
 			if (game.settings.get(cModuleName, "allowTileRiding")) {

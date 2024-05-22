@@ -49,28 +49,28 @@ class Ridingmanager {
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {} //Works out if Rider has moved independently
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList = [], pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
+	static UpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {} //Works out where the Riders of a given token should be placed and calls placeRiderTokens to apply updates
 	
-	static async OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
+	static async OnIndependentRidermovement(pToken, pChanges, pInfos, pRidden, psendingUser) {} //Handles what should happen if a rider moved independently
 	
-	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
+	static async planRiderTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {} //Works out where the Riders of pRiddenToken should move based on the updated pRiddenToken
 	
-	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
+	static planPatternRidersTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they are spread according to a set pattern
 	
 	static placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {} //sets the appropiate riding height (elevation) of pRiderTokenList based on pRiddenToken
 	
-	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {} //reduces the size of all tokens that are equal or greater in size to their ridden token to pSizeFactor of ridden token
+	static async fitRiders(pRiddenToken, pChanges, pRiderTokenList, pSizeFactor = cSizeFactor) {} //reduces the size of all tokens that are equal or greater in size to their ridden token to pSizeFactor of ridden token
 	
-	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
+	static planRelativRiderTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {} //works out the position of tokens if they can move freely on pRiddenToken
 	
 	//DEPRICATED:
 	//static placeRiderTokensPattern(priddenToken, pRiderTokenList, pxoffset, pxdelta, pallFamiliars = false, pAnimations = true) {} //Set the Riders(pRiderTokenList) token based on the Inputs (pxoffset, pxdelta, pbunchedRiders) und the position of priddenToken
 	
-	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {} //works out the position of tokens if they are spread according in a row
+	static placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {} //works out the position of tokens if they are spread according in a row
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
+	static placeRiderTokenscorner(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {} //places up to four tokens from pRiderTokenList on the corners of priddenToken
 	
-	static placeTokenrotated(pRiddenToken, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
+	static placeTokenrotated(pRiddenToken, pChanges, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
 	
 	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
@@ -92,9 +92,8 @@ class Ridingmanager {
 	static keydownMoveReplacement() {} //returns an xy replacement incase movement keys are down
 	
 	//IMPLEMENTATIONS
-	static OnTokenupdate(pToken, pchanges, pInfos, pID, pisTile = false) {
+	static OnTokenupdate(pToken, pChanges, pInfos, pID, pisTile = false) {
 		if (game.user.isGM) {
-			
 			/*
 			if (!pToken) {
 				//get token from scene if not linked
@@ -105,11 +104,11 @@ class Ridingmanager {
 			//Check if vToken is ridden
 			if (RideableFlags.isRidden(pToken)) {
 				//check if token position was actually changed
-				if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
+				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation") || (pChanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableFlags.RiderTokens(pToken);
 					
-					Ridingmanager.planRiderTokens(pToken, vRiderTokenList, !pisTile && pInfos.animate);
+					Ridingmanager.planRiderTokens(pToken, pChanges, vRiderTokenList, !pisTile && pInfos.animate);
 				}
 			}
 		}
@@ -202,28 +201,28 @@ class Ridingmanager {
 		}
 	}
 	
-	static UpdateRidderTokens(priddenToken, pRiderTokenList = [], pAnimations = true) {
-		if (priddenToken) {
+	static UpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {
+		if (pRiddenToken) {
 			if (pRiderTokenList.length > 0) {
-				Ridingmanager.planRiderTokens(priddenToken, pRiderTokenList, pAnimations);
+				Ridingmanager.planRiderTokens(pRiddenToken, {}, pRiderTokenList, pAnimations);
 			}
 			else {
-				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(priddenToken), FCore.sceneof(priddenToken));
+				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken));
 					
-				Ridingmanager.planRiderTokens(priddenToken, vRiderTokenList, false);
+				Ridingmanager.planRiderTokens(pRiddenToken, {}, vRiderTokenList, false);
 			}
 		}
 	} 
 	
-	static async OnIndependentRidermovement(pToken, pchanges, pInfos, pRidden, psendingUser) {
+	static async OnIndependentRidermovement(pToken, pChanges, pInfos, pRidden, psendingUser) {
 		let vElevationOverride = false; //option to override standard behaviour if only the elevation was changed
 					
 		if (game.users.get(psendingUser).isGM) {
-			if ((!pchanges.hasOwnProperty("x") && !pchanges.hasOwnProperty("y") && pchanges.hasOwnProperty("elevation")) && !(RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden")) {
+			if ((!pChanges.hasOwnProperty("x") && !pChanges.hasOwnProperty("y") && pChanges.hasOwnProperty("elevation")) && !(RideableUtils.getRiderMovementsetting() === "RiderMovement-moveridden")) {
 				//if a dm tried to only change the elevation while "move ridden" is off
 				vElevationOverride = true;
 				
-				RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pchanges.elevation - pToken.elevation));
+				RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pChanges.elevation - pToken.elevation));
 			}
 		}
 		
@@ -236,7 +235,7 @@ class Ridingmanager {
 				
 				if (RideableFlags.RiderscanMoveWithin(pRidden)) {
 					//move to closest border position
-					let vTargetPosition = GeometricUtils.closestBorderposition(pRidden, RideableFlags.TokenForm(pRidden), pToken, RideableUtils.CompleteProperties(["x","y","rotation"], pchanges, pToken));
+					let vTargetPosition = GeometricUtils.closestBorderposition(pRidden, RideableFlags.TokenForm(pRidden), pToken, RideableUtils.CompleteProperties(["x","y","rotation"], pChanges, pToken));
 
 					vTargetPosition = [...(GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRidden).grid, [(pRidden.width+pToken.width)%2,(pRidden.height+pToken.height)%2])),vTargetPosition.rotation - pRidden.rotation];
 
@@ -259,13 +258,13 @@ class Ridingmanager {
 						//can only change if you own vRidden
 						
 						let vxtarget = pRidden.x;								
-						if (pchanges.hasOwnProperty("x")) {
-							vxtarget = pRidden.x + (pchanges.x - pToken.x);
+						if (pChanges.hasOwnProperty("x")) {
+							vxtarget = pRidden.x + (pChanges.x - pToken.x);
 						}
 						
 						let vytarget = pRidden.y;
-						if (pchanges.hasOwnProperty("y")) {
-							vytarget = pRidden.y + (pchanges.y - pToken.y);
+						if (pChanges.hasOwnProperty("y")) {
+							vytarget = pRidden.y + (pChanges.y - pToken.y);
 						}
 						
 						let vztarget = pRidden.elevation;
@@ -274,13 +273,13 @@ class Ridingmanager {
 							vztarget = 0;
 						}
 						
-						if (pchanges.hasOwnProperty("elevation")) {
-							vztarget = pchanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.addRiderHeight(pToken);
+						if (pChanges.hasOwnProperty("elevation")) {
+							vztarget = pChanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.addRiderHeight(pToken);
 						}
 						
 						let vrotationtarget = pRidden.rotation;	
 						if (game.settings.get(cModuleName, "RiderRotation")) {
-							vrotationtarget = pchanges.rotation;
+							vrotationtarget = pChanges.rotation;
 						}
 						
 						[vxtarget, vytarget] = GeometricUtils.GridSnap([vxtarget, vytarget], FCore.sceneof(pRidden).grid);
@@ -294,21 +293,21 @@ class Ridingmanager {
 			}
 		
 			if (vdeleteChanges) {
-				delete pchanges.x;
-				delete pchanges.y;
+				delete pChanges.x;
+				delete pChanges.y;
 				
 				if (RideableFlags.UseRidingHeight(pRidden)) {
-					delete pchanges.elevation;
+					delete pChanges.elevation;
 				}
 				
-				delete pchanges.rotation;
+				delete pChanges.rotation;
 			}
 			
-			Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pchanges)
+			Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pChanges)
 		}
 	}
 	
-	static async planRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static async planRiderTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {
 		let vRiderTokenList = pRiderTokenList;
 		let vRiderFamiliarList = []; //List of Riders that Ride as familiars	
 		let vGrappledList = [];
@@ -332,40 +331,42 @@ class Ridingmanager {
 		
 		//reduce size if necessary
 		if (game.settings.get(cModuleName, "FitRidersize")) {
-			await Ridingmanager.fitRiders(pRiddenToken, vRiderTokenList, game.settings.get(cModuleName, "FitRiderSizeFactor"));
+			await Ridingmanager.fitRiders(pRiddenToken, pChanges, vRiderTokenList, game.settings.get(cModuleName, "FitRiderSizeFactor"));
 		}
     
 		if (RideableFlags.RiderscanMoveWithin(pRiddenToken)) {
-			Ridingmanager.planRelativRiderTokens(pRiddenToken, vRiderTokenList, pAnimations);
+			Ridingmanager.planRelativRiderTokens(pRiddenToken, pChanges, vRiderTokenList, pAnimations);
 		}
 		else {
-			Ridingmanager.planPatternRidersTokens(pRiddenToken, vRiderTokenList, pAnimations);
+			Ridingmanager.planPatternRidersTokens(pRiddenToken, pChanges, vRiderTokenList, pAnimations);
 		}
 		
 		//Familiars
-		Ridingmanager.placeRiderTokenscorner(pRiddenToken, vRiderFamiliarList, pAnimations);
+		Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, vRiderFamiliarList, pAnimations);
 		
 		//Grappled
 		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {
 			case cRowAbove:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (-GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2));
 				break;
 			case cRowMiddle:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (0)));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (0)));
 				break;
 			case cClosestInside:
-				Ridingmanager.planRelativRiderTokens(pRiddenToken, vGrappledList, pAnimations);
+				Ridingmanager.planRelativRiderTokens(pRiddenToken, pChanges, vGrappledList, pAnimations);
 				break;
 			case cFollowing:
-				await updatePathHistory(pRiddenToken);
+				await updatePathHistory(pRiddenToken, pChanges);
 				calculatenewRoute(vGrappledList, {StartRoute : true, Distance : Math.max(pRiddenToken.width, pRiddenToken.height) * pRiddenToken.parent.dimensions.distance, Target : pRiddenToken, Scene : pRiddenToken.parent, RidingMovement : true});
 				break;
 			default:
-				Ridingmanager.placeRidersTokensRow(pRiddenToken, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
+				Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, vGrappledList, pAnimations, [], vGrappledList.map(vToken => (GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2));
 		}
 	}
 	
-	static planPatternRidersTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static planPatternRidersTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {
+		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
+		
 		if (pRiderTokenList.length) {
 			let vAngleSteps; //to fix javascript syntax bug
 			
@@ -388,11 +389,11 @@ class Ridingmanager {
 						vMaxWidth = Math.max(vMaxWidth, GeometricUtils.insceneWidth(pRiderTokenList[i]));
 					}
 					
-					vMaxHeight = (GeometricUtils.insceneHeight(pRiddenToken) - vMaxHeight)/2;
-					vMaxWidth = (GeometricUtils.insceneWidth(pRiddenToken) - vMaxWidth)/2;
+					vMaxHeight = (vRiddenGeometry.insceneHeight - vMaxHeight)/2;
+					vMaxWidth = (vRiddenGeometry.insceneWidth - vMaxWidth)/2;
 					
 					for (let i = 0; i < pRiderTokenList.length; i++) {
-						Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, pRiderTokenList[i], vMaxWidth * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vMaxHeight * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
 					}	
 					
 					break;
@@ -406,12 +407,12 @@ class Ridingmanager {
 					
 					switch (pRiddenToken.documentName) {
 						case "Token":
-							vxsize = Math.round(pRiddenToken.width * 2);
-							vysize = Math.round(pRiddenToken.height * 2);
+							vxsize = Math.round(vRiddenGeometry.width * 2);
+							vysize = Math.round(vRiddenGeometry.height * 2);
 							break;
 						case "Tile":
-							vxsize = Math.round(pRiddenToken.width / cSizeFactor);
-							vysize = Math.round(pRiddenToken.height / cSizeFactor);
+							vxsize = Math.round(vRiddenGeometry.width / cSizeFactor);
+							vysize = Math.round(vRiddenGeometry.height / cSizeFactor);
 							break;
 					}
 					
@@ -481,8 +482,8 @@ class Ridingmanager {
 					
 					let vsortedRiders = pRiderTokenList.sort((a,b) => {return (a.height * a.width) - (b.height * b.width)}).reverse();
 					
-					const cxOffset = -GeometricUtils.insceneWidth(pRiddenToken)/2;
-					const cyOffset = -GeometricUtils.insceneHeight(pRiddenToken)/2;
+					const cxOffset = -vRiddenGeometry.insceneWidth/2;
+					const cyOffset = -vRiddenGeometry.insceneHeight/2;
 					
 					for (const vrider of vsortedRiders) {
 						let vtargetposition = searchfreeSpace(vrider.width * 2, vrider.height * 2);
@@ -496,7 +497,7 @@ class Ridingmanager {
 						let vTargetx = cxOffset + (vtargetposition[0] + vrider.width) * cSizeFactor;
 						let vTargety = cyOffset + (vtargetposition[1] + vrider.height) * cSizeFactor;
 						
-						Ridingmanager.placeTokenrotated(pRiddenToken, vrider, vTargetx  + vBasicOffset[0], vTargety + vBasicOffset[1], vRotOffset, pAnimations);
+						Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, vrider, vTargetx  + vBasicOffset[0], vTargety + vBasicOffset[1], vRotOffset, pAnimations);
 					}
 					
 					break;
@@ -528,7 +529,7 @@ class Ridingmanager {
 							
 							
 							for (let i = vPlacementInterval[0]; i <= vPlacementInterval[1]; i++) {
-								Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
+								Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, pRiderTokenList[i], vBaseRadius * vSizeFactor * Math.sin(vAngleSteps*cGradtoRad*i) + vBasicOffset[0], -vBaseRadius * vSizeFactor * Math.cos(vAngleSteps*cGradtoRad*i) + vBasicOffset[1], vRotOffset, pAnimations);
 							}	
 							
 							vBaseRadius = vBaseRadius + vMaxSize/2;
@@ -556,26 +557,26 @@ class Ridingmanager {
 						
 					break;
 				case cRowplacementTop:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (GeometricUtils.insceneHeight(vToken)-GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
 					break;
 				case cRowplacementBottom:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations, [vBasicOffset[0]], pRiderTokenList.map(vToken => (-GeometricUtils.insceneHeight(vToken)+GeometricUtils.insceneHeight(pRiddenToken))/2 + vBasicOffset[1]));
 					break;
 				case cCornerPlacement:
 				case cCornerPlacementinner:
 					if (pRiderTokenList.length <= 4) {
-						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations, RideableFlags.RiderPositioning(pRiddenToken) == cCornerPlacementinner, [vBasicOffset[0]], [vBasicOffset[1]]);
+						Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, pRiderTokenList, pAnimations, RideableFlags.RiderPositioning(pRiddenToken) == cCornerPlacementinner, [vBasicOffset[0]], [vBasicOffset[1]]);
 					}
 					else {
-						Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
+						Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
 					}
 					break;
 				case cMountPosition:
-					Ridingmanager.planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations);
+					Ridingmanager.planRelativRiderTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations);
 					break;
 				case cRowplacement:
 				default:
-					Ridingmanager.placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
+					Ridingmanager.placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations, [vBasicOffset[0]], [vBasicOffset[1]]);
 			}
 		}
 	} 
@@ -612,12 +613,13 @@ class Ridingmanager {
 		}
 	}
 	
-	static async fitRiders(pRiddenToken, pRiderTokenList, pSizeFactor = cSizeFactor) {
+	static async fitRiders(pRiddenToken, pChanges, pRiderTokenList, pSizeFactor = cSizeFactor) {
+		let vGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
 		if (pRiddenToken.documentName == "Token") {
 			for (let i = 0; i < pRiderTokenList.length; i++) {
 				
-				if ((pRiderTokenList[i].width >= pRiddenToken.width) && (pRiderTokenList[i].height >= pRiddenToken.height)) {
-					let vUpdate = {width : pSizeFactor*pRiddenToken.width, height : pSizeFactor*pRiddenToken.height};
+				if ((pRiderTokenList[i].width >= vGeometry.width) && (pRiderTokenList[i].height >= vGeometry.height)) {
+					let vUpdate = {width : pSizeFactor*vGeometry.width, height : pSizeFactor*vGeometry.height};
 					
 					if (RideableUtils.isPf2e()) {
 						vUpdate = {...vUpdate, flags : {pf2e : {linkToActorSize : false}}};
@@ -629,31 +631,34 @@ class Ridingmanager {
 		}
 	} 
 	
-	static planRelativRiderTokens(pRiddenToken, pRiderTokenList, pAnimations = true) {
+	static planRelativRiderTokens(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true) {
 		let vRiddenForm = RideableFlags.TokenForm(pRiddenToken);
+		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
 		
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			let vTargetPosition = RideableFlags.RelativPosition(pRiderTokenList[i]);
 			
 			if (!RideableFlags.HasrelativPosition(pRiderTokenList[i])) {
 				//if first time Rider give Border position
-				if (!GeometricUtils.withinBoundaries(pRiddenToken, RideableFlags.TokenForm(pRiddenToken), GeometricUtils.CenterPosition(pRiderTokenList[i]))) {
+				if (!GeometricUtils.withinBoundariesupdated(pRiddenToken, pChanges, RideableFlags.TokenForm(pRiddenToken), GeometricUtils.CenterPosition(pRiderTokenList[i]))) {
 					vTargetPosition = GeometricUtils.closestBorderposition(pRiddenToken, vRiddenForm, pRiderTokenList[i]);					
 				}
 				else {
-					vTargetPosition = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRiderTokenList[i], pRiddenToken), -pRiddenToken.rotation);
+					vTargetPosition = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRiderTokenList[i], vRiddenGeometry), -pRiddenToken.rotation);
 				}
 				
-				vTargetPosition = [...(GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRiddenToken).grid, [(pRiddenToken.width+pRiderTokenList[i].width)%2,(pRiddenToken.height+pRiderTokenList[i].height)%2])), pRiderTokenList[i].rotation - pRiddenToken.rotation];
+				vTargetPosition = [...(GeometricUtils.GridSnap(vTargetPosition, FCore.sceneof(pRiddenToken).grid, [(vRiddenGeometry.width+pRiderTokenList[i].width)%2,(vRiddenGeometry.height+pRiderTokenList[i].height)%2])), pRiderTokenList[i].rotation - vRiddenGeometry.rotation];
 
 				RideableFlags.setRelativPosition(pRiderTokenList[i], vTargetPosition);
 			}
 			
-			Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetPosition[0], vTargetPosition[1], vTargetPosition[2], pAnimations);		
+			Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, pRiderTokenList[i], vTargetPosition[0], vTargetPosition[1], vTargetPosition[2], pAnimations);		
 		}
 	}
 	
-	static placeRidersTokensRow(pRiddenToken, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {
+	static placeRidersTokensRow(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true, pxoffset = [], pyoffset = []) {
+		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
+		
 		if (pRiderTokenList.length) {
 			let vbunchedRiders = true;
 			let vxoffset = 0;
@@ -665,10 +670,10 @@ class Ridingmanager {
 			}
 			
 			//if Riders have to be bunched
-			if (vRiderWidthSumm > GeometricUtils.insceneWidth(pRiddenToken)) {
-				vxoffset = -GeometricUtils.insceneWidth(pRiddenToken)/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
+			if (vRiderWidthSumm > vRiddenGeometry.insceneWidth) {
+				vxoffset = -vRiddenGeometry.insceneWidth/2 + GeometricUtils.insceneWidth(pRiderTokenList[0])/2;	
 				if (pRiderTokenList.length > 1) {
-					vxdelta = (GeometricUtils.insceneWidth(pRiddenToken) - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
+					vxdelta = (vRiddenGeometry.insceneHeight - (GeometricUtils.insceneWidth(pRiderTokenList[pRiderTokenList.length - 1]) + GeometricUtils.insceneWidth(pRiderTokenList[0]))/2)/(pRiderTokenList.length-1);
 				}
 			} 
 			else { //if Riders dont have to be bunched
@@ -705,12 +710,14 @@ class Ridingmanager {
 				
 				let vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
 				
-				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
+				Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
 			}
 		}
 	}
 	
-	static placeRiderTokenscorner(pRiddenToken, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {
+	static placeRiderTokenscorner(pRiddenToken, pChanges, pRiderTokenList, pAnimations = true, pInner = false, pxoffset = [], pyoffset = []) {
+		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
+		
 		if (pRiderTokenList.length) {
 			for (let i = 0; i < Math.min(Math.max(pRiderTokenList.length, cCornermaxRiders-1), pRiderTokenList.length); i++) { //no more then 4 corner places			
 				let vTargetx = 0;
@@ -726,23 +733,23 @@ class Ridingmanager {
 				
 				switch ((i + Number(game.settings.get(cModuleName, "FamiliarRidingFirstCorner")))%cCornermaxRiders) {
 					case 0: //tl
-						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2 + vXoffset;
-						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2 + vYoffset;
+						vTargetx = -vRiddenGeometry.insceneWidth/2 + vXoffset;
+						vTargety = -vRiddenGeometry.insceneHeight/2 + vYoffset;
 						break;
 						
 					case 1: //tr
-						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2 - vXoffset;
-						vTargety = -GeometricUtils.insceneHeight(pRiddenToken)/2 + vYoffset;
+						vTargetx = vRiddenGeometry.insceneWidth/2 - vXoffset;
+						vTargety = -vRiddenGeometry.insceneHeight/2 + vYoffset;
 						break;
 						
 					case 2: //bl
-						vTargetx = -GeometricUtils.insceneWidth(pRiddenToken)/2 + vXoffset;
-						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2 - vYoffset;
+						vTargetx = -vRiddenGeometry.insceneWidth/2 + vXoffset;
+						vTargety = vRiddenGeometry.insceneHeight/2 - vYoffset;
 						break;
 						
 					case 3: //br
-						vTargetx = GeometricUtils.insceneWidth(pRiddenToken)/2 - vXoffset;
-						vTargety = GeometricUtils.insceneHeight(pRiddenToken)/2 - vYoffset;
+						vTargetx = vRiddenGeometry.insceneWidth/2 - vXoffset;
+						vTargety = vRiddenGeometry.insceneHeight/2 - vYoffset;
 						break;
 				}
 				
@@ -756,29 +763,30 @@ class Ridingmanager {
 				
 				let vRotOffset = RideableFlags.RidersRotOffset(pRiddenToken);
 				
-				Ridingmanager.placeTokenrotated(pRiddenToken, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
+				Ridingmanager.placeTokenrotated(pRiddenToken, pChanges, pRiderTokenList[i], vTargetx, vTargety, vRotOffset, pAnimations);		
 			}
 		}
 	}
 	
-	static placeTokenrotated(pRiddenToken, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {	
+	static placeTokenrotated(pRiddenToken, pChanges, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {	
+		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
 		let vTargetx = pTargetx;
 		let vTargety = pTargety;
 		
 		if (game.settings.get(cModuleName, "RiderRotation")) {
 			//rotation
-			[vTargetx, vTargety] = GeometricUtils.Rotated([pTargetx, pTargety], pRiddenToken.rotation);
+			[vTargetx, vTargety] = GeometricUtils.Rotated([pTargetx, pTargety], vRiddenGeometry.rotation);
 			
 			if (pRelativerotation) {
-				pRider.update({rotation: pRiddenToken.rotation + pRelativerotation}, {animate : pAnimation, RidingMovement : true});
+				pRider.update({rotation: vRiddenGeometry.rotation + pRelativerotation}, {animate : pAnimation, RidingMovement : true});
 			}
 			else {
-				pRider.update({rotation: pRiddenToken.rotation}, {animate : pAnimation, RidingMovement : true});
+				pRider.update({rotation: vRiddenGeometry.rotation}, {animate : pAnimation, RidingMovement : true});
 			}
 		}
 		
-		vTargetx = pRiddenToken.x + GeometricUtils.insceneWidth(pRiddenToken)/2 - GeometricUtils.insceneWidth(pRider)/2 + vTargetx;
-		vTargety = pRiddenToken.y + GeometricUtils.insceneHeight(pRiddenToken)/2 - GeometricUtils.insceneHeight(pRider)/2 + vTargety;
+		vTargetx = vRiddenGeometry.x - GeometricUtils.insceneWidth(pRider)/2 + vTargetx;
+		vTargety = vRiddenGeometry.y - GeometricUtils.insceneHeight(pRider)/2 + vTargety;
 			
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
 			pRider.update({x: vTargetx, y: vTargety}, {animate : pAnimation, RidingMovement : true});
@@ -939,8 +947,8 @@ class Ridingmanager {
 
 //export
 
-function UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations = true) {
-	Ridingmanager.UpdateRidderTokens(priddenToken, vRiderTokenList, pAnimations);
+function UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations = true) {
+	Ridingmanager.UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations);
 }
 function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);

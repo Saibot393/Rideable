@@ -33,6 +33,8 @@ class GeometricUtils {
 	
 	static CenterPositionXY(pToken) {} //returns the center position (x,y) of pToken
 	
+	static updatedGeometry(pToken, pChange) {} //returns the center position (x,y) of pToken after pChange
+	
 	static CentertoXY(pPoint, pToken) {} //maps a center point to a tl-corner point
 	
 	static CenterRoutetoXY(pRoute, pToken) {} //maps a center point route to a tl-corner point route
@@ -85,6 +87,8 @@ class GeometricUtils {
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
 	
+	static withinBoundariesupdated(pToken, pChanges, pChangespTokenForm, pPosition) {} //if pPosition is with in Boundaries of pToken (with form pTokenForm)
+	
 	//grids
 	static GridSnap(ppositon, pGrid, podd = [0,0]) {}//snaps ppositon to grid, podd should be an array of boolean refering to x and y (e.g. if summ of rider and ridden size is odd)
 	
@@ -120,6 +124,18 @@ class GeometricUtils {
 		else {
 			return {};
 		}
+	}
+	
+	static updatedGeometry(pToken, pChange) {
+		let vData = {};
+		
+		for (let vKey of ["x", "y", "width", "height", "rotation"]) {
+			vData[vKey] = pChange[vKey] ?? pToken[vKey];
+		}
+		
+		let vScale = pToken.documentName == "Token" ? FCore.sceneof(pToken).dimensions.size : 1;
+		
+		return {...vData, x : vData.x + vScale * vData.width / 2, y : vData.y + vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + vScale * vData.width / 2, 1 : vData.y + vScale * vData.height / 2};
 	}
 	
 	static CentertoXY(pPoint, pToken) {
@@ -258,6 +274,10 @@ class GeometricUtils {
 	}
 	
 	static insceneWidth(pToken) {
+		if (pToken.hasOwnProperty("insceneWidth")) {
+			return pToken.insceneWidth;
+		}
+		
 		if (pToken.documentName == "Tile") {
 			return pToken.width;
 		}
@@ -270,7 +290,11 @@ class GeometricUtils {
 		}
 	}
 	
-	static insceneHeight(pToken) {		
+	static insceneHeight(pToken) {
+		if (pToken.hasOwnProperty("insceneHeight")) {
+			return pToken.insceneHeight;
+		}
+		
 		if (pToken.documentName == "Tile") {
 			return pToken.height;
 		}
@@ -393,36 +417,42 @@ class GeometricUtils {
 	} 
 	
 	static withinBoundaries(pToken, pTokenForm, pPosition) {
+		return GeometricUtils.withinBoundariesupdated(pToken, {}, pTokenForm, pPosition);
+	}
+	
+	static withinBoundariesupdated(pToken, pChanges, pTokenForm, pPosition) {
 		let vDifference;
+		
+		let vTokenGeometry = GeometricUtils.updatedGeometry(pToken, pChanges);
 		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
-				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
-					return (GeometricUtils.Distance(GeometricUtils.CenterPosition(pToken), pPosition) <= Math.max(GeometricUtils.insceneWidth(pToken))/2);
+				if (Math.max(vTokenGeometry.insceneWidth == vTokenGeometry.insceneHeight)) {
+					return (GeometricUtils.Distance(vTokenGeometry, pPosition) <= Math.max(vTokenGeometry.insceneWidth)/2);
 				}
 				else {	
 					//supports ellipses through scaling
-					return (GeometricUtils.scaledDistance(GeometricUtils.CenterPosition(pToken), pPosition, [1/GeometricUtils.insceneWidth(pToken), 1/GeometricUtils.insceneHeight(pToken)], -pToken.rotation) <= 1/2);
+					return (GeometricUtils.scaledDistance(vTokenGeometry, pPosition, [1/vTokenGeometry.insceneWidth, 1/vTokenGeometry.insceneHeight], -vTokenGeometry.rotation) <= 1/2);
 				}
 				
 				break;
 			
 			case cTokenFormRectangle:
-				vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
+				vDifference = GeometricUtils.Difference(vTokenGeometry, pPosition);
 				
-				vDifference = GeometricUtils.Rotated(vDifference, -pToken.rotation);
+				vDifference = GeometricUtils.Rotated(vDifference, -vTokenGeometry.rotation);
 				
-				return ((Math.abs(vDifference[0]) <= GeometricUtils.insceneWidth(pToken)/2) && (Math.abs(vDifference[1]) <= GeometricUtils.insceneHeight(pToken)/2));
+				return ((Math.abs(vDifference[0]) <= vTokenGeometry.insceneWidth/2) && (Math.abs(vDifference[1]) <= vTokenGeometry.insceneHeight/2));
 			
 				break;
 				
 			case cTokenFormTransparency:
-				vDifference = GeometricUtils.Difference(GeometricUtils.CenterPosition(pToken), pPosition);
+				vDifference = GeometricUtils.Difference(vTokenGeometry, pPosition);
 				
-				vDifference = GeometricUtils.Rotated(vDifference, -pToken.rotation);
+				vDifference = GeometricUtils.Rotated(vDifference, -vTokenGeometry.rotation);
 				
 				if (!pToken.object.texture) {
-					GeometricUtils.withinBoundaries(pToken, cTokenFormRectangle, pPosition); //probably monochromatic rectangle
+					GeometricUtils.withinBoundariesupdated(pToken, pChanges, cTokenFormRectangle, pPosition); //probably monochromatic rectangle
 				}
 				
 				//render texture

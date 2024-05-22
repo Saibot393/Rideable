@@ -28,7 +28,7 @@ class FollowingManager {
 	
 	static updateFollowedList() {} //updates the followed list
 	
-	static async updatePathHistory(pToken) {} //updates the path history for pToken
+	static async updatePathHistory(pToken, pchanges) {} //updates the path history for pToken
 	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance) {} //returns the route for pFollower to follow pTarget at pDistance
@@ -260,10 +260,10 @@ class FollowingManager {
 		vFollowedList = FollowingManager.FollowedTokenList();
 	}
 	
-	static async updatePathHistory(pToken) {
+	static async updatePathHistory(pToken, pchanges) {
 		if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 			//update path history of pToken
-			await RideableFlags.AddtoPathHistory(pToken);
+			await RideableFlags.AddtoPathHistory(pToken, GeometricUtils.updatedGeometry(pToken, pchanges));
 		}
 	}
 	
@@ -320,7 +320,7 @@ class FollowingManager {
 		if (vFollowedList?.has(pToken.id)) {
 			if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 				if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-					await FollowingManager.updatePathHistory(pToken);
+					await FollowingManager.updatePathHistory(pToken, pchanges);
 					
 					//only consider owned tokens for which this player is the source of the follow order
 					let vFollowers = RideableFlags.followingTokens(pToken).filter(vToken => vToken.isOwner && RideableFlags.isFollowOrderSource(vToken));
