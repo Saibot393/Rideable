@@ -861,15 +861,21 @@ class Ridingmanager {
 				
 				if (RideableUtils.canbeMoved(pRidden)) {
 					if (vPilot && RideableFlags.isPilotedby(pRidden, vPilot)) {
-						let vTarget = {};
+						let vCurrentCenter = GeometricUtils.CenterPositionXY(pRidden);
+						let vTargetCenter = {x : vCurrentCenter.x + (pRelativChanges.x || 0), y : vCurrentCenter.y + (pRelativChanges.y || 0)}
+						let vCollision = CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentCenter, vTargetCenter, {type : "move"});
 						
-						for (let i = 0; i < cMotionProperties.length; i++) {
-							if (pRelativChanges.hasOwnProperty(cMotionProperties[i]) && (cMotionProperties[i] != "rotation" || game.settings.get(cModuleName, "RiderRotation"))) {
-								vTarget[cMotionProperties[i]] = pRidden[cMotionProperties[i]] + pRelativChanges[cMotionProperties[i]];
+						if (!vCollision.length) {
+							let vTarget = {};
+							
+							for (let i = 0; i < cMotionProperties.length; i++) {
+								if (pRelativChanges.hasOwnProperty(cMotionProperties[i]) && (cMotionProperties[i] != "rotation" || game.settings.get(cModuleName, "RiderRotation"))) {
+									vTarget[cMotionProperties[i]] = pRidden[cMotionProperties[i]] + pRelativChanges[cMotionProperties[i]];
+								}
 							}
+							
+							pRidden.update(vTarget);
 						}
-						
-						pRidden.update(vTarget);
 					}
 					else {
 						RideablePopups.TextPopUpID(vPilot ,"cantPilot", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
@@ -937,7 +943,6 @@ class Ridingmanager {
 			if (!vReplacement.x && !vReplacement.y) {
 				return {};
 			}
-			
 			return vReplacement;
 		}
 		
