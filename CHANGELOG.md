@@ -1,3 +1,6 @@
+## v3.0.1
+- Added collision checks to piloting movement
+
 ## v3.0.0
 - v12 Compatibility
 
