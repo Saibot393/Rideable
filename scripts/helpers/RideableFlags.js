@@ -33,6 +33,7 @@ const cAutoMountBlackListF = "AutoMountBlackListFlag"; //flag to contain a black
 const cAutoMountWhiteListF = "AutoMountWhiteListFlag"; //flag to contain a white list of tokens that should be mounted on enter (ignored if empty)
 const cPositionLockF = "PositionLockFlag"; //flag to store position lock of a token
 const cCanbePilotedF = "CanbePilotedFlag"; //flag to store of this token/tile can be piloted
+const cCheckPilotedCollisionF = "CheckPilotedCollisionFlag"; //flag to store of this token/tile should check for collision while piloting
 const cPilotedbyDefaultF = "PilotedbyDefaultFlag"; //flag to pilot this token/tile by default
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
@@ -54,7 +55,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -640,6 +641,19 @@ class RideableFlags {
 		}
 		
 		return false; //default if anything fails		
+	}
+	
+	static #CheckPilotedCollisionFlag (pToken) {
+		//returns content of CheckPilotedCollisionFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cCheckPilotedCollisionF)) {
+				return vFlag.CheckPilotedCollisionFlag;
+			}
+		}
+		
+		return pToken.documentName == "Tile"; //default if anything fails		
 	}
 	
 	static #PilotedbyDefaultFlag (pToken) {
@@ -1558,6 +1572,10 @@ class RideableFlags {
 	//pilots
 	static canbePiloted(pToken) {
 		return this.#CanbePilotedFlag(pToken);
+	}
+	
+	static CheckPilotedCollision(pToken) {
+		return this.#CheckPilotedCollisionFlag(pToken);
 	}
 	
 	static PilotedbyDefault(pToken) {

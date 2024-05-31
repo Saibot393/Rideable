@@ -864,14 +864,22 @@ class Ridingmanager {
 						//let vCurrentCenter = GeometricUtils.CenterPositionXY(pRidden);
 						//let vTargetCenter = {x : vCurrentCenter.x + (pRelativChanges.x || 0), y : vCurrentCenter.y + (pRelativChanges.y || 0)}
 						//let vCollision = CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentCenter, vTargetCenter, {type : "move"});
-						let vCurrentPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden));
-						let vTargetPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden, pRelativChanges));
 						let vCollisions = [];
-						
-						for (let i = 0; i < 4; i++) {
-							vCollisions.push(...CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentPoints[i], vTargetPoints[i], {type : "move"}));
+													
+						if (RideableFlags.CheckPilotedCollision(pRidden)) {
+							let vCurrentPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden));
+							let vTargetPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden, pRelativChanges));
+							
+							for (let i = 0; i < 4; i++) {
+								vCollisions.push(...CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentPoints[i], vTargetPoints[(i + 2)%4], {type : "move"}));
+							}
+							
+							if (!vCollisions.length) {
+								for (let i = 0; i < 4; i++) {
+									vCollisions.push(...CONFIG.Canvas.polygonBackends.move.testCollision(vTargetPoints[i], vTargetPoints[(i + +1)%4], {type : "move"}));
+								}
+							}
 						}
-						console.log(vCollisions)
 						
 						if (!vCollisions.length) {
 							let vTarget = {};

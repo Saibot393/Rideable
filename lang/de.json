@@ -458,6 +458,11 @@
 				"descrp"				: "Spieler können diese Figur Steuern, was es ihnen erlaubt sie zu bewegen ohne sie zu besitzen"
 			},
 			
+			"CheckPilotedCollisionFlag" : {
+				"name"					: "Kollision beim Steuern",
+				"descrp"				: "Ob beim Steuern dieser Figure die Kollision überprüft werden soll (beim TA mit Wänden ausstellen)"
+			},
+			
 			"PilotedbyDefaultFlag" : {
 				"name"					: "standardmäßig gesteuert",
 				"descrp"				: "Ob jeder Spieler der diese Figur reitet sie auch automatisch steuert (nicht kompatibel mit \"Reiter können sich frei bewegen\")"

@@ -458,6 +458,11 @@
 				"descrp"				: "Players can pilot this token, allowing them to move it even if they don't own it"
 			},
 			
+			"CheckPilotedCollisionFlag" : {
+				"name"					: "Collision when piloted",
+				"descrp"				: "If this tokens collision should be calculated while piloting (deactivate for TAs with attached walls)"
+			},
+			
 			"PilotedbyDefaultFlag" : {
 				"name"					: "Piloted by default",
 				"descrp"				: "If everyone riding this token automatically pilots this token (not compatible with \"Riders can move freely\")"

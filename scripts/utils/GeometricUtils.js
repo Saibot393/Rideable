@@ -329,10 +329,10 @@ class GeometricUtils {
 	
 	static fourspread(pPoint) {
 		return [
-			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4},
-			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4},
-			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4},
-			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4}
+			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4}, //BR
+			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4}, //TR
+			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4}, //TL
+			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4}  //BL
 		]
 	}
 	
