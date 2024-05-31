@@ -33,7 +33,9 @@ class GeometricUtils {
 	
 	static CenterPositionXY(pToken) {} //returns the center position (x,y) of pToken
 	
-	static updatedGeometry(pToken, pChange) {} //returns the center position (x,y) of pToken after pChange
+	static updatedGeometry(pToken, pChange = {}) {} //returns the center position (x,y) of pToken after pChange
+	
+	static changedGeometry(pToken, pChange = {}) {} //returns the center position (x,y) of pToken with pChange
 	
 	static CentertoXY(pPoint, pToken) {} //maps a center point to a tl-corner point
 	
@@ -78,6 +80,8 @@ class GeometricUtils {
 	static insceneHeight(pToken) {} //returns the tokens width in its scene
 	
 	static insceneSize(pToken) {} // returns the scene size of pTokens scene
+	
+	static fourspread(pPoint) {} // returns 4 equally spread points around pPoint
 	
 	//sort
 	static sortbymaxdim(pTokens) {} //sorts pTokens array by their largest dimensions, returns sorted array and array with their values
@@ -126,11 +130,23 @@ class GeometricUtils {
 		}
 	}
 	
-	static updatedGeometry(pToken, pChange) {
+	static updatedGeometry(pToken, pChange = {}) {
 		let vData = {};
 		
 		for (let vKey of ["x", "y", "width", "height", "rotation"]) {
 			vData[vKey] = pChange[vKey] ?? pToken[vKey];
+		}
+		
+		let vScale = pToken.documentName == "Token" ? FCore.sceneof(pToken).dimensions.size : 1;
+		
+		return {...vData, x : vData.x + vScale * vData.width / 2, y : vData.y + vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + vScale * vData.width / 2, 1 : vData.y + vScale * vData.height / 2};
+	}
+	
+	static changedGeometry(pToken, pChange = {}) {
+		let vData = {};
+		
+		for (let vKey of ["x", "y", "width", "height", "rotation"]) {
+			vData[vKey] = pToken[vKey] + (pChange[vKey] || 0);
 		}
 		
 		let vScale = pToken.documentName == "Token" ? FCore.sceneof(pToken).dimensions.size : 1;
@@ -309,6 +325,15 @@ class GeometricUtils {
 	
 	static insceneSize(pToken) {
 		return FCore.sceneof(pToken).dimensions.size;
+	}
+	
+	static fourspread(pPoint) {
+		return [
+			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4},
+			{x : pPoint.x + pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4},
+			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4},
+			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4}
+		]
 	}
 	
 	//sort

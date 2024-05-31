@@ -861,11 +861,19 @@ class Ridingmanager {
 				
 				if (RideableUtils.canbeMoved(pRidden)) {
 					if (vPilot && RideableFlags.isPilotedby(pRidden, vPilot)) {
-						let vCurrentCenter = GeometricUtils.CenterPositionXY(pRidden);
-						let vTargetCenter = {x : vCurrentCenter.x + (pRelativChanges.x || 0), y : vCurrentCenter.y + (pRelativChanges.y || 0)}
-						let vCollision = CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentCenter, vTargetCenter, {type : "move"});
+						//let vCurrentCenter = GeometricUtils.CenterPositionXY(pRidden);
+						//let vTargetCenter = {x : vCurrentCenter.x + (pRelativChanges.x || 0), y : vCurrentCenter.y + (pRelativChanges.y || 0)}
+						//let vCollision = CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentCenter, vTargetCenter, {type : "move"});
+						let vCurrentPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden));
+						let vTargetPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden, pRelativChanges));
+						let vCollisions = [];
 						
-						if (!vCollision.length) {
+						for (let i = 0; i < 4; i++) {
+							vCollisions.push(...CONFIG.Canvas.polygonBackends.move.testCollision(vCurrentPoints[i], vTargetPoints[i], {type : "move"}));
+						}
+						console.log(vCollisions)
+						
+						if (!vCollisions.length) {
 							let vTarget = {};
 							
 							for (let i = 0; i < cMotionProperties.length; i++) {
