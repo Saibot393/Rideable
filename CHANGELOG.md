@@ -1,3 +1,7 @@
+## v3.0.3
+- Further improved collision checks to piloting movement
+- Added per token/tile setting to enable/disable collision when piloting (disable collision for token attacher objects wtih walls)
+
 ## v3.0.2
 - Improved collision checks to piloting movement
 
