@@ -1,3 +1,6 @@
+## v3.0.5
+- Fixed bug for mount movement when using "Move ridden Token (if owned)" on gridded maps
+
 ## v3.0.4
 - Fixed bug in free rider positioning
 
