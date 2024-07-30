@@ -7,7 +7,7 @@
     "name": "saibot"
     }
   ],
-  "version": "3.0.4",
+  "version": "3.0.5",
   "compatibility": {
     "minimum": "10",
     "verified": "12"
@@ -64,10 +64,9 @@
       ]
   },
   "url": "https://github.com/Saibot393/Rideable",
-  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v3.0.4.zip",
+  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v3.0.5.zip",
   "manifest": "https://github.com/Saibot393/Rideable/releases/latest/download/module.json",
   "readme": "https://github.com/Saibot393/Rideable/blob/main/README.md",
   "changelog": "https://github.com/Saibot393/Rideable/blob/main/CHANGELOG.md",
-  "bugs": "https://github.com/Saibot393/Rideable/issues",
-  "allowBugReporter": true
+  "bugs": "https://github.com/Saibot393/Rideable/issues"
 }

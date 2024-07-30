@@ -257,14 +257,29 @@ class Ridingmanager {
 					if (pRidden.isOwner) {
 						//can only change if you own vRidden
 						
+						let vChange = Ridingmanager.keydownMoveReplacement();
+						
 						let vxtarget = pRidden.x;								
 						if (pChanges.hasOwnProperty("x")) {
-							vxtarget = pRidden.x + (pChanges.x - pToken.x);
+							if (vChange.hasOwnProperty("x")) {
+								vxtarget = pRidden.x + vChange.x;
+								console.log(pRidden.x);
+								console.log(vChange.x);
+								console.log(vxtarget);
+							}
+							else {
+								vxtarget = pRidden.x + (pChanges.x - pToken.x);
+							}
 						}
 						
 						let vytarget = pRidden.y;
 						if (pChanges.hasOwnProperty("y")) {
-							vytarget = pRidden.y + (pChanges.y - pToken.y);
+							if (vChange.hasOwnProperty("y")) {
+								vytarget = pRidden.y + vChange.y;
+							}
+							else {
+								vytarget = pRidden.y + (pChanges.y - pToken.y);
+							}
 						}
 						
 						let vztarget = pRidden.elevation;

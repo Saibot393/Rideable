@@ -138,6 +138,7 @@ class RideableCompatibility {
 	}
 	
 	static RequestRideableTeleport(pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID) {
+		console.log({pTokenIDs, pSourceSceneID, pTargetSceneID, pSWTarget, pUserID});
 		if (game.user.isGM) {
 			if ((pSourceSceneID != pTargetSceneID) && pSourceSceneID && pTargetSceneID) {
 				//only necessary for cross scene teleport
@@ -153,6 +154,7 @@ class RideableCompatibility {
 	} 	
 		
 	static async OrganiseTeleport(pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser, pDeleteOld = true, pTeleportMount = true, pupdatePrevID = true) {
+		console.log({pTokenIDs, pSourceScene, pTargetScene, pSWTarget, pUser, pDeleteOld, pTeleportMount, pupdatePrevID});
 		if (game.user.isGM) {
 			if (pSourceScene != pTargetScene) {
 				if (pSourceScene && pTargetScene) {
