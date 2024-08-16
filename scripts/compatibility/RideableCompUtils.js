@@ -69,7 +69,7 @@ class RideableCompUtils {
 	
 	static async RemoveRideableDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses dfreds api to remove effects with pEffectNames to pToken
 	
-	static FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
+	static async FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
 	
 	//specific: token attacher
 	static isTAAttachedto(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
@@ -236,15 +236,29 @@ class RideableCompUtils {
 			vPostFix = ".grapple";
 		}
 		
-		for (let i = 0; i < pEffects.length; i++) {
-			await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
-			  effect: pEffects[i].toObject(),
-			  uuid : pToken.actor.uuid,
-			  origin : cModuleName + vPostFix
-			});
-			/*
-			game.dfreds.effectInterface.addEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
-			*/
+		if (game.release.generation < 12) {
+			for (let i = 0; i < pEffects.length; i++) {
+				await game.dfreds.effectInterface._socket.executeAsGM('addEffect', {
+				  effect: pEffects[i].toObject(),
+				  uuid : pToken.actor.uuid,
+				  origin : cModuleName + vPostFix
+				});
+				/*
+				game.dfreds.effectInterface.addEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
+				*/
+			}
+		}
+		else {
+			for (let i = 0; i < pEffects.length; i++) {
+				await game.dfreds.effectInterface.addEffect({
+					effectData: {...pEffects[i].toObject(),
+								 origin : cModuleName + vPostFix},
+					uuid : pToken.actor.uuid
+				});
+				/*
+				game.dfreds.effectInterface.addEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
+				*/
+			}
 		}
 	}
 	
@@ -259,40 +273,76 @@ class RideableCompUtils {
 			vPostFix = ".grapple";
 		}
 		
-		for (let i = 0; i < pEffects.length; i++) {
-			let vName = pEffects[i].name;
+		if (game.release.generation < 12) {
+			for (let i = 0; i < pEffects.length; i++) {
+				let vName = pEffects[i].name;
+				
+				if (!vName) {
+					vName = pEffects[i].label;
+				}
+				
+				await game.dfreds.effectInterface._socket.executeAsGM('removeEffect', {
+				  effectName: vName,
+				  uuid : pToken.actor.uuid,
+				  origin : cModuleName + vPostFix
+				});
+				//game.dfreds.effectInterface.removeEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
+			}	
+		}
+		else {
+			for (let i = 0; i < pEffects.length; i++) {
+				let vName = pEffects[i].name;
+				
+				if (!vName) {
+					vName = pEffects[i].label;
+				}
 			
-			if (!vName) {
-				vName = pEffects[i].label;
+				await game.dfreds.effectInterface.removeEffect({
+					effectName: vName,
+					uuid : pToken.actor.uuid,
+					origin : cModuleName + vPostFix
+				});
 			}
-			
-			await game.dfreds.effectInterface._socket.executeAsGM('removeEffect', {
-			  effectName: vName,
-			  uuid : pToken.actor.uuid,
-			  origin : cModuleName + vPostFix
-			});
-			//game.dfreds.effectInterface.removeEffect({effectName : pEffectNames[i], uuid : pToken.actor.uuid, origin : cModuleName})
-		}		
+		}
 	}
 	
-	static FilterEffects(pNameIDs) {
+	static async FilterEffects(pNameIDs) {
 		let vNameIDs = [];
 		
 		let vBuffer;
 		
-		for (let i = 0; i < pNameIDs.length; i++) {
-			vBuffer = game.dfreds.effects._all.find(vEffect => vEffect.name == pNameIDs[i] || vEffect.name == pNameIDs[i]);
-			
-			if (vBuffer) {
-				vNameIDs.push(vBuffer);
+		if (game.release.generation < 12) {
+			for (let i = 0; i < pNameIDs.length; i++) {
+				vBuffer = game.dfreds.effects?._all.find(vEffect => vEffect.name == pNameIDs[i] /*|| vEffect.label == pNameIDs[i]*/);
+				
+				if (vBuffer) {
+					vNameIDs.push(vBuffer);
+				}
+				else {
+					vBuffer = game.dfreds.effects?._customEffectsHandler._findCustomEffectsItem()?.effects.get(pNameIDs[i]);
+					
+					if (!vBuffer) {
+						vBuffer = game.dfreds.effects?._customEffectsHandler._findCustomEffectsItem()?.effects.find(v => v.name == pNameIDs[i]);
+					}
+					
+					if (vBuffer) {
+						vNameIDs.push(vBuffer);
+					}
+				}
 			}
-			else {
-				vBuffer = game.dfreds.effects._customEffectsHandler._findCustomEffectsItem().effects.get(pNameIDs[i]);
+		}
+		else {
+			for (let i = 0; i < pNameIDs.length; i++) {
+				vBuffer = await game.dfreds.effectInterface.findEffect({effectName : pNameIDs[i]});
 				
 				if (!vBuffer) {
-					vBuffer = game.dfreds.effects._customEffectsHandler._findCustomEffectsItem().effects.find(v => v.name == pNameIDs[i]);
+					vBuffer = await game.dfreds.effectInterface.findEffect({effectId : pNameIDs[i]});
+				}	
+					
+				if (!vBuffer) {
+					vBuffer = await fromUuid(pNameIDs[i]);
 				}
-				
+					
 				if (vBuffer) {
 					vNameIDs.push(vBuffer);
 				}

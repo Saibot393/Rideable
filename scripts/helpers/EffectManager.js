@@ -109,7 +109,7 @@ class EffectManager {
 			}
 			
 			if (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
-				vEffectDocuments = RideableCompUtils.FilterEffects(pEffectNames);
+				vEffectDocuments = await RideableCompUtils.FilterEffects(pEffectNames);
 				
 				RideableCompUtils.AddDfredEffect(vEffectDocuments, pTarget, pInfos);
 			}
