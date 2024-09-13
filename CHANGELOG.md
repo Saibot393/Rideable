@@ -1,3 +1,6 @@
+## v3.0.6
+- Compatibility update for new DFreds CE
+
 ## v3.0.5
 - Fixed bug for mount movement when using "Move ridden Token (if owned)" on gridded maps
 
