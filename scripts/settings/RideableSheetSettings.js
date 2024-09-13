@@ -13,7 +13,7 @@ class RideableSheetSettings {
 	
 	static createHTMLOption(pInfos, pto, pwithformgroup = false) {} //creates new html "code"
 	
-	static FixSheetWindow(pHTML, pApp, pIndentifier) {} //fixes the formating of pHTML sheet window
+	static FixSheetWindow(pHTML, pIndentifier) {} //fixes the formating of pHTML sheet window
 	
 	//IMPLEMENTATIONS
 	
@@ -294,10 +294,10 @@ class RideableSheetSettings {
 		}
 		
 		if (pisTile) {
-			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
+			RideableSheetSettings.FixSheetWindow(pApp.element, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
 		}
 		else {
-			RideableSheetSettings.FixSheetWindow(pHTML, pApp, `nav.sheet-tabs[data-group="main"]`);
+			RideableSheetSettings.FixSheetWindow(pApp.element, `nav.sheet-tabs[data-group="main"]`);
 		}
 		
 		//pHTML.css("width", "max-content");
@@ -466,7 +466,7 @@ class RideableSheetSettings {
 		return vnewHTML;
 	}
 	
-	static FixSheetWindow(pHTML , pApp, pIndentifier) {
+	static FixSheetWindow(pHTML, pIndentifier) {
 		let vNeededWidth = 0;
 
 		pHTML.find(pIndentifier).children().each(function() {
@@ -475,13 +475,9 @@ class RideableSheetSettings {
 		
 		let vWindow = pHTML.find(pIndentifier).closest(`div.app.window-app`);
 		
-		if (vNeededWidth > vWindow.width()) {
-			//vWindow.width(vNeededWidth);
-			
-			//vWindow.find(`form`).removeAttr(`style`);
-			
-			pApp.setPosition({"width" : vNeededWidth});
-		}			
+		if (vNeededWidth > pHTML.width()) {
+			pHTML.width(vNeededWidth);
+		}					
 	}
 }
 
