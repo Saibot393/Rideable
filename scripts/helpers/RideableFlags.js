@@ -194,7 +194,7 @@ class RideableFlags {
 	
 	static async resetScale(pToken) {} //resets the scale of pToken to the ScaleSizesaveFlag if a scale is saved
 	
-	static async ApplyRidersScale(pRidden, pRiders) {} //applies the riders scale of pRidden to pRiders and saves previous scales
+	static async ApplyRidersScale(pRidden, pRiders, pWithGlobalScale = true) {} //applies the riders scale of pRidden to pRiders and saves previous scales
 	
 	static RidersScale(pObject) {} //returns riders scale of this pObject
 	
@@ -1187,11 +1187,21 @@ class RideableFlags {
 	}
 	
 	static AutomountBlackList(pRidden, pRaw = false) {
-		return this.#AutoMountBlackListFlag(pRidden).split(cDelimiter);
+		if (pRaw) {
+			return this.#AutoMountBlackListFlag(pRidden)
+		}
+		else {
+			return this.#AutoMountBlackListFlag(pRidden).split(cDelimiter);
+		}
 	}
 	
 	static AutomountWhiteList(pRidden, pRaw = false) {
-		return this.#AutoMountWhiteListFlag(pRidden).split(cDelimiter);
+		if (pRaw) {
+			return this.#AutoMountWhiteListFlag(pRidden);
+		}
+		else {
+			return this.#AutoMountWhiteListFlag(pRidden).split(cDelimiter);
+		}
 	}
 
 	static isAutomountBlacklisted(pRidden, pRider) {
@@ -1500,8 +1510,12 @@ class RideableFlags {
 		}
 	}
 	
-	static async ApplyRidersScale(pRidden, pRiders) {
+	static async ApplyRidersScale(pRidden, pRiders, pWithGlobalScale = true) {
 		let vScale = this.#RidersScaleFlag(pRidden);
+		
+		if (pWithGlobalScale) {
+			vScale = vScale * game.settings.get(cModuleName, "FitRiderScaleFactor");
+		}
 		
 		if (vScale != undefined && vScale != 1) {
 			for (let i = 0; i < pRiders.length; i++) {

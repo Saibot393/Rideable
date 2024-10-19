@@ -419,7 +419,7 @@ Hooks.once("setupTileActions", (pMATT) => {
 				},
 				content: async (trigger, action) => {
 					let entityName = await pMATT.entityName(action.data?.entity || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
-					let vMountName = await pMATT.entityName(action.data?.target);
+					let vMountName = await pMATT.entityName(action.data?.target || trigger.ctrls.find(c => c.id == "entity")?.defvalue);
 					
 					return TranslateandReplace(cMATT + ".actions." + "mount-target" + ".descrp", {pname : Translate(trigger.name, false), pEntities : entityName, pMount : vMountName})
 					//return `<span class="logic-style">${Translate(trigger.name, false)}</span> <span class="entity-style">${entityName}</span>`;

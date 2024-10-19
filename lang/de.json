@@ -35,6 +35,11 @@
 				"descrp"				: "Erlaubt es gewisse Effekte auf reitende und gepackte Figuren anzuwenden"
 			},
 			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "Chris's Premades integration",
+				"descrp"				: "Allows certain effects to be applied to mounted and grappled tokens"
+			},
+			
 			"TaggerMountingIntegration" : {
 				"name" 					: "Tagger Reit Integration",
 				"descrp"				: "Erlaubt es Figuren über Tags auf Fieguren/Fliesen auf- oder absteigen zu lassen (Tag: \"Rideable:{ReiterFigurID}\")"

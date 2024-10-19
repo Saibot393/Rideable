@@ -2,6 +2,7 @@ import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js
 import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
+import { RideableCompUtils } from "../compatibility/RideableCompUtils.js";
 
 const cRideableIcon = "fas fa-horse";
 
@@ -214,7 +215,7 @@ class RideableSheetSettings {
 															vflagname : cSpawnRidersF
 															}, `div[data-tab="${cModuleName}"]`);
 				
-				if (RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
+				if (RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule()) {
 					//Custom Mounting effects applied to Riders
 					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
 																vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 

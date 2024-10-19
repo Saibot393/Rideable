@@ -35,6 +35,11 @@
 				"descrp"				: "Allows certain effects to be applied to mounted and grappled tokens"
 			},
 			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "Chris's Premades integration",
+				"descrp"				: "Allows certain effects to be applied to mounted and grappled tokens"
+			},
+			
 			"TaggerMountingIntegration" : {
 				"name" 					: "Tagger mounting integration",
 				"descrp"				: "Allows tokens to be mounted and unmounted via tags (tag: \"Rideable:{RiderTokenID}\")"

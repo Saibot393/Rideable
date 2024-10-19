@@ -19,6 +19,7 @@ const cTokenAttacher = "token-attacher";
 const cTokenZ = "token-z";
 const cRoutingLib = "routinglib";
 const cMATT = "monks-active-tiles";
+const cCPR = "chris-premades";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -32,7 +33,7 @@ const cGrabbedEffectName = "Grappled"; //For convenient effects
 
 const cTokenFormAttachedTiles = "TokenFormAttachedTiles"; //For Token Attacher
 
-export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT }
+export { cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT, cCPR }
 export { cRideableTag, cGrabbedEffectName, cTokenFormAttachedTiles }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
@@ -64,12 +65,28 @@ class RideableCompUtils {
 	//specific: wall-heights
 	static guessWHTokenHeight(pToken, pWithElevation = false) {} //[Wall-Height] gives the Height the Wall-Height module assigns pToken
 	
+	//effect modules specific: dfreds-convenient-effects & chris premades
+	static hasactiveEffectModule() {} //returns if an effect module compatibility is enabled
+	
+	static async addIDNameEffects(pNameIDs, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //adds effects matching pNameIDs to pToken using compatible modules
+	
+	static async RemoveRideableEffects(pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //removes rideable effects from pToken actor
+	
+	static isRideableEffect(pEffect, pInfos = {forMountEffect : false, grappleEffect : false}) {} //returns if pEffect is a rideable effect
+	
 	//specific: dfreds-convenient-effects
 	static async AddDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses dfreds api to add effects with pEffectNames to pToken
 	
 	static async RemoveRideableDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses dfreds api to remove effects with pEffectNames to pToken
 	
-	static async FilterEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
+	static async FilterDFEffects(pNameIDs) {} //returns an array of effects fitting the ids or names in pNameIDs
+	
+	//specific: chris premades
+	static async AddCPREffects(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses CPR to add effects to pToken
+	
+	static async RemoveRideableCPREffects(pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {} //uses CPR to remove effects to pToken
+	
+	static FilterCPREffects(pNameIDs) {} //returns array of effects datas
 	
 	//specific: token attacher
 	static isTAAttachedto(pToken, pObject) {} //returns if pObject is attached to pToken or vice versa
@@ -224,6 +241,41 @@ class RideableCompUtils {
 		}
 	}
 	
+	//effect modules specific: dfreds-convenient-effects & chris premades
+	static hasactiveEffectModule() {
+		return (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) || (RideableCompUtils.isactiveModule(cCPR) && game.settings.get(cModuleName, "CPREffectsIntegration"))
+	} 
+	
+	static async addIDNameEffects(pNameIDs, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
+		if (RideableCompUtils.isactiveModule(cDfredCE) && game.settings.get(cModuleName, "DFredsEffectsIntegration")) {
+			await RideableCompUtils.AddDfredEffect(await RideableCompUtils.FilterDFEffects(pNameIDs), pToken, pInfos);
+		}
+
+		if (RideableCompUtils.isactiveModule(cCPR) && game.settings.get(cModuleName, "CPREffectsIntegration")) {
+			await RideableCompUtils.AddCPREffects(RideableCompUtils.FilterCPREffects(pNameIDs), pToken, pInfos);
+		}
+	}
+	
+	static async RemoveRideableEffects(pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
+		let vEffectIDs = pToken.actor.effects.filter(vEffect => RideableCompUtils.isRideableEffect(vEffect, pInfos)).map(vEffect => vEffect.id);
+
+		await pToken.actor.deleteEmbeddedDocuments("ActiveEffect", vEffectIDs);
+	}
+	
+	static isRideableEffect(pEffect, pInfos = {forMountEffect : false, grappleEffect : false}) {
+		let vPostFix = "";
+		
+		if (pInfos.forMountEffect) {
+			vPostFix = ".forMount";
+		}
+		
+		if (pInfos.grappleEffect) {
+			vPostFix = ".grapple";
+		}
+		
+		return pEffect.origin == cModuleName + vPostFix;
+	}
+	
 	//specific: dfreds-convenient-effects
 	static async AddDfredEffect(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
 		let vPostFix = "";
@@ -306,7 +358,7 @@ class RideableCompUtils {
 		}
 	}
 	
-	static async FilterEffects(pNameIDs) {
+	static async FilterDFEffects(pNameIDs) {
 		let vNameIDs = [];
 		
 		let vBuffer;
@@ -350,6 +402,58 @@ class RideableCompUtils {
 		}
 		
 		return vNameIDs;
+	}
+	
+	//specific: chris premades
+	static async AddCPREffects(pEffects, pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
+		let vPostFix = "";
+		
+		if (pInfos.forMountEffect) {
+			vPostFix = ".forMount";
+		}
+		
+		if (pInfos.grappleEffect) {
+			vPostFix = ".grapple";
+		}
+		
+		//pEffects.forEach(vEffect => vEffect.origin = cModuleName + vPostFix);
+		
+		//pToken.actor.createEmbeddedDocuments("ActiveEffect", pEffects)
+		await pToken.actor.createEmbeddedDocuments("ActiveEffect", pEffects, {keepId: true});
+		
+		for (let vEffect of pEffects) {
+			let vAppliedEffect = pToken.actor.effects.find(vAE => vAE._source?._id == vEffect.id);
+			
+			if (vAppliedEffect) {
+				await vAppliedEffect.update({origin : cModuleName + vPostFix});
+			}
+		}
+	}
+	
+	static async RemoveRideableCPREffects(pToken, pInfos = {forMountEffect : false, grappleEffect : false}) {
+		let vPostFix = "";
+		
+		if (pInfos.forMountEffect) {
+			vPostFix = ".forMount";
+		}
+		
+		if (pInfos.grappleEffect) {
+			vPostFix = ".grapple";
+		}
+		
+		let vEffectIDs = pToken.actor.effects.filter(vEffect => vEffect.origin == cModuleName + vPostFix).map(vEffect => vEffect.id);
+		
+		await pToken.actor.deleteEmbeddedDocuments("ActiveEffect", vEffects);
+	}
+	
+	static FilterCPREffects(pNameIDs) {
+		let vEffects = game.items.find(i => i.flags[cCPR]?.effectInterface).collections.effects;
+		
+		if (!vEffects) {
+			return [];
+		}
+		
+		return vEffects.filter(vEffect => pNameIDs.find(vNameID => vEffect.name == vNameID || vEffect.id == vNameID || vEffect.uuid == vNameID));
 	}
 	
 	//specific: token attacher

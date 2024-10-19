@@ -1,6 +1,6 @@
 import * as FCore from "../CoreVersionComp.js";
 
-import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE, cRoutingLib } from "../compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE, cCPR, cRoutingLib } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
 import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
@@ -49,6 +49,16 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	hint: Translate("Settings.DFredsEffectsIntegration.descrp"),
 	scope: "world",
 	config: RideableCompUtils.isactiveModule(cDfredCE) && !RideableUtils.isPf2e(),
+	type: Boolean,
+	default: false,
+	requiresReload: true
+  }); 
+  
+  game.settings.register(cModuleName, "CPREffectsIntegration", {
+	name: Translate("Settings.CPREffectsIntegration.name"),
+	hint: Translate("Settings.CPREffectsIntegration.descrp"),
+	scope: "world",
+	config: RideableCompUtils.isactiveModule(cCPR) && !RideableUtils.isPf2e(),
 	type: Boolean,
 	default: false,
 	requiresReload: true
@@ -148,7 +158,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.CustomRidingEffects.name"),
 	hint: Translate("Settings.CustomRidingEffects.descrp"),
 	scope: "world",
-	config: RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration"),
+	config: RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule(),
 	type: String,
 	default: ""
   });    
@@ -199,7 +209,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	name: Translate("Settings.GrapplingSystemEffects.name"),
 	hint: Translate("Settings.GrapplingSystemEffects.descrp"),
 	scope: "world",
-	config: RideableUtils.isPf2e() || game.settings.get(cModuleName, "DFredsEffectsIntegration"),
+	config: RideableUtils.isPf2e() ||  RideableCompUtils.hasactiveEffectModule(),
 	type: Boolean,
 	default: false
   });  
@@ -260,6 +270,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	},
 	default: 0.65
   });  
+  
+  game.settings.register(cModuleName, "FitRiderScaleFactor", {
+	name: Translate("Settings.FitRiderScaleFactor.name"),
+	hint: Translate("Settings.FitRiderScaleFactor.descrp"),
+	scope: "world",
+	config: true,
+	type: Number,
+	range: {
+		min: 0,
+		max: 3,
+		step: 0.05
+	},
+	default: 1
+  }); 
   
   game.settings.register(cModuleName, "RiderMovementworlddefault", {
 	name: Translate("Settings.RiderMovementworlddefault.name"),
