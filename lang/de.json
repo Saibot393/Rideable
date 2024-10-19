@@ -35,7 +35,7 @@
 				"descrp"				: "Erlaubt es gewisse Effekte auf reitende und gepackte Figuren anzuwenden"
 			},
 			
-			"DFredsEffectsIntegration" : {
+			"CPREffectsIntegration" : {
 				"name" 					: "Chris's Premades integration",
 				"descrp"				: "Allows certain effects to be applied to mounted and grappled tokens"
 			},
