@@ -450,3 +450,5 @@ export function updateFollowedList() {FollowingManager.updateFollowedList()};
 
 export async function updatePathHistory(pToken) {await FollowingManager.updatePathHistory(pToken)};
 
+export function RequestreplaceFollowerListIDs ({pPlayers, pOldIDs, pNewIDs} = {}) {if (pPlayers?.includes(game.user.id)) {FollowingManager.replaceFollowerListIDs(pOldIDs, pNewIDs)}}
+

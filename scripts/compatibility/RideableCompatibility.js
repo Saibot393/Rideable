@@ -172,9 +172,16 @@ class RideableCompatibility {
 								let vOldFollowers = RideableFlags.IDfollowingTokens(pTokenIDs[i], pSourceScene).map(vToken => vToken.id);
 								let vNewFollowers = await RideableCompatibility.TeleportleftTokens(vOldFollowers, pSourceScene, pTargetScene, pTarget, pUser, pDeleteOld, pTeleportMount, pupdatePrevID);
 								
-								vNewFollowers.forEach(vFollower => RideableFlags.updateFollowedID(vFollower, vToken.id));
+								vRelevantPlayers = [];
+								vNewFollowers.forEach(vFollower => {
+									RideableFlags.updateFollowedID(vFollower, vToken.id);
+									vRelevantPlayers.push(vFollower.flags[cModuleName].FollowOrderPlayerIDFlag);
+								});
 								
-								Hooks.call(cModuleName + "replaceFollowerListIDs", [pTokenIDs[i]], [vToken.id]);
+								if (vRelevantPlayers.includes(game.user.id)) {
+									Hooks.call(cModuleName + "replaceFollowerListIDs", [pTokenIDs[i]], [vToken.id]); //TEST!
+								};
+								game.socket.emit("module.Rideable", {pFunction : "RequestreplaceFollowerListIDs", pData : {pPlayers : vRelevantPlayers, pOldIDs : [pTokenIDs[i]], pNewIDs : [vToken.id]}});
 								
 								//update
 								
