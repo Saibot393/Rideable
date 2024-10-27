@@ -28,6 +28,8 @@ class FollowingManager {
 	
 	static updateFollowedList() {} //updates the followed list
 	
+	static replaceFollowerListIDs(pOldIDs, pNewIDs) {} //replaces pOldID on vFollowedList with pNewID
+	
 	static async updatePathHistory(pToken, pchanges) {} //updates the path history for pToken
 	
 	//support
@@ -260,6 +262,12 @@ class FollowingManager {
 		vFollowedList = FollowingManager.FollowedTokenList();
 	}
 	
+	static replaceFollowerListIDs(pOldIDs, pNewIDs) {
+		pOldIDs.forEach(vID => vFollowedList.delete(vID));
+		
+		pNewIDs.forEach(vID => vFollowedList.add(vID));
+	}
+	
 	static async updatePathHistory(pToken, pchanges) {
 		if (pToken.isOwner && game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 			//update path history of pToken
@@ -416,6 +424,8 @@ Hooks.once("ready", function () {
 		Hooks.on("refreshToken", (...args) => FollowingManager.OnTokenrefresh(...args));
 		
 		Hooks.on("canvasReady", (...args) => FollowingManager.OnCanvasReady(...args));
+		
+		Hooks.on(cModuleName + "replaceFollowerListIDs", (pOldIDs, pNewIDs) => FollowingManager.replaceFollowerListIDs(pOldIDs, pNewIDs));
 	}
 });
 

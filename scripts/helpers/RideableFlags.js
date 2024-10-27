@@ -246,6 +246,10 @@ class RideableFlags {
 	
 	static isFollowingToken(pFollower, pToken) {} //returns if pFollower is following pToken
 	
+	static isFollowed(pToken) {} //returns if pToken is followed
+	
+	static isFollowedID(pID, pScene) {} //returns if pID has follower in pScene
+	
 	static isFollowingSameToken(pFollowerA, pFollowerB) {} //returns wether pFollowerA, pFollowerB are following the same target
 	
 	static followedID(pFollower) {} //retruns the ID of the token followed by pFollower
@@ -253,12 +257,16 @@ class RideableFlags {
 	static followedToken(pFollower) {} //retruns the Token followed by pFollower
 	
 	static followingTokens(pToken) {} //returns array of Tokens following pToken
+
+	static IDfollowingTokens(pID, pScene) {} //returns array of Tokens following pID in pScene
 	
 	static FollowDistance(pFollower) {} //returns the follow distance of pFollower
 	
 	static async UpdateFollowDistance(pFollower, pDistance) {} //updates the set follow distance
 	
 	static async startFollowing(pFollower, pToken, pDistance) {} //start pFollower to follow pToken
+	
+	static async updateFollowedID(pFollower, pNewID) {} //replace previous follow id with pNewID
 	
 	static isFollowOrderSource(pFollower) {} //returns if current player is source of follow order
 	
@@ -1698,8 +1706,21 @@ class RideableFlags {
 	}
 	
 	static isFollowingToken(pFollower, pToken) {
-		return this.#followedTokenFlag(pFollower) == pToken.id;
+		switch (typeof pToken) {
+			case "string":
+				return this.#followedTokenFlag(pFollower) == pToken;
+			case "object":
+				return this.#followedTokenFlag(pFollower) == pToken.id;
+		}
 	}
+	
+	static isFollowed(pToken) {
+		return pToken.parent.tokens.find(vToken => RideableFlags.isFollowingToken(vToken, pToken));
+	} 
+	
+	static isFollowedID(pID, pScene) {
+		return pScene.tokens.find(vToken => RideableFlags.isFollowingToken(vToken, pID));
+	} 
 	
 	static isFollowingSameToken(pFollowerA, pFollowerB) {
 		return this.#followedTokenFlag(pFollowerA) == this.#followedTokenFlag(pFollowerB);
@@ -1717,6 +1738,10 @@ class RideableFlags {
 		return pToken.parent.tokens.filter(vToken => RideableFlags.isFollowingToken(vToken, pToken));
 	}
 	
+	static IDfollowingTokens(pID,pScene) {
+		return pScene.tokens.filter(vToken => RideableFlags.isFollowingToken(vToken, pID));
+	}
+	
 	static FollowDistance(pFollower) {
 		return this.#followDistanceFlag(pFollower);
 	}
@@ -1731,6 +1756,10 @@ class RideableFlags {
 		await this.#setfollowDistanceFlag(pFollower, pDistance);
 		
 		await this.#setFollowOrderPlayerIDFlag(pFollower, game.userId);
+	}
+	
+	static async updateFollowedID(pFollower, pNewID) {
+		await this.#setfollowedTokenFlag(pFollower, pNewID);
 	}
 	
 	static isFollowOrderSource(pFollower) {
