@@ -172,7 +172,7 @@ class RideableCompatibility {
 								let vOldFollowers = RideableFlags.IDfollowingTokens(pTokenIDs[i], pSourceScene).map(vToken => vToken.id);
 								let vNewFollowers = await RideableCompatibility.TeleportleftTokens(vOldFollowers, pSourceScene, pTargetScene, pTarget, pUser, pDeleteOld, pTeleportMount, pupdatePrevID);
 								
-								vRelevantPlayers = [];
+								let vRelevantPlayers = [];
 								vNewFollowers.forEach(vFollower => {
 									RideableFlags.updateFollowedID(vFollower, vToken.id);
 									vRelevantPlayers.push(vFollower.flags[cModuleName].FollowOrderPlayerIDFlag);

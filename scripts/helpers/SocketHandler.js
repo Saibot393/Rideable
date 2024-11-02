@@ -3,6 +3,7 @@ import { MoveRiddenRequest, SyncSortRequest } from "../RidingScript.js";
 import { PopUpRequest } from "./RideablePopups.js";
 import { RequestRideableTeleport } from "../compatibility/RideableCompatibility.js";
 import { switchScene } from "../utils/RideableUtils.js";
+import { RequestreplaceFollowerListIDs } from "../FollowingScript.js";
 
 //execute functions with pData depending on pFunction
 function organiseSocketEvents({pFunction, pData} = {}) {
@@ -27,6 +28,9 @@ function organiseSocketEvents({pFunction, pData} = {}) {
 			break;
 		case "SyncSortRequest":
 			SyncSortRequest(pData);
+			break;
+		case "RequestreplaceFollowerListIDs":
+			RequestreplaceFollowerListIDs(pData);
 			break;
 	}
 }
