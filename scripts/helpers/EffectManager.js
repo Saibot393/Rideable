@@ -47,7 +47,7 @@ class EffectManager {
 						
 						if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
 							//World Mounting effects
-							vRiderEffectNames = vRiderEffectNames.concat(RideableUtils.CustomWorldRidingEffects());
+							vRiderEffectNames.push(...RideableUtils.CustomWorldRidingEffects());
 							
 							//Standard mounting effect
 							if (RideableUtils.isPf2e() && game.settings.get(cModuleName, "RidingSystemEffects")) {
@@ -56,19 +56,25 @@ class EffectManager {
 						}
 						
 						if (RideableFlags.SelfApplyCustomEffects(pRider)) {
-							vRiderEffectNames.push(RideableFlags.MountingEffects(pRider));
+							vRiderEffectNames.push(...RideableFlags.MountingEffects(pRider));
 						}
 					}
 					else {
-						if (game.settings.get(cModuleName, "GrapplingSystemEffects")) {
-							if (RideableUtils.isPf2e()) {
-								vRiderEffectNames.push(cGrappledPf2eEffectID);
+						if (!RideableFlags.OverrideWorldMEffects(pRidden)) {
+							if (game.settings.get(cModuleName, "GrapplingSystemEffects")) {
+								if (RideableUtils.isPf2e()) {
+									vRiderEffectNames.push(cGrappledPf2eEffectID);
+								}
+								
+								if (RideableCompUtils.hasactiveEffectModule()) {
+									vRiderEffectNames.push(cGrabbedEffectName);
+								}
 							}
 							
-							if (RideableCompUtils.hasactiveEffectModule()) {
-								vRiderEffectNames.push(cGrabbedEffectName);
-							}
+							vRiderEffectNames.push(RideableUtils.CustomWorldGrapplingEffects());
 						}
+						
+						vRiderEffectNames.push(RideableFlags.GrapplingEffects(pRidden));
 					}
 				}
 			}
@@ -87,7 +93,7 @@ class EffectManager {
 			let vRiders = RideableFlags.RiderTokens(pRidden).filter(vRider => !(RideableFlags.isGrappled(vRider)));
 			
 			for (let i = 0; i < vRiders.length; i++) {
-				vMountEffectNames = vMountEffectNames.concat(RideableFlags.forMountEffects(vRiders[i]));
+				vMountEffectNames.push(...RideableFlags.forMountEffects(vRiders[i]));
 			}
 			
 			EffectManager.applyRideableEffects(pRidden, vMountEffectNames, {forMountEffect : true});

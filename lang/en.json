@@ -169,6 +169,11 @@
 				"descrp"				: "If a token gets grappled, a system dependent effect will be applied to the token"				
 			},
 			
+			"CustomGrapplingEffects" : {
+				"name" 					: "Custom grappling effects",
+				"descrp"				: "Effect that are applied to tokens when they are grappled (Names or IDs, seperated with \";\")"				
+			},
+			
 			"StopGrappleonEffectRemoval" : {
 				"name"					: "Stop grapple on effect removal",
 				"descrp"				: "If a token should be released as soon as the grapple effect is removed"
@@ -199,6 +204,11 @@
 			"FitRiderSizeFactor" : {
 				"name" 					: "Adjusted rider size factor",
 				"descrp"				: "The factor by which the sizre of riders is adjusted in cases where they are greater or equal in size to the ridden token"				
+			},
+			
+			"RiderScaleFactor" : {
+				"name" 					: "Rider scale factor",
+				"descrp"				: "Scale applied to riders (only graphical)"	
 			},
 		
 			"MessagePopUps" : {
@@ -439,8 +449,8 @@
 			},
 			
 			"WorldMEffectOverrideFlag" : {
-				"name"					: "Override world riding effects",
-				"descrp"				: "Overrides the world standard riding effects with the above set effects (instead of appending them)"
+				"name"					: "Override world effects",
+				"descrp"				: "Overrides the world standard effects with the below set effects (instead of appending them)"
 			},
 			
 			"SelfApplyEffectsFlag" : {
@@ -456,6 +466,11 @@
 			"canbeGrappledFlag" : {
 				"name"					: "Can be grappled",
 				"descrp"				: "If this token can be grappled"
+			},
+			
+			"GrapplingEffectsFlag" : {
+				"name"					: "Grappling effects",
+				"descrp"				: "Effects that are applied to graplle targets of this token (Names or IDs, seperated with \";\")"
 			},
 			
 			"CanbePilotedFlag" : {

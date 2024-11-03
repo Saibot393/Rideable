@@ -169,6 +169,11 @@
 				"descrp"				: "Wenn eine Figure gepackts wird, wird ein System abhängiger Effekt auf die Figur gesetzt"				
 			},
 			
+			"CustomGrapplingEffects" : {
+				"name" 					: "Eigene \"Gepackt\" Effekte",
+				"descrp"				: "Effekte welche auf gepackte Figuren angewandt werden (Namen oder IDs, getrennt mit \";\")"				
+			},
+			
 			"StopGrappleonEffectRemoval" : {
 				"name"					: "Stoppe Gepackt bei Effekt Entfernung",
 				"descrp"				: "Ob Figuren frei gelassen werden sollen, wenn der \"Gepackt\" Effekt entfernt wird"
@@ -199,6 +204,11 @@
 			"FitRiderSizeFactor" : {
 				"name" 					: "Reitergrößen anpassungs Faktor",
 				"descrp"				: "Der Faktor um welchen die Größe von reitenden Figuren angepasst wird wenn größer oder gleich groß der gerittenen Figur sind"				
+			},
+			
+			"RiderScaleFactor" : {
+				"name" 					: "Reiter Skalierung",
+				"descrp"				: "Skalierung welche auf Reiter angewandt wird (nur graphisch)"
 			},
 		
 			"MessagePopUps" : {
@@ -439,8 +449,8 @@
 			},
 			
 			"WorldMEffectOverrideFlag" : {
-				"name"					: "Überschreibe Welt-Reiteffekte",
-				"descrp"				: "Überschreibt die Welt-Reiteffekte mit den oben festgelegten (anstatt sie zu erweitern)"
+				"name"					: "Überschreibe Welteffekte",
+				"descrp"				: "Überschreibt die Welteffekte mit den unten festgelegten (anstatt sie zu erweitern)"
 			},
 			
 			"SelfApplyEffectsFlag" : {
@@ -456,6 +466,11 @@
 			"canbeGrappledFlag" : {
 				"name"					: "Kann ergriffen werden",
 				"descrp"				: "Ob diese Figur egriffen werden kann"
+			},
+			
+			"MountingEffectsFlag" : {
+				"name"					: "Ergreifen-Effekte",
+				"descrp"				: "Effekte welche auf von dieser Figur ergriffene Figuren angewandt werden (Namen oder IDs, getrennt mit \";\")"
 			},
 			
 			"CanbePilotedFlag" : {

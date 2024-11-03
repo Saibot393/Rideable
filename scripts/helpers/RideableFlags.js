@@ -17,6 +17,7 @@ const cRiderPositioningF = "RiderPositioningFlag"; //Flag that describes how the
 const cSpawnRidersF = "SpawnRidersFlag"; //Flag that describes all riders that should spawn on creation (names or ids)
 const cGrappledF = "GrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
 const ccanbeGrappledF = "canbeGrappledFlag"; //Flag that describes, that this token is riding as a grabbled token
+const cGrapplingEffectsF = "GrapplingEffectsFlag"; // Flag to store grappling effects applied to targets
 const cSizesaveF = "SizesaveFlag"; //Flag that can save the size of the token
 const cScaleSizesaveF = "ScaleSizesaveFlag"; //Flag that can sace the scale size of the Token
 const cRidersScaleF = "RidersScaleFlag"; //Flag to store the scale of riders of this token
@@ -55,7 +56,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -225,13 +226,13 @@ class RideableFlags {
 	static isPilotedby(pRidden, pPilot) {} //returns of pRidden is piloted by pPilot
 	
 	//effects
-	static MountingEffects(pToken) {} //returns alls the effects pToken gives its Riders as array
-	
-	static MountingEffectsstring(pToken) {} //returns alls the effects pToken gives its Riders
+	static MountingEffects(pToken) {} //returns all the effects pToken gives its Riders as array
 	
 	static forMountEffects(pRider, pRaw = false) {} //returns the effects pRider applies to its mount
 	
 	static OverrideWorldMEffects(pToken) {} //returns if this Token mounting effects override the world standard (or just add to it)
+	
+	static GrapplingEffects(pToken, pRaw = false) {} //returns alls the effects pToken gives its Grapple Targets as array
 	
 	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {} //gives pEffect the appropiate Flag
 	
@@ -467,6 +468,19 @@ class RideableFlags {
 		}
 		
 		return true; //default if anything fails
+	} 
+	
+	static #GrapplingEffectsFlag (pToken) { 
+	//returns effects for grappling
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cGrapplingEffectsF)) {
+				return vFlag.GrapplingEffectsFlag;
+			}
+		}
+		
+		return ""; //default if anything fails
 	} 
 	
 	static #SizesaveFlag(pToken) {
@@ -1522,7 +1536,7 @@ class RideableFlags {
 		let vScale = this.#RidersScaleFlag(pRidden);
 		
 		if (pWithGlobalScale) {
-			vScale = vScale * game.settings.get(cModuleName, "FitRiderScaleFactor");
+			vScale = vScale * game.settings.get(cModuleName, "RiderScaleFactor");
 		}
 		
 		if (vScale != undefined && vScale != 1) {
@@ -1632,12 +1646,12 @@ class RideableFlags {
 	}
 	
 	//effects
-	static MountingEffects(pToken) {
+	static MountingEffects(pToken, pRaw = false) {
+		if (pRaw) {
+			return this.#MountingEffectsFlag(pToken);
+		}
+		
 		return this.#MountingEffectsFlag(pToken).split(cDelimiter);
-	}
-	
-	static MountingEffectsstring(pToken) {
-		return this.#MountingEffectsFlag(pToken);
 	}
 	
 	static forMountEffects(pRider, pRaw = false) {
@@ -1651,6 +1665,14 @@ class RideableFlags {
 	
 	static OverrideWorldMEffects(pToken) {
 		return this.#WorldMEffectOverrideFlag(pToken);
+	}
+	
+	static GrapplingEffects(pToken, pRaw = false) {
+		if (pRaw) {
+			return this.#GrapplingEffectsFlag(pToken);
+		}
+		
+		return this.#GrapplingEffectsFlag(pToken).split(cDelimiter);
 	}
 	
 	static async MarkasRideableEffect(pEffect, pforMountEffect = false) {

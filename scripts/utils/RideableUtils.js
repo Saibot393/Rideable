@@ -96,6 +96,8 @@ class RideableUtils {
 	
 	static CustomWorldRidingEffects() {} //returns all World setting Riding effects
 	
+	static CustomWorldGrapplingEffects() {} //returns all World setting Grappling effects
+	
 	//IMPLEMENTATIONS
 	
 	//Identification	
@@ -489,7 +491,11 @@ class RideableUtils {
 	
 	static CustomWorldRidingEffects() {
 		return game.settings.get(cModuleName, "CustomRidingEffects").split(cDelimiter);
-	} //returns all World setting Riding effects
+	}
+	
+	static CustomWorldGrapplingEffects() {
+		return game.settings.get(cModuleName, "CustomGrapplingEffects").split(cDelimiter);
+	}
 }
 
 //for easy translation

@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 import { RideableCompUtils } from "../compatibility/RideableCompUtils.js";
@@ -216,15 +216,6 @@ class RideableSheetSettings {
 															}, `div[data-tab="${cModuleName}"]`);
 				
 				if (RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule()) {
-					//Custom Mounting effects applied to Riders
-					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
-																vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
-																vtype : "text",
-																vwide : true,
-																vvalue : RideableFlags.MountingEffectsstring(pApp.document), 
-																vflagname : cMountingEffectsF
-																}, `div[data-tab="${cModuleName}"]`);
-					
 					//if custom Mounting effects should override world stndard
 					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cWorldMEffectOverrideF +".name"), 
 																vhint : Translate("TokenSettings."+ cWorldMEffectOverrideF +".descrp"), 
@@ -232,6 +223,15 @@ class RideableSheetSettings {
 																vwide : true,
 																vvalue : RideableFlags.OverrideWorldMEffects(pApp.document), 
 																vflagname : cWorldMEffectOverrideF
+																}, `div[data-tab="${cModuleName}"]`);
+					
+					//Custom Mounting effects applied to Riders
+					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cMountingEffectsF +".name"), 
+																vhint : Translate("TokenSettings."+ cMountingEffectsF +".descrp"), 
+																vtype : "text",
+																vwide : true,
+																vvalue : RideableFlags.MountingEffects(pApp.document, true), 
+																vflagname : cMountingEffectsF
 																}, `div[data-tab="${cModuleName}"]`);
 							
 					if (!pisTile) {
@@ -251,18 +251,27 @@ class RideableSheetSettings {
 																	vwide : true,
 																	vvalue : RideableFlags.forMountEffects(pApp.document), 
 																	vflagname : cforMountEffectsF
-																	}, `div[data-tab="${cModuleName}"]`);																
+																	}, `div[data-tab="${cModuleName}"]`);		
+
+						if (game.settings.get(cModuleName, "Grappling")) {
+							//if this token can be grappled
+							RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ ccanbeGrappledF +".name"), 
+																		vhint : Translate("TokenSettings."+ ccanbeGrappledF +".descrp"), 
+																		vtype : "checkbox",
+																		vvalue : RideableFlags.canbeGrappled(pApp.document), 
+																		vflagname : ccanbeGrappledF
+																		}, `div[data-tab="${cModuleName}"]`);
+							
+							//effects applied to tokens grappled by this token
+							RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cGrapplingEffectsF +".name"), 
+																		vhint : Translate("TokenSettings."+ cGrapplingEffectsF +".descrp"), 
+																		vtype : "text",
+																		vwide : true,
+																		vvalue : RideableFlags.GrapplingEffects(pApp.document, true), 
+																		vflagname : cGrapplingEffectsF
+																		}, `div[data-tab="${cModuleName}"]`);
+						}
 					}
-				}
-				
-				if (!pisTile) {
-					//if this token can be grappled
-					RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ ccanbeGrappledF +".name"), 
-																vhint : Translate("TokenSettings."+ ccanbeGrappledF +".descrp"), 
-																vtype : "checkbox",
-																vvalue : RideableFlags.canbeGrappled(pApp.document), 
-																vflagname : ccanbeGrappledF
-																}, `div[data-tab="${cModuleName}"]`);
 				}
 				
 				//if this token can be piloted

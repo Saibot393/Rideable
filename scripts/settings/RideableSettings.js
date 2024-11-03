@@ -214,6 +214,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "CustomGrapplingEffects", {
+	name: Translate("Settings.CustomGrapplingEffects.name"),
+	hint: Translate("Settings.CustomGrapplingEffects.descrp"),
+	scope: "world",
+	config: RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule(),
+	type: String,
+	default: ""
+  }); 
+  
   game.settings.register(cModuleName, "StopGrappleonEffectRemoval", {
 	name: Translate("Settings.StopGrappleonEffectRemoval.name"),
 	hint: Translate("Settings.StopGrappleonEffectRemoval.descrp"),
@@ -271,9 +280,9 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: 0.65
   });  
   
-  game.settings.register(cModuleName, "FitRiderScaleFactor", {
-	name: Translate("Settings.FitRiderScaleFactor.name"),
-	hint: Translate("Settings.FitRiderScaleFactor.descrp"),
+  game.settings.register(cModuleName, "RiderScaleFactor", {
+	name: Translate("Settings.RiderScaleFactor.name"),
+	hint: Translate("Settings.RiderScaleFactor.descrp"),
 	scope: "world",
 	config: true,
 	type: Number,
