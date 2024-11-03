@@ -1,3 +1,12 @@
+## v3.1.0
+- Added compatibility with [Chris's Premades](https://foundryvtt.com/packages/chris-premades)
+  - Adds the world setting "Chris's Premades integration" to use the effects managed by Chris's Premade
+- Teleporting via Stairways will now also teleport following tokens
+- Added world setting Rider scale factor to scale the graphics of riders
+- Added world setting Custom grappling effects to add custom effects for grappling
+- Added token setting Custom grappling effects to add custom effects applied to tokens grappled by this token
+- Small bug fix for setting windows
+
 ## v3.0.6
 - Compatibility update for new DFreds CE
 
