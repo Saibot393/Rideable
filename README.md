@@ -37,6 +37,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Prevent enemy riding: to stop tokens from riding enemy tokens (GMs ignore this setting)
 - Adjust rider size: to reduce the size of riders should their size be greater or equal to the size of the ridden token
 - Adjusted rider size factor: to set the factor by which the size of riders of smaller tokens is adjusted
+- Rider scale factor: to scale the graphics of riders
 - Rider movement default setting: to set the default Rider movement behaviour for new players
 - Mount button default position: to set the world default position for the mount button
 - Enable Token following: to use the Token following feature
@@ -68,11 +69,12 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Token form: to set the form used to define this tokens border (Circle/Ellipse or Rectangle)
 - Riders can move freely: to allow riders to move freely within this tokens borders (if the token is moved, all riders will keep their relative position)
 - Spawn riders (GM only): to set with which riders this token spawns
+- Override world effects (GM only): to override the world standard effects with the tokens effects (instead of appending them)
 - Riding effects (GM only): to set effects tokens gain when they start riding this token
-- Override world riding effects (GM only): to override the world standard riding effects with the tokens effects (instead of appending them)
 - Self apply riding effects (GM only): to make this token apply its own Riding effects while riding
 - Mount effects (GM only): to set effects that are applied to the mount of this token
 - Can be grappled(GM only): to enabled/disable the grapple feature on this token
+- Grappling effects(GM only): Custom effects added to tokens grappled by this token
 - Can be piloted(GM only): to allow players to pilot this token/tile
 - Piloted by default(GM only): to make this token piloted by every rider automatically
 
@@ -90,6 +92,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
   - Supports both in- and cross-scene stairways
   - Riders will follow their ridden token through stairways
   - If the option "Move ridden Token" is active, the ridden token will follow its riders through stairways
+  - Following tokens will automatically be teleported when the followed token teleports
   - If a users (standard) character gets teleported in one of this ways, the user will switch scenes
   - If the option "Prevent movement" for rider tokens is active, riders will be prevented from using stairways (GMs can override this)
 - [Wall-Height](https://foundryvtt.com/packages/wall-height):
@@ -106,7 +109,11 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 - [DFreds Convenient Effects](https://foundryvtt.com/packages/dfreds-convenient-effects):
   - Must be activated with the world setting DFreds Convenient Effects Integration
   - Allows for effects to be applied to mounted and grappled tokens
-  - Allows for custom mounted effects to be set
+  - Allows for custom mounted adn grappled effects to be set
+- [Chris's Premades](https://foundryvtt.com/packages/chris-premades)
+  - Must be activated with the world setting DFreds Convenient Effects Integration
+  - Allows for effects to be applied to mounted and grappled tokens
+  - Allows for custom mounted adn grappled effects to be set
 - [Token Attacher](https://foundryvtt.com/packages/token-attacher/):
   - "Riding loops" should not be possible
   - Adds token form "from attached tiles" to use attached tiles as the form of this token
