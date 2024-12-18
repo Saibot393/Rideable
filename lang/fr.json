@@ -1,0 +1,583 @@
+{
+	"Rideable" : {
+		"Titles" : {
+			"Rideable"                  : "Montable",
+			"WorldSettings"             : "Paramètres du monde (MJ uniquement)",
+			"ClientSettings"            : "Paramètres client",
+			"GMonly"                    : "MJ uniquement",
+			"Tile"                      : "Tuile",
+			"RequiresRL"                : "Montable nécessite que <a href=\"https://foundryvtt.com/packages/routinglib\">routinglib</a> soit actif pour que la fonctionnalité de suivi des jetons fonctionne"
+		},
+		
+		"Settings" : {
+			"defaultRideable" : {
+				"name"                  : "Jetons montables par défaut",
+				"descrp"                : "Si tous les jetons doivent être montables par défaut (peut être modifié pour chaque jeton dans les paramètres du jeton)"
+			},
+
+			"allowTileRiding" : {
+				"name"                  : "Les tuiles peuvent être montées",
+				"descrp"                : "Si les tuiles peuvent être montées, tout comme les jetons"
+			},
+
+			"allowMountingonEntering" : {
+				"name"                  : "Autoriser le montage à l'entrée",
+				"descrp"                : "Permet aux jetons et aux tuiles d'être configurés pour être montés par des jetons entrant dans leur espace"
+			},
+
+			"LocknKeyintegration" : {
+				"name"                  : "Intégration Lock & Key",
+				"descrp"                : "Permet de verrouiller les jetons montables"
+			},
+
+			"DFredsEffectsIntegration" : {
+				"name"                  : "Intégration DFreds Convenient Effects",
+				"descrp"                : "Permet d'appliquer certains effets aux jetons montés et saisis"
+			},
+
+			"CPREffectsIntegration" : {
+				"name"                  : "Intégration Chris's Premades",
+				"descrp"                : "Permet d'appliquer certains effets aux jetons montés et saisis"
+			},
+
+			"TaggerMountingIntegration" : {
+				"name"                  : "Intégration de montage Tagger",
+				"descrp"                : "Permet de monter et démonter des jetons via des balises (balise : \"Rideable:{RiderTokenID}\")"
+			},
+
+			"RidingHeight" : {
+				"name"                  : "Hauteur de montée",
+				"descrp"                : "La hauteur en z qu'un jeton monté a par rapport à sa monture (recommandé d'être au-dessus de 0)"
+			},
+
+			"useRidingHeight" : {
+				"name"                  : "Utiliser la hauteur de montée par défaut",
+				"descrp"                : "Si les jetons utilisent la hauteur de montée par défaut"
+			},
+
+			"useRiddenTokenHeight" : {
+				"name"                  : "Utiliser la hauteur du jeton monté",
+				"descrp"                : "Utilise la hauteur du jeton monté (ajoutée via le module \"Wall-Height\") au lieu de la \"Hauteur de montée\" définie"
+			},
+
+			"MountingDistance" : {
+				"name"                  : "Distance de montage",
+				"descrp"                : "La distance maximale qu'un jeton peut avoir par rapport à sa cible de montage (-1 pour une portée illimitée)"
+			},
+
+			"UseArmReachDistance": {
+				"name"                  : "Utiliser la distance \"Portée des bras\"",
+				"descrp"                : "Utilise la distance définie dans \"Portée des bras\" pour la distance de montage"
+			},
+
+			"BorderDistance" : {
+				"name"                  : "Distance bord à bord",
+				"descrp"                : "Si la distance de montage doit être calculée à partir du bord des jetons au lieu du point central (fonctionne correctement uniquement pour les jetons circulaires/carrés)"
+			},
+
+			"MaxRiders" : {
+				"name"                  : "Nombre maximum de cavaliers par jeton",
+				"descrp"                : "Le nombre maximum de jetons pouvant monter un jeton (-1 pour illimité)"
+			},
+
+			"RiderMovementworlddefault" : {
+				"name"                  : "Paramètre par défaut du mouvement du cavalier",
+				"descrp"                : "Paramètre par défaut pour le mouvement des cavaliers des joueurs (ne remplace pas les paramètres existants)"
+			},
+
+			"MountButtonDefaultPosition" : {
+				"name"                  : "Position par défaut du bouton de montage",
+				"descrp"                : "Paramètre par défaut pour la position du bouton de montage (ne remplace pas les paramètres existants)"
+			},					
+
+			"RiderMovement" : {
+				"name"                  : "Mouvement du cavalier",
+				"descrp"                : "Ce qui doit se passer si un jeton monté essaie de se déplacer par lui-même",
+				"options" : {
+					"worlddefault"      : "utiliser le paramètre par défaut du monde",
+					"disallow"          : "Empêcher le mouvement",
+					"dismount"          : "Démonter le cavalier",
+					"moveridden"        : "Déplacer le jeton monté (si possédé)"
+				}
+			},
+
+			"MountButtonPosition" : {
+				"name"                  : "Position du bouton de montage",
+				"descrp"                : "Position du bouton de montage",
+				"options" : {
+					"default"           : "utiliser le paramètre par défaut du monde",
+					"none"              : "pas de bouton",
+					"left"              : "gauche",
+					"right"             : "droite"
+				}
+			},
+
+			"RiderProxySelect" : {
+				"name"                  : "Sélection de proxy cavalier",
+				"descrp"                : "Si le jeton monté ou les cavaliers doivent être sélectionnés à la place du jeton sélectionné",
+				"options" : {
+					"never"             : "jamais",
+					"familiar"          : "familiers uniquement",
+					"always"            : "toujours",
+					"allRiders"         : "tous les cavaliers"
+				}
+			},
+
+			"RiderRotation" : {
+				"name"                  : "Lier les rotations",
+				"descrp"                : "Fait tourner tous les cavaliers si un jeton monté est tourné (fonctionne également avec l'option \"Déplacer le jeton monté\")"
+			},
+
+			"RidingSystemEffects" : {
+				"name"                  : "Appliquer l'effet \"Monté\"",
+				"descrp"                : "Si un jeton commence à monter, un effet dépendant du système sera appliqué au jeton"
+			},
+
+			"CustomRidingEffects" : {
+				"name"                  : "Effets personnalisés de montée",
+				"descrp"                : "Effets appliqués aux jetons lorsqu'ils commencent à monter (Noms ou IDs, séparés par \";\")"
+			},
+
+			"RideableTag" : {
+				"name"                  : "Trait \"Montable\"",
+				"descrp"                : "Permet aux jetons ayant le trait 'Montable' d'être montés (le trait \"Montable\" doit être ajouté manuellement sous Paramètres > Pathfinder 2e Édition > Gérer les éléments personnalisés > Traits de créature)"
+			},
+
+			"FamiliarRiding" : {
+				"name"                  : "Montée des familiers",
+				"descrp"                : "Permet aux familiers de monter leur maître, les familiers seront placés aux coins de leur maître"
+			},
+
+			"FamiliarRidingFirstCorner" : {
+				"name"                  : "Position de montée des familiers",
+				"descrp"                : "Premier coin occupé par les familiers.",
+				"options" : {
+					"tl"                : "En haut à gauche",
+					"tr"                : "En haut à droite",
+					"bl"                : "En bas à gauche",
+					"br"                : "En bas à droite"
+				}
+			},
+
+			"Grappling" : {
+				"name"                  : "Saisie",
+				"descrp"                : "Permet aux jetons de se saisir mutuellement (les jetons saisis ne peuvent être démontés que par le jeton qui les saisit)"
+			},
+
+			"GrapplingSystemEffects" : {
+				"name"                  : "Appliquer l'effet \"Saisi\"",
+				"descrp"                : "Si un jeton est saisi, un effet dépendant du système sera appliqué au jeton"
+			},
+
+			"CustomGrapplingEffects" : {
+				"name"                  : "Effets personnalisés de saisie",
+				"descrp"                : "Effets appliqués aux jetons lorsqu'ils sont saisis (Noms ou IDs, séparés par \";\")"
+			},
+
+			"StopGrappleonEffectRemoval" : {
+				"name"                  : "Arrêter la saisie à la suppression de l'effet",
+				"descrp"                : "Si un jeton doit être libéré dès que l'effet de saisie est supprimé"
+			},
+
+			"GrappleplacementDefault" : {
+				"name"                  : "Placement par défaut de la saisie",
+				"descrp"                : "Placement standard des jetons saisis",
+				"options" : {
+					"RowBelow"          : "en dessous",
+					"RowAbove"          : "au-dessus",
+					"RowMiddle"         : "au milieu",
+					"ClosestInside"     : "à l'intérieur",
+					"Following"         : "suivre"
+				}
+			},
+			
+			"PreventEnemyRiding" : {
+				"name"                  : "Empêcher la montée des ennemis",
+				"descrp"                : "Empêche les jetons de monter sur des jetons ennemis (les MJ peuvent toujours contourner cette règle)"				
+			},
+
+			"FitRidersize" : {
+				"name"                  : "Ajuster la taille du cavalier",
+				"descrp"                : "Ajuste la taille du cavalier dans le cas où elle est supérieure ou égale à celle du jeton monté"				
+			},
+
+			"FitRiderSizeFactor" : {
+				"name"                  : "Facteur de taille ajustée du cavalier",
+				"descrp"                : "Le facteur par lequel la taille des cavaliers est ajustée dans les cas où ils sont supérieurs ou égaux en taille au jeton monté"				
+			},
+
+			"RiderScaleFactor" : {
+				"name"                  : "Facteur d'échelle du cavalier",
+				"descrp"                : "Échelle appliquée aux cavaliers (uniquement graphique)"	
+			},
+
+			"MessagePopUps" : {
+				"name"                  : "Popups de messages",
+				"descrp"                : "Active plusieurs popups lors d'actions telles que monter ou descendre"				
+			},		
+
+			"OnlyownedMessagePopUps" : {
+				"name"                  : "Popups de messages propres uniquement",
+				"descrp"                : "Affiche uniquement les popups de messages des jetons que vous contrôlez"				
+			},
+
+			"EnableFollowing" : {
+				"name"                  : "Activer le suivi des jetons",
+				"descrp"                : "Si le suivi des jetons est actif dans ce monde"
+			},
+
+			"FollowingAlgorithm" : {
+				"name"                  : "Algorithme de suivi",
+				"descrp"                : "Quel algorithme de suivi est utilisé (installez routinglib pour plus d'options)",
+				"options" : {
+					"SimplePathHistory" : "Historique de chemin simple (simple, léger en ressources)",
+					"routinglib"        : "routinglib (avancé, gourmand en ressources, recommandé)"
+				}
+			},
+
+			"FollowingCombatBehaviour" : {
+				"name"                  : "Comportement de suivi en combat",
+				"descrp"                : "Comment les jetons qui suivent se comportent en combat",
+				"options" : {
+					"stop"              : "Arrêter le suivi",
+					"resumeafter"       : "Arrêter et reprendre après le combat",
+					"continue"          : "Continuer le suivi"
+				}
+			},
+
+			"OnlyfollowViewed" : {
+				"name"                  : "Suivre uniquement les visibles",
+				"descrp"                : "Si seuls les jetons actuellement visibles doivent être suivis"
+			},	
+
+			"PreventFollowerStacking" : {
+				"name"                  : "Empêcher l'empilement des suiveurs",
+				"descrp"                : "Si les suiveurs du même jeton doivent être empêchés de s'empiler, ils peuvent toujours s'empiler dans des zones étroites"
+			},	
+
+			"OnFollowerMovement" : {
+				"name"                  : "Mouvement des suiveurs",
+				"descrp"                : "Ce qui doit se passer si un jeton qui suit essaie de se déplacer par lui-même",
+				"options" : {
+					"stopfollowing"     : "Arrêter de suivre",
+					"updatedistance"    : "Mettre à jour la distance de suivi"
+				}
+			}		
+		},
+		
+		"Keys" : {
+			"Mount" : {
+				"name"                  : "Monter",
+				"descrp"                : "Monter les jetons contrôlés sur le jeton ciblé (Macro alternative : \"Monter\")"
+			},
+
+			"UnMount" : {
+				"name"                  : "Descendre",
+				"descrp"                : "Descendre les jetons contrôlés de leur jeton monté, ou descendre le jeton ciblé du jeton contrôlé (Macro alternative : \"Descendre\")"
+			},
+
+			"MountFamiliar" : {
+				"name"                  : "Monter familier",
+				"descrp"                : "Monter les familiers contrôlés sur le jeton ciblé si ce jeton est leur maître (Macro alternative : \"MonterFamiliers\") (uniquement si l'option \"Montée des familiers\" est activée)"
+			},
+
+			"GrappleTarget" : {
+				"name"                  : "Saisir/libérer la cible",
+				"descrp"                : "Monter le jeton ciblé sur le jeton contrôlé, ne peut être descendu que par le jeton qui le saisit (Macro alternative : \"Saisir\") (uniquement si l'option \"Saisie\" est activée)"
+			},
+
+			"ToggleMount" : {
+				"name"                  : "Activer/désactiver la montée",
+				"descrp"                : "Monter ou descendre les jetons contrôlés sur/du jeton ciblé"
+			},
+
+			"ToggleGrapplePlacement" : {
+				"name"                  : "Changer le placement de saisie",
+				"descrp"                : "Bascule entre les options de placement des jetons saisis pour les jetons sélectionnés"
+			},
+
+			"TogglePiloting" : {
+				"name"                  : "Activer/désactiver le pilotage",
+				"descrp"                : "Commencer ou arrêter le pilotage du jeton actuellement monté"
+			},
+
+			"ToggleFollowing" : {
+				"name"                  : "Activer/désactiver le suivi",
+				"descrp"                : "Commencer ou arrêter le suivi des jetons sélectionnés pour le jeton ciblé ou suivi"
+			}
+		},
+		
+		"Popup" : {
+		"Mounting"                 : "Monté sur {pRiddenName}",
+		"UnMounting"               : "Descendu de {pRiddenName}",
+		"MountingFamiliar"         : "Suit maintenant son maître {pRiddenName}",
+		"UnMountingFamiliar"       : "Ne suit plus son maître {pRiddenName}",
+		"PreventedRiderMove"       : "Toujours monté sur {pRiddenName}",
+		"RidingLoop"               : "Monter sur {pRiddenName} serait étrange",
+		"NoPlace"                  : "{pRiddenName} n'a plus de place disponible",
+		"EnemyRiding"              : "{pRiddenName} est mon ennemi",
+		"Toofaraway"               : "{pRiddenName} est trop éloigné",
+		"RiddenisLocked"           : "{pRiddenName} est verrouillé",
+		
+		"Grappling"                : "Saisi par {pRiddenName}",
+		"UnGrappling"              : "Relâché de {pRiddenName}",
+		"PreventedGrappledMove"    : "Toujours saisi par {pRiddenName}",
+		
+		"cantPilot"                : "{pRiddenName} ne peut pas être piloté",
+		"startPiloting"            : "Pilote maintenant {pRiddenName}",
+		"stopPiloting"             : "Ne pilote plus {pRiddenName}",
+		"cantbeMoved"              : "{cantbeMoved} ne peut pas être déplacé (peut être attaché à un autre objet)",
+		
+		"StopFollowing"            : "Arrêté de suivre",
+		"StartFollowing"           : "Commencé à suivre {pFollowedName}",
+		"CantFollowinCombat"       : "Impossible de suivre pendant le combat",
+		"TargetisFollowingMe"      : "{pFollowedName} me suit déjà",
+		
+		"PositionLocked"           : "Position verrouillée",
+		"PositionUnlocked"         : "Position déverrouillée"
+	},
+
+	"TokenSettings" : {
+		"MaxRiderFlag" : {
+			"name"                 : "Nombre maximum de cavaliers",
+			"descrp"               : "Remplace la configuration globale pour ce jeton (-1 pour illimité, laisser vide pour revenir au paramètre par défaut du monde)"
+		},
+		
+		"MountonEnterFlag" : {
+			"name"                 : "Monter à l'entrée",
+			"descrp"               : "Les jetons qui entrent dans l'espace de ce jeton ou de cette tuile montent dessus"
+		},
+		
+		"AutoMountBlackListFlag" : {
+			"name"                 : "Liste noire de montée à l'entrée",
+			"descrp"               : "Noms, IDs et IDs d'acteurs des jetons qui ne monteront pas à l'entrée (séparés par \";\")"
+		},
+		
+		"AutoMountWhiteListFlag" : {
+			"name"                 : "Liste blanche de montée à l'entrée",
+			"descrp"               : "Noms, IDs et IDs d'acteurs des jetons autorisés à monter à l'entrée (séparés par \";\", vide pour ignorer)"
+		},
+		
+		"RiderPositioningFlag" : {
+			"name"                 : "Positionnement des cavaliers",
+			"descrp"               : "Le modèle dans lequel les jetons cavaliers seront placés",
+			"options" : {
+				"CirclePlacement"   : "Cercle",
+				"RowPlacement"      : "Ligne",
+				"BlockPlacement"    : "Bloc",
+				"ClusterPlacement"  : "Grappe",
+				"RowPlacementTop"   : "Ligne en haut",
+				"RowPlacementBottom": "Ligne en bas",
+				"CornerPlacement"   : "Coins",
+				"CornerPlacementinner": "Coins (intérieur)",
+				"MountPosition"     : "Position de montée"
+			}
+		},
+		
+		"RiderOffsetFlag" : {
+			"name"                 : "Décalage des cavaliers",
+			"descrp"               : "Le décalage de placement pour les cavaliers [en cases de la scène]"
+		},
+		
+		"RiderRotOffsetFlag" : {
+			"name"                 : "Décalage de rotation des cavaliers",
+			"descrp"               : "Le décalage de rotation pour les cavaliers"
+		},
+		
+		"GrapplePlacementFlag" : {
+			"name"                 : "Placement des saisis",
+			"descrp"               : "Où les jetons saisis sont placés",
+			"options" : {
+				"RowBelow"          : "en dessous",
+				"RowAbove"          : "au-dessus",
+				"RowMiddle"         : "au milieu",
+				"ClosestInside"     : "à l'intérieur",
+				"Following"         : "suivre"
+			}
+		},
+		
+		"issetRideableFlag" : {
+			"name"                 : "Jeton montable",
+			"descrp"               : "Remplace la configuration par défaut globale"
+		},
+		
+		"TileRideableNameFlag" : {
+			"name"                 : "Nom de la tuile",
+			"descrp"               : "Nom utilisé par Montable pour cette tuile (par exemple, pour les popups)"
+		},
+		
+		"TokenFormFlag" : {
+			"name"                 : "Forme du jeton",
+			"descrp"               : "",
+			"options" : {
+				"TokenFormCircle"   : "Cercle/ellipse",
+				"TokenFormRectangle": "Rectangle",
+				"TokenTransparency" : "depuis la transparence",
+				"TokenFormAttachedTiles" : "depuis les jetons/les tuiles attachés",
+				"TileFormNone"      : "Aucune forme/ignorer"
+			}
+		},
+		
+		"CustomRidingheightFlag" : {
+			"name"                 : "Hauteur de montée personnalisée",
+			"descrp"               : "Hauteur personnalisée de ce jeton, utilisée pour ses cavaliers (laisser vide pour la valeur par défaut)"
+		},
+		
+		"UseRidingHeightFlag" : {
+			"name"                 : "Utiliser la hauteur de montée",
+			"descrp"               : "Si l'élévation des cavaliers de ce jeton doit être gérée"
+		},
+		
+		"RidersScaleFlag" : {
+			"name"                 : "Échelle des cavaliers",
+			"descrp"               : "Échelle appliquée aux cavaliers de cet objet (uniquement graphique)"
+		},
+		
+		"InsideMovementFlag" : {
+			"name"                 : "Les cavaliers peuvent se déplacer librement",
+			"descrp"               : "Si les cavaliers peuvent se déplacer librement dans les limites de ce jeton"
+		},
+		
+		"SpawnRidersFlag" : {
+			"name"                 : "Cavaliers générés",
+			"descrp"               : "Les cavaliers générés avec ce jeton (Noms ou IDs, séparés par \";\")"
+		},
+		
+		"MountingEffectsFlag" : {
+			"name"                 : "Effets de montée",
+			"descrp"               : "Effets appliqués aux cavaliers de ce jeton (Noms ou IDs, séparés par \";\")"
+		},
+		
+		"WorldMEffectOverrideFlag" : {
+			"name"                 : "Remplacer les effets globaux",
+			"descrp"               : "Remplace les effets standard globaux par les effets définis ci-dessous (au lieu de les ajouter)"
+		},
+		
+		"SelfApplyEffectsFlag" : {
+			"name"                 : "Appliquer ses propres effets de montée",
+			"descrp"               : "Si ce jeton doit appliquer ses propres effets de montée lorsqu'il monte"
+		},
+		
+		"forMountEffectsFlag" : {
+			"name"                 : "Effets de montée",
+			"descrp"               : "Effets appliqués aux montures de ce jeton (Noms ou IDs, séparés par \";\")"
+		},
+		
+		"canbeGrappledFlag" : {
+			"name"                 : "Peut être saisi",
+			"descrp"               : "Si ce jeton peut être saisi"
+		},
+		
+		"GrapplingEffectsFlag" : {
+			"name"                 : "Effets de saisie",
+			"descrp"               : "Effets appliqués aux cibles saisies de ce jeton (Noms ou IDs, séparés par \";\")"
+		},
+		
+		"CanbePilotedFlag" : {
+			"name"                 : "Peut être piloté",
+			"descrp"               : "Les joueurs peuvent piloter ce jeton, leur permettant de le déplacer même s'ils ne le possèdent pas"
+		},
+		
+		"CheckPilotedCollisionFlag" : {
+			"name"                 : "Collision en pilotage",
+			"descrp"               : "Si la collision de ce jeton doit être calculée lors du pilotage (désactiver pour les objets attachés à des murs)"
+		},
+		
+		"PilotedbyDefaultFlag" : {
+			"name"                 : "Piloté par défaut",
+			"descrp"               : "Si tous les cavaliers de ce jeton le pilotent automatiquement (incompatible avec \"Les cavaliers peuvent se déplacer librement\")"
+		}
+	},
+		
+		"RideableTag.str"				: "montable",
+		
+		"monks-active-tiles" : {
+			"filters" : {
+				"name"					: "Filtre",
+						
+				"riders-of" : {
+					"name"				: "Filtrer les cavaliers d'une monture",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition} de <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"mount" : {
+							"name"		: "Monture"
+						},
+								
+						"filterCondition" : {
+							"name"		: "Condition d'état de cavalier :",
+							"options" : {
+								"rider": "est cavalier",
+								"notrider" : "n'est pas cavalier"
+							}	
+						}
+					}
+				},
+						
+				"is-rider" : {
+					"name"				: "Filtrer les cavaliers",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Condition d'état de cavalier :",
+							"options" : {
+								"rider": "est cavalier",
+								"notrider" : "n'est pas cavalier"
+							}	
+						}
+					}					
+				},
+						
+				"is-ridden" : {
+					"name"				: "Filtrer les montures",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Condition d'état de monture :",
+							"options" : {
+								"ridden": "est monté",
+								"notridden" : "n'est pas monté"
+							}	
+						}
+					}					
+				}
+			},
+					
+			"actions" : {
+				"mount-this-tile" : {
+					"name"				: "Monter sur cette tuile",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+						
+				"mount-target" : {
+					"name"				: "Monter",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> sur <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Monture"
+						}
+					}
+				},
+						
+				"unmount" : {
+					"name"				: "Démonter",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+						
+				"unmount-riders" : {
+					"name"				: "Démonter les cavaliers",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> de <span class=\"entity-style\">{pEntities}</span>"
+				},
+						
+				"toggle-mount-target" : {
+					"name"				: "Basculer montée",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> sur <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Monture"
+						}
+					}
+				}
+			}
+		}
+	}
+}
