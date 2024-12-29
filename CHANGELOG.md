@@ -1,3 +1,6 @@
+## v3.1.2
+- Small bug fix for "follow" grappling setting
+
 ## v3.1.1
 - Added french translation (thanks to [wirgeen](https://github.com/wirgeen))
 
