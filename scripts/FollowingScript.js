@@ -315,7 +315,7 @@ class FollowingManager {
 		let vTokens = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => vToken.isOwner && RideableFlags.isFollowing(vToken) && RideableFlags.isFollowOrderSource(vToken));
 		
 		let vFollowedIDs = vTokens.map(vToken => RideableFlags.followedID(vToken));
-		
+
 		let vNewSet = new Set();
 		
 		vFollowedIDs.forEach(vID => vNewSet.add(vID));
@@ -448,7 +448,7 @@ export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Dista
 
 export function updateFollowedList() {FollowingManager.updateFollowedList()};
 
-export async function updatePathHistory(pToken) {await FollowingManager.updatePathHistory(pToken)};
+export async function updatePathHistory(pToken, pChanges = undefined) {await FollowingManager.updatePathHistory(pToken, pChanges)};
 
 export function RequestreplaceFollowerListIDs ({pPlayers, pOldIDs, pNewIDs} = {}) {if (pPlayers?.includes(game.user.id)) {FollowingManager.replaceFollowerListIDs(pOldIDs, pNewIDs)}}
 
