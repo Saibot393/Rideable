@@ -119,7 +119,8 @@
 					"never"				: "nie",
 					"familiar"			: "nur begleiter",
 					"always"			: "immer",
-					"allRiders"			: "alle Reiter"
+					"allRiders"			: "alle Reiter",
+					"ctrl"				: "mit STRG"
 				}
 			},
 			

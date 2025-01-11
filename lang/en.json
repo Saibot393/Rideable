@@ -119,7 +119,8 @@
 					"never"				: "never",
 					"familiar"			: "familiars only",
 					"always"			: "always",
-					"allRiders"			: "all riders"
+					"allRiders"			: "all riders",
+					"ctrl"				: "on CTRL"
 				}
 			},
 			

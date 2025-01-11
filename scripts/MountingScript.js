@@ -82,7 +82,7 @@ class MountingManager {
 	
 	static CheckEntering(pToken, pchanges, pInfos, pID) {} //called on token updates to check if they enter a MountonENter tile/token
 	
-	static ProxySelect(pToken) {} //called to start a proxy select
+	static ProxySelect(pToken, pOptions = {}) {} //called to start a proxy select
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -611,11 +611,11 @@ class MountingManager {
 		}
 	}
 	
-	static onTokenControl(pToken, pControlled) {
+	static onTokenControl(pToken, pControlled, pOptions) {
 		let vToken = pToken.document;
 		
 		if (pControlled) {
-			MountingManager.ProxySelect(vToken);
+			MountingManager.ProxySelect(vToken, pOptions);
 		}
 	}
 	
@@ -684,8 +684,8 @@ class MountingManager {
 		}
 	}
 	
-	static ProxySelect(pToken) {
-		if (canvas.tokens.controlled.length == 1) {
+	static ProxySelect(pToken, pOptions) {
+		if (canvas.tokens.controlled.length >= 1 && !pOptions?.PreventRideableSelect) {
 			if (game.settings.get(cModuleName, "RiderProxySelect") != "never") {
 				switch (game.settings.get(cModuleName, "RiderProxySelect")) {
 					case "familiar":
@@ -700,7 +700,7 @@ class MountingManager {
 									if (vRidden && vToken && vRidden.owner) {
 										vToken.release();
 									
-										vRidden.control();
+										vRidden.control({});
 									}
 								}
 							}
@@ -714,6 +714,37 @@ class MountingManager {
 								vRider.object.control({releaseOthers : false});
 							}
 						}
+						break;
+					case "ctrl":
+						if (keyboard.downKeys.has("ControlLeft") || keyboard.downKeys.has("ControlRight")) {
+							let vNewTargets = [];
+							
+							if (RideableFlags.isRider(pToken)) {
+								vNewTargets = [RideableFlags.RiddenToken(pToken)];
+							}
+							else {
+								/*
+								if (RideableFlags.isRidden(pToken)) {
+									console.log(2);
+									vNewTargets = RideableFlags.RiderTokens(pToken);
+								}
+								*/
+							}
+							vNewTargets = vNewTargets.filter(vTarget => vTarget);
+							
+							if (vNewTargets.length) {
+								let vToken = pToken?.object;
+								
+								if (vToken) {
+									vToken.release();
+								}
+								
+								for (let vTarget of vNewTargets) {
+									vTarget.object.control({PreventRideableSelect : true, releaseOthers : false});
+								}
+							}
+						}
+						break;
 				}
 			}
 		}
