@@ -99,7 +99,7 @@
 				"descrp": "Indica se deve essere selezionato il token cavalcato o i cavalieri invece del token selezionato",
 				"options": {
 					"never": "Mai",
-					"familiar": "Solo familiari",
+					"familiar": "Solo famigli",
 					"always": "Sempre",
 					"allRiders": "Tutti i cavalieri"
 				}
