@@ -1,3 +1,6 @@
+## v3.1.5
+- Added key binding (default T + CTRL) for Proxy target, to easily target the mounts of tokens
+
 ## v3.1.4
 - Added "on Ctrl" to "Proxy rider select"
 
