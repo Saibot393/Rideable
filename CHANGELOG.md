@@ -1,6 +1,9 @@
+## v3.1.4
+- Added "on Ctrl" to "Proxy rider select"
+
 ## v3.1.3
 - Added Italien translation (thanks to [Landscape](https://github.com/LandscapeNemo))
-- 
+  
 ## v3.1.2
 - Small bug fix for "follow" grappling setting
 
