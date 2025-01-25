@@ -2,7 +2,7 @@ import * as FCore from "../CoreVersionComp.js";
 
 import { RideableCompUtils, cWallHeight, cArmReach, cArmReachold, cLocknKey, cTagger, cDfredCE, cCPR, cRoutingLib } from "../compatibility/RideableCompUtils.js";
 import { RideableUtils, cModuleName, Translate} from "../utils/RideableUtils.js";
-import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected} from "../MountingScript.js";
+import { MountSelected, MountSelectedFamiliar, GrappleTargeted, UnMountSelected, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected, ProxyTarget} from "../MountingScript.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 import { SelectedToggleFollwing } from "../FollowingScript.js";
 
@@ -517,7 +517,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
   game.keybindings.register(cModuleName, "ToggleMount", {
     name: Translate("Keys.ToggleMount.name"),
     hint: Translate("Keys.ToggleMount.descrp"),
-    onDown: () => { ToggleMountselected(true); },
+    onDown: (pOptions) => { ToggleMountselected(pOptions); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
@@ -549,6 +549,21 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     onDown: () => { SelectedToggleFollwing(); },
     restricted: false,
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+  
+  game.keybindings.register(cModuleName, "ProxyTarget", {
+    name: Translate("Keys.ProxyTarget.name"),
+    hint: Translate("Keys.ProxyTarget.descrp"),
+    editable: [
+      {
+        key: "KeyT",
+		modifiers: ["Control"]
+      }
+    ],
+    onDown: (pOptions) => { ProxyTarget(pOptions) },
+    restricted: false,
+	reservedModifiers: ["Shift"]
+    //precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
   });
 });
 

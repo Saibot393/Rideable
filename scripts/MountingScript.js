@@ -84,6 +84,8 @@ class MountingManager {
 	
 	static ProxySelect(pToken, pOptions = {}) {} //called to start a proxy select
 	
+	static ProxyTarget(pOptions = {}) {} //called to start a proxy target
+	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
 	
@@ -750,6 +752,32 @@ class MountingManager {
 		}
 	}
 	
+	static ProxyTarget(pOptions = {}) {
+		let vLayer = canvas.activeLayer;
+		
+		if (vLayer instanceof TokenLayer) {
+			let vHovered = vLayer.hover;
+					
+			if (vHovered && !vHovered.document.isSecret) {
+				let vProxySelected = false;
+				
+				if (RideableFlags.isRider(vHovered.document)) {
+					let vRidden = RideableFlags.RiddenToken(vHovered.document);
+					
+					if (vRidden && vRidden.object) {
+						vRidden.object.setTarget(!vRidden.object.isTargeted, {releaseOthers: !pOptions.isShift});
+						
+						vProxySelected = true;
+					}
+				}
+				
+				if (!vProxySelected) {
+					vHovered.setTarget(!vHovered.isTargeted, {releaseOthers: !pOptions.isShift});
+				}
+			}
+		}
+	}
+	
 	//Aditional Informations
 	
 	static TokencanMount (pRider, pRidden, pRidingOptions) {
@@ -888,6 +916,8 @@ function TogglePositionLock(pTokens, pshowMessage = true) {return MountingManage
 
 function TogglePositionLockSelected(pshowMessage = true) {return MountingManager.TogglePositionLock(RideableUtils.selectedTokens(), pshowMessage)}
 
+function ProxyTarget(pOptions = {}) {return MountingManager.ProxyTarget(pOptions)}
+
 //Request Handlers
 function UnMountRequest({ pselectedTokenIDs, pSceneID, pfromRidden } = {}) {return MountingManager.UnMountRequest(pselectedTokenIDs, pSceneID, pfromRidden); }
 
@@ -895,4 +925,4 @@ function MountRequest({ pTargetID, pselectedTokensID, pSceneID, pRidingOptions} 
 
 export { MountSelected, MountSelectedFamiliar, GrappleTargeted, MountRequest, UnMountSelected, UnMountRequest, ToggleMountselected, ToggleGrapplePlacementSelected, TogglePilotingSelected, TogglePositionLock, TogglePositionLockSelected};
 
-export { Mount, UnMount, ToggleMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID };
+export { Mount, UnMount, ToggleMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID, ProxyTarget };

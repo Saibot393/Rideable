@@ -305,7 +305,12 @@
 			"ToggleFollowing" : {
 				"name"					: "Toggle following",
 				"descrp"				: "Start of stop the selected tokens from following the targeted or followed token"
-			}	
+			},
+
+			"ProxyTarget" : {
+				"name"					: "Proxy target",
+				"descrp"				: "Target the mount of the hovered token, if possible"
+			}				
 		},
 		
 		"Popup" : {

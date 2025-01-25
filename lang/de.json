@@ -305,7 +305,12 @@
 			"ToggleFollowing" : {
 				"name"					: "Folgen starten/stoppen",
 				"descrp"				: "Lässt die kontrollierten Figuren der angezielten Figur folgen bzw. hört damit auf"
-			}
+			},
+			
+			"ProxyTarget" : {
+				"name"					: "Proxy zielen",
+				"descrp"				: "Zielt die von der gehoverten Figur gerittene Figur an, wenn möglich"
+			}	
 		},
 		
 		"Popup" : {
