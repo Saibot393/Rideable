@@ -513,10 +513,11 @@ class RideableCompUtils {
 	}
 	
 	//specific: routinglib-wrapper
-	static async RLRoute(pToken, pTarget, pbeforeEnd = 0) {
+	static async RLRoute(pToken, pTarget, pTargetCoordinates = {}, pbeforeEnd = 0) {
 		let vStart = {};
 		
 		let vTarget = {};
+		let vTargetCoordinates = {...{x : pTarget.x, y : pTarget.y}, ...pTargetCoordinates};
 		
 		let vRoute = [];
 		
@@ -528,26 +529,26 @@ class RideableCompUtils {
 				vStart.x = Math.round((pToken.x)/vGridSize);
 				vStart.y = Math.round((pToken.y)/vGridSize);
 				
-				vTarget.x = Math.round((pTarget.x)/vGridSize);
-				vTarget.y = Math.round((pTarget.y)/vGridSize);
+				vTarget.x = Math.round((vTargetCoordinates.x)/vGridSize);
+				vTarget.y = Math.round((vTargetCoordinates.y)/vGridSize);
 				break;
 			case 0: 
 				//no grid
 				vStart = GeometricUtils.CenterPositionXY(pToken);
 				
 				if (pTarget.documentName == "Token") {
-					vTarget = GeometricUtils.CenterPositionXY(pTarget);
+					vTarget = GeometricUtils.CenterPositionXY(pTarget, vTargetCoordinates);
 				}
 				else {
-					vTarget = {x : pTarget.x, y : pTarget.y};
+					vTarget = vTargetCoordinates;
 				}
 				break;
 			default:
 				break;
 		}
-		
+
 		vRoute = (await routinglib.calculatePath(vStart, vTarget, {token : pToken.object}))?.path;
-		
+
 		if (vRoute) {
 			switch (pToken.parent.grid.type) {
 				case 1:
@@ -567,12 +568,14 @@ class RideableCompUtils {
 		else {
 			vRoute = [];
 		}
-		
+
 		if (pTarget.elevation != pToken.elevation) {
 			vRoute.forEach((vPoint, i) => vPoint.elevation = pToken.elevation + (pTarget.elevation - pToken.elevation)/vRoute.length * (i+1));
 		}
 
-		return GeometricUtils.CutRoute(vRoute, pbeforeEnd, pToken.parent.grid);
+		vRoute = GeometricUtils.CutRoute(vRoute, pbeforeEnd, pToken.parent.grid);
+		
+		return vRoute;
 	}
 }
 

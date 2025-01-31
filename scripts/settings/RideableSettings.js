@@ -359,7 +359,9 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: String,
 	choices: {
 		"stop" : Translate("Settings.FollowingCombatBehaviour.options.stop"),
+		"stop-includefollowed" : Translate("Settings.FollowingCombatBehaviour.options.stop-includefollowed"),
 		"resumeafter": Translate("Settings.FollowingCombatBehaviour.options.resumeafter"),
+		"resumeafter-includefollowed": Translate("Settings.FollowingCombatBehaviour.options.resumeafter-includefollowed"),
 		"continue": Translate("Settings.FollowingCombatBehaviour.options.continue")
 	},
 	default: "stop"

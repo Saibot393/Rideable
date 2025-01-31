@@ -1840,7 +1840,7 @@ class RideableFlags {
 		
 		if (vPoint) {
 			let vHistory = this.#PathHistoryFlag(pToken);
-			
+
 			vHistory.push(vPoint);
 			
 			if (vHistory.length > cPathMaxHistory) {

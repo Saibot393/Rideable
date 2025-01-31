@@ -241,7 +241,9 @@
 				"descrp"				: "Wie sich folgende Figuren im Kampf verhalten sollen",
 				"options" : {
 					"stop"				: "Nichtmehr folgen",
+					"stop-includefollowed" : "Nichtmehr folgen (inklusive Gefolgtem)",
 					"resumeafter"		: "Nach dem Kampf weiter folgen",
+					"resumeafter-includefollowed" : "Nach dem Kampf weiter folgen (inklusive Gefolgtem)",
 					"continue"			: "Weiter folgen"
 				}
 			},

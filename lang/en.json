@@ -241,7 +241,9 @@
 				"descrp"				: "How following tokens behave in combat",
 				"options" : {
 					"stop"				: "Stop following",
+					"stop-includefollowed"	: "Stop following (consider followed)",
 					"resumeafter"		: "Stop and resume after fight",
+					"resumeafter-includefollowed" : "Stop and resume after fight (consider followed)",
 					"continue"			: "Continue following"
 				}
 			},

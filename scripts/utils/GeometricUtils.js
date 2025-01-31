@@ -31,7 +31,7 @@ class GeometricUtils {
 	
 	static CenterPosition(pToken, pTokenReplacementPosition = {}) {} //returns the position of the Center of pToken
 	
-	static CenterPositionXY(pToken) {} //returns the center position (x,y) of pToken
+	static CenterPositionXY(pToken, pXYReplacement = undefined) {} //returns the center position (x,y) of pToken
 	
 	static updatedGeometry(pToken, pChange = {}) {} //returns the center position (x,y) of pToken after pChange
 	
@@ -69,7 +69,7 @@ class GeometricUtils {
 	
 	static scaledDistance(pPositionA, pPositionB, pfactorarray, protation = 0) {} //returns the distance between position A nad B with the x and y component scaled with pfactorarray (rotates difference before claculation if protation != 0)
 	
-	static TokenDistance(pTokenA, pTokenB) {} //returns (in game) Distance between Tokens
+	static TokenDistance(pTokenA, pTokenB, pTokenAReplacementPosition = {}) {} //returns (in game) Distance between Tokens
 	
 	static TokenDistanceto(pToken, pPosition, pTokenReplacementPosition = {}) {} //returns the distance of pToken to pPosition
 	
@@ -121,9 +121,14 @@ class GeometricUtils {
 		}
 	}
 
-	static CenterPositionXY(pToken) {
+	static CenterPositionXY(pToken, pXYReplacement = undefined) {
 		if (pToken) {
-			return {x: pToken.x + GeometricUtils.insceneWidth(pToken)/2, y: pToken.y + GeometricUtils.insceneHeight(pToken)/2};
+			if (pXYReplacement) {
+				return {x: pXYReplacement.x + GeometricUtils.insceneWidth(pToken)/2, y: pXYReplacement.y + GeometricUtils.insceneHeight(pToken)/2};
+			}
+			else {
+				return {x: pToken.x + GeometricUtils.insceneWidth(pToken)/2, y: pToken.y + GeometricUtils.insceneHeight(pToken)/2};
+			}
 		}
 		else {
 			return {};
@@ -253,9 +258,10 @@ class GeometricUtils {
 		}
 	} 
 	
-	static TokenDistance(pTokenA, pTokenB) {
+	static TokenDistance(pTokenA, pTokenB, pTokenAReplacementPosition = {}) {
 		if ((pTokenA) && (pTokenB)) {
-			return Math.sqrt( ((pTokenA.x+GeometricUtils.insceneWidth(pTokenA)/2)-(pTokenB.x+GeometricUtils.insceneWidth(pTokenB)/2))**2 + ((pTokenA.y+GeometricUtils.insceneHeight(pTokenA)/2)-(pTokenB.y+GeometricUtils.insceneHeight(pTokenB)/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			let vTokenAPosition = {...pTokenA, ...pTokenAReplacementPosition};
+			return Math.sqrt( ((vTokenAPosition.x+GeometricUtils.insceneWidth(pTokenA)/2)-(pTokenB.x+GeometricUtils.insceneWidth(pTokenB)/2))**2 + ((vTokenAPosition.y+GeometricUtils.insceneHeight(pTokenA)/2)-(pTokenB.y+GeometricUtils.insceneHeight(pTokenB)/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 		}
 		
 		return 0;
@@ -673,7 +679,7 @@ class GeometricUtils {
 			}
 			
 			let vResultRoute = [pRoute[0]];
-			
+
 			let vTargetLength = vCompleteLength - pbeforeEnd;
 			
 			if (vTargetLength > 0) {
@@ -691,7 +697,7 @@ class GeometricUtils {
 							if (pGrid) {
 								vNewPoint = GeometricUtils.GridSnapxy(vNewPoint, pGrid);
 							}
-							
+
 							vNewPoint.elevation = Math.round(pRoute[i-1].elevation + (pRoute[i].elevation - pRoute[i-1].elevation) * (vTargetLength/vDistances[i]));
 							
 							if (isNaN(vNewPoint.elevation)) {
