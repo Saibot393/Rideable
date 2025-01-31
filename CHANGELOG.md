@@ -1,3 +1,6 @@
+## v3.2.0
+- Improvments and bug fixes for the following feature, including new options for the "In combat follow behaviour" setting
+
 ## v3.1.5
 - Added key binding (default T + CTRL) for Proxy target, to easily target the mounts of tokens
 
