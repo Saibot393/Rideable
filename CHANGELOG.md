@@ -1,3 +1,6 @@
+## v3.2.1
+- Added Italien translation (thanks to [Landscape](https://github.com/LandscapeNemo))
+
 ## v3.2.0
 - Improvments and bug fixes for the following feature, including new options for the "In combat follow behaviour" setting
 
