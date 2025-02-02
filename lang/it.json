@@ -146,7 +146,7 @@
 				"name": "Effetti personalizzati di presa",
 				"descrp": "Effetti applicati ai token quando vengono afferrati (Nomi o ID separati da \";\")"
 			},
-			"GrappleonEffectRemoval": {
+			"StopGrappleonEffectRemoval": {
 				"name": "Interrompi presa alla rimozione dell'effetto",
 				"descrp": "Se un token deve essere rilasciato non appena l'effetto di presa viene rimosso"
 			},
@@ -277,9 +277,9 @@
 			"PreventedGrappledMove": "Ancora afferrato da {pRiddenName}",
 			"cantPilot": "{pRiddenName} non può essere pilotato",
 			"startPiloting": "Ora pilotando {pRiddenName}",
-			"Piloting": "Non pilotando più {pRiddenName}",
+			"stopPiloting": "Non pilotando più {pRiddenName}",
 			"cantbeMoved": "{cantbeMoved} non può essere spostato (potrebbe essere collegato a qualcosa)",
-			"Following": "Interrotto il seguito",
+			"StopFollowing": "Interrotto il seguito",
 			"StartFollowing": "Iniziato il seguito di {pFollowedName}",
 			"CantFollowinCombat": "Non è possibile seguire durante il combattimento",
 			"TargetisFollowingMe": "{pFollowedName} mi sta già seguendo",
