@@ -1,3 +1,6 @@
+## v3.2.2
+- Added setting Check rider collision to check riders collision with wall before placing them
+
 ## v3.2.1
 - Added Italien translation (thanks to [Landscape](https://github.com/LandscapeNemo))
 
