@@ -20,6 +20,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Tokens rideable by default: to change if tokens are rideable by default
 - Tiles can be mounted[*v11 upwards*]: to enable tile mounting feature
 - Allow mount on enter: to activate the mount on enter feature in this world (*turn off to increase performance*)
+- Check rider collision: to check riders collision with wall before placing them
 - Riding Height: to change the relative z-height of the riders
 - Use riding height by default: to set wether tokens/tiles should use the riding height per default for their riders
 - Mounting distance: to limit the distance from which a token can mount another token
