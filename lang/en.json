@@ -45,6 +45,11 @@
 				"descrp"				: "Allows tokens to be mounted and unmounted via tags (tag: \"Rideable:{RiderTokenID}\")"
 			},
 			
+			"CheckRiderCollision" : {
+				"name" 					: "Check rider collision",
+				"descrp"				: "Check rider collisions and change position accordingly"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Riding height",
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"

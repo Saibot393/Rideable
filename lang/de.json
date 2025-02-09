@@ -45,6 +45,11 @@
 				"descrp"				: "Erlaubt es Figuren über Tags auf Fieguren/Fliesen auf- oder absteigen zu lassen (Tag: \"Rideable:{ReiterFigurID}\")"
 			},
 			
+			"CheckRiderCollision" : {
+				"name" 					: "Reiter Kollision überprüfen",
+				"descrp"				: "Die Kollision von Reitern überprüfen und ihre Positionierung anpassen"
+			},
+			
 			"RidingHeight" : {
 				"name" 					: "Reithöhe",
 				"descrp"				: "Die Z-Höhe welche eine reitende Figur im Vergleich zur getrittenen Figur hat (es wird ein Wert über 0 empfohlen)"

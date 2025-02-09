@@ -804,6 +804,18 @@ class Ridingmanager {
 		vTargetx = vRiddenGeometry.x - GeometricUtils.insceneWidth(pRider)/2 + vTargetx;
 		vTargety = vRiddenGeometry.y - GeometricUtils.insceneHeight(pRider)/2 + vTargety;
 			
+	    if (game.settings.get(cModuleName, "CheckRiderCollision")) {
+			let vRiddenPoints = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
+			let vRiderPoints = GeometricUtils.updatedGeometry(pRider, {x : vTargetx, y : vTargety});
+			
+			let vCollisions = CONFIG.Canvas.polygonBackends.move.testCollision(vRiddenPoints, vRiderPoints, {type : "move"})
+			
+			if (vCollisions.length) {
+				vTargetx = vCollisions[0].x - GeometricUtils.insceneWidth(pRider)/2;
+				vTargety = vCollisions[0].y - GeometricUtils.insceneHeight(pRider)/2;
+			}
+		}	
+			
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
 			pRider.update({x: vTargetx, y: vTargety}, {animate : pAnimation, RidingMovement : true});
 		}

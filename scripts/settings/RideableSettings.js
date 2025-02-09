@@ -73,6 +73,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   }); 
   
+  game.settings.register(cModuleName, "CheckRiderCollision", {
+	name: Translate("Settings.CheckRiderCollision.name"),
+	hint: Translate("Settings.CheckRiderCollision.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  }); 
+  
   game.settings.register(cModuleName, "RidingHeight", {
 	name: Translate("Settings.RidingHeight.name"),
 	hint: Translate("Settings.RidingHeight.descrp"),
