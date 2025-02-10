@@ -290,6 +290,7 @@ class FollowingManager {
 		if (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 			if ((!game.users.find(vUser => vUser.isGM && vUser.active) && pToken.isOwner) || game.user.isGM) {
 				//update path history of pToken
+				await CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
 				await RideableFlags.AddtoPathHistory(pToken, GeometricUtils.updatedGeometry(pToken, pchanges));
 			}
 		}
@@ -370,7 +371,7 @@ class FollowingManager {
 		//if (vFollowedList?.has(pToken.id)) {
 		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-				await FollowingManager.updatePathHistory(pToken, pchanges);
+				FollowingManager.updatePathHistory(pToken, pchanges);
 				
 				//precheck combat behaviour
 				if (!(pToken.inCombat && ["stop-includefollowed", "resumeafter-includefollowed"].includes(game.settings.get(cModuleName, "FollowingCombatBehaviour")))) {
