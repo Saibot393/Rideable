@@ -1,3 +1,6 @@
+## v3.2.3
+- Fixed problem with simple path history following algorithm
+
 ## v3.2.2
 - Added setting Check rider collision to check riders collision with wall before placing them
 
