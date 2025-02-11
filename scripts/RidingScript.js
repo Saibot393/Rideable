@@ -263,9 +263,6 @@ class Ridingmanager {
 						if (pChanges.hasOwnProperty("x")) {
 							if (vChange.hasOwnProperty("x")) {
 								vxtarget = pRidden.x + vChange.x;
-								console.log(pRidden.x);
-								console.log(vChange.x);
-								console.log(vxtarget);
 							}
 							else {
 								vxtarget = pRidden.x + (pChanges.x - pToken.x);
@@ -298,6 +295,16 @@ class Ridingmanager {
 						}
 						
 						[vxtarget, vytarget] = GeometricUtils.GridSnap([vxtarget, vytarget], FCore.sceneof(pRidden).grid);
+						
+						//prevent move through wall bug
+						let vRiddenPoints = GeometricUtils.updatedGeometry(pRidden);
+						let vTargetPoints = GeometricUtils.updatedGeometry(pRidden, {x : vxtarget, y : vytarget});
+						
+						let vCollisions = CONFIG.Canvas.polygonBackends.move.testCollision(vRiddenPoints, vTargetPoints, {type : "move"})
+						if (vCollisions.length) {
+							vxtarget = vCollisions[0].x - vRiddenPoints.insceneWidth/2 + Math.sign(vRiddenPoints.x - vTargetPoints.x);
+							vytarget = vCollisions[0].y - vRiddenPoints.insceneHeight/2 + Math.sign(vRiddenPoints.y - vTargetPoints.y);
+						}
 						
 						pRidden.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget}, {animate : pInfos.animate});
 					}
