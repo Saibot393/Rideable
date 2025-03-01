@@ -1,3 +1,6 @@
+## v3.2.4
+-Fixed bug that could allows tokens to walk through certain wells when "Move ridden Token" is active
+
 ## v3.2.3
 - Fixed problem with simple path history following algorithm
 
