@@ -39,7 +39,8 @@ const cPilotedbyDefaultF = "PilotedbyDefaultFlag"; //flag to pilot this token/ti
 const cisPilotingF = "isPilotingFlag"; //flag that describes, that this token i piloting its mount
 const cforMountEffectsF = "forMountEffectsFlag"; //flag that stores effects applied to this tokens mount
 const cRiderOffsetF = "RiderOffsetFlag"; //flag to store the offset of all riders
-const cRiderRotOffsetF = "RiderRotOffsetFlag"; //flag to stor a rotation offset
+const cRiderRotOffsetF = "RiderRotOffsetFlag"; //flag to store a rotation offset
+const cisMountItemF = "isMountItemFlag"; //flag to store if an item is a mount item
 const cfollowedTokenF = "followedTokenFlag";//flag to store id of followed token
 const cfollowDistanceF = "followDistanceFlag"; //Flag to store the distance at which this token follows
 const cplannedRouteF = "plannedRouteFlag"; //Flag to store a planned route for this token (array of x,y)
@@ -241,6 +242,11 @@ class RideableFlags {
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
 	static IsActorEffect(pActor, pEffect) {} //returns if pEffect is registered as special effect of pActor and if so, which kind ["riding", "grapple", "forMount"]
+	
+	//items
+	static markasMountItem(pItem) {} //marks item object (not instance of item) as mount object (before it is created)
+	
+	static IsMountItem(pItem) {} //return if item is mount item
 	
 	//following
 	static isFollowing(pFollower) {} //returns if pFollower is following something
@@ -727,6 +733,20 @@ class RideableFlags {
 		}
 		
 		return 0; //default if anything fails		
+	}
+	
+	static #IsMountItemFlag (pItem) {
+		//return conten of IsMountItemFlag of pItem (boolean)
+		let vFlag = this.#RideableFlags(pItem);
+		
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cisMountItemF)) {
+				return vFlag.isMountItemFlag;
+			}
+		}
+		
+		return false; //default if anything fails	
 	}
 	
 	static #isPilotingFlag (pToken) {
@@ -1720,6 +1740,19 @@ class RideableFlags {
 				}
 			}
 		}
+	}
+	
+	//items
+	static markasMountItem(pItem) {
+		pItem[flags] = {
+			[cModuleName] : {
+				[cisMountItemF] : true
+			}
+		}
+	}
+	
+	static IsMountItem(pItem) {
+		return this.#IsMountItemFlag(pItem);
 	}
 	
 	//following

@@ -220,7 +220,14 @@ class GeometricUtils {
 	} 
 	
 	static scaleto(pVector, pfactor) {
-		return GeometricUtils.scale(pVector, pfactor/GeometricUtils.value(pVector));
+		let vValue = GeometricUtils.value(pVector);
+		
+		if (vValue == 0) {
+			return pVector;
+		}
+		else {
+			return GeometricUtils.scale(pVector, pfactor/GeometricUtils.value(pVector));
+		}
 	}
 	
 	static scaletoxy(pVector, pfactorarray) {
@@ -358,6 +365,8 @@ class GeometricUtils {
 		
 		vDirection = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRider, pToken, pRiderReplacementPosition), -pToken.rotation);
 		
+		console.log(vDirection);
+		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
 				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
@@ -382,9 +391,12 @@ class GeometricUtils {
 					vTarget[1] = vDirection[1]/vDirection[0] * vTarget[0];
 				}
 				else {
-					vTarget[1] = Math.sign(vDirection[1]) * GeometricUtils.insceneHeight(pToken)/2;
-					
-					vTarget[0] = vDirection[0]/vDirection[1] * vTarget[1];
+					if (vDirection[1] != 0) {
+						//0 case, vDirection[0] = 0, since abs(vDirection[0]) <= vDirection[1]
+						vTarget[1] = Math.sign(vDirection[1]) * GeometricUtils.insceneHeight(pToken)/2;
+						
+						vTarget[0] = vDirection[0]/vDirection[1] * vTarget[1];
+					}
 				}
 				
 				return vTarget;

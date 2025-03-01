@@ -49,7 +49,7 @@ class MountingManager {
 	//placement
 	static async ToggleGrapplePlacement(pTokens) {} //Toggles the Grapple placements of pTokens
 	
-	static ToggleGrapplePlacementSelected() {} //Taggles the Grapple placements of the selected tokens
+	static ToggleGrapplePlacementSelected() {} //Toggles the Grapple placements of the selected tokens
 	
 	//piloting
 	static async TogglePiloting(pTokens) {} //Toggles the piloting of pTokens
@@ -85,6 +85,15 @@ class MountingManager {
 	static ProxySelect(pToken, pOptions = {}) {} //called to start a proxy select
 	
 	static ProxyTarget(pOptions = {}) {} //called to start a proxy target
+	
+	//items
+	static async createMountItem(pRidden, pOptions = {}) {} //creates a new mount item for pRidden
+	
+	static async deleteMountItem(pRidden) {} //deletes any mount items for pRidden
+	
+	static async getMountItem(pRidden, pCreate = true) {} //returns mount item of pRidden (or creates a new one if no item is found)
+	
+	static async updateMountItem(pRidden) {} //takes care of mount item updates
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -775,6 +784,57 @@ class MountingManager {
 					vHovered.setTarget(!vHovered.isTargeted, {releaseOthers: !pOptions.isShift});
 				}
 			}
+		}
+	}
+	
+	//items
+	static async createMountItem(pRidden, pOptions = {}) {
+		let vMountItem = undefined;
+		
+		if (pRidden?.actor) {
+			let vItemData = {
+				name : Translate("Items.MountItem.name"),
+				type : "loot",
+				image : "icons/containers/misc/wheelbarrow-white.webp"
+			}
+			
+			RideableFlags.markasMountItem(vItemData);
+			
+			vMountItem = await pRidden.actor.createEmbeddedDocuments("Item", [vItemData]);
+		}
+		
+		return vMountItem;
+	}
+	
+	static async deleteMountItem(pRidden) {
+		if (pRidden.actor) {
+			let vMountItems = pRidden.actor.items.filter(vItem => RideableFlags.IsMountItem(vItem));
+			
+			await pRidden.actor.deleteEmbeddedDocuments("Item", [vMountItems.map(vItem => vItem.id)]);
+		}
+	}
+	
+	static async getMountItem(pRidden, pCreate = true) {
+		let vItems = pRidden?.actor?.items;
+		
+		let vMountItem = undefined;
+		
+		if (vItems) {
+			vMountItem = vItems.find(vItem => RideableFlags.IsMountItem(vItem));
+		}
+		
+		if (!vMountItem && pCreate) {
+			vMountItem = await MountingManager.createMountItem(pRidden);
+		}
+		
+		return vMountItem;
+	}
+	
+	static async updateMountItem(pRidden) {
+		let vMountItem = await MountingManager.getMountItem(pRidden, true);
+		
+		if (vMountItem) {
+			vMountItem
 		}
 	}
 	
