@@ -1744,7 +1744,7 @@ class RideableFlags {
 	
 	//items
 	static markasMountItem(pItem) {
-		pItem[flags] = {
+		pItem.flags = {
 			[cModuleName] : {
 				[cisMountItemF] : true
 			}

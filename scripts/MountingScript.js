@@ -2,13 +2,14 @@ import * as FCore from "./CoreVersionComp.js";
 
 import { RideableFlags } from "./helpers/RideableFlags.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
-import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
+import { RideableUtils, Translate, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
 import { EffectManager } from "./helpers/EffectManager.js";
 
 const cRideableIcon = "fas fa-horse";
+const cWeightIcon = "fa-solid fa-weight-hanging";
 
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
@@ -94,6 +95,8 @@ class MountingManager {
 	static async getMountItem(pRidden, pCreate = true) {} //returns mount item of pRidden (or creates a new one if no item is found)
 	
 	static async updateMountItem(pRidden) {} //takes care of mount item updates
+	
+	static onItemUpdate(pItem) {} //called when an item creates, updates or deletes
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -524,6 +527,8 @@ class MountingManager {
 		
 		MountingManager.ProxySelect(pRider);
 		
+		MountingManager.updateMountItem(pRidden);
+		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
 	
@@ -553,6 +558,8 @@ class MountingManager {
 		}
 		
 		EffectManager.onRiderUnMount(pRider, pRidden, pRidingOptions);
+		
+		MountingManager.updateMountItem(pRidden);
 		
 		Hooks.callAll(cModuleName + "." + "UnMount", pRider, pRidden, pRidingOptions);
 	}
@@ -803,14 +810,14 @@ class MountingManager {
 			vMountItem = await pRidden.actor.createEmbeddedDocuments("Item", [vItemData]);
 		}
 		
-		return vMountItem;
+		return vMountItem[0];
 	}
 	
 	static async deleteMountItem(pRidden) {
 		if (pRidden.actor) {
 			let vMountItems = pRidden.actor.items.filter(vItem => RideableFlags.IsMountItem(vItem));
 			
-			await pRidden.actor.deleteEmbeddedDocuments("Item", [vMountItems.map(vItem => vItem.id)]);
+			await pRidden.actor.deleteEmbeddedDocuments("Item", vMountItems.map(vItem => vItem.id));
 		}
 	}
 	
@@ -834,8 +841,49 @@ class MountingManager {
 		let vMountItem = await MountingManager.getMountItem(pRidden, true);
 		
 		if (vMountItem) {
-			vMountItem
+			let vRiders = RideableFlags.RiderTokens(pRidden);
+			
+			if (vRiders.length) {
+				let vWeights = vRiders.map(vRider => RideableUtils.totalWeight(vRider));
+				
+				let vtotalWeight = 0;
+				
+				vWeights.forEach(vWeight => vtotalWeight = vtotalWeight + vWeight);
+				
+				let vDescription = "<p>" + Translate("Items.MountItem.descrp") + "</p>";
+				
+				vDescription = vDescription + "<ul>";
+				
+				for (let i = 0; i < vRiders.length; i++) {
+					vDescription = vDescription + `
+						<li>
+							<p>@UUID[${vRiders[i].actor.uuid}]{${vRiders[i].actor.name}} <i class="${cWeightIcon}"></i>${vWeights[i]}</p>
+						</li>
+					`;
+				}
+				
+				vDescription = vDescription + "</ul>";
+				
+				console.log(vMountItem);
+				
+				await vMountItem.update({system : {
+					weight : {value : vtotalWeight},
+					description : {value : vDescription}
+				}});
+				
+				
+			}
+			else {
+				MountingManager.deleteMountItem(pRidden);
+			}
 		}
+		
+		//add update on weight update of riders)
+		//for hooks createItem, updateItem, deleteItem with filter for rider
+	}
+	
+	static onItemUpdate(pItem) {
+		//mount item update here
 	}
 	
 	//Aditional Informations
@@ -939,6 +987,12 @@ Hooks.on(cModuleName + ".RideableEffectDeletion", (pEffect, pUser, pInfos) => Mo
 Hooks.on("pasteToken", async (...args) => {await MountingManager.onpasteToken(...args)});
 
 Hooks.on("controlToken", (...args) => MountingManager.onTokenControl(...args));
+
+Hooks.on("createItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
+
+Hooks.on("updateItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
+
+Hooks.on("deleteItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
 
 //Hooks.on(cModuleName+".RideableEffectDeletion", (...args) => MountingManager.onRideableEffectDeletion(...args));
 

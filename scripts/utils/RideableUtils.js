@@ -86,6 +86,8 @@ class RideableUtils {
 	
 	static canbeMoved(pObject) {} //returns if pObject can be moved
 	
+	static totalWeight(pToken) {} //tries to work out the total weight of a token in game units
+	
 	//support
 	static CompleteProperties(pProperties, pSource1, pSource2) {} //returns an object containing properties defined in pProperties, first filled with pSource1, then with pSource2
 	
@@ -397,6 +399,18 @@ class RideableUtils {
 		}
 		
 		return true;
+	}
+	
+	static totalWeight(pToken) {
+		let vWeight = 1;
+		
+		let vActor = pToken?.actor;
+		
+		if (vActor) {
+			
+		}
+		
+		return vWeight;
 	}
 	
 	//support
