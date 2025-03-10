@@ -17,7 +17,11 @@ const cPf2eName = "pf2e"; //name of Pathfinder 2. edition system
 //Riding names
 const cRidingString = "Ridden by:"; //Ridingeffects will have a name consisting of this string followed by a space and the riding tokens name
 const cRideableTag = "rideable"; //Rideable tokens need this tag if enabled (and system is Pf2e)
-const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script 
+const cRidingMovementTag = "RidingMovement"; //used to mark movement orders coming from the Riding script
+
+//for quantity paths
+const cQuantity = "quantity"; //name of the quantity attribut of items in most systems
+const cValue = "value"; //name of the value attribute some quantity attributes have
 
 //type names
 const cNPCType = "npc"; //type of npc tokens
@@ -28,6 +32,9 @@ const cPf2EffectType = "effect"; //the item type of Pf2e effects
 const cPf2ConditionType = "condition"; //the item type of Pf2e conditions
 
 export { cPf2eName, cModuleName, cPopUpID, cDelimiter };
+
+var vlastSearchedItemtype; //Saves the last item type for which a path was searched
+var vlastItempath; //Saves the last path that was found for lastSearchedItemtype
 
 //a few support functions
 class RideableUtils {
@@ -86,7 +93,13 @@ class RideableUtils {
 	
 	static canbeMoved(pObject) {} //returns if pObject can be moved
 	
-	static totalWeight(pToken) {} //tries to work out the total weight of a token in game units
+	static async totalWeight(pToken) {} //tries to work out the total weight of a token in game units
+	
+	static async ItemQuantityPath(pItem, pItemtype = "", pSearchDepth = 10) {} //returns the path to the items quantity in form of an array ([] if no path found)
+	
+	static setItemquantity(pItem, pset, pCharacter = undefined) {} //trys to set quantity of pItem to pset
+	
+	static async getItemquantity(pItem, pPath = []) {} //trys to get quantity of pItem, returns 0 otherwise
 	
 	//support
 	static CompleteProperties(pProperties, pSource1, pSource2) {} //returns an object containing properties defined in pProperties, first filled with pSource1, then with pSource2
@@ -401,16 +414,140 @@ class RideableUtils {
 		return true;
 	}
 	
-	static totalWeight(pToken) {
-		let vWeight = 1;
+	static async totalWeight(pToken) {
+		let vWeight = 0;
 		
 		let vActor = pToken?.actor;
 		
 		if (vActor) {
-			
+			for (let vItem of vActor.items) {
+				let vItemWeight = vItem.system.weight?.value;
+				console.log(vItemWeight);
+				if (vItemWeight) {
+					if (vItemWeight == "L") {
+						vItemWeight = 0.1;
+					}
+					
+					if (!isNaN(vItemWeight)) {
+						let vQuantity = await RideableUtils.getItemquantity(vItem);
+						console.log(vQuantity);
+						vWeight = vWeight + Number(vItemWeight) * vQuantity;
+					}
+				}
+			}
+
+			if (vActor.system?.details?.weight) {
+				if (!isNaN(vActor.system.details.weight)) {
+					vWeight = vWeight + Number(vActor.system.details.weight);
+				}
+			}
 		}
 		
 		return vWeight;
+	}
+	
+	static async ItemQuantityPath(pItem, pItemtype = "", pSearchDepth = 10) {
+		//pSearchDepth 10 is only an estimation
+		let vPath = [];
+		
+		if (pItem && pSearchDepth > 0) {
+			let vsubPath;
+			let vPrimeKeys = Object.keys(pItem);
+			
+			if (pItemtype == vlastSearchedItemtype) {
+				//if item path already known just return it
+				return vlastItempath;
+			}
+			
+			if (vPrimeKeys.length) {
+				if (vPrimeKeys.includes(cQuantity)) {
+					//if found return quantity path directly
+					vPath.push(cQuantity);
+					
+					if (Object.keys(pItem[cQuantity])?.includes(cValue)) {
+						vPath.push(cValue);
+					};
+				}
+				else {
+					//if not found search sub paths
+					for (let i = 0; i < vPrimeKeys.length; i++) {
+						if (vPath.length == 0) {
+							//only (recursive)search if not already found
+							vsubPath = RideableUtils.ItemQuantityPath(pItem[vPrimeKeys[i]], pSearchDepth-1);
+							
+							if (vsubPath.length > 0) {
+								//subpath includes quantity, unshift path name into start of array and be done
+								vPath = vsubPath;
+								
+								vPath.unshift(vPrimeKeys[i]);
+							}				
+						}
+					}
+				}
+			}
+			
+			if (vPath.length > 0) {
+				//to potentially increase the next searches speed
+				vlastSearchedItemtype = pItemtype;
+				vlastItempath = vPath;
+			}
+		}
+		
+		return vPath;
+	}
+	
+	static async setItemquantity(pItem, pset, pCharacter = undefined) {		
+		if (pItem) {
+			if (pset <= 0 && pCharacter) {
+				//special easy case
+				pCharacter.actor.deleteEmbeddedDocuments("Item", [pItem.id]);
+				
+				return true;
+			}
+			 
+			let vPath = (await RideableUtils.ItemQuantityPath(pItem.system, pItem.type)); 
+			let vUpdate = {};
+			
+			vUpdate[vPath.join(".")] = pset;
+			
+			pItem.update({system : vUpdate});
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	static async getItemquantity(pItem, pPath = []) {
+		if (pItem) {
+			let vBuffer = pItem.system;
+			let vPath = pPath; 
+			
+			if (vPath.length <= 0) {
+				vPath = await RideableUtils.ItemQuantityPath(pItem.system, [pItem.type]); 
+			}
+			
+			if (vPath.length > 0) {
+				for(let i = 0; i < vPath.length; i++) {	
+					//last one will be quantity
+					if (vBuffer) {
+						vBuffer = vBuffer[vPath[i]]
+					}
+				}
+				
+				if (!isNaN(vBuffer)) {
+					return Number(vBuffer);
+				}
+				else {
+					return 0;
+				}
+			}	
+
+			return 0;
+		}
+		else {
+			return 0;
+		}
 	}
 	
 	//support

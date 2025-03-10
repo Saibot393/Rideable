@@ -11,6 +11,8 @@ import { EffectManager } from "./helpers/EffectManager.js";
 const cRideableIcon = "fas fa-horse";
 const cWeightIcon = "fa-solid fa-weight-hanging";
 
+const cInitiativeDelta = 0.01;
+
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
 	//DECLARATIONS
@@ -97,6 +99,9 @@ class MountingManager {
 	static async updateMountItem(pRidden) {} //takes care of mount item updates
 	
 	static onItemUpdate(pItem) {} //called when an item creates, updates or deletes
+	
+	//combatants
+	static async onCombatantUpdate(pCombatant) {} //called when a combatant is updated
 	
 	//Aditional Informations
 	static TokencanMount (pRider, pRidden, pRidingOptions, pShowPopups = false) {} //returns if pRider can currently mount pRidden (ignores TokenisRideable and TokencanRide) (can also show appropiate popups with reasons why mounting failed)
@@ -844,7 +849,11 @@ class MountingManager {
 			let vRiders = RideableFlags.RiderTokens(pRidden);
 			
 			if (vRiders.length) {
-				let vWeights = vRiders.map(vRider => RideableUtils.totalWeight(vRider));
+				let vWeights = [];
+				
+				for (let vRider of vRiders) {
+					vWeights.push(await RideableUtils.totalWeight(vRider));
+				}
 				
 				let vtotalWeight = 0;
 				
@@ -864,7 +873,7 @@ class MountingManager {
 				
 				vDescription = vDescription + "</ul>";
 				
-				console.log(vMountItem);
+				console.log(vtotalWeight);
 				
 				await vMountItem.update({system : {
 					weight : {value : vtotalWeight},
@@ -883,7 +892,61 @@ class MountingManager {
 	}
 	
 	static onItemUpdate(pItem) {
-		//mount item update here
+		let vActor = pItem.actor;
+		
+		if (vActor && game.user.isGM) {
+			let vToken = vActor.token;
+			
+			if (!vToken) {
+				vToken = canvas.tokens.placeables.find(vToken => vToken.actor == vActor);
+			}
+			
+			if (vToken) {
+				let vRidden = RideableFlags.RiddenToken(vToken);
+				
+				if (vRidden) {
+					MountingManager.updateMountItem(vRidden);
+				}
+			}
+		}
+	}
+	
+	//combatants
+	static async onCombatantUpdate(pCombatant) {
+		let vToken = pCombatant.combatant;
+		
+		let fSetInitiative = async (pToken, pInitiative) => {
+			let vTokenCombatant = pToken.combatant;
+			
+			if (!vTokenCombatant) {
+				await vTokenCombatant.toggleCombatant();
+				vTokenCombatant = vTokenCombatant.combatant;
+			}
+			
+			if (vTokenCombatant) {
+				await vTokenCombatant.update({initiative : pInitiative});
+			}
+		}
+		
+		if (vToken && true) {
+			let vRidden = RideableFlags.RiddenToken(vToken);
+			
+			if (vRidden && vRidden.isOwner) {
+				let vRidersofRidden = RideableFlags.RiderTokens(vRidden);
+				
+				if (vRidersofRidden[0] == vToken) {
+					await fSetInitiative(vRidden, pCombatant.initiative - cInitiativeDelta);
+				}
+			}
+		}
+		
+		if (vToken && true) {
+			let vFamiliars = RideableFlags.RiderTokens(vToken).filter(vRider => RideableFlags.isFamiliarRider(vRider));
+			
+			for (let vFamiliar of vFamiliars) {
+				await fSetInitiative(vFamiliar, pCombatant.initiative - cInitiativeDelta);
+			}
+		}
 	}
 	
 	//Aditional Informations
@@ -993,6 +1056,10 @@ Hooks.on("createItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
 Hooks.on("updateItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
 
 Hooks.on("deleteItem", (pItem) => {MountingManager.onItemUpdate(pItem)});
+
+Hooks.on("createCombatant", (pCombatant) => {MountingManager.onCombatantUpdate(pCombatant)});
+
+Hooks.on("updateCombatant", (pCombatant) => {MountingManager.onCombatantUpdate(pCombatant)});
 
 //Hooks.on(cModuleName+".RideableEffectDeletion", (...args) => MountingManager.onRideableEffectDeletion(...args));
 
