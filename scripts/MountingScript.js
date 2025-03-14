@@ -13,6 +13,8 @@ const cWeightIcon = "fa-solid fa-weight-hanging";
 
 const cInitiativeDelta = 0.01;
 
+const cMountItemTypes = ["loot", "equipment"];
+
 //can be called by macros to quickly control the Riding functionality and handels a few additional settings regarding mounting
 class MountingManager {
 	//DECLARATIONS
@@ -801,18 +803,22 @@ class MountingManager {
 	
 	//items
 	static async createMountItem(pRidden, pOptions = {}) {
-		let vMountItem = undefined;
+		let vMountItem = [];
 		
-		if (pRidden?.actor) {
-			let vItemData = {
-				name : Translate("Items.MountItem.name"),
-				type : "loot",
-				image : "icons/containers/misc/wheelbarrow-white.webp"
+		let vType = cMountItemTypes.find(vType => Item.TYPES.includes(vType));
+		
+		if (vType) {
+			if (pRidden?.actor) {
+				let vItemData = {
+					name : Translate("Items.MountItem.name"),
+					type : vType,
+					image : "icons/containers/misc/wheelbarrow-white.webp"
+				}
+				
+				RideableFlags.markasMountItem(vItemData);
+				
+				vMountItem = await pRidden.actor.createEmbeddedDocuments("Item", [vItemData]);
 			}
-			
-			RideableFlags.markasMountItem(vItemData);
-			
-			vMountItem = await pRidden.actor.createEmbeddedDocuments("Item", [vItemData]);
 		}
 		
 		return vMountItem[0];
@@ -843,52 +849,52 @@ class MountingManager {
 	}
 	
 	static async updateMountItem(pRidden) {
-		let vMountItem = await MountingManager.getMountItem(pRidden, true);
-		
-		if (vMountItem) {
-			let vRiders = RideableFlags.RiderTokens(pRidden);
+		if (game.user.isGM) {
+			let vMountItem = await MountingManager.getMountItem(pRidden, true);
 			
-			if (vRiders.length) {
-				let vWeights = [];
+			if (vMountItem) {
+				let vRiders = RideableFlags.RiderTokens(pRidden);
 				
-				for (let vRider of vRiders) {
-					vWeights.push(await RideableUtils.totalWeight(vRider));
+				if (vRiders.length) {
+					let vWeights = [];
+					
+					for (let vRider of vRiders) {
+						vWeights.push(await RideableUtils.totalWeight(vRider));
+					}
+					
+					let vtotalWeight = 0;
+					
+					vWeights.forEach(vWeight => vtotalWeight = vtotalWeight + vWeight);
+					
+					let vDescription = "<p>" + Translate("Items.MountItem.descrp") + "</p>";
+					
+					vDescription = vDescription + "<ul>";
+					
+					for (let i = 0; i < vRiders.length; i++) {
+						vDescription = vDescription + `
+							<li>
+								<p>@UUID[${vRiders[i].actor.uuid}]{${vRiders[i].actor.name}} <i class="${cWeightIcon}"></i>${vWeights[i]}</p>
+							</li>
+						`;
+					}
+					
+					vDescription = vDescription + "</ul>";
+					
+					await vMountItem.update({system : {
+						weight : {value : vtotalWeight},
+						bulk : {value : vtotalWeight},
+						description : {value : vDescription}
+					}});
+					
+					
 				}
-				
-				let vtotalWeight = 0;
-				
-				vWeights.forEach(vWeight => vtotalWeight = vtotalWeight + vWeight);
-				
-				let vDescription = "<p>" + Translate("Items.MountItem.descrp") + "</p>";
-				
-				vDescription = vDescription + "<ul>";
-				
-				for (let i = 0; i < vRiders.length; i++) {
-					vDescription = vDescription + `
-						<li>
-							<p>@UUID[${vRiders[i].actor.uuid}]{${vRiders[i].actor.name}} <i class="${cWeightIcon}"></i>${vWeights[i]}</p>
-						</li>
-					`;
+				else {
+					MountingManager.deleteMountItem(pRidden);
 				}
-				
-				vDescription = vDescription + "</ul>";
-				
-				console.log(vtotalWeight);
-				
-				await vMountItem.update({system : {
-					weight : {value : vtotalWeight},
-					description : {value : vDescription}
-				}});
-				
-				
-			}
-			else {
-				MountingManager.deleteMountItem(pRidden);
 			}
 		}
 		
-		//add update on weight update of riders)
-		//for hooks createItem, updateItem, deleteItem with filter for rider
+		//add update on weight update of riders
 	}
 	
 	static onItemUpdate(pItem) {
@@ -913,14 +919,13 @@ class MountingManager {
 	
 	//combatants
 	static async onCombatantUpdate(pCombatant) {
-		let vToken = pCombatant.combatant;
-		
+		let vToken = pCombatant.token;
 		let fSetInitiative = async (pToken, pInitiative) => {
 			let vTokenCombatant = pToken.combatant;
 			
 			if (!vTokenCombatant) {
-				await vTokenCombatant.toggleCombatant();
-				vTokenCombatant = vTokenCombatant.combatant;
+				await pToken.toggleCombatant();
+				vTokenCombatant = pToken.combatant;
 			}
 			
 			if (vTokenCombatant) {
@@ -928,23 +933,25 @@ class MountingManager {
 			}
 		}
 		
-		if (vToken && true) {
-			let vRidden = RideableFlags.RiddenToken(vToken);
-			
-			if (vRidden && vRidden.isOwner) {
-				let vRidersofRidden = RideableFlags.RiderTokens(vRidden);
+		if (vToken && pCombatant.initiative != null) {
+			if (true) {
+				let vRidden = RideableFlags.RiddenToken(vToken);
 				
-				if (vRidersofRidden[0] == vToken) {
-					await fSetInitiative(vRidden, pCombatant.initiative - cInitiativeDelta);
+				if (vRidden && vRidden.isOwner) {
+					let vRidersofRidden = RideableFlags.RiderTokens(vRidden);
+					
+					if (vRidersofRidden[0] == vToken) {
+						await fSetInitiative(vRidden, pCombatant.initiative - cInitiativeDelta);
+					}
 				}
 			}
-		}
-		
-		if (vToken && true) {
-			let vFamiliars = RideableFlags.RiderTokens(vToken).filter(vRider => RideableFlags.isFamiliarRider(vRider));
 			
-			for (let vFamiliar of vFamiliars) {
-				await fSetInitiative(vFamiliar, pCombatant.initiative - cInitiativeDelta);
+			if (true) {
+				let vFamiliars = RideableFlags.RiderTokens(vToken).filter(vRider => RideableFlags.isFamiliarRider(vRider));
+				
+				for (let vFamiliar of vFamiliars) {
+					await fSetInitiative(vFamiliar, pCombatant.initiative - cInitiativeDelta);
+				}
 			}
 		}
 	}
@@ -1035,6 +1042,7 @@ class MountingManager {
 }
 
 //Hooks
+
 Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
 
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));

@@ -422,7 +422,11 @@ class RideableUtils {
 		if (vActor) {
 			for (let vItem of vActor.items) {
 				let vItemWeight = vItem.system.weight?.value;
-				console.log(vItemWeight);
+				
+				if (vItemWeight == undefined) {
+					vItemWeight = vItem.system.bulk?.value
+				}
+
 				if (vItemWeight) {
 					if (vItemWeight == "L") {
 						vItemWeight = 0.1;
@@ -439,6 +443,11 @@ class RideableUtils {
 			if (vActor.system?.details?.weight) {
 				if (!isNaN(vActor.system.details.weight)) {
 					vWeight = vWeight + Number(vActor.system.details.weight);
+				}
+				else {
+					if (!isNaN(vActor.system.details.weight.value)) {
+						vWeight = vWeight + Number(vActor.system.details.weight.value);
+					}
 				}
 			}
 		}
