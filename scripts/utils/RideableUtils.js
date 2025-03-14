@@ -31,6 +31,8 @@ const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 const cPf2EffectType = "effect"; //the item type of Pf2e effects
 const cPf2ConditionType = "condition"; //the item type of Pf2e conditions
 
+const cMovementKeys = ["movement", "speed"];
+
 export { cPf2eName, cModuleName, cPopUpID, cDelimiter };
 
 var vlastSearchedItemtype; //Saves the last item type for which a path was searched
@@ -100,6 +102,8 @@ class RideableUtils {
 	static setItemquantity(pItem, pset, pCharacter = undefined) {} //trys to set quantity of pItem to pset
 	
 	static async getItemquantity(pItem, pPath = []) {} //trys to get quantity of pItem, returns 0 otherwise
+	
+	static MovementEffectOverrides(pToken) {} //returns an array containing flags, modes, and values to override movement values in an effect
 	
 	//support
 	static CompleteProperties(pProperties, pSource1, pSource2) {} //returns an object containing properties defined in pProperties, first filled with pSource1, then with pSource2
@@ -557,6 +561,33 @@ class RideableUtils {
 		else {
 			return 0;
 		}
+	}
+	
+	static MovementEffectOverrides(pToken) {
+		let vActor = pToken?.actor;
+		
+		let vModfiers = [];
+		
+		if (vActor) {
+			let vAttributes = vActor.system.attributes;
+			
+			let vMovementKey = Object.keys(vAttributes).find(vKey => cMovementKeys.includes(vKey));
+			
+			if (vMovementKey) {
+				for (vKey of Object.keys(vAttributes[vMovementKey])) {
+					vModfiers.push(
+						{
+							key : "system.attributes." + vMovementKey + "." + vKey,
+							mode : 5, //5, as in 5verride
+							priority : null,
+							value : vAttributes[vMovementKey][vKey]
+						}
+					);
+				}
+			}
+		}
+		
+		return vModfiers;
 	}
 	
 	//support

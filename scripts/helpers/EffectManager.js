@@ -18,9 +18,11 @@ class EffectManager {
 	
 	static async removeRideableEffects(pRider, pInfos = {}) {} //remove all effects flaged as Rideable effect
 	
+	static async applyModifierstoMountEffect(pToken, pModifiers) {} //applies modifiers to the first in mount effect found 
+	
 	//Hooks
 	
-	static onRiderMount(pRider, pRidden, pRidingOptions) {} //handle creation of mounting effects
+	static async onRiderMount(pRider, pRidden, pRidingOptions) {} //handle creation of mounting effects
 	
 	static onRiderUnMount(pRider, pRidden, pRidingOptions) {} //handle deletion of mounting effects
 	
@@ -130,12 +132,50 @@ class EffectManager {
 		}
 	}
 	
-	//Hooks
-	static onRiderMount(pRider, pRidden, pRidingOptions = {}) {
-		if (RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule()) {
-			EffectManager.applyMountingEffects(pRider, pRidden, pRidingOptions); //add additional systems here if necessary
+	static async applyModifierstoMountEffect(pToken, pModifiers) {
+		if (RideableUtils.isPf2e()) {
+			let vEffect = pToken.actor.itemTypes.effect.concat(pRider.actor.itemTypes.condition).find(vElement => RideableFlags.isRideableEffect(vElement, pInfos.forMountEffect));
 			
-			EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
+			if (vEffect) {
+				let vRulesUpdates = [...vEffect.rules];
+				
+				for (let vModifier of pModifiers) {
+					vChangeUpdates.push({
+						...vModifier,
+						key : "ActiveEffectLike",
+						path : vModifier.key,
+						mode : vModifier.mode == 5 ?? "override"
+					})
+				}
+				
+				vEffect.update({changes : vChangeUpdates});
+			}
+		}
+		else {
+			let vEffect = pToken.actor.effects.find(vEffect => RideableCompUtils.isRideableEffect(vEffect));
+			
+			if (vEffect) {
+				let vChangeUpdates = [...vEffect.changes];
+				
+				for (let vModifier of pModifiers) {
+					vChangeUpdates.push(vModifier)
+				}
+				
+				vEffect.update({changes : vChangeUpdates});
+			}
+		}
+	}
+	
+	//Hooks
+	static async onRiderMount(pRider, pRidden, pRidingOptions = {}) {
+		if (RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule()) {
+			await EffectManager.applyMountingEffects(pRider, pRidden, pRidingOptions); //add additional systems here if necessary
+			
+			await EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
+			
+			if (pRidingOptions.RiderModifiers?.length) {
+				EffectManager.applyModifierstoMountEffect(pRider, pRidingOptions.RiderModifiers);
+			}
 		}
 	}
 	

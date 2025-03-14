@@ -530,7 +530,7 @@ class MountingManager {
 			RideableFlags.ApplyRidersScale(pRidden, [pRider]);
 		}
 		
-		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
+		EffectManager.onRiderMount(pRider, pRidden, {...pRidingOptions, RiderModifiers : RideableUtils.MovementEffectOverrides(pRidden)});
 		
 		MountingManager.ProxySelect(pRider);
 		
