@@ -1703,7 +1703,7 @@ class RideableFlags {
 		}
 		
 		if (pEffect) {
-			pEffect.setFlag(cModuleName, vFlagName, true)
+			await pEffect.setFlag(cModuleName, vFlagName, true)
 		}
 	}
 	

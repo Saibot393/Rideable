@@ -81,7 +81,7 @@ class EffectManager {
 				}
 			}
 			
-			EffectManager.applyRideableEffects(pRider, vRiderEffectNames, {grappleEffect : pRidingOptions.Grappled});
+			await EffectManager.applyRideableEffects(pRider, vRiderEffectNames, {grappleEffect : pRidingOptions.Grappled});
 		}
 	}
 	
@@ -98,7 +98,7 @@ class EffectManager {
 				vMountEffectNames.push(...RideableFlags.forMountEffects(vRiders[i]));
 			}
 			
-			EffectManager.applyRideableEffects(pRidden, vMountEffectNames, {forMountEffect : true});
+			await EffectManager.applyRideableEffects(pRidden, vMountEffectNames, {forMountEffect : true});
 		}
 	} 
 	
@@ -112,6 +112,7 @@ class EffectManager {
 				let vEffects = await pTarget.actor.createEmbeddedDocuments("Item", vEffectDocuments);
 				
 				for (let i = 0; i < vEffects.length; i++) {
+					console.log(vEffects[i]);
 					await RideableFlags.MarkasRideableEffect(vEffects[i], pInfos.forMountEffect);
 				}
 			}
@@ -134,21 +135,26 @@ class EffectManager {
 	
 	static async applyModifierstoMountEffect(pToken, pModifiers) {
 		if (RideableUtils.isPf2e()) {
-			let vEffect = pToken.actor.itemTypes.effect.concat(pRider.actor.itemTypes.condition).find(vElement => RideableFlags.isRideableEffect(vElement, pInfos.forMountEffect));
-			
+			console.log(pToken.actor.itemTypes.effect.concat(pToken.actor.itemTypes.condition));
+			console.log(pToken.actor.itemTypes.effect.concat(pToken.actor.itemTypes.condition).length);
+			console.log(pToken.actor.items.size);
+			console.log(pToken.actor);
+			let vEffect = pToken.actor.itemTypes.effect.concat(pToken.actor.itemTypes.condition).find(vElement => RideableFlags.isRideableEffect(vElement));
+			pToken.actor.itemTypes.effect.concat(pToken.actor.itemTypes.condition).forEach(vElement => console.log(vElement.flags));
+			console.log(vEffect);
 			if (vEffect) {
 				let vRulesUpdates = [...vEffect.rules];
 				
 				for (let vModifier of pModifiers) {
-					vChangeUpdates.push({
+					vRulesUpdates.push({
 						...vModifier,
 						key : "ActiveEffectLike",
 						path : vModifier.key,
-						mode : vModifier.mode == 5 ?? "override"
+						mode : vModifier.mode == 5 ? "override" : ""
 					})
 				}
 				
-				vEffect.update({changes : vChangeUpdates});
+				vEffect.update({system : {rules : vRulesUpdates}});
 			}
 		}
 		else {
@@ -173,6 +179,7 @@ class EffectManager {
 			
 			await EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
 			
+			console.log(pRidingOptions);
 			if (pRidingOptions.RiderModifiers?.length) {
 				EffectManager.applyModifierstoMountEffect(pRider, pRidingOptions.RiderModifiers);
 			}

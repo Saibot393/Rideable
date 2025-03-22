@@ -438,7 +438,7 @@ class RideableUtils {
 					
 					if (!isNaN(vItemWeight)) {
 						let vQuantity = await RideableUtils.getItemquantity(vItem);
-						console.log(vQuantity);
+
 						vWeight = vWeight + Number(vItemWeight) * vQuantity;
 					}
 				}
@@ -574,7 +574,7 @@ class RideableUtils {
 			let vMovementKey = Object.keys(vAttributes).find(vKey => cMovementKeys.includes(vKey));
 			
 			if (vMovementKey) {
-				for (vKey of Object.keys(vAttributes[vMovementKey])) {
+				for (let vKey of Object.keys(vAttributes[vMovementKey])) {
 					vModfiers.push(
 						{
 							key : "system.attributes." + vMovementKey + "." + vKey,
