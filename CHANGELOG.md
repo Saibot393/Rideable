@@ -1,3 +1,6 @@
+## v3.3.1
+- Small translation fix
+
 ## v3.3.0
 - Added setting Mounting weight to add an Item to ridden tokens that represents the weight of the riding tokens
 - Added setting Initiative link to link the initiative of the mounts to their riders
