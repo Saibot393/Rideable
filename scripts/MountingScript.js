@@ -530,7 +530,13 @@ class MountingManager {
 			RideableFlags.ApplyRidersScale(pRidden, [pRider]);
 		}
 		
-		EffectManager.onRiderMount(pRider, pRidden, {...pRidingOptions, RiderModifiers : RideableUtils.MovementEffectOverrides(pRidden)});
+		let vRidingOptions = {...pRidingOptions};
+		
+		if (game.settings.get(cModuleName, "SpeedAdjustment") == "all") {
+			pRidingOptions.RiderModifiers = RideableUtils.MovementEffectOverrides(pRidden);
+		}
+		
+		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
 		
 		MountingManager.ProxySelect(pRider);
 		
@@ -849,11 +855,15 @@ class MountingManager {
 	}
 	
 	static async updateMountItem(pRidden) {
-		if (game.user.isGM) {
+		if (game.user.isGM && game.settings.get(cModuleName, "MountingWeight") != "off") {
 			let vMountItem = await MountingManager.getMountItem(pRidden, true);
 			
 			if (vMountItem) {
 				let vRiders = RideableFlags.RiderTokens(pRidden);
+				
+				if (game.settings.get(cModuleName, "MountingWeight") == "mountsonly") {
+					vRiders = vRiders.filter(vToken => !RideableFlags.isFamiliarRider(vToken));
+				}
 				
 				if (vRiders.length) {
 					let vWeights = [];
@@ -934,23 +944,23 @@ class MountingManager {
 		}
 		
 		if (vToken && pCombatant.initiative != null) {
-			if (true) {
+			if (game.settings.get(cModuleName, "InitiativeLink") != "off") {
 				let vRidden = RideableFlags.RiddenToken(vToken);
 				
-				if (vRidden && vRidden.isOwner) {
+				if (!RideableFlags.isFamiliarRider(vToken) && vRidden && vRidden.isOwner) {
 					let vRidersofRidden = RideableFlags.RiderTokens(vRidden);
 					
 					if (vRidersofRidden[0] == vToken) {
 						await fSetInitiative(vRidden, pCombatant.initiative - cInitiativeDelta);
 					}
 				}
-			}
-			
-			if (true) {
-				let vFamiliars = RideableFlags.RiderTokens(vToken).filter(vRider => RideableFlags.isFamiliarRider(vRider));
 				
-				for (let vFamiliar of vFamiliars) {
-					await fSetInitiative(vFamiliar, pCombatant.initiative - cInitiativeDelta);
+				if (game.settings.get(cModuleName, "InitiativeLink") == "all") {
+					let vFamiliars = RideableFlags.RiderTokens(vToken).filter(vRider => RideableFlags.isFamiliarRider(vRider));
+					
+					for (let vFamiliar of vFamiliars) {
+						await fSetInitiative(vFamiliar, pCombatant.initiative - cInitiativeDelta);
+					}
 				}
 			}
 		}

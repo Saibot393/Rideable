@@ -179,7 +179,6 @@ class EffectManager {
 			
 			await EffectManager.RecheckforMountEffects(pRidden, pRidingOptions);
 			
-			console.log(pRidingOptions);
 			if (pRidingOptions.RiderModifiers?.length) {
 				EffectManager.applyModifierstoMountEffect(pRider, pRidingOptions.RiderModifiers);
 			}

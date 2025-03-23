@@ -444,13 +444,22 @@ class RideableUtils {
 				}
 			}
 
-			if (vActor.system?.details?.weight) {
-				if (!isNaN(vActor.system.details.weight)) {
-					vWeight = vWeight + Number(vActor.system.details.weight);
+			//fomd actor weight string
+			let vRawWeight = vActor.system?.details?.weight;
+			
+			if (!vRawWeight) {
+				vRawWeight = vActor.system?.details?.weight?.value;
+			}
+			//find numerical weight in weight string
+			if (vRawWeight) {
+				if (!isNaN(vRawWeight)) {
+					vWeight = vWeight + Number(vRawWeight);
 				}
 				else {
-					if (!isNaN(vActor.system.details.weight.value)) {
-						vWeight = vWeight + Number(vActor.system.details.weight.value);
+					let vNumbers = vRawWeight.match(/\d+/g);
+					
+					if (vNumbers.length) {
+						vWeight = vWeight + Number(vNumbers);
 					}
 				}
 			}

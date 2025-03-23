@@ -303,6 +303,49 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: 1
   }); 
   
+  game.settings.register(cModuleName, "MountingWeight", {
+	name: Translate("Settings.MountingWeight.name"),
+	hint: Translate("Settings.MountingWeight.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"off": 			Translate("Settings.MountingWeight.options.off"),
+		"mountsonly": 	Translate("Settings.MountingWeight.options.normalonly"),
+		"all": 			Translate("Settings.MountingWeight.options.all")
+	},
+	default: "off"
+  });  
+  
+  game.settings.register(cModuleName, "InitiativeLink", {
+	name: Translate("Settings.InitiativeLink.name"),
+	hint: Translate("Settings.InitiativeLink.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"off": 			Translate("Settings.InitiativeLink.options.off"),
+		"mountsonly": 	Translate("Settings.InitiativeLink.options.normalonly"),
+		"all": 			Translate("Settings.InitiativeLink.options.all")
+	},
+	default: "off"
+  }); 
+
+  game.settings.register(cModuleName, "SpeedAdjustment", {
+	name: Translate("Settings.SpeedAdjustment.name"),
+	hint: Translate("Settings.SpeedAdjustment.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices: {
+		"off": 			Translate("Settings.SpeedAdjustment.options.off"),
+		//"mountsonly": 	Translate("Settings.SpeedAdjustment.options.normalonly"),
+		"all": 			Translate("Settings.SpeedAdjustment.options.all")
+	},
+	default: "off",
+	config: RideableUtils.isPf2e() ||  RideableCompUtils.hasactiveEffectModule()
+  }); 
+  
   game.settings.register(cModuleName, "RiderMovementworlddefault", {
 	name: Translate("Settings.RiderMovementworlddefault.name"),
 	hint: Translate("Settings.RiderMovementworlddefault.descrp"),

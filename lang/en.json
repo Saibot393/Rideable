@@ -216,6 +216,36 @@
 				"name" 					: "Rider scale factor",
 				"descrp"				: "Scale applied to riders (only graphical)"	
 			},
+			
+			"MountingWeight" : {
+				"name" 					: "Mounting weight",
+				"descrp"				: "Adds an Item to Mounts to represent the weight of mounted Tokens",
+				"options" : {
+					"off"				: "Off",
+					"mountsonly"		: "Normal mounts only",
+					"all"				: "All mounts (including familiar riding)"
+				}
+			},
+			
+			"InitiativeLink" : {
+				"name" 					: "Initiative link",
+				"descrp"				: "Always places mounts after the rider in the initiative tracker",
+				"options" : {
+					"off"				: "Off",
+					"mountsonly"		: "Normal mounts only",
+					"all"				: "All mounts (reversed for familiar riding)"
+				}
+			},
+			
+			"SpeedAdjustment" : {
+				"name" 					: "Speed adjustment",
+				"descrp"				: "Adjusts the movement speed of riders to the speed of the mount (only active with mounting effects)",
+				"options" : {
+					"off"				: "Off",
+					"mountsonly"		: "Normal mounts only",
+					"all"				: "All mounts"
+				}
+			},
 		
 			"MessagePopUps" : {
 				"name" 					: "Message popups",
@@ -503,6 +533,13 @@
 		},
 		
 		"RideableTag.str"				: "rideable",
+		
+		"Items" : {
+			"MountItem" : {
+				"name" 					: "Mounted weight",
+				"descrp"				: "Weight added by mounted creatures:"
+			}
+		},
 		
 		"monks-active-tiles" : {
 			"filters" : {

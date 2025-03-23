@@ -216,6 +216,36 @@
 				"name" 					: "Reiter Skalierung",
 				"descrp"				: "Skalierung welche auf Reiter angewandt wird (nur graphisch)"
 			},
+			
+			"MountingWeight" : {
+				"name" 					: "Reit Gewicht",
+				"descrp"				: "Fügt gerittenen Figuren einen Gegenstand hinzu welcher das Gewicht der Reiter repräsentiert",
+				"options" : {
+					"off"				: "Aus",
+					"mountsonly"		: "Nur normales Reiten",
+					"all"				: "Alle (inklusive Vertraute)"
+				}
+			},
+			
+			"InitiativeLink" : {
+				"name" 					: "Initiative Verbindung",
+				"descrp"				: "Plaziert gerittenen Figuren nach dem Reiter in der Initiativeliste",
+				"options" : {
+					"off"				: "Aus",
+					"mountsonly"		: "Nur normales Reiten",
+					"all"				: "Alle (für Vertraute umgekehrt)"
+				}
+			},
+			
+			"SpeedAdjustment" : {
+				"name" 					: "Geschwindigkeit anpassen",
+				"descrp"				: "Passt die Geschwindigkeit der Reiter auf die GEschwindigkeit der gerittenen Figuren an (nur wenn Reiteffekte aktiv sind)",
+				"options" : {
+					"off"				: "Aus",
+					"mountsonly"		: "Nur normales Reiten",
+					"all"				: "Alle"
+				}
+			},
 		
 			"MessagePopUps" : {
 				"name" 					: "Pop-up-Meldungen",
@@ -503,6 +533,13 @@
 		},
 		
 		"RideableTag.str"				: "rideable",
+		
+		"Items" : {
+			"MountItem" : {
+				"name" 					: "Reitgewicht",
+				"descrp"				: "Gewicht der reitenden Figuren:"
+			}
+		},
 		
 		"monks-active-tiles" : {
 			"filters" : {
