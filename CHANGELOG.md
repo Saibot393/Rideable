@@ -1,3 +1,9 @@
+## v3.3.0
+- Added setting Mounting weight to add an Item to ridden tokens that represents the weight of the riding tokens
+- Added setting Initiative link to link the initiative of the mounts to their riders
+- Added setting Speed adjustment to adjust the speed of riders to represent the speed of their mounts
+- Fixed bug with grapple placement
+
 ## v3.2.4
 -Fixed bug that could allows tokens to walk through certain wells when "Move ridden Token" is active
 
