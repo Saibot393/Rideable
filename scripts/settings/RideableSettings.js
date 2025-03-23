@@ -311,7 +311,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: String,
 	choices: {
 		"off": 			Translate("Settings.MountingWeight.options.off"),
-		"mountsonly": 	Translate("Settings.MountingWeight.options.normalonly"),
+		"mountsonly": 	Translate("Settings.MountingWeight.options.mountsonly"),
 		"all": 			Translate("Settings.MountingWeight.options.all")
 	},
 	default: "off"
@@ -325,7 +325,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	type: String,
 	choices: {
 		"off": 			Translate("Settings.InitiativeLink.options.off"),
-		"mountsonly": 	Translate("Settings.InitiativeLink.options.normalonly"),
+		"mountsonly": 	Translate("Settings.InitiativeLink.options.mountsonly"),
 		"all": 			Translate("Settings.InitiativeLink.options.all")
 	},
 	default: "off"
