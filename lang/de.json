@@ -262,6 +262,11 @@
 				"descrp"				: "Ob Figur folgen in der Welt erlaubt ist (benötigt routinglib)"
 			},
 			
+			"FollowingCompatibilityMode" : {
+				"name"					: "Figur folgen kompatibilitäts Modus",
+				"descrp"				: "Dieser Modus kann Fehler im Zusammenhang mit Modulen wie etwa \"Drag Ruler\" verhindern oder verminden (ändert Reihenfolge des Folgens)"
+			},
+			
 			"FollowingAlgorithm" : {
 				"name"					: "Folgen Algorithmus",
 				"descrp"				: "Welcher Algorithmus für das Folgen benutz wird (installiere routinglib für mehr optionen)",

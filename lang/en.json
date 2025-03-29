@@ -262,6 +262,11 @@
 				"descrp"				: "If Token following is active in this world"
 			},
 			
+			"FollowingCompatibilityMode" : {
+				"name"					: "Token following compatibility mode",
+				"descrp"				: "This mode can prevent or reduce bugs when using modules like \"Drag Ruler\" (changes order of the following logic)"
+			},
+			
 			"FollowingAlgorithm" : {
 				"name"					: "Following algorithm",
 				"descrp"				: "Which following algorithm is used (install routinglib for more options)",

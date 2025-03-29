@@ -371,7 +371,12 @@ class FollowingManager {
 		//if (vFollowedList?.has(pToken.id)) {
 		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
 			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
-				FollowingManager.updatePathHistory(pToken, pchanges);
+				if (game.settings.get(cModuleName, "FollowingCompatibilityMode")) {
+					await FollowingManager.updatePathHistory(pToken, pchanges);
+				}
+				else {
+					FollowingManager.updatePathHistory(pToken, pchanges);
+				}
 				
 				//precheck combat behaviour
 				if (!(pToken.inCombat && ["stop-includefollowed", "resumeafter-includefollowed"].includes(game.settings.get(cModuleName, "FollowingCombatBehaviour")))) {

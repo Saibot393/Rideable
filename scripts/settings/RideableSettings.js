@@ -384,7 +384,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	requiresReload: true
   });  
   
-  //
+  game.settings.register(cModuleName, "FollowingCompatibilityMode", {
+	name: Translate("Settings.FollowingCompatibilityMode.name"),
+	hint: Translate("Settings.FollowingCompatibilityMode.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+
   let vFollowOptions = {
 	  "SimplePathHistory" : Translate("Settings.FollowingAlgorithm.options.SimplePathHistory")
   };
