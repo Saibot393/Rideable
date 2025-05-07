@@ -1,3 +1,6 @@
+## v4.0.0
+- v13 compatibility
+
 ## v3.3.2
 - Added setting for token following compatibility mode (can prevent some bugs in combination with other modules)
 
