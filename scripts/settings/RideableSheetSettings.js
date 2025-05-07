@@ -26,29 +26,30 @@ class RideableSheetSettings {
 			//pHTML.find('input[name="lockRotation"]').closest(".form-group").after(vTittleHTML);
 			
 			//create new tab
-			let vTabsheet;
-			let vprevTab;
 			let vTabContentHTML;
 			
+			let vTabbar = pHTML.querySelector(`nav.sheet-tabs`);
+			let vprevTab = pisTile ? pHTML.querySelector(`div[data-tab="overhead"]`) : pHTML.querySelector(`div[data-tab="resources"]`); //places LnK tab after last core tab "details"
+			
 			if (!pisTile) { //Tokens
-				vTabsheet = pHTML.find(`[data-group="main"].sheet-tabs`);
-				vprevTab = pHTML.find(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
-				vTabContentHTML = `<div class="tab" data-group="main" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
+				//vTabbar = pHTML.querySelector(`[data-group="main"].sheet-tabs`);
+				//vprevTab = pHTML.querySelector(`div[data-tab="resources"]`); //places rideable tab after last core tab "resources"
+				vTabContentHTML = fromHTML(`<div class="tab ${pApp.tabGroups?.sheet == cModuleName ? 'active' : ''} scrollable" ${game.release.generation <= 12 ? 'data-group="main"' : 'data-group="sheet"'} data-application-part="${cModuleName}"  data-tab="${cModuleName}"></div>`); //tab content sheet HTML	
 			}
 			else { //Tiles
-				vTabsheet =  pHTML.find(`nav.sheet-tabs:first`);
-				vprevTab = pHTML.find(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
-				vTabContentHTML = `<div class="tab" data-tab="${cModuleName}"></div>`; //tab content sheet HTML	
+				//vTabbar =  pHTML.querySelector(`nav.sheet-tabs:first`);
+				//vprevTab = pHTML.querySelector(`div[data-tab="animation"]`); //places rideable tab after last core tab "animations"
+				vTabContentHTML = fromHTML(`<div class="tab ${pApp.tabGroups?.sheet == cModuleName ? 'active' : ''} scrollable" ${game.release.generation <= 12 ? '' : 'data-group="sheet"'} data-application-part="${cModuleName}" data-tab="${cModuleName}"></div>`); //tab content sheet HTML	
 			}
 			
-			let vTabButtonHTML = 	`
-							<a class="item" data-tab="${cModuleName}">
+			let vTabButtonHTML = 	fromHTML(`
+							<a class="item ${pApp.tabGroups?.sheet == cModuleName ? 'active' : ''}" data-action="tab" ${game.release.generation <= 12 ? 'data-group="main"' : 'data-group="sheet"'} data-tab="${cModuleName}">
 								<i class="${cRideableIcon}"></i>
 								${Translate("Titles."+cModuleName)}
 							</a>
-							`; //tab button HTML
+							`); //tab button HTML
 			
-			vTabsheet.append(vTabButtonHTML);
+			vTabbar.append(vTabButtonHTML);
 			vprevTab.after(vTabContentHTML);
 			
 			//create settings in reversed order	
@@ -200,11 +201,11 @@ class RideableSheetSettings {
 														}, `div[data-tab="${cModuleName}"]`);
 														
 			if (game.user.isGM) {//GM settings
-				let vGMTittleHTML = `
+				let vGMTittleHTML = fromHTML(`
 										<hr>
 										<h3 class="border" name="RideableTitle">${Translate("Titles.GMonly")}</h3>
-									`;
-				pHTML.find(`div[data-tab="${cModuleName}"]`).append(vGMTittleHTML);
+									`);
+				pHTML.querySelector(`div[data-tab="${cModuleName}"]`).append(vGMTittleHTML);
 			
 				//Tokens spawned on creation
 				RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cSpawnRidersF +".name"), 
@@ -303,21 +304,16 @@ class RideableSheetSettings {
 			pApp.setPosition({ height: "auto" });
 		}
 		
-		if (pisTile) {
-			RideableSheetSettings.FixSheetWindow(pApp.element, `nav.sheet-tabs[aria-role="Form Tab Navigation"]`);
-		}
-		else {
-			RideableSheetSettings.FixSheetWindow(pApp.element, `nav.sheet-tabs[data-group="main"]`);
-		}
+		RideableSheetSettings.FixSheetWindow(pApp.element, `nav.sheet-tabs`);
 		
 		//pHTML.css("width", "max-content");
 	} 
 	
 	static AddHTMLOption(pHTML, pInfos, pto) {
-		pHTML.find(pto/*`div[data-tab="${cModuleName}"]`*/).append(RideableSheetSettings.createHTMLOption(pInfos))
+		pHTML.querySelector(pto/*`div[data-tab="${cModuleName}"]`*/).append(RideableSheetSettings.createHTMLOption(pInfos))
 	}
 	
-	static createHTMLOption(pInfos, pwithformgroup = false) {
+	static createHTMLOption(pInfos, pwithformgroup = false, pAsDOM = true) {
 		let vlabel = "Name";	
 		if (pInfos.hasOwnProperty("vlabel")) {
 			vlabel = pInfos.vlabel;
@@ -473,24 +469,42 @@ class RideableSheetSettings {
 		
 		//pHTML.find('[name="RideableTitle"]').after(vnewHTML);
 		//pHTML.find(pto/*`div[data-tab="${cModuleName}"]`*/).append(vnewHTML);
-		return vnewHTML;
+		return pAsDOM ? fromHTML(vnewHTML) : vnewHTML;
 	}
 	
 	static FixSheetWindow(pHTML, pIndentifier) {
+		if (!pHTML.nodeType) pHTML = pHTML[0];
+		
 		let vNeededWidth = 0;
 
-		pHTML.find(pIndentifier).children().each(function() {
-			vNeededWidth = vNeededWidth + $(this).outerWidth();
-		});
+		Array.from(pHTML.querySelector(pIndentifier).children).forEach(vElement => vNeededWidth = vNeededWidth + vElement.offsetWidth);
 		
-		let vWindow = pHTML.find(pIndentifier).closest(`div.app.window-app`);
-		
-		if (vNeededWidth > pHTML.width()) {
-			pHTML.width(vNeededWidth);
-		}					
+		if (vNeededWidth > pHTML.offsetWidth) {
+			pHTML.style.width = vNeededWidth + "px";
+		}		
 	}
 }
 
-Hooks.on("renderTokenConfig", (pApp, pHTML, pData) => RideableSheetSettings.SheetSetting(pApp, pHTML, pData));
+function fromHTML(pHTML) {
+	let vDIV = document.createElement('div');
+	
+	vDIV.innerHTML = pHTML;
+	
+	return vDIV.querySelector("*");
+}
 
-Hooks.on("renderTileConfig", (pApp, pHTML, pData) => RideableSheetSettings.SheetSetting(pApp, pHTML, pData, true));
+Hooks.once("ready", () => {
+	if (game.user.isGM) {
+		//register settings only for GM
+		if (game.release.generation <= 12) {
+			Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML[0], vData)); //for tokens
+			
+			Hooks.on("renderTileConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML[0], vData, true)); //for tokens
+		}
+		else {
+			Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData)); //for tokens
+			
+			Hooks.on("renderTileConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData, true)); //for tokens
+		}
+	}
+});

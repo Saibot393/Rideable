@@ -136,12 +136,18 @@ class RideableUtils {
 	
 	static IDsfromTokens (pTokens) {
 		let vIDs = [];
+		
+		let vTokens = pTokens;
+		
+		if (!Array.isArray(vTokens)) {
+			vTokens = [vTokens];
+		}
 					
-		for (let i = 0; i < pTokens.length; i++) {
+		for (let i = 0; i < vTokens.length; i++) {
 			let vBuffer = null;
 			
-			if (pTokens[i]) {
-				vIDs[vIDs.length] = pTokens[i].id;
+			if (vTokens[i]) {
+				vIDs[vIDs.length] = vTokens[i].id;
 			}
 		}
 		

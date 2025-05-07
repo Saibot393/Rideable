@@ -184,7 +184,13 @@ class MountingManager {
 				if (pTarget) {
 					if ((RideableFlags.TokenisRideable(pTarget, true) && RideableUtils.issettingMountableandUn(pTarget, true)) || pRidingOptions.Familiar || pRidingOptions.Grappled) {
 						
-						let vValidTokens = pselectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
+						let vSelectedTokens = pselectedTokens;
+						
+						if (!Array.isArray(vSelectedTokens)) {
+							vSelectedTokens = [vSelectedTokens];
+						}
+						
+						let vValidTokens = vSelectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
 						
 						vValidTokens = vValidTokens.filter(vToken => MountingManager.TokencanMount(vToken, pTarget, pRidingOptions, true));
 		
@@ -448,6 +454,8 @@ class MountingManager {
 	
 	//ui
 	static addMountingButton(pHUD, pHTML, pToken) {
+		if (game.release.generation <= 12) pHTML = pHTML[0];
+		
 		if (RideableFlags.TokenisRideable(pToken)) {
 			let vButtonPosition = game.settings.get(cModuleName, "MountButtonPosition");
 			
@@ -456,13 +464,13 @@ class MountingManager {
 			}
 			
 			if (vButtonPosition != "none") {		
-				let vButtonHTML = `<div class="control-icon" data-action="mount">
-									<i class="${cRideableIcon}"></i>
-							   </div>`;
+				let vButtonHTML = fromHTML(`<div class="control-icon" data-action="mount">
+												<i class="${cRideableIcon}"></i>
+											</div>`);
 				
-				pHTML.find("div.col."+vButtonPosition).append(vButtonHTML);
+				pHTML.querySelector("div.col."+vButtonPosition).append(vButtonHTML);
 				
-				let vButton = pHTML.find(`div[data-action="mount"]`);
+				let vButton = pHTML.querySelector(`div[data-action="mount"]`);
 				
 				let vRiders = RideableUtils.selectedTokens();
 				
@@ -834,7 +842,9 @@ class MountingManager {
 		if (pRidden.actor) {
 			let vMountItems = pRidden.actor.items.filter(vItem => RideableFlags.IsMountItem(vItem));
 			
-			await pRidden.actor.deleteEmbeddedDocuments("Item", vMountItems.map(vItem => vItem.id));
+			if (vMountItems.length) {
+				await pRidden.actor.deleteEmbeddedDocuments("Item", vMountItems.map(vItem => vItem.id));
+			}
 		}
 	}
 	
@@ -1051,6 +1061,14 @@ class MountingManager {
 	}
 }
 
+function fromHTML(pHTML) {
+	let vDIV = document.createElement('div');
+	
+	vDIV.innerHTML = pHTML;
+	
+	return vDIV.querySelector("*");
+}
+
 //Hooks
 
 Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
@@ -1089,7 +1107,7 @@ function MountSelectedFamiliar(pTargetHovered = false) { return MountingManager.
 
 function ToggleMountselected(pTargetHovered = false) {return MountingManager.ToggleMountselected(pTargetHovered); }
 
-function GrappleTargeted(pTargetHovered = false) { return MountingManager.ToggleMountselected(pTargetHovered, {Grappled: true})};
+function GrappleTargeted(pTargetHovered = false, pOptions = {}) { return MountingManager.ToggleMountselected(pTargetHovered, {...pOptions, Grappled: true})};
 
 function UnMountSelected() { return MountingManager.UnMountSelected(); }
 

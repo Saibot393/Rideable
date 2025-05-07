@@ -33,6 +33,10 @@ class EffectManager {
 		//Effects applied to pRider
 		let vRiderEffectNames = [];
 		
+		if (pRidingOptions.MountingEffectsAdditional) {
+			vRiderEffectNames.push(MountingEffectsAdditional);
+		}
+		
 		if (RideableUtils.isPf2e() || RideableCompUtils.hasactiveEffectModule()) {
 			//for riders effects
 			await EffectManager.removeRideableEffects(pRider, {grappleEffect : pRidingOptions.Grappled});
@@ -112,7 +116,6 @@ class EffectManager {
 				let vEffects = await pTarget.actor.createEmbeddedDocuments("Item", vEffectDocuments);
 				
 				for (let i = 0; i < vEffects.length; i++) {
-					console.log(vEffects[i]);
 					await RideableFlags.MarkasRideableEffect(vEffects[i], pInfos.forMountEffect);
 				}
 			}

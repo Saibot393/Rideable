@@ -631,22 +631,24 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 
 //Hooks
 Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
+	if (game.release.generation <= 12) pHTML = pHTML[0];
+	
 	//add a few titles	
 	let vnewHTML;
 	
 	if (game.user.isGM) {
 		//first world setting
-		vnewHTML = `<h3 class="border">${Translate("Titles.WorldSettings")}</h3>`;
+		vnewHTML = fromHTML(`<h3 class="border">${Translate("Titles.WorldSettings")}</h3>`);
 		 
-		pHTML.find('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
+		pHTML.querySelector('input[name="' + cModuleName + '.defaultRideable"]').closest(".form-group").before(vnewHTML);
 		
 		//first client setting
-		vnewHTML = `
+		vnewHTML =  fromHTML(`
 					<hr>
 					<h3 class="border">${Translate("Titles.ClientSettings")}</h3>
-					`;
+					`);
 		 
-		pHTML.find('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
+		pHTML.querySelector('select[name="' + cModuleName + '.RiderMovement"]').closest(".form-group").before(vnewHTML);
 		
 		/*
 		if (!RideableCompUtils.isactiveModule(cRoutingLib)) {
@@ -657,3 +659,11 @@ Hooks.on("renderSettingsConfig", (pApp, pHTML, pData) => {
 		*/
 	}
 });
+
+function fromHTML(pHTML) {
+	let vDIV = document.createElement('div');
+	
+	vDIV.innerHTML = pHTML;
+	
+	return vDIV.querySelector("*");
+}
