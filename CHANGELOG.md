@@ -1,3 +1,6 @@
+## v4.0.1
+- Added polish translation (thanks to [Lioheart](https://github.com/Lioheart))
+
 ## v4.0.0
 - v13 compatibility
 
