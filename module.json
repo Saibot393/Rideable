@@ -37,6 +37,12 @@
       "name": "Italiano",
       "path": "lang/it.json",
       "flags": {}
+    },
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "lang/pl.json",
+      "flags": {}
     }
   ],
   "esmodules": [

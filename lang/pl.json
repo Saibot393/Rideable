@@ -1,0 +1,638 @@
+{
+	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "Ustawienia świata (tylko MG)",
+			"ClientSettings"			: "Ustawienia klienta",
+			"GMonly"					: "Tylko MG",
+			"Tile"						: "Kafelek",
+			"RequiresRL"				: "Rideable wymaga <a href=\"https://foundryvtt.com/packages/routinglib\">routinglib</a> aby funkcja śledzenia tokenów działała" 
+		},
+		
+		"Settings" : {
+			"defaultRideable" : {
+				"name" 					: "Tokeny z możliwością jazdy",
+				"descrp"				: "Czy wszystkie tokeny powinny być domyślnie dostępne do jazdy (można to zmienić dla każdego tokenu w ustawieniach tokenu)"
+			},
+			
+			"allowTileRiding" : {
+				"name" 					: "Kafelki można dosiadać",
+				"descrp"				: "Czy kafelki można dosiadać tak samo jak tokeny"
+			},
+			
+			"allowMountingonEntering" : {
+				"name" 					: "Zezwól na dosiadanie przy wejściu",
+				"descrp"				: "Zezwól aby można było dosiadać tokeny i kafelki za pomocą tokenów, które wchodzą w ich przestrzeń."
+			},
+			
+			"LocknKeyintegration" : {
+				"name" 					: "Integracja Lock & Key",
+				"descrp"				: "Umożliwia blokowanie tokenów, na których można jeździć"
+			},
+			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "Integracja DFreds Convenient Effects",
+				"descrp"				: "Pozwala na zastosowanie określonych efektów do tokenów dosiadanych i chwytanych"
+			},
+			
+			"CPREffectsIntegration" : {
+				"name" 					: "Integracja Chris's Premades",
+				"descrp"				: "Pozwala na zastosowanie określonych efektów do tokenów dosiadanych i chwytanych"
+			},
+			
+			"TaggerMountingIntegration" : {
+				"name" 					: "Integracja Tagger",
+				"descrp"				: "Umożliwia dosiadanie i zsiadanie tokenów za pomocą tagów (tag: \"Rideable:{RiderTokenID}\")"
+			},
+			
+			"CheckRiderCollision" : {
+				"name" 					: "Sprawdź kolizję jeźdźców",
+				"descrp"				: "Sprawdź kolizje jeźdźców i odpowiednio zmień pozycję"
+			},
+			
+			"RidingHeight" : {
+				"name" 					: "Wysokość wierzchowca",
+				"descrp"				: "Wysokość, jaką jeździec ma w stosunku do swojego wierzchowca (zalecane powyżej 0)"
+			},
+			
+			"useRidingHeight" : {
+				"name" 					: "Użyj domyślnej wysokości wierzchowca",
+				"descrp"				: "Jeśli tokeny domyślnie używają wysokości wierzchowca"
+			},
+			
+			"useRiddenTokenHeight" : {
+				"name" 					: "Użyj wysokości tokenu",
+				"descrp"				: "Używa wysokości tokenu jeźdźca (dodanego poprzez moduł „Wall-Height”) zamiast ustawionej „Wysokości wierzchowca”."
+			},
+			
+			"MountingDistance" : {
+				"name" 					: "Odległość dosiadania",
+				"descrp"				: "Maksymalna odległość tokenu od celu dosiadania (-1 dla zasięgu nieograniczonego)"
+			},
+			
+			"UseArmReachDistance": {
+				"name" 					: "Użyj dystansu \"Arms Reach\"",
+				"descrp"				: "Wykorzystuje odległość ustawioną w opcji „Arms Reach” jako odległość dosiadania"	
+			},
+			
+			"BorderDistance" : {
+				"name" 					: "Odległość od granicy do granicy",
+				"descrp"				: "Jeśli odległość dosiadania ma być obliczana od krawędzi tokenów zamiast od punktu środkowego (działa poprawnie tylko w przypadku tokenów okrągłych/kwadratowych)"
+			},
+
+			"MaxRiders" : {
+				"name" 					: "Maksymalna liczba jeźdźców na token",
+				"descrp"				: "Maksymalna ilość tokenów, które można wykorzystać na jeden token (-1 dla nieograniczonej liczby)"
+			},
+
+			"RiderMovementworlddefault" : {
+				"name" 					: "Domyślne ustawienia ruchu jeźdźca",
+				"descrp"				: "Domyślne ustawienie ruchu jeźdźców graczy (nie zastępuje)"
+			},		
+
+			"MountButtonDefaultPosition" : {
+				"name" 					: "Domyślna pozycja przycisku „Dosiadanie”",
+				"descrp"				: "Domyślne ustawienie pozycji przycisku dosiadanie (nie zastępuje)"
+			},					
+
+			"RiderMovement" : {
+				"name" 					: "Ruch jeźdźca",
+				"descrp"				: "Co powinno się stać, jeśli token jeźdźca próbuje poruszyć się samodzielnie",
+				"options" : {
+					"worlddefault"		: "użyj domyślnych ustawień świata",
+					"disallow"			: "Zapobieganie przemieszczaniu się",
+					"dismount"			: "Zsiadanie jeźdźca",
+					"moveridden"		: "Przesuń token wierzchowca (jeśli jesteś właścicielem)"
+				}
+			},
+			
+			"MountButtonPosition" : {
+				"name" 					: "Pozycja przycisku dosiadania",
+				"descrp"				: "Pozycja przycisku dosiadania",
+				"options" : {
+					"default"			: "użyj domyślnych ustawień świata",
+					"none"				: "brak przycisku",
+					"left"				: "lewo",
+					"right"				: "prawo"
+				}
+			},
+			
+			"RiderProxySelect" : {
+				"name"					: "Wybór pełnomocnika jeźdźca",
+				"descrp"				: "Czy zamiast wybranego tokena powinien zostać wybrany dosiadany token lub jego jeźdźcy",
+				"options" : {
+					"never"				: "nigdy",
+					"familiar"			: "tylko chowańce",
+					"always"			: "zawsze",
+					"allRiders"			: "wszyscy jeźdźcy",
+					"ctrl"				: "z CTRL"
+				}
+			},
+			
+			"RiderRotation" : {
+				"name" 					: "Podłącz obrót",
+				"descrp"				: "Obraca wszystkich jeźdźców, jeśli obrócony zostanie token jeźdźca (działa również z opcją „Przesuń token wierzchowca”)."				
+			},
+		
+			"RidingSystemEffects" : {
+				"name" 					: "Zastosuj efekt „Dosiadany”",
+				"descrp"				: "Jeśli token zacznie jeździć, zostanie zastosowany efekt zależny od systemu."				
+			},
+			
+			"CustomRidingEffects" : {
+				"name" 					: "Niestandardowe efekty wierzchowców",
+				"descrp"				: "Efekty, które są stosowane do tokenów, gdy zaczynają jeździć (nazwy lub identyfikatory, oddzielone znakiem „;”)"				
+			},			
+			
+			"RideableTag" : {
+				"name" 					: "Cecha \"Rideable\"",
+				"descrp"				: "Zezwala na jazdę na tokenach posiadających cechę „Rideable” (cecha „Rideable” musi zostać dodana ręcznie w ustawieniach>Pathfinder 2nd Edition>Zarządzaj elementami Honebrew>Cechy stworzeń)"				
+			},
+			
+			"FamiliarRiding" : {
+				"name" 					: "Wierzchowiec dla chowańców",
+				"descrp"				: "Pozwala chowańcom na jazdę na swoich panach, chowańce będą umieszczani w rogach swoich panów"				
+			},
+			
+			"FamiliarRidingFirstCorner" : {
+				"name" 					: "Pozycja chowańców podczas jazdy",
+				"descrp"				: "Pierwszy róg zajęty przez chowańców.",
+				"options" : {
+					"tl"				: "Lewy górny róg",
+					"tr"				: "Prawy górny róg",
+					"bl"				: "Lewy dolny róg",
+					"br"				: "Prawy dolny róg"
+				}
+			},
+			
+			"Grappling" : {
+				"name" 					: "Chwytanie",
+				"descrp"				: "Pozwala tokenom na chwytanie się nawzajem (chwycone tokeny mogą zostać rozłączone tylko przez token, który je chwycił)"				
+			},
+			
+			"GrapplingSystemEffects" : {
+				"name" 					: "Zastosuj efekt „Chwycony”",
+				"descrp"				: "Jeśli token zostanie złapany, zostanie na niego zastosowany efekt zależny od systemu."				
+			},
+			
+			"CustomGrapplingEffects" : {
+				"name" 					: "Niestandardowe efekty chwytania",
+				"descrp"				: "Efekty, które są stosowane do tokenów, gdy są one chwytane (nazwy lub identyfikatory, oddzielone znakiem „;”)"				
+			},
+			
+			"StopGrappleonEffectRemoval" : {
+				"name"					: "Zatrzymaj chwytanie po usunięciu efektu",
+				"descrp"				: "Jeśli token powinien zostać zwolniony natychmiast po usunięciu efektu chwytania"
+			},
+			
+			"GrappleplacementDefault" : {
+				"name"					: "Domyślne umiejscowienie chwytania",
+				"descrp"				: "Standardowe rozmieszczenie chwytania tokenów",
+				"options" : {
+					"RowBelow"			: "poniżej",
+					"RowAbove"			: "powyżej",
+					"RowMiddle"			: "pośrodku",
+					"ClosestInside"		: "wewnątrz",
+					"Following"			: "podążaj"
+				}
+			},
+			
+			"PreventEnemyRiding" : {
+				"name" 					: "Zapobiegaj wjeżdżaniu wrogów",
+				"descrp"				: "Zapobiega przejeżdżaniu tokenów przez tokeny przeciwnika (MG nadal może to zrobić)"				
+			},
+			
+			"FitRidersize" : {
+				"name" 					: "Dostosuj rozmiar jeźdźca",
+				"descrp"				: "Dostosowuje rozmiar jeźdźca w przypadku, gdy jest on większy lub równy rozmiarowi tokenu, na którym się znajduje."				
+			},
+			
+			"FitRiderSizeFactor" : {
+				"name" 					: "Skorygowany współczynnik wielkości jeźdźca",
+				"descrp"				: "Współczynnik, przez który wielkość jeźdźców jest dostosowywana w przypadku, gdy są oni równi lub więksi od wielkości tokenu, na którym się poruszają."				
+			},
+			
+			"RiderScaleFactor" : {
+				"name" 					: "Współczynnik skali jeźdźca",
+				"descrp"				: "Skala stosowana do jeźdźców (tylko graficzna)"	
+			},
+			
+			"MountingWeight" : {
+				"name" 					: "Masa jeźdźca",
+				"descrp"				: "Dodaje Przedmiot do Wierzchowca, aby reprezentować wagę jeźdźców.",
+				"options" : {
+					"off"				: "Wyłączony",
+					"mountsonly"		: "Tylko normalne wierzchowce",
+					"all"				: "Wszystkie wierzchowce (w tym chowańce)"
+				}
+			},
+			
+			"InitiativeLink" : {
+				"name" 					: "Podłącz inicjatywę",
+				"descrp"				: "Zawsze umieszczaj wierzchowce za jeźdźcem w śledzeniu spotkań.",
+				"options" : {
+					"off"				: "Wyłączony",
+					"mountsonly"		: "Tylko normalne wierzchowce",
+					"all"				: "Wszystkie wierzchowce (odwrócone dla jazdy chowańców)"
+				}
+			},
+			
+			"SpeedAdjustment" : {
+				"name" 					: "Regulacja szybkości",
+				"descrp"				: "Dostosowuje szybkość ruchu jeźdźców do szybkości wierzchowca (aktywne tylko przy efektach związanych z wierzchowcami).",
+				"options" : {
+					"off"				: "Wyłączony",
+					"mountsonly"		: "Tylko normalne wierzchowce",
+					"all"				: "Wszystkie wierzchowce"
+				}
+			},
+		
+			"MessagePopUps" : {
+				"name" 					: "Wyskakujące komunikaty",
+				"descrp"				: "Włącza wyświetlanie wielu okienek podczas wykonywania takich czynności, jak dosiadanie lub zsiadanie."				
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Wyświetlanie tylko własnych komunikatów",
+				"descrp"				: "Wyświetla tylko komunikaty wyskakujące z tokenów, które kontrolujesz"				
+			},
+			
+			"EnableFollowing" : {
+				"name"					: "Włącz podążanie za tokenem",
+				"descrp"				: "Jeśli włączone, podążanie za tokenem jest aktywne w tym świecie"
+			},
+			
+			"FollowingCompatibilityMode" : {
+				"name"					: "Tryb zgodności podążania za tokenami",
+				"descrp"				: "Ten tryb może zapobiegać lub ograniczać błędy podczas korzystania z modułów takich jak „Drag Ruler” (zmienia kolejność następujących operacji logicznych)."
+			},
+			
+			"FollowingAlgorithm" : {
+				"name"					: "Algorytm podążania",
+				"descrp"				: "Który z poniższych algorytmów jest używany (zainstaluj routinglib, aby uzyskać więcej opcji)",
+				"options" : {
+					"SimplePathHistory" : "Prosta historia ścieżek (prosta, niewielkie zużycie zasobów)",
+					"routinglib"		: "routinglib (zaawansowany, wymagający dużej ilości zasobów, zalecany)"
+				}
+			},
+			
+			"FollowingCombatBehaviour" : {
+				"name"					: "W walce postępuj zgodnie z zachowaniem",
+				"descrp"				: "Jak zachowują się tokeny podczas walki",
+				"options" : {
+					"stop"				: "Przestań podążać",
+					"stop-includefollowed"	: "Przestań podążać (rozważ podążanie)",
+					"resumeafter"		: "Zatrzymaj i wznów po walce",
+					"resumeafter-includefollowed" : "Zatrzymaj i wznów po walce (rozważ podążanie)",
+					"continue"			: "Kontynuuj podążanie"
+				}
+			},
+			
+			"OnlyfollowViewed" : {
+				"name"					: "Podążaj za widocznymi tokenami",
+				"descrp"				: "Jeśli mają podążać tylko aktualnie widoczne tokeny"
+			},	
+			
+			"PreventFollowerStacking" : {
+				"name"					: "Zapobieganie nakładaniu się podążających",
+				"descrp"				: "Jeśli nie chcesz, aby tokeny podążające mogły się nakładać, nadal mogą one nakładać się w ciasnych obszarach."
+			},	
+			
+			"OnFollowerMovement" : {
+				"name" 					: "Ruch podążających",
+				"descrp"				: "Co powinno się stać, jeśli podążający token próbuje poruszyć się samodzielnie",
+				"options" : {
+					"stopfollowing"		: "Przestań podążać",
+					"updatedistance"	: "Aktualizacja odległości podążania"
+				}
+			}			
+		},
+		
+		"Keys" : {
+			"Mount" : {
+				"name" 					: "Dosiadanie",
+				"descrp"				: "Dosiadanie kontrolowanych tokenów do docelowego tokenu (alternatywne makro: „Mount”)"
+			},
+			
+			"UnMount" : {
+				"name" 					: "Zsiadanie",
+				"descrp"				: "Zsiadanie z kontrolowanych tokenów, na których się znajdują, lub zsiadanie tokenów docelowych z tokenów kontrolowanych (alternatywne makro: „Unmount”)"
+			},
+			
+			"MountFamiliar" : {
+				"name" 					: "Dosiadanie chowańca",
+				"descrp"				: "Wsiądź kontrolowanym chowańcem przez gracza i skieruj go na token, jeśli token jest mistrzem (alternatywne makro: „MountFamiliar”) (tylko jeśli ustawienie „Jazda chowańca” jest aktywne)"
+			},
+			
+			"GrappleTarget" : {
+				"name" 					: "Cel chwytania/puszczenia",
+				"descrp"				: "Przymocuj token docelowy do tokenu kontrolowanego, można odłączyć tylko za pomocą tokenu chwytającego (alternatywne makro: „Grapple”) (tylko jeśli ustawienie „Chwytanie” jest aktywne)"
+			},
+			
+			"ToggleMount" : {
+				"name" 					: "Przełącznik dosiadania",
+				"descrp"				: "Podłączanie lub odłączanie tokenów kontrolowanych do/z docelowego tokenu"
+			},
+			
+			"ToggleGrapplePlacement" : {
+				"name"					: "Przełącz położenie chwytania",
+				"descrp"				: "Przełącza między opcjami umieszczenia tokenów chwytających dla wybranych tokenów"
+			},
+			
+			"TogglePiloting" : {
+				"name" 					: "Przełącznik prowadzenia",
+				"descrp"				: "Rozpoczęcie lub zatrzymanie sterowania aktualnie dosiadanym tokenem"
+			},
+
+			"ToggleFollowing" : {
+				"name"					: "Przełącznik podążania",
+				"descrp"				: "Rozpoczęcie lub zatrzymanie podążania wybranych tokenów przez token docelowy lub podążany"
+			},
+
+			"ProxyTarget" : {
+				"name"					: "Cel pośredni",
+				"descrp"				: "Jeśli to możliwe, wybierz miejsce przymocowania tokenu, nad którym znajduje się kursor."
+			}				
+		},
+		
+		"Popup" : {
+			"Mounting"					: "Dosiada {pRiddenName}",
+			"UnMounting"				: "Zsiada z {pRiddenName}",
+			"MountingFamiliar"			: "Podąża za mistrzem {pRiddenName}",
+			"UnMountingFamiliar"		: "Przestaje podążać za mistrzem {pRiddenName}",
+			"PreventedRiderMove"		: "Ciągle dosiada {pRiddenName}",
+			"RidingLoop"				: "Jazda na {pRiddenName} byłaby niezręczna",
+			"NoPlace"					: "{pRiddenName} nie ma już miejsca",
+			"EnemyRiding"				: "{pRiddenName} jest moim wrogiem",
+			"Toofaraway"				: "{pRiddenName} jest zbyt daleko",
+			"RiddenisLocked"			: "{pRiddenName} jest zablokowany",
+			
+			"Grappling"					: "Chwycony przez {pRiddenName}",
+			"UnGrappling"				: "Wyswobodzony od {pRiddenName}",
+			"PreventedGrappledMove"		: "Ciągle pochwycony przez {pRiddenName}",
+			
+			"cantPilot"					: "{pRiddenName} nie może być sterowany",
+			"startPiloting"				: "Sterujesz {pRiddenName}",
+			"stopPiloting"				: "Nie sterujesz już {pRiddenName}",
+			"cantbeMoved"				: "{cantbeMoved} nie można przenieść (może być przyłączony do czegoś)",
+			
+			"StopFollowing"				: "Przestaje podążać",
+			"StartFollowing"			: "Zaczyna podążać za {pFollowedName}",
+			"CantFollowinCombat"		: "Nie można podążać podczas walki",
+			"TargetisFollowingMe"		: "{pFollowedName} już za mną podąża",
+			
+			"PositionLocked"			: "Pozycja zablokowana",
+			"PositionUnlocked"			: "Pozycja odblokowana"
+		},	
+		
+		"TokenSettings" : {
+			"MaxRiderFlag" : {
+				"name"					: "Maksymalna liczba jeźdźców",
+				"descrp"				: "Zastępuje globalne ustawienie dla tego tokenu (-1 dla nieograniczonego, pozostaw puste, aby powrócić do domyślnego ustawienia świata)"
+			},
+			
+			"MountonEnterFlag" : {
+				"name"					: "Dosiadanie przy wejściu",
+				"descrp"				: "Tokeny, które wchodzą do tej przestrzeni tokenów/kafelek, dosiadają je."
+			},
+			
+			"AutoMountBlackListFlag" : {
+				"name"					: "Czarna lista dosiadania przy wejściu",
+				"descrp"				: "Nazwy tokenów, identyfikatory i identyfikatory aktorów, które nie można dosiadać przy wejściu (oddzielone znakiem „;”)"
+			},
+			
+			"AutoMountWhiteListFlag" : {
+				"name"					: "Biała lista dosiadania przy wejściu",
+				"descrp"				: "Nazwy tokenów, identyfikatory i identyfikatory aktorów, które można dosiadać przy wejściu (oddzielone znakiem „;”, puste, aby zignorować)"
+			},
+			
+			"RiderPositioningFlag" : {
+				"name"					: "Pozycja jeźdźca",
+				"descrp"				: "Schemat rozmieszczenia tokenów jeźdźców",
+				"options" : {
+					"CirclePlacement"	: "Koło",
+					"RowPlacement"		: "Rząd",
+					"BlockPlacement"	: "Blok",
+					"ClusterPlacement"	: "Klaster",
+					"RowPlacementTop"	: "Górny wiersz",
+					"RowPlacementBottom": "Dolny wiersz",
+					"CornerPlacement"	: "Narożniki",
+					"CornerPlacementinner": "Narożniki (wewnętrzne)",
+					"MountPosition"		: "Pozycja dosiadania"
+				}
+			},
+			
+			"RiderOffsetFlag" : {
+				"name"					: "Przesunięcie jeźdźców",
+				"descrp"				: "Przesunięcie pozycji jeźdźców [w kwadratach sceny]"
+			},
+			
+			"RiderRotOffsetFlag" : {
+				"name"					: "Przesunięcie obrotu jeźdźców",
+				"descrp"				: "Przesunięcie obrotu dla jeźdźców"
+			},
+			
+			"GrapplePlacementFlag" : {
+				"name"					: "Umiejscowienie chwytu",
+				"descrp"				: "Gdzie umieszczane są pochwycone tokeny",
+				"options" : {
+					"RowBelow"			: "poniżej",
+					"RowAbove"			: "powyżej",
+					"RowMiddle"			: "pośrodku",
+					"ClosestInside"		: "wewnątrz",
+					"Following"			: "podążaj"
+				}
+			},
+			
+			"issetRideableFlag" : {
+				"name"					: "Token nadaje się do jazdy",
+				"descrp"				: "Zastępuje globalne ustawienie domyślne."
+			},
+			
+			"TileRideableNameFlag" : {
+				"name"					: "Nazwa kafelka",
+				"descrp"				: "Nazwa używana przez Rideable dla tego kafelka (np. Popups)"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Postać tokenu",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Okrąg/Elipsa",
+					"TokenFormRectangle": "Prostokąt",
+					"TokenTransparency"	: "z przezroczystości",
+					"TokenFormAttachedTiles" : "z przyłączonych tokenów/kafelków",
+					"TileFormNone"		: "Brak postaci/ignoruj"
+				}
+			},
+			
+			"CustomRidingheightFlag" : {
+				"name"					: "Niestandardowa wysokość wierzchowca",
+				"descrp"				: "Niestandardowa wysokość tego tokenu, używana dla jego użytkowników (pozostaw puste, aby zachować wartość domyślną)"
+			},
+			
+			"UseRidingHeightFlag" : {
+				"name"					: "Uwzględnij wysokość wierzchowca",
+				"descrp"				: "Jeśli wysokość tych tokenów powinna być zarządzana"
+			},
+			
+			"RidersScaleFlag" : {
+				"name"					: "Skala jeźdźców",
+				"descrp"				: "Skala zastosowana do obiektów tego obiektu (tylko graficzna)"
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Jeźdźcy mogą się swobodnie poruszać",
+				"descrp"				: "Jeśli jeźdźcy mogą poruszać się swobodnie w granicach tego tokenu"
+			},
+			
+			"SpawnRidersFlag" : {
+				"name"					: "Wytwórz jeźdźców",
+				"descrp"				: "Jeźdźcy, z którymi pojawia się ten token (nazwy lub identyfikatory, oddzielone znakiem „;”)"
+			},
+			
+			"MountingEffectsFlag" : {
+				"name"					: "Efekty wierzchowców",
+				"descrp"				: "Efekty, które są stosowane do wierzchowców tego tokenu (nazwy lub identyfikatory, oddzielone znakiem „;”)"
+			},
+			
+			"WorldMEffectOverrideFlag" : {
+				"name"					: "Zastąp efekty świata",
+				"descrp"				: "Zastępuje standardowe efekty świata efektami ustawionymi poniżej (zamiast dodawać je na końcu)."
+			},
+			
+			"SelfApplyEffectsFlag" : {
+				"name"					: "Zastosuj efekty wierzchowca dla siebie",
+				"descrp"				: "Jeśli ten token powinien zastosować swoje efekty wierzchowca podczas dosiadania"
+			},
+			
+			"forMountEffectsFlag" : {
+				"name"					: "Efekty dosiadania",
+				"descrp"				: "Efekty, które są stosowane do jeźdźców tego tokenu (nazwy lub identyfikatory, oddzielone znakiem „;”)"
+			},
+			
+			"canbeGrappledFlag" : {
+				"name"					: "Może być chwytany",
+				"descrp"				: "Jeśli ten token może zostać złapany"
+			},
+			
+			"GrapplingEffectsFlag" : {
+				"name"					: "Efekty chwytania",
+				"descrp"				: "Efekty, które są stosowane do celów chwytania tego tokenu (nazwy lub identyfikatory, oddzielone znakiem „;”)"
+			},
+			
+			"CanbePilotedFlag" : {
+				"name"					: "Może być sterowany",
+				"descrp"				: "Gracze mogą sterować tym tokenem, co pozwala im na przemieszczanie go, nawet jeśli nie jest ich własnością."
+			},
+			
+			"CheckPilotedCollisionFlag" : {
+				"name"					: "Zderzenia podczas sterowania",
+				"descrp"				: "Czy kolizja tokenów powinna być obliczana podczas sterowania (wyłącz dla TA z przyłączonymi ścianami)"
+			},
+			
+			"PilotedbyDefaultFlag" : {
+				"name"					: "Domyślnie sterowany",
+				"descrp"				: "Jeśli wszyscy jeźdźcy na tym tokenie automatycznie sterują tym tokenem (niezgodne z opcją „Jeźdźcy mogą poruszać się swobodnie”)"
+			}
+		},
+		
+		"RideableTag.str"				: "nadający się do jazdy",
+		
+		"Items" : {
+			"MountItem" : {
+				"name" 					: "Waga jeźdźca",
+				"descrp"				: "Waga dodana przez dosiadanie stworzenia:"
+			}
+		},
+		
+		"monks-active-tiles" : {
+			"filters" : {
+				"name"					: "Filtr",
+				
+				"riders-of" : {
+					"name"				: "Filtruj jeźdźców wierzchowych",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition} z <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"mount" : {
+							"name"		: "Dosiadanie"
+						},
+						
+						"filterCondition" : {
+							"name"		: "Stan techniczny jeźdźca:",
+							"options" : {
+								"rider": "jest jeźdźcem",
+								"notrider" : "nie jest jeźdźcem"
+							}	
+						}
+					}
+				},
+				
+				"is-rider" : {
+					"name"				: "Filtr jeźdźców",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Stan techniczny wierzchowca:",
+							"options" : {
+								"rider": "jest wierzchowcem",
+								"notrider" : "nie jest wierzchowcem"
+							}	
+						}
+					}					
+				},
+				
+				"is-ridden" : {
+					"name"				: "Filtr wierzchowców",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Stan techniczny dosiadanych:",
+							"options" : {
+								"ridden": "jest dosiadany",
+								"notridden" : "nie jest dosiadany"
+							}	
+						}
+					}					
+				}
+			},
+			
+			"actions" : {
+				"mount-this-tile" : {
+					"name"				: "Dosiadanie tego kafelka",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"mount-target" : {
+					"name"				: "Dosiadanie",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> do <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Dosiadanie"
+						}
+					}
+				},
+				
+				"unmount" : {
+					"name"				: "Zsiadanie",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"unmount-riders" : {
+					"name"				: "Zsiadanie jeźdźców",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> z <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"toggle-mount-target" : {
+					"name"				: "Przełącznik dosiadania",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> do <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Dosiadanie"
+						}
+					}
+				}
+			}
+		}
+	}
+}
