@@ -101,7 +101,7 @@ class GeometricUtils {
 	//graphics
 	static Pixelsof(pObject) {} //returns the pixels of pObject
 	
-	static AlphaValue(pPosition, pPixelArray, pObject) {} //returns the Alpha value of Pixel at pPosition of pPixelArray with described size
+	static AlphaValue(pPosition, pPixelArray, pObject, pModifiers = undefined) {} //returns the Alpha value of Pixel at pPosition of pPixelArray with described size
 	
 	//route
 	static CutRoute(pRoute, pbeforeEnd = 0, pGrid = undefined) {} //returns round cut pbeforeEnd pixels before the last coordinate
@@ -365,8 +365,6 @@ class GeometricUtils {
 		
 		vDirection = GeometricUtils.Rotated(GeometricUtils.TokenDifference(pRider, pToken, pRiderReplacementPosition), -pToken.rotation);
 		
-		console.log(vDirection);
-		
 		switch (pTokenForm) {
 			case cTokenFormCircle:
 				if (Math.max(GeometricUtils.insceneWidth(pToken) == GeometricUtils.insceneHeight(pToken))) {
@@ -411,14 +409,14 @@ class GeometricUtils {
 					return vStartingPosition;
 				}
 				
-				let vLength = GeometricUtils.value(vStartingPosition);
+				let vLength = GeometricUtils.value(vStartingPosition) * pToken.texture.scaleX;
 				
 				let vPixels = GeometricUtils.Pixelsof(pToken);
 				
 				for (let i = Math.round(vLength); i > -vLength; i--) {
 					let vPartLength = GeometricUtils.scale(vStartingPosition, i/vLength);
 					
-					if (GeometricUtils.AlphaValue(vPartLength, vPixels, pToken) > cAlphaTreshhold) {
+					if (GeometricUtils.AlphaValue(vPartLength, vPixels, pToken, pToken.texture) > cAlphaTreshhold) {
 						return vPartLength;
 					}
 				}
@@ -501,7 +499,7 @@ class GeometricUtils {
 				//render texture
 				let vpixels = GeometricUtils.Pixelsof(pToken);
 				
-				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken) > cAlphaTreshhold;
+				return GeometricUtils.AlphaValue(vDifference, vpixels, pToken, pToken.texture) > cAlphaTreshhold;
 			case cTokenFormAttachedTiles:
 				return RideableCompUtils.TAAttachedTiles(pToken).find(vTile => GeometricUtils.withinBoundaries(vTile, RideableFlags.TokenForm(vTile), pPosition));
 			case cTileFormNone:
@@ -652,12 +650,34 @@ class GeometricUtils {
 		return vpixels;
 	}
 	
-	static AlphaValue(pPosition, pPixelArray, pObject) {	
+	static AlphaValue(pPosition, pPixelArray, pObject, pModifiers = undefined) {	
 		let vAlpha = 0;
 		
-		let vTexturex = Math.round((GeometricUtils.insceneWidth(pObject)/2 - pPosition[0]) / GeometricUtils.insceneWidth(pObject) * pObject.object.texture.width);
+		let vPosition = [pPosition[0], pPosition[1]];
 		
-		let vTexturey = Math.round((GeometricUtils.insceneHeight(pObject)/2 - pPosition[1]) / GeometricUtils.insceneHeight(pObject) * pObject.object.texture.height);
+		if (pModifiers) {
+			if (pModifiers.scaleX) {
+				vPosition[0] = vPosition[0]/pModifiers.scaleX;
+			}
+			
+			if (pModifiers.scaleY) {
+				vPosition[1] = vPosition[1]/pModifiers.scaleY;
+			}
+			
+			/*
+			if (pModifiers.anchorX) {
+				vPosition[0] = vPosition[0] - (pModifiers.anchorX - 0.5) * GeometricUtils.insceneWidth(pObject);
+			}
+			
+			if (pModifiers.anchorY) {
+				vPosition[1] = vPosition[1] + (pModifiers.anchorY - 0.5) * GeometricUtils.insceneHeight(pObject);
+			}
+			*/
+		}
+		
+		let vTexturex = Math.round((GeometricUtils.insceneWidth(pObject)/2 - vPosition[0]) / GeometricUtils.insceneWidth(pObject) * pObject.object.texture.width);
+		
+		let vTexturey = Math.round((1 - (GeometricUtils.insceneHeight(pObject)/2 - vPosition[1]) / GeometricUtils.insceneHeight(pObject)) * pObject.object.texture.height);
 		
 		if ((vTexturex >= 0 && vTexturex < pObject.object.texture.width) && (vTexturey >= 0 && vTexturey < pObject.object.texture.height)) {
 			vAlpha = pPixelArray[(vTexturey * pObject.object.texture.width + vTexturex)*4 + 3];

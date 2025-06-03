@@ -1679,7 +1679,7 @@ class RideableFlags {
 			return this.#forMountEffectsFlag(pRider);
 		}
 		else {
-			return this.#forMountEffectsFlag(pRider).split(cDelimiter);
+			return this.#forMountEffectsFlag(pRider)?.split(cDelimiter) || [];
 		}
 	}
 	
