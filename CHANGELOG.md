@@ -1,3 +1,6 @@
+## v4.0.2
+- Bug fixes and improvements
+
 ## v4.0.1
 - Added polish translation (thanks to [Lioheart](https://github.com/Lioheart))
 
