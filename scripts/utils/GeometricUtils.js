@@ -492,6 +492,8 @@ class GeometricUtils {
 				
 				vDifference = GeometricUtils.Rotated(vDifference, -vTokenGeometry.rotation);
 				
+				vDifference[1] = -vDifference[1]; //correction for inverted draw y
+				
 				if (!pToken.object.texture) {
 					GeometricUtils.withinBoundariesupdated(pToken, pChanges, cTokenFormRectangle, pPosition); //probably monochromatic rectangle
 				}
