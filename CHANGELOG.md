@@ -1,3 +1,6 @@
+## v4.0.4
+- Bug fix for prototype tokens
+
 ## v4.0.3
 - Small bug fix
 
