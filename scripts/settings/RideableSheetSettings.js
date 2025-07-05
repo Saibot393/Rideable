@@ -19,6 +19,11 @@ class RideableSheetSettings {
 	//IMPLEMENTATIONS
 	
 	static SheetSetting(pApp, pHTML, pData, pisTile = false) {
+		if (!pApp.document) {
+			if (pApp.actor) {
+				pApp.document = pApp.actor.prototypeToken;
+			}
+		}
 		
 		if (!pisTile || game.settings.get(cModuleName, "allowTileRiding")) {
 			//create title (under which all settings are placed)
@@ -504,7 +509,11 @@ Hooks.once("ready", () => {
 		else {
 			Hooks.on("renderTokenConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData)); //for tokens
 			
+			Hooks.on("renderPrototypeTokenConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData)); //for tokens
+			
 			Hooks.on("renderTileConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData, true)); //for tokens
+			
+			//Hooks.on("renderPrototypeTileConfig", (vApp, vHTML, vData) => RideableSheetSettings.SheetSetting(vApp, vHTML, vData, true)); //for tokens
 		}
 	}
 });
