@@ -452,8 +452,16 @@ class RideableSheetSettings {
 				vnewHTML = vnewHTML + `</select>`;
 				break;
 			case "range":
-				vnewHTML = vnewHTML + 	`<input type=${vtype} name="flags.${vfullflagname}" id=${vID} value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}" ${vlockedstate}>
-										<span class="${vtype}-value">${vvalue}</span>`;
+				if (game.release.generation <= 12) {
+					vnewHTML = vnewHTML + 	`<input type=${vtype} name="flags.${vfullflagname}" id=${vID} value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}" ${vlockedstate}>
+											<span class="${vtype}-value">${vvalue}</span>`;
+				}
+				else {
+					vnewHTML = vnewHTML + 	`<range-picker name="flags.${vfullflagname}" id="flags.${vfullflagname}" value="${vvalue}" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}">
+												<input type="range" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}>
+												<input type="number" min="${vrange[0]}" max="${vrange[1]}" step="${vstep}>
+											</range-picker>`
+				}
 				break;
 			case "numberpart":
 			case "numberinterval":
