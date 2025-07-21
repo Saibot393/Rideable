@@ -1,3 +1,6 @@
+## v4.0.6
+- Fixed bug with automatic effect application
+
 ## v4.0.5
 - Settings UI improvement
 
