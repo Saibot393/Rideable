@@ -1,3 +1,6 @@
+## v4.0.5
+- Settings UI improvement
+
 ## v4.0.4
 - Bug fix for prototype tokens
 
