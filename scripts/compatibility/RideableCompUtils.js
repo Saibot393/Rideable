@@ -385,18 +385,20 @@ class RideableCompUtils {
 		}
 		else {
 			for (let i = 0; i < pNameIDs.length; i++) {
-				vBuffer = await game.dfreds.effectInterface.findEffect({effectName : pNameIDs[i]});
-				
-				if (!vBuffer) {
-					vBuffer = await game.dfreds.effectInterface.findEffect({effectId : pNameIDs[i]});
-				}	
+				if (pNameIDs[i]) {
+					vBuffer = await game.dfreds.effectInterface.findEffect({effectName : pNameIDs[i]});
 					
-				if (!vBuffer) {
-					vBuffer = await fromUuid(pNameIDs[i]);
-				}
-					
-				if (vBuffer) {
-					vNameIDs.push(vBuffer);
+					if (!vBuffer) {
+						vBuffer = await game.dfreds.effectInterface.findEffect({effectId : pNameIDs[i]});
+					}	
+						
+					if (!vBuffer) {
+						vBuffer = await fromUuid(pNameIDs[i]);
+					}
+						
+					if (vBuffer) {
+						vNameIDs.push(vBuffer);
+					}
 				}
 			}
 		}

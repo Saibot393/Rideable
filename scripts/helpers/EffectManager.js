@@ -77,10 +77,10 @@ class EffectManager {
 								}
 							}
 							
-							vRiderEffectNames.push(RideableUtils.CustomWorldGrapplingEffects());
+							vRiderEffectNames.push(...RideableUtils.CustomWorldGrapplingEffects());
 						}
 						
-						vRiderEffectNames.push(RideableFlags.GrapplingEffects(pRidden));
+						vRiderEffectNames.push(...RideableFlags.GrapplingEffects(pRidden));
 					}
 				}
 			}
