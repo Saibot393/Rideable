@@ -795,6 +795,7 @@ class Ridingmanager {
 		let vRiddenGeometry = GeometricUtils.updatedGeometry(pRiddenToken, pChanges);
 		let vTargetx = pTargetx;
 		let vTargety = pTargety;
+		let vShouldAnimate = pAnimation;
 		
 		if (game.settings.get(cModuleName, "RiderRotation")) {
 			//rotation
@@ -823,8 +824,19 @@ class Ridingmanager {
 			}
 		}	
 
+		if (game.settings.get(cModuleName, "TeleportRiders") != "off") {
+			switch (game.settings.get(cModuleName, "TeleportRiders")) {
+				case "familiaronly": 
+					vShouldAnimate = pAnimation && !RideableFlags.isFamiliarRider(pRider);
+					break;
+				case "all": 
+					vShouldAnimate = false;
+					break;
+			}
+		}
+
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
-			await pRider.update({x: vTargetx, y: vTargety}, {animate : pAnimation, RidingMovement : true});
+			await pRider.update({x: vTargetx, y: vTargety}, {animate : vShouldAnimate, RidingMovement : true});
 		}
 	}
 	

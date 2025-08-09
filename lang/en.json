@@ -133,6 +133,16 @@
 				"name" 					: "Link rotations",
 				"descrp"				: "Rotates alls riders if a ridden token is rotated (also works with \"Move ridden Token\" option)"				
 			},
+			
+			"TeleportRiders" : {
+				"name" 					: "Teleport riders",
+				"descrp"				: "If riding tokens should be teleported instead of moved when the mounted token moves",
+				"options" : {
+					"off" 				: "off",
+					"familiaronly"		: "familiars only",
+					"all"				: "all riders"
+				}
+			},
 		
 			"RidingSystemEffects" : {
 				"name" 					: "Apply \"Mounted\" effect",

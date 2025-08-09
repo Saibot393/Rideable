@@ -154,6 +154,20 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });   
   
+  game.settings.register(cModuleName, "TeleportRiders", {
+	name: Translate("Settings.TeleportRiders.name"),
+	hint: Translate("Settings.TeleportRiders.descrp"),
+	scope: "world",
+	config: true,
+	type: String,
+	choices : {
+		"off" : Translate("Settings.TeleportRiders.options.off"),
+		"familiaronly" : Translate("Settings.TeleportRiders.options.familiaronly"),
+		"all" : Translate("Settings.TeleportRiders.options.all"),
+	},
+	default: false
+  });   
+  
   game.settings.register(cModuleName, "RidingSystemEffects", {
 	name: Translate("Settings.RidingSystemEffects.name"),
 	hint: Translate("Settings.RidingSystemEffects.descrp"),

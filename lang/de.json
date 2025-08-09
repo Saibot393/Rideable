@@ -122,7 +122,7 @@
 				"descrp"				: "Ob die gerittene Figur oder die Reiter beim anklicken der Figur ausgewählt werden soll",
 				"options" : {
 					"never"				: "nie",
-					"familiar"			: "nur begleiter",
+					"familiar"			: "nur Begleiter",
 					"always"			: "immer",
 					"allRiders"			: "alle Reiter",
 					"ctrl"				: "mit STRG"
@@ -132,6 +132,16 @@
 			"RiderRotation" : {
 				"name" 					: "Rotations-Verbindung",
 				"descrp"				: "Rotiert alle reitenden Figuren wenn die gerittene Figur rotiert wird (funktioniert auch mit der \"Bewege gerittene Figur\"-Option)"				
+			},
+			
+			"TeleportRiders" : {
+				"name" 					: "Reiter teleportieren",
+				"descrp"				: "Ob Reiter teleportiert anstatt bewegt werden sollen wenn die gerittene Figur bewegt wird",
+				"options" : {
+					"off" 				: "aus",
+					"familiaronly"		: "nur Begleiter",
+					"all"				: "alle Reiter"
+				}
 			},
 		
 			"RidingSystemEffects" : {
