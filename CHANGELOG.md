@@ -1,5 +1,5 @@
 ## v4.0.7
-- Added rider teleport setting
+- Added teleport riders setting
 
 ## v4.0.6
 - Fixed bug with automatic effect application
