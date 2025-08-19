@@ -1,3 +1,7 @@
+## v4.0.8
+- Familiars should no longer get stuck to will due to the new v13 wall collision system
+- With an upcomming d&d5e system update, tokens should ignore collision with riding/ridden tokens
+
 ## v4.0.7
 - Added teleport riders setting
 
