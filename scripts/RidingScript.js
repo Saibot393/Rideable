@@ -834,9 +834,17 @@ class Ridingmanager {
 					break;
 			}
 		}
-
+		
+		let vOptions = {animate : vShouldAnimate, RidingMovement : true};
+		
+		if (game.release.generation > 12) {
+			if (RideableFlags.isFamiliarRider(pRider)) {
+				vOptions._movement = {constrained : false};
+			}
+		}
+		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
-			await pRider.update({x: vTargetx, y: vTargety}, {animate : vShouldAnimate, RidingMovement : true});
+			await pRider.update({x: vTargetx, y: vTargety}, vOptions);
 		}
 	}
 	

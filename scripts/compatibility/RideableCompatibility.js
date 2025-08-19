@@ -6,7 +6,7 @@ import { RideablePopups } from "../helpers/RideablePopups.js";
 import { Mount, UnMount, UnMountallRiders, MountbyID, UnMountbyID, UnMountallRidersbyID } from "../MountingScript.js";
 
 import { RideableCompUtils, cLockTypeRideable, cRideableTag } from "./RideableCompUtils.js";
-import { cStairways, cTagger, cWallHeight, cLocknKey, cMATT } from "./RideableCompUtils.js";
+import { cDnD5e, cStairways, cTagger, cWallHeight, cLocknKey, cMATT } from "./RideableCompUtils.js";
 //			SW			TGG		WH
 
 //RideableCompatibility will take care of compatibility with other modules in regards to calls, currently supported:
@@ -295,6 +295,24 @@ export { RequestRideableTeleport };
 
 //Hook into other modules
 Hooks.once("init", async () => {
+	
+	if (game.system.id == cDnD5e) {
+		Hooks.on("dnd5e.determineOccupiedGridSpaceBlocking", (vGridSpace, vToken, vOptions, vFound) => {
+			console.log(vFound);
+			vFound.forEach(vtoTest => {
+				if (RideableFlags.RidingConnection(vToken, vtoTest)) vFound.delete(vtoTest);
+			});
+			console.log(vFound);
+		});
+		
+		Hooks.on("dnd5e.determineOccupiedGridSpaceDifficult", (vGridSpace, vToken, vOptions, vFound) => {
+			console.log(vFound);
+			vFound.forEach(vtoTest => {
+				if (RideableFlags.RidingConnection(vToken, vtoTest)) vFound.delete(vtoTest);
+			});
+			console.log(vFound);
+		});
+	}
 	
 	if (RideableCompUtils.isactiveModule(cStairways)) {
 		Hooks.on("StairwayTeleport", (...args) => RideableCompatibility.onSWTeleport(...args));
