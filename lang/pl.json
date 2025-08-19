@@ -133,6 +133,16 @@
 				"name" 					: "Podłącz obrót",
 				"descrp"				: "Obraca wszystkich jeźdźców, jeśli obrócony zostanie token jeźdźca (działa również z opcją „Przesuń token wierzchowca”)."				
 			},
+			
+			"TeleportRiders" : {
+				"name" 					: "Teleportacja jeźdźców",
+				"descrp"				: "Czy tokeny jeźdźców powinny być teleportowane zamiast przemieszczane, gdy przemieszcza się token wierzchowca?",
+				"options" : {
+					"off" 				: "wyłączony",
+					"familiaronly"		: "tylko chowańce",
+					"all"				: "wszyscy jeźdźcy"
+				}
+			},
 		
 			"RidingSystemEffects" : {
 				"name" 					: "Zastosuj efekt „Dosiadany”",
