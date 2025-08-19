@@ -838,13 +838,11 @@ class Ridingmanager {
 		let vOptions = {animate : vShouldAnimate, RidingMovement : true};
 		
 		if (game.release.generation > 12) {
-			if (RideableFlags.isFamiliarRider(pRider)) {
-				vOptions._movement = {constrained : false};
-			}
+			vOptions.constrainOptions = { ignoreWalls: true, ignoreCost: true }
 		}
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
-			await pRider.update({x: vTargetx, y: vTargety}, vOptions);
+			await pRider.move({x: vTargetx, y: vTargety}, vOptions);
 		}
 	}
 	
