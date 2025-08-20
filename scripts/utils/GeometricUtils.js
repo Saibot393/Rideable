@@ -535,7 +535,7 @@ class GeometricUtils {
 				return vsnapposition;
 				break;
 			
-			case 2:
+			//case 2:
 				/*
 				let vgridheight = Math.round(chexfactor*pGrid.size+0.5);
 				
@@ -570,7 +570,7 @@ class GeometricUtils {
 				*/
 			//add cases for grids(later)
 			default:
-				return vsnapposition;
+				return ppositon;
 		}
 	}
 	

@@ -208,7 +208,7 @@ class Ridingmanager {
 			}
 			else {
 				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken));
-					
+
 				Ridingmanager.planRiderTokens(pRiddenToken, {}, vRiderTokenList, false);
 			}
 		}
@@ -293,9 +293,9 @@ class Ridingmanager {
 						if (game.settings.get(cModuleName, "RiderRotation")) {
 							vrotationtarget = pChanges.rotation;
 						}
-						
+
 						[vxtarget, vytarget] = GeometricUtils.GridSnap([vxtarget, vytarget], FCore.sceneof(pRidden).grid);
-						
+
 						//prevent move through wall bug
 						let vRiddenPoints = GeometricUtils.updatedGeometry(pRidden);
 						let vTargetPoints = GeometricUtils.updatedGeometry(pRidden, {x : vxtarget, y : vytarget});

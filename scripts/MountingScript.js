@@ -409,15 +409,15 @@ class MountingManager {
 	static async ToggleGrapplePlacement(pTokens) {
 		for (let i = 0; i < pTokens.length; i++) {
 			if (pTokens[i].isOwner) {
-				switch (RideableFlags.GrapplePlacement(pTokens[i])) {
-					case cGrapplePlacements[1]:
-						await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[0]);
-						break;
-					default:
-						await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[1]);
-				}
+				let vCurrent = RideableFlags.GrapplePlacement(pTokens[i]);
 				
-				UpdateRidderTokens();
+				let vCurrentIndex = cGrapplePlacements.indexOf(vCurrent);
+				
+				let vTargetIndex = (vCurrentIndex + 1) % (cGrapplePlacements.length - 2); //the last placement option is special, skip it
+				
+				await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[vTargetIndex]);
+
+				UpdateRidderTokens(pTokens[i]);
 			}
 		}
 	}
@@ -755,7 +755,7 @@ class MountingManager {
 						}
 						break;
 					case "ctrl":
-						if (keyboard.downKeys.has("ControlLeft") || keyboard.downKeys.has("ControlRight")) {
+						if (game.keyboard.downKeys.has("ControlLeft") || game.keyboard.downKeys.has("ControlRight")) {
 							let vNewTargets = [];
 							
 							if (RideableFlags.isRider(pToken)) {
