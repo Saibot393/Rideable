@@ -1,3 +1,7 @@
+## v4.0.9
+- Fixed bug that could cause riders to get stuck in bugs (maybe)
+- Small UI fix
+
 ## v4.0.8
 - Familiars should no longer get stuck to will due to the new v13 wall collision system
 - With an upcomming d&d5e system update, tokens should ignore collision with riding/ridden tokens
