@@ -842,7 +842,12 @@ class Ridingmanager {
 		}
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
-			await pRider.move({x: vTargetx, y: vTargety}, vOptions);
+			if (game.release.generation > 12) {
+				await pRider.move({x: vTargetx, y: vTargety}, vOptions);
+			}
+			else {
+				await pRider.update({x: vTargetx, y: vTargety}, vOptions);
+			}
 		}
 	}
 	
