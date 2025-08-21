@@ -1,3 +1,8 @@
+## v4.0.10
+- Fixed keyboard movement related error
+- Fixed bug regarding grappling positioning quick change key
+- Fixed bug with "move ridden" option on hex grid maps
+
 ## v4.0.9
 - Fixed bug that could cause riders to get stuck in bugs (maybe)
 - Small UI fix
