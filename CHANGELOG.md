@@ -1,3 +1,6 @@
+## v4.0.15
+- Improvements to mount on enter
+
 ## v4.0.14
 - fix for fix, oh well
 
