@@ -1679,7 +1679,15 @@ class RideableFlags {
 			return this.#forMountEffectsFlag(pRider);
 		}
 		else {
-			return this.#forMountEffectsFlag(pRider)?.split(cDelimiter) || [];
+			let vValue = this.#forMountEffectsFlag(pRider);
+			
+			if (typeof vValue == "string") {
+				return this.#forMountEffectsFlag(pRider)?.split(cDelimiter) || [];
+			}
+			
+			if (Array.isArray(vValue) {
+				vValue;
+			}
 		}
 	}
 	
