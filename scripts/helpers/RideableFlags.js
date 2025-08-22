@@ -1688,6 +1688,8 @@ class RideableFlags {
 			if (Array.isArray(vValue)) {
 				vValue;
 			}
+			
+			return [];
 		}
 	}
 	
