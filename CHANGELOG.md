@@ -1,3 +1,6 @@
+## v4.0.12
+- small fix for data value
+
 ## v4.0.11
 - v12/v13 compatibility fix
 
