@@ -704,7 +704,7 @@ class MountingManager {
 	}
 	
 	static CheckEntering(pToken, pChanges, pInfos, pID) {
-		if ((pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y")) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
+		if (((pChanges.hasOwnProperty("x") && pToken.x != pChanges.x) || (pChanges.hasOwnProperty("y") && pToken.y != pChanges.y)) && game.settings.get(cModuleName, "allowMountingonEntering") && pID == game.user.id && !RideableFlags.isRider(pToken)) {
 			let vNewPosition = GeometricUtils.updatedGeometry(pToken, pChanges);
 
 			let vMoEobjects = canvas.tokens.placeables.map(vToken => vToken.document).filter(vToken => RideableFlags.MountonEnter(vToken));
@@ -718,7 +718,14 @@ class MountingManager {
 			vMoEobjects = vMoEobjects.filter(vMoEObject => RideableFlags.isvalidAutomount(vMoEObject, pToken));
 			
 			if (vMoEobjects.length) {
-				MountingManager.RequestMount([pToken], vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0], {MountbyEnter : true});
+				let vMount = vMoEobjects.sort((a, b) => {return a.elevation - b.elevation})[0];
+				
+				if (!RideableFlags.RiderscanMoveWithin(vMount)) {
+					delete pChanges.x;
+					delete pChanges.y;
+				}		
+				
+				MountingManager.RequestMount([pToken], vMount, {MountbyEnter : true});
 			}
 		}
 	}
@@ -1075,7 +1082,7 @@ Hooks.on("createToken", (...args) => MountingManager.onTokenCreation(...args));
 
 Hooks.on("deleteToken", (...args) => MountingManager.onTokenDeletion(...args));
 
-Hooks.on("updateToken", (...args) => MountingManager.CheckEntering(...args));
+Hooks.on("preUpdateToken", (...args) => MountingManager.CheckEntering(...args));
 
 Hooks.on("renderTokenHUD", (...args) => MountingManager.addMountingButton(...args));
 
