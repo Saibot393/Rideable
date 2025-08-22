@@ -1,3 +1,6 @@
+## v4.0.11
+- v12/v13 compatibility fix
+
 ## v4.0.10
 - Fixed keyboard movement related error
 - Fixed bug regarding grappling positioning quick change key
