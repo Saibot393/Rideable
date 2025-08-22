@@ -1685,7 +1685,7 @@ class RideableFlags {
 				return this.#forMountEffectsFlag(pRider)?.split(cDelimiter) || [];
 			}
 			
-			if (Array.isArray(vValue) {
+			if (Array.isArray(vValue)) {
 				vValue;
 			}
 		}
