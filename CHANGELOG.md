@@ -1,3 +1,6 @@
+## v4.0.16
+- Fix for player based grapple placement changing
+
 ## v4.0.15
 - Improvements to mount on enter
 
