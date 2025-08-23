@@ -201,6 +201,25 @@ class Ridingmanager {
 		}
 	}
 	
+	static RequestUpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {
+		if (game.user.isGM) {
+			Ridingmanager.UpdateRidderTokens(pRiddenToken, pRiderTokenList, pAnimations);
+		}
+		else {
+			if (!game.paused) {
+				game.socket.emit("module.Rideable", {pFunction : "UpdateRidderTokensRequest", pData : {pRiddenID: pRiddenToken.id, pRidersListIDs: RideableUtils.IDsfromTokens(pRiderTokenList), pSceneID : FCore.sceneof(pRiddenToken).id, pAnimations : pAnimations}});
+			}
+		}
+	} 
+	
+	static UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations) {
+		if (game.user.isGM) {
+			let vScene = game.scenes.get(pSceneID);
+			
+			Ridingmanager.UpdateRidderTokens(RideableUtils.TokenfromID(pRiddenID, vScene), RideableUtils.TokensfromIDs(pRidersListIDs, vScene), pAnimations);
+		}
+	}
+	
 	static UpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {
 		if (pRiddenToken) {
 			if (pRiderTokenList.length > 0) {
@@ -1026,6 +1045,14 @@ class Ridingmanager {
 
 //export
 
+function RequestUpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {
+	Ridingmanager.RequestUpdateRidderTokens(pRiddenToken, pRiderTokenList, pAnimations);
+} 
+
+function UpdateRidderTokensRequest({pRiddenID, pRidersListIDs, pSceneID, pAnimations} = {}) {
+	Ridingmanager.UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations);
+}
+
 function UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations = true) {
 	Ridingmanager.UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations);
 }
@@ -1041,7 +1068,7 @@ function SyncSortRequest({pDocumentID, pCollectionName, pSceneID, pSort} = {}) {
 	Ridingmanager.SyncSortRequest(pDocumentID, pCollectionName, pSceneID, pSort);
 }
 
-export { UpdateRidderTokens, UnsetRidingHeight, MoveRiddenRequest, SyncSortRequest };
+export { RequestUpdateRidderTokens, UpdateRidderTokensRequest, UpdateRidderTokens, UnsetRidingHeight, MoveRiddenRequest, SyncSortRequest };
 
 //Set Hooks
 Hooks.on("updateToken", (...args) => Ridingmanager.OnTokenupdate(...args));

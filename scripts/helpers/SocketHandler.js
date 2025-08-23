@@ -1,5 +1,5 @@
 import { MountRequest, UnMountRequest } from "../MountingScript.js";
-import { MoveRiddenRequest, SyncSortRequest } from "../RidingScript.js";
+import { MoveRiddenRequest, SyncSortRequest, UpdateRidderTokensRequest } from "../RidingScript.js";
 import { PopUpRequest } from "./RideablePopups.js";
 import { RequestRideableTeleport } from "../compatibility/RideableCompatibility.js";
 import { switchScene } from "../utils/RideableUtils.js";
@@ -32,6 +32,8 @@ function organiseSocketEvents({pFunction, pData} = {}) {
 		case "RequestreplaceFollowerListIDs":
 			RequestreplaceFollowerListIDs(pData);
 			break;
+		case "UpdateRidderTokensRequest":
+			UpdateRidderTokensRequest(pData);
 	}
 }
 

@@ -4,7 +4,7 @@ import { RideableFlags } from "./helpers/RideableFlags.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
 import { RideableUtils, Translate, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
-import { UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
+import { RequestUpdateRidderTokens, UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
 import { EffectManager } from "./helpers/EffectManager.js";
 
@@ -417,7 +417,7 @@ class MountingManager {
 				
 				await RideableFlags.setGrapplePlacement(pTokens[i], cGrapplePlacements[vTargetIndex]);
 
-				UpdateRidderTokens(pTokens[i]);
+				RequestUpdateRidderTokens(pTokens[i]);
 			}
 		}
 	}
