@@ -1,3 +1,6 @@
+## v4.0.17
+- v12 ui fix
+
 ## v4.0.16
 - Fix for player based grapple placement changing
 
