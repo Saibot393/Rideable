@@ -494,6 +494,11 @@ class RideableSheetSettings {
 
 		Array.from(pHTML.querySelector(pIndentifier).children).forEach(vElement => vNeededWidth = vNeededWidth + vElement.offsetWidth);
 		
+		if (game.release.generation > 12) {
+			pHTML.querySelector(pIndentifier).style.overflowX = "auto";
+			pHTML.querySelector(pIndentifier).style.overflowY = "hidden";
+		}
+		
 		if (vNeededWidth > pHTML.offsetWidth) {
 			pHTML.style.width = vNeededWidth + "px";
 		}		
