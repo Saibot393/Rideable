@@ -713,6 +713,8 @@ class MountingManager {
 				vMoEobjects = vMoEobjects.concat(canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => RideableFlags.MountonEnter(vTile)));
 			}
 			
+			vMoEobjects = vMoEobjects.filter(vToken => vToken != pToken);
+			
 			vMoEobjects = vMoEobjects.filter(vToken => GeometricUtils.withinBoundaries(vToken, RideableFlags.TokenForm(vToken), vNewPosition)); //filter entered MoE objects
 			
 			vMoEobjects = vMoEobjects.filter(vMoEObject => RideableFlags.isvalidAutomount(vMoEObject, pToken));
