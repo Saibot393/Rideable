@@ -1,3 +1,6 @@
+## v4.0.19
+- Temporary work around fix for D&D5e System regarding token blocking
+
 ## v4.0.18
 - Fix for mount on enter
 
