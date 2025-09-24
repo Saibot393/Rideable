@@ -1559,7 +1559,7 @@ class RideableFlags {
 			vScale = vScale * game.settings.get(cModuleName, "RiderScaleFactor");
 		}
 		
-		if (vScale != undefined && vScale != 1) {
+		if (vScale != undefined && vScale != 1 && !isNaN(vScale)) {
 			for (let i = 0; i < pRiders.length; i++) {
 				await RideableFlags.savecurrentScale(pRiders[i]);
 				
