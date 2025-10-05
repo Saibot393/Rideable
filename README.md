@@ -56,6 +56,7 @@ Since v2.13.0 Rideable also has a feature for Token following.
 - Rider proxy select: to select ridden tokens instead of riders
 - Message popups: to activate some popups on certain actions
 - Own message popups only: to only show message popups from tokens you control
+- UI Notifications to show some action dependent UI messages
 - Follower movement: to set how followers should behave when they are moved independently of the token they follow
 #### Tokens (separate tab):
 - Token is Rideable: to override world default for this token
