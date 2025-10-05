@@ -1,3 +1,6 @@
+## v4.0.21
+- Small bug fix (again)
+
 ## v4.0.20
 - Small bug fix
 
