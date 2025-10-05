@@ -267,6 +267,11 @@
 				"descrp"				: "Zeigt nur die Pop-up Meldungen der Figuren unter eigener Kontrolle"				
 			},
 			
+			"UINotifications" : {
+				"name" 					: "UI-Meldungen",
+				"descrp"				: "Aktiviert mehrere UI-Meldungen bei Aktionen wie Auf- oder Absteigen"				
+			},
+			
 			"EnableFollowing" : {
 				"name"					: "Figur folgen aktivieren",
 				"descrp"				: "Ob Figur folgen in der Welt erlaubt ist (benötigt routinglib)"

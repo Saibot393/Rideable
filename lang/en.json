@@ -267,6 +267,11 @@
 				"descrp"				: "Only shows the message popups from tokens you control"				
 			},
 			
+			"UINotifications" : {
+				"name" 					: "UI Notifications",
+				"descrp"				: "Enables multible UI notifications upon actions such as mounting or dismounting"				
+			},
+			
 			"EnableFollowing" : {
 				"name"					: "Enable Token following",
 				"descrp"				: "If Token following is active in this world"

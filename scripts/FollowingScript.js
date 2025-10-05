@@ -60,7 +60,7 @@ class FollowingManager {
 		
 		for (let i = 0; i < vFollowers.length; i++) {
 			if (RideableFlags.isFollowingToken(pTarget, vFollowers[i])) {
-				RideablePopups.TextPopUpID(vFollowers[i] ,"TargetisFollowingMe", {pFollowedName : RideableFlags.RideableName(pTarget)}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(vFollowers[i] ,"TargetisFollowingMe", {pFollowedName : RideableFlags.RideableName(pTarget)}, {type : "error"}); //MESSAGE POPUP
 			}
 		}
 		vFollowers = vFollowers.filter(vFollower => !RideableFlags.isFollowingToken(pTarget, vFollower));
@@ -83,7 +83,7 @@ class FollowingManager {
 				FollowingManager.OnStartFollowing(vFollowers[i], pTarget);
 			}
 			else {
-				RideablePopups.TextPopUpID(vFollowers[i] ,"CantFollowinCombat"); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(vFollowers[i], "CantFollowinCombat", {}, {type : "error"}); //MESSAGE POPUP
 			}
 		}
 		
@@ -452,7 +452,7 @@ class FollowingManager {
 	
 	static OnStartFollowing(pToken, pFollowed, pPopup = true) {
 		if (pPopup) {
-			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pFollowedName : RideableFlags.RideableName(pFollowed)}); //MESSAGE POPUP
+			RideablePopups.TextPopUpID(pToken ,"StartFollowing", {pFollowedName : RideableFlags.RideableName(pFollowed)}, {type : "success"}); //MESSAGE POPUP
 		}
 		
 		//FollowingManager.updateFollowedList();
@@ -462,7 +462,7 @@ class FollowingManager {
 	
 	static OnStopFollowing(pToken, pPopup = true) {
 		if (pPopup) {
-			RideablePopups.TextPopUpID(pToken ,"StopFollowing"); //MESSAGE POPUP
+			RideablePopups.TextPopUpID(pToken ,"StopFollowing", {}, {type : "success"}); //MESSAGE POPUP
 		}
 		
 		//FollowingManager.updateFollowedList();

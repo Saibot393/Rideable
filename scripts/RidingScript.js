@@ -176,7 +176,7 @@ class Ridingmanager {
 					
 							vDeleteChanges = true;
 							
-							RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+							RideablePopups.TextPopUpID(pToken ,"PreventedGrappledMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}, {type : "warn"}); //MESSAGE POPUP
 						}
 						
 						if (vindependentRiderLeft) {
@@ -265,7 +265,7 @@ class Ridingmanager {
 				else {
 					//suppress movement
 					if (!canvas.tokens.controlled.map(vToken => vToken.id).includes(RideableFlags.RiddenToken(pToken)?.id)) {
-						RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pToken ,"PreventedRiderMove", {pRiddenName : RideableFlags.RideableName(RideableFlags.RiddenToken(pToken))}, {type : "warn"}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -971,11 +971,11 @@ class Ridingmanager {
 						}
 					}
 					else {
-						RideablePopups.TextPopUpID(vPilot ,"cantPilot", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
+						RideablePopups.TextPopUpID(vPilot ,"cantPilot", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "error"}); //MESSAGE POPUP	
 					}					
 				}
 				else {
-					RideablePopups.TextPopUpID(vPilot ,"cantbeMoved", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
+					RideablePopups.TextPopUpID(vPilot ,"cantbeMoved", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "error"}); //MESSAGE POPUP	
 				}
 			}
 		}

@@ -190,7 +190,12 @@ class MountingManager {
 							vSelectedTokens = [vSelectedTokens];
 						}
 						
-						let vValidTokens = vSelectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget)).slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
+						let vValidTokens = vSelectedTokens.filter(vToken => !RideableFlags.isRider(vToken) && (vToken != pTarget));
+						
+						if (vValidTokens.length > RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions)) {
+							vValidTokens = vValidTokens.slice(0, RideableFlags.TokenRidingSpaceleft(pTarget, pRidingOptions));
+							RideablePopups.TextPopUpID(pTarget, "NoPlace", {pRiddenName : RideableFlags.RideableName(pTarget)}, {type : "warn"}); //MESSAGE POPUP
+						}
 						
 						vValidTokens = vValidTokens.filter(vToken => MountingManager.TokencanMount(vToken, pTarget, pRidingOptions, true));
 		
@@ -441,7 +446,7 @@ class MountingManager {
 				else {
 					let vRidden = RideableFlags.RiddenToken(pTokens[i]);
 					if (vRidden) {
-						RideablePopups.TextPopUpID(pTokens[i] ,"cantPilot", {pRiddenName : RideableFlags.RideableName(vRidden)}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pTokens[i] ,"cantPilot", {pRiddenName : RideableFlags.RideableName(vRidden)}, {type : "error"}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -495,10 +500,10 @@ class MountingManager {
 		for (let i = 0; i < vTokens.length; i++) {
 			if ((await RideableFlags.togglePositionLock(vTokens[i])) && pshowMessage) {
 				if (RideableFlags.hasPositionLock(vTokens[i])) {
-					RideablePopups.TextPopUpID(pTokens[i] ,"PositionLocked"); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pTokens[i], "PositionLocked", {}, {type : "info"}); //MESSAGE POPUP
 				}
 				else {
-					RideablePopups.TextPopUpID(pTokens[i] ,"PositionUnlocked"); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pTokens[i], "PositionUnlocked",  {}, {type : "info"}); //MESSAGE POPUP
 				}
 			}
 		}
@@ -519,14 +524,14 @@ class MountingManager {
 			
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
-					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"MountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 				}
 				else {
 					if (pRidingOptions.Grappled) {
-						RideablePopups.TextPopUpID(pRider ,"Grappling", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"Grappling", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -557,14 +562,14 @@ class MountingManager {
 		if (pRider) {	
 			if (pRidden) {
 				if (pRidingOptions.Familiar) {
-					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+					RideablePopups.TextPopUpID(pRider ,"UnMountingFamiliar", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 				}
 				else {
 					if (pRidingOptions.Grappled) {
-						RideablePopups.TextPopUpID(pRider ,"UnGrappling", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"UnGrappling", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+						RideablePopups.TextPopUpID(pRider ,"UnMounting", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 					}
 				}
 			}
@@ -588,7 +593,7 @@ class MountingManager {
 	static async onstartPiloting(pRider, pRidden, pRidingOptions) {
 		if (pRider) {	
 			if (pRidden) {
-				RideablePopups.TextPopUpID(pRider ,"startPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider ,"startPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 			}
 		}	
 
@@ -598,7 +603,7 @@ class MountingManager {
 	static async onstopPiloting(pRider, pRidden, pRidingOptions) {
 		if (pRider) {	
 			if (pRidden) {
-				RideablePopups.TextPopUpID(pRider ,"stopPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider ,"stopPiloting", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 			}
 		}
 		
@@ -987,11 +992,9 @@ class MountingManager {
 	
 	//Aditional Informations
 	
-	static TokencanMount (pRider, pRidden, pRidingOptions) {
-		
+	static TokencanMount(pRider, pRidden, pRidingOptions) {
 		if (!RideableFlags.RidingLoop(pRider, pRidden) && !RideableUtils.isConnected(pRider, pRidden)) {
 			//prevent riding loops
-			
 			if (RideableFlags.TokenhasRidingPlace(pRidden, pRidingOptions)) {
 			//check if Token has place left to be ridden
 				if (!game.settings.get(cModuleName, "PreventEnemyRiding") || !RideableUtils.areEnemies(pRider, pRidden) || pRidingOptions.isGM || pRidingOptions.Grappled) {
@@ -1000,22 +1003,21 @@ class MountingManager {
 						return true;
 					}
 					else {
-						RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : RideableFlags.RideableName(pRidden)});
+						RideablePopups.TextPopUpID(pRider ,"Toofaraway", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "warn"});
 						return false;
 					}
 				}
 				else {
-					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP	
+					RideablePopups.TextPopUpID(pRider ,"EnemyRiding", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "error"}); //MESSAGE POPUP	
 				}
 			}
 			else {
-				RideablePopups.TextPopUpID(pRider ,"NoPlace", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
+				RideablePopups.TextPopUpID(pRider, "NoPlace", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "warn"}); //MESSAGE POPUP
 			}
 		}
 		else {
 			//RideablePopups.TextPopUpID(pRider ,"RidingLoop", {pRiddenName : RideableFlags.RideableName(pRidden)}); //MESSAGE POPUP
 		}
-		
 		return false; //default
 	}
 	

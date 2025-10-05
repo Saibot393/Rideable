@@ -524,6 +524,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "UINotifications", {
+	name: Translate("Settings.UINotifications.name"),
+	hint: Translate("Settings.UINotifications.descrp"),
+	scope: "client",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   game.settings.register(cModuleName, "OnFollowerMovement", {
 	name: Translate("Settings.OnFollowerMovement.name"),
 	hint: Translate("Settings.OnFollowerMovement.descrp"),
