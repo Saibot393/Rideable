@@ -2,7 +2,7 @@ import * as FCore from "./CoreVersionComp.js";
 
 import { RideableFlags } from "./helpers/RideableFlags.js";
 import { GeometricUtils } from "./utils/GeometricUtils.js";
-import { RideableUtils, Translate, cModuleName } from "./utils/RideableUtils.js";
+import { RideableUtils, Translate, cModuleName, cWeightIgnoreItemTypes } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { RequestUpdateRidderTokens, UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
@@ -932,20 +932,22 @@ class MountingManager {
 	}
 	
 	static onItemUpdate(pItem) {
-		let vActor = pItem.actor;
-		
-		if (vActor && game.user.isGM) {
-			let vToken = vActor.token;
-			
-			if (!vToken) {
-				vToken = canvas.tokens.placeables.find(vToken => vToken.actor == vActor);
-			}
-			
-			if (vToken) {
-				let vRidden = RideableFlags.RiddenToken(vToken);
+		if (!cWeightIgnoreItemTypes.includes(pItem.type)) {
+			let vActor = pItem.actor;
+
+			if (vActor && game.user.isGM) {
+				let vToken = vActor.token;
 				
-				if (vRidden) {
-					MountingManager.updateMountItem(vRidden);
+				if (!vToken) {
+					vToken = canvas.tokens.placeables.find(vToken => vToken.actor == vActor);
+				}
+				
+				if (vToken) {
+					let vRidden = RideableFlags.RiddenToken(vToken);
+					
+					if (vRidden) {
+						MountingManager.updateMountItem(vRidden);
+					}
 				}
 			}
 		}

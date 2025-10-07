@@ -31,9 +31,11 @@ const cFamilarType = "familiar"; //type of familiar tokens (Pf2e)
 const cPf2EffectType = "effect"; //the item type of Pf2e effects
 const cPf2ConditionType = "condition"; //the item type of Pf2e conditions
 
+const cWeightIgnoreItemTypes = ["effect"];
+
 const cMovementKeys = ["movement", "speed"];
 
-export { cPf2eName, cModuleName, cPopUpID, cDelimiter };
+export { cPf2eName, cModuleName, cPopUpID, cDelimiter, cWeightIgnoreItemTypes };
 
 var vlastSearchedItemtype; //Saves the last item type for which a path was searched
 var vlastItempath; //Saves the last path that was found for lastSearchedItemtype
@@ -448,10 +450,20 @@ class RideableUtils {
 						vWeight = vWeight + Number(vItemWeight) * vQuantity;
 					}
 				}
+				
+				if (vItem.system?.properties?.has("weightlessContents")) { //e.g. d&d bag of holding
+					if (!isNaN(vItem.system?.contentsWeight)) {
+						vWeight = vWeight - Number(vItem.system?.contentsWeight)
+					}
+				}
 			}
 
-			//fomd actor weight string
+			//find actor weight string
 			let vRawWeight = vActor.system?.details?.weight;
+			
+			if (vRawWeight?.value) {
+				vRawWeight = vRawWeight.value;
+			}
 			
 			if (!vRawWeight) {
 				vRawWeight = vActor.system?.details?.weight?.value;
