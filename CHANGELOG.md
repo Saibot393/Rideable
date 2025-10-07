@@ -1,3 +1,6 @@
+## v4.1.1
+- Improvements and fixes for rider weight calculations
+
 ## v4.1.0
 - Added setting UI Notifications to show some action dependent UI messages
 
