@@ -1,3 +1,6 @@
+## v4.1.0
+- Added setting UI Notifications to show some action dependent UI messages
+
 ## v4.0.21
 - Small bug fix (again)
 
