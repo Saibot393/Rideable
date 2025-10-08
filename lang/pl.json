@@ -267,6 +267,11 @@
 				"descrp"				: "Wyświetla tylko komunikaty wyskakujące z tokenów, które kontrolujesz"				
 			},
 			
+			"UINotifications" : {
+				"name" 					: "Powiadomienia UI",
+				"descrp"				: "Włącza wiele powiadomień UI dotyczących działań takich jak dosiadanie lub zsiadanie."				
+			},
+			
 			"EnableFollowing" : {
 				"name"					: "Włącz podążanie za tokenem",
 				"descrp"				: "Jeśli włączone, podążanie za tokenem jest aktywne w tym świecie"
