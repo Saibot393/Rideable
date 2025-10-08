@@ -1,3 +1,6 @@
+## v4.1.2
+- Update for Polish translation (thanks to [Lioheart](https://github.com/Lioheart))
+
 ## v4.1.1
 - Improvements and fixes for rider weight calculations
 
