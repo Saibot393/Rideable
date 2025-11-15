@@ -537,7 +537,7 @@ class MountingManager {
 			}
 			
 			if (game.settings.get(cModuleName, "FitRidersize")) {
-				RideableFlags.savecurrentSize(pRider);
+				await RideableFlags.savecurrentSize(pRider);
 			}
 			
 			RideableFlags.ApplyRidersScale(pRidden, [pRider]);
@@ -575,7 +575,7 @@ class MountingManager {
 			}
 			
 			if (game.settings.get(cModuleName, "FitRidersize")) {
-				RideableFlags.resetSize(pRider);
+				await RideableFlags.resetSize(pRider);
 			}
 			
 			RideableFlags.resetScale(pRider);

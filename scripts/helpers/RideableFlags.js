@@ -190,7 +190,7 @@ class RideableFlags {
 	
 	static async savecurrentSize(pToken) {} //saves the current size of pToken into the SizesaveFlag (and makes size changeable if necessary)
 	
-	static resetSize(pToken) {} //resets the size of pToken to the SizesaveFlag if a size is saved
+	static async resetSize(pToken) {} //resets the size of pToken to the SizesaveFlag if a size is saved
 	
 	static async savecurrentScale(pToken) {} //saves the current scale of pToken into the ScaleSizesaveFlag
 	
@@ -1520,20 +1520,20 @@ class RideableFlags {
 		await this.#setSizesaveFlag(pToken, [pToken.width, pToken.height]);
 		
 		if (RideableUtils.isPf2e()) {
-			await pToken.update({flags : {pf2e : {linkToActorSize : false}}})
+			await pToken.update({flags : {pf2e : {linkToActorSize : false}}}, {RidingMovement : true})
 		}
 	}
 	
-	static resetSize(pToken) {
+	static async resetSize(pToken) {
 		if (this.#SizesaveFlag(pToken).length) {
 			let vsavedSize = this.#SizesaveFlag(pToken);
 			
 			this.#setSizesaveFlag(pToken, []);
 			
-			pToken.update({width: vsavedSize[0], height: vsavedSize[1]});
+			await pToken.update({width: vsavedSize[0], height: vsavedSize[1]});
 			
 			if (RideableUtils.isPf2e()) {
-				pToken.update({flags : {pf2e : {linkToActorSize : true}}})
+				await pToken.update({flags : {pf2e : {linkToActorSize : true}}})
 			}
 		}
 	}
@@ -1562,10 +1562,7 @@ class RideableFlags {
 		if (Number(vScale) > 0 && vScale != 1) {
 			for (let i = 0; i < pRiders.length; i++) {
 				await RideableFlags.savecurrentScale(pRiders[i]);
-				
 				await pRiders[i].update({texture : {scaleX : pRiders[i].texture.scaleX * vScale, scaleY : pRiders[i].texture.scaleY * vScale}});
-				
-				
 			}
 		}
 	}

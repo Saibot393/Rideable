@@ -115,13 +115,19 @@ class Ridingmanager {
 	}
 	
 	static OnTokenpreupdate(pToken, pchanges, pInfos, psendingUser) {
+		let vIgnoreUpdate = false;
+		
+		if (pchanges?.flags?.pf2e?.hasOwnProperty("linkToActorSize")) {
+			vIgnoreUpdate = true; //workaround for edge case
+		}
+		
 		//Check if Token is Rider
 		if (RideableFlags.isRider(pToken)) {
 			let vPositionChange = pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"));
 			let vElevationChange = pchanges.hasOwnProperty("elevation");
 			
 			if (vPositionChange || vElevationChange) {
-				if (!pInfos.RidingMovement) {
+				if (!(pInfos.RidingMovement || vIgnoreUpdate)) {
 					let vRidden = RideableFlags.RiddenToken(pToken);
 					
 					let vDeleteChanges = false;
@@ -967,7 +973,7 @@ class Ridingmanager {
 								}
 							}
 							
-							pRidden.update(vTarget);
+							pRidden.update(vTarget, {RidingMovement : true});
 						}
 					}
 					else {
