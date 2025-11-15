@@ -1,3 +1,6 @@
+# v4.1.3
+- Small bug fix for edge case in pf2e
+
 ## v4.1.2
 - Update for Polish translation (thanks to [Lioheart](https://github.com/Lioheart))
 
