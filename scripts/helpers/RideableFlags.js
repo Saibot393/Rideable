@@ -1528,9 +1528,8 @@ class RideableFlags {
 		if (this.#SizesaveFlag(pToken).length) {
 			let vsavedSize = this.#SizesaveFlag(pToken);
 			
-			this.#setSizesaveFlag(pToken, []);
-			
-			await pToken.update({width: vsavedSize[0], height: vsavedSize[1]});
+			//await this.#setSizesaveFlag(pToken, []);
+			await pToken.update({width: vsavedSize[0], height: vsavedSize[1]}, {RidingMovement : true});
 			
 			if (RideableUtils.isPf2e()) {
 				await pToken.update({flags : {pf2e : {linkToActorSize : true}}})

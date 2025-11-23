@@ -288,7 +288,7 @@ class MountingManager {
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);
 				
-				MountingManager.onUnMount(vRiderTokens[i], vRiddenTokens[i], {Familiar: RideableFlags.wasFamiliarRider(vRiderTokens[i]), Grappled: RideableFlags.wasGrappled(vRiderTokens[i])});
+				await MountingManager.onUnMount(vRiderTokens[i], vRiddenTokens[i], {Familiar: RideableFlags.wasFamiliarRider(vRiderTokens[i]), Grappled: RideableFlags.wasGrappled(vRiderTokens[i])});
 			}
 		}
 	}

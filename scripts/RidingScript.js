@@ -5,6 +5,7 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 import { updatePathHistory, calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
+import { RideableCompUtils, cTerrainMapper} from "./compatibility/RideableCompUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -250,7 +251,6 @@ class Ridingmanager {
 				RideableFlags.setaddRiderHeight(pToken, RideableFlags.addRiderHeight(pToken) + (pChanges.elevation - pToken.elevation));
 			}
 		}
-		
 		if (!vElevationOverride) {
 			let vdeleteChanges = false;
 			
@@ -868,7 +868,12 @@ class Ridingmanager {
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
 			if (game.release.generation > 12) {
-				await pRider.move({x: vTargetx, y: vTargety}, vOptions);
+				if (RideableCompUtils.isactiveModule(cTerrainMapper)) {
+					await pRider.update({x: vTargetx, y: vTargety}, vOptions);
+				}
+				else {
+					await pRider.move({x: vTargetx, y: vTargety}, vOptions);
+				}
 			}
 			else {
 				await pRider.update({x: vTargetx, y: vTargety}, vOptions);

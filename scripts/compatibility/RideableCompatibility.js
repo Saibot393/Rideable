@@ -40,8 +40,6 @@ class RideableCompatibility {
 	//specific: MATT
 	static async onTileTrigger(pTile, pTrigger, pInfos, pUserID, pData) {
 		if (pInfos.action == "teleport" && pInfos.data.location.sceneId) {
-			console.log(pInfos);
-			console.log(pData);
 			/*
 			if (game.user.isGM) {
 				RideableCompatibility.RequestRideableTeleport(pData.selectedTokenIds, pData.sourceSceneId, pData.targetSceneId, pData.targetData, game.user.id);
