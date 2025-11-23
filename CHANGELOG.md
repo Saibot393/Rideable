@@ -1,5 +1,5 @@
 # v4.1.4
-- Temporary fix for [Terrain Mapper compatibility]((https://github.com/caewok/fvtt-terrain-mapper/issues/96))
+- Temporary fix for [Terrain Mapper compatibility](https://github.com/caewok/fvtt-terrain-mapper/issues/96)
 
 # v4.1.3
 - Small bug fix for edge case in pf2e
