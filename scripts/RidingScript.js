@@ -73,7 +73,7 @@ class Ridingmanager {
 	
 	static async placeTokenrotated(pRiddenToken, pChanges, pRider, pTargetx, pTargety, pRelativerotation = 0, pAnimation = true) {} //places pRider on pRidden using the pTargetx, pTargetx relativ to pRidden center position and rotates them is enabled
 	
-	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
+	static async UnsetRidingHeight(pRiderTokens, pRiddenTokens) {} //Reduces Tokens Elevation by Riding height or sets it to the height of the previously ridden token
 	
 	//sort
 	static SyncSort(pDocument, pSort, pInfos = {}) {} //requests all clients to synch sort value of pDocument only GM
@@ -124,8 +124,8 @@ class Ridingmanager {
 		
 		//Check if Token is Rider
 		if (RideableFlags.isRider(pToken)) {
-			let vPositionChange = pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || (pchanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"));
-			let vElevationChange = pchanges.hasOwnProperty("elevation");
+			let vPositionChange = (pchanges.hasOwnProperty("x") && pToken.x != pchanges.x) || (pchanges.hasOwnProperty("y") && pToken.y != pchanges.y) || (pchanges.hasOwnProperty("rotation") && pToken.rotation != pchanges.rotation && game.settings.get(cModuleName, "RiderRotation"));
+			let vElevationChange = pchanges.hasOwnProperty("elevation") && pToken.elevation != pchanges.elevation;
 			
 			if (vPositionChange || vElevationChange) {
 				if (!(pInfos.RidingMovement || vIgnoreUpdate)) {
@@ -253,7 +253,6 @@ class Ridingmanager {
 		}
 		if (!vElevationOverride) {
 			let vdeleteChanges = false;
-			
 			
 			if ((RideableUtils.getRiderMovementsetting() === "RiderMovement-disallow")) {
 				vdeleteChanges = true;
@@ -881,7 +880,7 @@ class Ridingmanager {
 		}
 	}
 	
-	static UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
+	static async UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 		for (let i = 0; i < pRiderTokens.length; i++) {
 			if (pRiderTokens[i]) {
 				let vTargetz = 0;
@@ -904,7 +903,7 @@ class Ridingmanager {
 				} 
 
 				if (!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) {
-					pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
+					await pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
 				}
 			}
 		}
@@ -1067,8 +1066,8 @@ function UpdateRidderTokensRequest({pRiddenID, pRidersListIDs, pSceneID, pAnimat
 function UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations = true) {
 	Ridingmanager.UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations);
 }
-function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
-	Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
+async function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
+	await Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
 }
 
 function MoveRiddenRequest({pRiddenID, pSceneID, pRelativChanges, pInfos} = {}) {
