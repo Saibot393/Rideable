@@ -1,3 +1,7 @@
+# v4.1.5
+- Improved unmount/reset logic
+- Fixed some bugs pertaining to rider size adjustment
+
 # v4.1.4
 - Temporary fix for [Terrain Mapper compatibility](https://github.com/caewok/fvtt-terrain-mapper/issues/96)
 
