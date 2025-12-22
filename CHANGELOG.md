@@ -1,3 +1,6 @@
+# v4.1.6
+- Fix for temporary terrain mapper fix
+
 # v4.1.5
 - Improved unmount/reset logic
 - Fixed some bugs pertaining to rider size adjustment
