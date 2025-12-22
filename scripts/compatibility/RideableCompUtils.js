@@ -24,7 +24,7 @@ const cTokenZ = "token-z";
 const cRoutingLib = "routinglib";
 const cMATT = "monks-active-tiles";
 const cCPR = "chris-premades";
-const cTerrainMapper = "fvtt-terrain-mapper";
+const cTerrainMapper = "terrainmapper";//"fvtt-terrain-mapper";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
