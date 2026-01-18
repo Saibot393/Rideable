@@ -1,3 +1,6 @@
+## v4.1.7
+- Bug fix for move ridden
+
 # v4.1.6
 - Fix for temporary terrain mapper fix
 
