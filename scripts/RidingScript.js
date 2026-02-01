@@ -838,10 +838,10 @@ class Ridingmanager {
 			[vTargetx, vTargety] = GeometricUtils.Rotated([pTargetx, pTargety], vRiddenGeometry.rotation);
 			
 			if (pRelativerotation) {
-				pRider.update({rotation: vRiddenGeometry.rotation + pRelativerotation}, {animate : pAnimation, RidingMovement : true});
+				await pRider.update({rotation: vRiddenGeometry.rotation + pRelativerotation}, {animate : pAnimation, RidingMovement : true});
 			}
 			else {
-				pRider.update({rotation: vRiddenGeometry.rotation}, {animate : pAnimation, RidingMovement : true});
+				await pRider.update({rotation: vRiddenGeometry.rotation}, {animate : pAnimation, RidingMovement : true});
 			}
 		}
 		
