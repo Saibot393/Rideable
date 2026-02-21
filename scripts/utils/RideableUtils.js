@@ -429,14 +429,21 @@ class RideableUtils {
 	static async totalWeight(pToken) {
 		let vWeight = 0;
 		
+		let vQuantityThreshold;
 		let vActor = pToken?.actor;
 		
 		if (vActor) {
 			for (let vItem of vActor.items) {
+				vQuantityThreshold = 0;
 				let vItemWeight = vItem.system.weight?.value;
 				
 				if (vItemWeight == undefined) {
 					vItemWeight = vItem.system.bulk?.value
+					
+					if (vItem.system.bulk?.per > 0) {
+						vItemWeight = vItemWeight/vItem.system.bulk.per;
+						vQuantityThreshold = vItem.system.bulk.per;
+					}
 				}
 
 				if (vItemWeight) {
@@ -446,38 +453,75 @@ class RideableUtils {
 					
 					if (!isNaN(vItemWeight)) {
 						let vQuantity = await RideableUtils.getItemquantity(vItem);
+						
+						let vAdd = Number(vItemWeight) * vQuantity;
+						
+						vAdd = Math.floor(vAdd*10)/10;
+						
+						if (vQuantity < vQuantityThreshold) vAdd = 0;
+						if (vItem.isInContainer) vAdd = 0;
 
-						vWeight = vWeight + Number(vItemWeight) * vQuantity;
+						vWeight = vWeight + vAdd;
 					}
 				}
 				
 				if (vItem.system?.properties?.has("weightlessContents")) { //e.g. d&d bag of holding
 					if (!isNaN(vItem.system?.contentsWeight)) {
-						vWeight = vWeight - Number(vItem.system?.contentsWeight)
+						vWeight = vWeight - Number(vItem.system?.contentsWeight);
 					}
 				}
 			}
 
 			//find actor weight string
-			let vRawWeight = vActor.system?.details?.weight;
-			
-			if (vRawWeight?.value) {
-				vRawWeight = vRawWeight.value;
-			}
-			
-			if (!vRawWeight) {
-				vRawWeight = vActor.system?.details?.weight?.value;
-			}
-			//find numerical weight in weight string
-			if (vRawWeight) {
-				if (!isNaN(vRawWeight)) {
-					vWeight = vWeight + Number(vRawWeight);
+			if (game.system.id == "pf2e") {
+				let vCreatureSizeWeight = 0;
+				
+				switch (vActor.system.traits.size.value) {
+					case "tiny":
+						vCreatureSizeWeight = 1;
+						break;
+					case "sm":
+						vCreatureSizeWeight = 3;
+						break;
+					case "med":
+						vCreatureSizeWeight = 6;
+						break;
+					case "lg":
+						vCreatureSizeWeight = 12;
+						break;
+					case "huge":
+						vCreatureSizeWeight = 24;
+						break;
+					case "grg":
+						vCreatureSizeWeight = 48;
+						break;
 				}
-				else {
-					let vNumbers = vRawWeight.match(/\d+/g);
-					
-					if (vNumbers.length) {
-						vWeight = vWeight + Number(vNumbers);
+				
+				
+				vWeight = vWeight + vCreatureSizeWeight;
+			}
+			else {
+				let vRawWeight = vActor.system?.details?.weight;
+				
+				if (vRawWeight?.value) {
+					vRawWeight = vRawWeight.value;
+				}
+				
+				if (!vRawWeight) {
+					vRawWeight = vActor.system?.details?.weight?.value;
+				}
+				//find numerical weight in weight string
+				
+				if (vRawWeight) {
+					if (!isNaN(vRawWeight)) {
+						vWeight = vWeight + Number(vRawWeight);
+					}
+					else {
+						let vNumbers = vRawWeight.match(/\d+/g);
+						
+						if (vNumbers.length) {
+							vWeight = vWeight + Number(vNumbers);
+						}
 					}
 				}
 			}
