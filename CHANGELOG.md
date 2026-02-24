@@ -1,3 +1,6 @@
+## v4.1.8
+- Improved mounting weight calculation for PF2e
+  
 ## v4.1.7
 - Bug fix for move ridden
 
