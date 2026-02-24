@@ -1,3 +1,6 @@
+## v4.1.9
+- Improved weight calculation for Pf2e (thanks to [Steven White](https://github.com/Manypiemen12))
+
 ## v4.1.8
 - Improved mounting weight calculation for PF2e
   
