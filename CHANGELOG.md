@@ -7,17 +7,17 @@
 ## v4.1.7
 - Bug fix for move ridden
 
-# v4.1.6
+## v4.1.6
 - Fix for temporary terrain mapper fix
 
-# v4.1.5
+## v4.1.5
 - Improved unmount/reset logic
 - Fixed some bugs pertaining to rider size adjustment
 
-# v4.1.4
+## v4.1.4
 - Temporary fix for [Terrain Mapper compatibility](https://github.com/caewok/fvtt-terrain-mapper/issues/96)
 
-# v4.1.3
+## v4.1.3
 - Small bug fix for edge case in pf2e
 
 ## v4.1.2
