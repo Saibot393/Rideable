@@ -438,17 +438,22 @@ class RideableUtils {
 				let vItemWeight = vItem.system.weight?.value;
 				
 				if (vItemWeight == undefined) {
-					vItemWeight = vItem.system.bulk?.value
-					
+					vItemWeight = vItem.system.bulk?.value;
+				}
+
+				if (vItemWeight) {
 					if (vItem.system.bulk?.per > 0) {
 						vItemWeight = vItemWeight/vItem.system.bulk.per;
 						vQuantityThreshold = vItem.system.bulk.per;
 					}
-				}
-
-				if (vItemWeight) {
+					
 					if (vItemWeight == "L") {
 						vItemWeight = 0.1;
+					}
+					
+					//if the item we are looking at is worn and is armor, add 1 bulk to it**
+					if (vItem.system.equipped?.carryType == "worn" && vItem.type == "armor" && vItem.system.equipped?.inSlot == true) {
+						vItemWeight = vItemWeight > 0.1 ? vItemWeight + 1 : 1;
 					}
 					
 					if (!isNaN(vItemWeight)) {
@@ -526,6 +531,8 @@ class RideableUtils {
 				}
 			}
 		}
+		
+		vWeight = Math.round(vWeight*10)/10;
 		
 		return vWeight;
 	}
