@@ -5,7 +5,7 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 import { updatePathHistory, calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
-import { RideableCompUtils, cTerrainMapper} from "./compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cTerrainMapper, cTerrainMapperOLD} from "./compatibility/RideableCompUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -310,17 +310,22 @@ class Ridingmanager {
 						}
 						
 						if (pChanges.hasOwnProperty("elevation")) {
-							if (RideableFlags.UseRidingHeight(pRidden)) {
-								let vRidingHeight;		
-								
-								if (RideableFlags.HascustomRidingHeight(pRidden)) {
-									vRidingHeight = RideableFlags.customRidingHeight(pRidden);
-								}
-								else {
-									vRidingHeight = RideableUtils.Ridingheight(pRidden);
-								}
+							if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
+								vztarget = pChanges.elevation - RideableUtils.Ridingheight(pRidden) - RideableFlags.addRiderHeight(pToken); //necessary due to some strange Terrain Mapper behaviour
+							}
+							else {
+								if (RideableFlags.UseRidingHeight(pRidden)) {
+									let vRidingHeight;		
 									
-								vztarget = vztarget - vRidingHeight/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pToken);
+									if (RideableFlags.HascustomRidingHeight(pRidden)) {
+										vRidingHeight = RideableFlags.customRidingHeight(pRidden);
+									}
+									else {
+										vRidingHeight = RideableUtils.Ridingheight(pRidden);
+									}
+										
+									vztarget = vztarget - vRidingHeight/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pToken);
+								}
 							}
 						}
 						
@@ -879,7 +884,7 @@ class Ridingmanager {
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
 			if (game.release.generation > 12) {
-				if (RideableCompUtils.isactiveModule(cTerrainMapper)) {
+				if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
 					await pRider.update({x: vTargetx, y: vTargety}, vOptions);
 				}
 				else {

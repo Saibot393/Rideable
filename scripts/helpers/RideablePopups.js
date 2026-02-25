@@ -26,7 +26,8 @@ class RideablePopups {
 					ui.notifications.warn(vText, {console : false});
 					break;
 				case "success":
-					ui.notifications.success(vText, {console : false});
+					if (ui.notifications.success) ui.notifications.success(vText, {console : false})
+					else ui.notifications.info(vText, {console : false});
 					break;
 				case "info":
 				default:
