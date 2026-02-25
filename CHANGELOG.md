@@ -1,3 +1,7 @@
+## v4.1.10
+- Fixed v12 compatibility issue
+- Fixed Terrain Mapper compatibility issue
+
 ## v4.1.9
 - Improved weight calculation for Pf2e (thanks to [Steven White](https://github.com/Manypiemen12))
 
