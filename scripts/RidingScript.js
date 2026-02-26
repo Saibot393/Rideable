@@ -304,7 +304,15 @@ class Ridingmanager {
 						}
 						
 						let vztarget = pRidden.elevation;
-
+						if (pChanges.hasOwnProperty("elevation")) {
+							if (vChange.hasOwnProperty("elevation")) {
+								vztarget = pRidden.elevation + vChange.elevation;
+							}
+							else {
+								vztarget = pRidden.elevation + (pChanges.elevation - pToken.elevation);
+							}
+						}
+						/*
 						if (!isFinite(vztarget)) {
 							vztarget = 0;
 						}
@@ -324,10 +332,11 @@ class Ridingmanager {
 										vRidingHeight = RideableUtils.Ridingheight(pRidden);
 									}
 										
-									vztarget = vztarget - vRidingHeight/*game.settings.get(cModuleName, "RidingHeight")*/ + RideableFlags.addRiderHeight(pToken);
+									vztarget = vztarget - vRidingHeight/*game.settings.get(cModuleName, "RidingHeight") - RideableFlags.addRiderHeight(pToken);
 								}
 							}
 						}
+						*/
 						
 						
 						let vrotationtarget = pRidden.rotation;	
