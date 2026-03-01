@@ -1,0 +1,653 @@
+{
+	"Rideable" : {
+		"Titles" : {
+			"Rideable"					: "Rideable",
+			"WorldSettings"				: "Configurações de Mundo (Apenas GM)",
+			"ClientSettings"			: "Configurações do Cliente",
+			"GMonly"					: "Apenas GM",
+			"Tile"						: "Tile",
+			"RequiresRL"				: "Rideable requer que o <a href=\"https://foundryvtt.com/packages/routinglib\">routinglib</a> esteja ativo para que o recurso de seguir tokens funcione." 
+		},
+		
+		"Settings" : {
+			"defaultRideable" : {
+				"name" 					: "Tokens montáveis por padrão",
+				"descrp"				: "Define se todos os tokens devem ser montáveis por padrão (pode ser alterado individualmente nas configurações de cada token)"
+			},
+			
+			"allowTileRiding" : {
+				"name" 					: "Tiles podem ser montados",
+				"descrp"				: "Define se tiles podem ser montados, assim como os tokens"
+			},
+			
+			"allowMountingonEntering" : {
+				"name" 					: "Permitir montar ao entrar",
+				"descrp"				: "Permite que tokens e tiles sejam configurados para serem montados por tokens que entrarem em seu espaço"
+			},
+			
+			"LocknKeyintegration" : {
+				"name" 					: "Integração Lock & Key",
+				"descrp"				: "Permite que tokens montáveis sejam trancados"
+			},
+			
+			"DFredsEffectsIntegration" : {
+				"name" 					: "Integração DFreds Convenient Effects",
+				"descrp"				: "Permite que certos efeitos sejam aplicados a tokens montados e agarrados"
+			},
+			
+			"CPREffectsIntegration" : {
+				"name" 					: "Integração Chris's Premades",
+				"descrp"				: "Permite que certos efeitos sejam aplicados a tokens montados e agarrados"
+			},
+			
+			"TaggerMountingIntegration" : {
+				"name" 					: "Integração de montaria Tagger",
+				"descrp"				: "Permite que tokens sejam montados e desmontados via tags (tag: \"Rideable:{RiderTokenID}\")"
+			},
+			
+			"CheckRiderCollision" : {
+				"name" 					: "Verificar colisão do cavaleiro",
+				"descrp"				: "Verifica colisões do cavaleiro e altera a posição de acordo"
+			},
+			
+			"RidingHeight" : {
+				"name" 					: "Altura da montaria",
+				"descrp"				: "A altura-z que um token montado possui em relação à sua montaria (recomendado ser maior que 0)"
+			},
+			
+			"useRidingHeight" : {
+				"name" 					: "Usar altura da montaria por padrão",
+				"descrp"				: "Se os tokens devem usar a altura da montaria por padrão"
+			},
+			
+			"useRiddenTokenHeight" : {
+				"name" 					: "Usar altura do token",
+				"descrp"				: "Usa a altura do token montado (adicionada através do módulo \"Wall-Height\") em vez da \"Altura da montaria\" definida"
+			},
+			
+			"MountingDistance" : {
+				"name" 					: "Distância de montaria",
+				"descrp"				: "A distância máxima que um token pode estar de seu alvo de montaria (-1 para alcance ilimitado)"
+			},
+			
+			"UseArmReachDistance": {
+				"name" 					: "Usar distância do \"Arms Reach\"",
+				"descrp"				: "Usa a distância definida no módulo \"Arms Reach\" para a distância de montaria"	
+			},
+			
+			"BorderDistance" : {
+				"name" 					: "Distância borda a borda",
+				"descrp"				: "Se a distância de montaria deve ser calculada a partir da borda dos tokens em vez do ponto central (funciona melhor para tokens circulares/quadrados)"
+			},
+
+			"MaxRiders" : {
+				"name" 					: "Máximo de cavaleiros por token",
+				"descrp"				: "A quantidade máxima de tokens que podem montar um único token (-1 para ilimitado)"
+			},
+
+			"RiderMovementworlddefault" : {
+				"name" 					: "Configuração padrão de movimento do cavaleiro",
+				"descrp"				: "Configuração padrão para o movimento dos cavaleiros dos jogadores (não sobrescreve configurações individuais)"
+			},		
+
+			"MountButtonDefaultPosition" : {
+				"name" 					: "Posição padrão do botão de montar",
+				"descrp"				: "Configuração padrão para a posição do botão de montar (não sobrescreve)"
+			},					
+
+			"RiderMovement" : {
+				"name" 					: "Movimento do cavaleiro",
+				"descrp"				: "O que deve acontecer se um token montado tentar se mover por conta própria",
+				"options" : {
+					"worlddefault"		: "usar configuração padrão do mundo",
+					"disallow"			: "Impedir movimento",
+					"dismount"			: "Desmontar cavaleiro",
+					"moveridden"		: "Mover token montado (se possuir permissão)"
+				}
+			},
+			
+			"MountButtonPosition" : {
+				"name" 					: "Posição do botão de montar",
+				"descrp"				: "Posição do botão de montar",
+				"options" : {
+					"default"			: "usar configuração padrão do mundo",
+					"none"				: "sem botão",
+					"left"				: "esquerda",
+					"right"				: "direita"
+				}
+			},
+			
+			"RiderProxySelect" : {
+				"name"					: "Seleção de proxy do cavaleiro",
+				"descrp"				: "Se o token montado ou os cavaleiros devem ser selecionados no lugar do token clicado",
+				"options" : {
+					"never"				: "nunca",
+					"familiar"			: "apenas familiares",
+					"always"			: "sempre",
+					"allRiders"			: "todos os cavaleiros",
+					"ctrl"				: "ao usar CTRL"
+				}
+			},
+			
+			"RiderRotation" : {
+				"name" 					: "Vincular rotações",
+				"descrp"				: "Rotaciona todos os cavaleiros se o token montado for rotacionado (também funciona com a opção \"Mover token montado\")"				
+			},
+			
+			"TeleportRiders" : {
+				"name" 					: "Teleportar cavaleiros",
+				"descrp"				: "Se os tokens cavaleiros devem ser teleportados em vez de movidos quando a montaria se mover",
+				"options" : {
+					"off" 				: "desativado",
+					"familiaronly"		: "apenas familiares",
+					"all"				: "todos os cavaleiros"
+				}
+			},
+		
+			"RidingSystemEffects" : {
+				"name" 					: "Aplicar efeito \"Montado\"",
+				"descrp"				: "Se um token começar a montar, um efeito dependente do sistema será aplicado ao token"				
+			},
+			
+			"CustomRidingEffects" : {
+				"name" 					: "Efeitos de montaria personalizados",
+				"descrp"				: "Efeitos aplicados aos tokens quando começam a montar (Nomes ou IDs, separados por \";\")"				
+			},			
+			
+			"RideableTag" : {
+				"name" 					: "Traço \"Montável\"",
+				"descrp"				: "Permite que tokens que possuem o traço 'Rideable' sejam montados (o traço \"Rideable\" deve ser adicionado manualmente em Configurações > Pathfinder 2e > Manage Homebrew Elements > Creature Traits)"				
+			},
+			
+			"FamiliarRiding" : {
+				"name" 					: "Montaria de Familiar",
+				"descrp"				: "Permite que familiares montem em seu mestre; os familiares serão posicionados nos cantos do mestre"				
+			},
+			
+			"FamiliarRidingFirstCorner" : {
+				"name" 					: "Posição de montaria do familiar",
+				"descrp"				: "Primeiro canto ocupado por familiares.",
+				"options" : {
+					"tl"				: "Superior esquerdo",
+					"tr"				: "Superior direito",
+					"bl"				: "Inferior esquerdo",
+					"br"				: "Inferior direito"
+				}
+			},
+			
+			"Grappling" : {
+				"name" 					: "Agarrar",
+				"descrp"				: "Permite que tokens agarrem uns aos outros (tokens agarrados só podem ser soltos pelo token que os está agarrando)"				
+			},
+			
+			"GrapplingSystemEffects" : {
+				"name" 					: "Aplicar efeito \"Agarrado\"",
+				"descrp"				: "Se um token for agarrado, um efeito dependente do sistema será aplicado a ele"				
+			},
+			
+			"CustomGrapplingEffects" : {
+				"name" 					: "Efeitos de agarrar personalizados",
+				"descrp"				: "Efeitos aplicados aos tokens quando são agarrados (Nomes ou IDs, separados por \";\")"				
+			},
+			
+			"StopGrappleonEffectRemoval" : {
+				"name"					: "Encerrar agarrar ao remover efeito",
+				"descrp"				: "Se um token deve ser solto assim que o efeito de agarrado for removido"
+			},
+			
+			"GrappleplacementDefault" : {
+				"name"					: "Posicionamento padrão de agarrar",
+				"descrp"				: "O posicionamento padrão de agarrar dos tokens",
+				"options" : {
+					"RowBelow"			: "abaixo",
+					"RowAbove"			: "acima",
+					"RowMiddle"			: "meio",
+					"ClosestInside"		: "dentro",
+					"Following"			: "seguindo"
+				}
+			},
+			
+			"PreventEnemyRiding" : {
+				"name" 					: "Impedir montaria em inimigos",
+				"descrp"				: "Impede tokens de montarem em tokens inimigos (GMs ainda podem sobrescrever isso)"				
+			},
+			
+			"FitRidersize" : {
+				"name" 					: "Ajustar tamanho do cavaleiro",
+				"descrp"				: "Ajusta o tamanho do cavaleiro caso ele seja maior ou igual ao tamanho da montaria"				
+			},
+			
+			"FitRiderSizeFactor" : {
+				"name" 					: "Fator de ajuste de tamanho do cavaleiro",
+				"descrp"				: "O fator pelo qual o tamanho dos cavaleiros é ajustado em casos onde são maiores ou iguais à montaria"				
+			},
+			
+			"RiderScaleFactor" : {
+				"name" 					: "Fator de escala do cavaleiro",
+				"descrp"				: "Escala aplicada aos cavaleiros (apenas visual)"	
+			},
+			
+			"MountingWeight" : {
+				"name" 					: "Peso da montaria",
+				"descrp"				: "Adiciona um Item às Montarias para representar o peso dos Tokens montados",
+				"options" : {
+					"off"				: "Desativado",
+					"mountsonly"		: "Apenas montarias normais",
+					"all"				: "Todas as montarias (incluindo familiares)"
+				}
+			},
+			
+			"InitiativeLink" : {
+				"name" 					: "Vincular Iniciativa",
+				"descrp"				: "Sempre coloca as montarias após o cavaleiro no rastreador de iniciativa",
+				"options" : {
+					"off"				: "Desativado",
+					"mountsonly"		: "Apenas montarias normais",
+					"all"				: "Todas as montarias (invertido para familiares)"
+				}
+			},
+			
+			"SpeedAdjustment" : {
+				"name" 					: "Ajuste de velocidade",
+				"descrp"				: "Ajusta a velocidade de movimento dos cavaleiros para a velocidade da montaria (ativo apenas com efeitos de montaria)",
+				"options" : {
+					"off"				: "Desativado",
+					"mountsonly"		: "Apenas montarias normais",
+					"all"				: "Todas as montarias"
+				}
+			},
+		
+			"MessagePopUps" : {
+				"name" 					: "Pop-ups de mensagem",
+				"descrp"				: "Habilita diversos pop-ups ao realizar ações como montar ou desmontar"				
+			},		
+			
+			"OnlyownedMessagePopUps" : {
+				"name" 					: "Apenas pop-ups de tokens controlados",
+				"descrp"				: "Mostra apenas pop-ups de mensagens de tokens que você controla"				
+			},
+			
+			"UINotifications" : {
+				"name" 					: "Notificações de UI",
+				"descrp"				: "Habilita diversas notificações de interface ao realizar ações como montar ou desmontar"				
+			},
+			
+			"EnableFollowing" : {
+				"name"					: "Habilitar Seguir Token",
+				"descrp"				: "Define se a função de seguir tokens está ativa neste mundo"
+			},
+			
+			"FollowingCompatibilityMode" : {
+				"name"					: "Modo de compatibilidade de Seguir",
+				"descrp"				: "Este modo pode prevenir ou reduzir bugs ao usar módulos como \"Drag Ruler\" (altera a ordem da lógica de seguimento)"
+			},
+			
+			"FollowingAlgorithm" : {
+				"name"					: "Algoritmo de seguimento",
+				"descrp"				: "Qual algoritmo de seguimento é usado (instale o routinglib para mais opções)",
+				"options" : {
+					"SimplePathHistory" : "Histórico de caminho simples (simples, leve)",
+					"routinglib"		: "routinglib (avançado, pesado, recomendado)"
+				}
+			},
+			
+			"FollowingCombatBehaviour" : {
+				"name"					: "Comportamento de seguir em combate",
+				"descrp"				: "Como os tokens seguidores se comportam em combate",
+				"options" : {
+					"stop"				: "Parar de seguir",
+					"stop-includefollowed"	: "Parar de seguir (considerar seguido)",
+					"resumeafter"		: "Parar e retomar após a luta",
+					"resumeafter-includefollowed" : "Parar e retomar após a luta (considerar seguido)",
+					"continue"			: "Continuar seguindo"
+				}
+			},
+			
+			"OnlyfollowViewed" : {
+				"name"					: "Seguir apenas visíveis",
+				"descrp"				: "Se apenas tokens visíveis no momento devem ser seguidos"
+			},	
+			
+			"PreventFollowerStacking" : {
+				"name"					: "Prevenir empilhamento de seguidores",
+				"descrp"				: "Se os seguidores de um mesmo token devem ser impedidos de se empilharem; eles ainda podem empilhar em áreas estreitas"
+			},	
+			
+			"OnFollowerMovement" : {
+				"name" 					: "Movimento do seguidor",
+				"descrp"				: "O que deve acontecer se um token seguidor tentar se mover por conta própria",
+				"options" : {
+					"stopfollowing"		: "Parar de seguir",
+					"updatedistance"	: "Atualizar distância de seguimento"
+				}
+			}			
+		},
+		
+		"Keys" : {
+			"Mount" : {
+				"name" 					: "Montar",
+				"descrp"				: "Monta os Tokens controlados no Token alvo (Macro alternativa: \"Mount\")"
+			},
+			
+			"UnMount" : {
+				"name" 					: "Desmontar",
+				"descrp"				: "Desmonta os Tokens controlados de sua montaria, ou desmonta o Token alvo do Token controlado (Macro alternativa: \"Unmount\")"
+			},
+			
+			"MountFamiliar" : {
+				"name" 					: "Montar familiar",
+				"descrp"				: "Monta os familiares controlados no Token alvo se o alvo for o mestre (Macro alternativa: \"MountFamiliar\") (apenas se a configuração \"Montaria de Familiar\" estiver ativa)"
+			},
+			
+			"GrappleTarget" : {
+				"name" 					: "Agarrar/Soltar alvo",
+				"descrp"				: "Monta o token alvo ao Token controlado, só podendo ser desmontado pelo token que está agarrando (Macro alternativa: \"Grapple\") (apenas se a configuração \"Agarrar\" estiver ativa)"
+			},
+			
+			"ToggleMount" : {
+				"name" 					: "Alternar montaria",
+				"descrp"				: "Monta ou desmonta os Tokens controlados de/para o Token alvo"
+			},
+			
+			"ToggleGrapplePlacement" : {
+				"name"					: "Trocar posicionamento de agarrar",
+				"descrp"				: "Alterna entre as opções de posicionamento de tokens agarrados para os tokens selecionados"
+			},
+			
+			"TogglePiloting" : {
+				"name" 					: "Alternar pilotagem",
+				"descrp"				: "Inicia ou para de pilotar o token atualmente montado"
+			},
+
+			"ToggleFollowing" : {
+				"name"					: "Alternar seguimento",
+				"descrp"				: "Inicia ou para o seguimento dos tokens selecionados em relação ao alvo ou token seguido"
+			},
+
+			"ProxyTarget" : {
+				"name"					: "Alvo proxy",
+				"descrp"				: "Alveja a montaria do token sob o mouse, se possível"
+			}				
+		},
+		
+		"Popup" : {
+			"Mounting"					: "Montou em {pRiddenName}",
+			"UnMounting"				: "Desmontou de {pRiddenName}",
+			"MountingFamiliar"			: "Seguindo o mestre {pRiddenName}",
+			"UnMountingFamiliar"		: "Parou de seguir o mestre {pRiddenName}",
+			"PreventedRiderMove"		: "Ainda montado em {pRiddenName}",
+			"RidingLoop"				: "Montar em {pRiddenName} seria estranho",
+			"NoPlace"					: "{pRiddenName} não tem mais espaço",
+			"EnemyRiding"				: "{pRiddenName} é meu inimigo",
+			"Toofaraway"				: "{pRiddenName} está muito longe",
+			"RiddenisLocked"			: "{pRiddenName} está trancado",
+			
+			"Grappling"					: "Agarrado por {pRiddenName}",
+			"UnGrappling"				: "Solto de {pRiddenName}",
+			"PreventedGrappledMove"		: "Ainda agarrado por {pRiddenName}",
+			
+			"cantPilot"					: "{pRiddenName} não pode ser pilotado",
+			"startPiloting"				: "Agora pilotando {pRiddenName}",
+			"stopPiloting"				: "Não está mais pilotando {pRiddenName}",
+			"cantbeMoved"				: "{cantbeMoved} não pode ser movido (pode estar preso a algo)",
+			
+			"StopFollowing"				: "Parou de seguir",
+			"StartFollowing"			: "Começou a seguir {pFollowedName}",
+			"CantFollowinCombat"		: "Não é possível seguir durante o combate",
+			"TargetisFollowingMe"		: "{pFollowedName} já está me seguindo",
+			
+			"PositionLocked"			: "Posição travada",
+			"PositionUnlocked"			: "Posição destravada"
+		},	
+		
+		"TokenSettings" : {
+			"MaxRiderFlag" : {
+				"name"					: "Máximo de cavaleiros",
+				"descrp"				: "Sobrescreve a configuração global para este token (-1 para ilimitado, deixe vazio para retornar ao padrão do mundo)"
+			},
+			
+			"MountonEnterFlag" : {
+				"name"					: "Montar ao entrar",
+				"descrp"				: "Tokens que entrarem no espaço deste token/tile irão montá-lo"
+			},
+			
+			"AutoMountBlackListFlag" : {
+				"name"					: "Lista negra de montar ao entrar",
+				"descrp"				: "Nomes de tokens, IDs e IDs de atores que não serão montados ao entrar (separados por \";\")"
+			},
+			
+			"AutoMountWhiteListFlag" : {
+				"name"					: "Lista branca de montar ao entrar",
+				"descrp"				: "Nomes de tokens, IDs e IDs de atores permitidos para montar ao entrar (separados por \";\", vazio para ignorar)"
+			},
+			
+			"RiderPositioningFlag" : {
+				"name"					: "Posicionamento do cavaleiro",
+				"descrp"				: "O padrão no qual os tokens cavaleiros serão posicionados",
+				"options" : {
+					"CirclePlacement"	: "Círculo",
+					"RowPlacement"		: "Fila",
+					"BlockPlacement"	: "Bloco",
+					"ClusterPlacement"	: "Agrupamento",
+					"RowPlacementTop"	: "Fila superior",
+					"RowPlacementBottom": "Fila inferior",
+					"CornerPlacement"	: "Cantos",
+					"CornerPlacementinner": "Cantos (interno)",
+					"MountPosition"		: "Posição de montaria"
+				}
+			},
+			
+			"RiderOffsetFlag" : {
+				"name"					: "Deslocamento (Offset) dos cavaleiros",
+				"descrp"				: "O deslocamento de posicionamento para os cavaleiros [em quadrados da cena]"
+			},
+			
+			"RiderRotOffsetFlag" : {
+				"name"					: "Deslocamento rotacional dos cavaleiros",
+				"descrp"				: "O deslocamento de rotação para os cavaleiros"
+			},
+			
+			"GrapplePlacementFlag" : {
+				"name"					: "Posicionamento de agarrado",
+				"descrp"				: "Onde os tokens agarrados são posicionados",
+				"options" : {
+					"RowBelow"			: "abaixo",
+					"RowAbove"			: "acima",
+					"RowMiddle"			: "meio",
+					"ClosestInside"		: "dentro",
+					"Following"			: "seguir"
+				}
+			},
+			
+			"issetRideableFlag" : {
+				"name"					: "Token é Montável",
+				"descrp"				: "Sobrescreve a configuração padrão global"
+			},
+			
+			"TileRideableNameFlag" : {
+				"name"					: "Nome do Tile",
+				"descrp"				: "Nome usado pelo Rideable para este tile (ex: em Pop-ups)"
+			},
+			
+			"TokenFormFlag" : {
+				"name"					: "Forma do Token",
+				"descrp"				: "",
+				"options" : {
+					"TokenFormCircle"	: "Círculo/Elipse",
+					"TokenFormRectangle": "Retângulo",
+					"TokenTransparency"	: "da transparência",
+					"TokenFormAttachedTiles" : "de tokens/tiles anexados",
+					"TileFormNone"		: "Sem forma/ignorar"
+				}
+			},
+			
+			"CustomRidingheightFlag" : {
+				"name"					: "Altura de montaria personalizada",
+				"descrp"				: "Altura personalizada deste token, usada para seus cavaleiros (deixe vazio para o valor padrão)"
+			},
+			
+			"UseRidingHeightFlag" : {
+				"name"					: "Usar altura da montaria",
+				"descrp"				: "Se a elevação dos cavaleiros deste token deve ser gerenciada"
+			},
+			
+			"RidersScaleFlag" : {
+				"name"					: "Escala dos cavaleiros",
+				"descrp"				: "Escala aplicada aos cavaleiros deste objeto (apenas visual)"
+			},
+			
+			"InsideMovementFlag" : {
+				"name"					: "Cavaleiros podem se mover livremente",
+				"descrp"				: "Se os cavaleiros podem se mover livremente dentro dos limites deste token"
+			},
+			
+			"SpawnRidersFlag" : {
+				"name"					: "Gerar cavaleiros",
+				"descrp"				: "Cavaleiros com os quais este token já surge (Nomes ou IDs, separados por \";\")"
+			},
+			
+			"MountingEffectsFlag" : {
+				"name"					: "Efeitos de montaria",
+				"descrp"				: "Efeitos aplicados aos cavaleiros deste token (Nomes ou IDs, separados por \";\")"
+			},
+			
+			"WorldMEffectOverrideFlag" : {
+				"name"					: "Sobrescrever efeitos do mundo",
+				"descrp"				: "Sobrescreve os efeitos padrão do mundo com os efeitos definidos abaixo (em vez de apenas anexá-los)"
+			},
+			
+			"SelfApplyEffectsFlag" : {
+				"name"					: "Auto-aplicar efeitos de montaria",
+				"descrp"				: "Define se este token deve aplicar seus próprios efeitos de montaria em si mesmo enquanto monta"
+			},
+			
+			"forMountEffectsFlag" : {
+				"name"					: "Efeitos na montaria",
+				"descrp"				: "Efeitos que são aplicados às montarias deste token (Nomes ou IDs, separados por \";\")"
+			},
+			
+			"canbeGrappledFlag" : {
+				"name"					: "Pode ser agarrado",
+				"descrp"				: "Define se este token pode ser agarrado"
+			},
+			
+			"GrapplingEffectsFlag" : {
+				"name"					: "Efeitos de agarrar",
+				"descrp"				: "Efeitos aplicados aos alvos agarrados por este token (Nomes ou IDs, separados por \";\")"
+			},
+			
+			"CanbePilotedFlag" : {
+				"name"					: "Pode ser pilotado",
+				"descrp"				: "Jogadores podem pilotar este token, permitindo que eles o movam mesmo que não sejam os donos"
+			},
+			
+			"CheckPilotedCollisionFlag" : {
+				"name"					: "Colisão ao ser pilotado",
+				"descrp"				: "Se a colisão deste token deve ser calculada enquanto pilotado (desative para Tiles Ativos com paredes anexadas)"
+			},
+			
+			"PilotedbyDefaultFlag" : {
+				"name"					: "Pilotado por padrão",
+				"descrp"				: "Se todos que montarem este token automaticamente o pilotarão (não compatível com \"Cavaleiros podem se mover livremente\")"
+			}
+		},
+		
+		"RideableTag.str"				: "montável",
+		
+		"Items" : {
+			"MountItem" : {
+				"name" 					: "Peso montado",
+				"descrp"				: "Peso adicionado por criaturas montadas:"
+			}
+		},
+		
+		"monks-active-tiles" : {
+			"filters" : {
+				"name"					: "Filtro",
+				
+				"riders-of" : {
+					"name"				: "Filtrar cavaleiros da montaria",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition} de <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"mount" : {
+							"name"		: "Montaria"
+						},
+						
+						"filterCondition" : {
+							"name"		: "Condição de estado de montaria:",
+							"options" : {
+								"rider": "é cavaleiro",
+								"notrider" : "não é cavaleiro"
+							}	
+						}
+					}
+				},
+				
+				"is-rider" : {
+					"name"				: "Filtrar cavaleiros",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Condição de estado de montaria:",
+							"options" : {
+								"rider": "é cavaleiro",
+								"notrider" : "não é cavaleiro"
+							}	
+						}
+					}					
+				},
+				
+				"is-ridden" : {
+					"name"				: "Filtrar montados",
+					"descrp"			: "<span class=\"filter-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> {pCondition}",
+					"settings" : {
+						"filterCondition" : {
+							"name"		: "Condição de estado de montado:",
+							"options" : {
+								"ridden": "está montado",
+								"notridden" : "não está montado"
+							}	
+						}
+					}					
+				}
+			},
+			
+			"actions" : {
+				"mount-this-tile" : {
+					"name"				: "Montar neste tile",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"mount-target" : {
+					"name"				: "Montar",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> em <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Montaria"
+						}
+					}
+				},
+				
+				"unmount" : {
+					"name"				: "Desmontar",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"unmount-riders" : {
+					"name"				: "Desmontar cavaleiros",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> de <span class=\"entity-style\">{pEntities}</span>"
+				},
+				
+				"toggle-mount-target" : {
+					"name"				: "Alternar montaria",
+					"descrp"			: "<span class=\"logic-style\">{pname}</span> <span class=\"entity-style\">{pEntities}</span> em <span class=\"entity-style\">{pMount}</span>",
+					"settings" : {
+						"target" : {
+							"name"		: "Montaria"
+						}
+					}
+				}
+			}
+		}
+	}
+}

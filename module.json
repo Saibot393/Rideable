@@ -7,7 +7,7 @@
     "name": "saibot"
     }
   ],
-  "version": "4.1.11",
+  "version": "4.1.12",
   "compatibility": {
     "minimum": "10",
     "verified": "13"
@@ -42,6 +42,12 @@
       "lang": "pl",
       "name": "Polski",
       "path": "lang/pl.json",
+      "flags": {}
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json",
       "flags": {}
     }
   ],
@@ -82,7 +88,7 @@
       ]
   },
   "url": "https://github.com/Saibot393/Rideable",
-  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v4.1.11.zip",
+  "download": "https://github.com/Saibot393/Rideable/archive/refs/tags/v4.1.12.zip",
   "manifest": "https://github.com/Saibot393/Rideable/releases/latest/download/module.json",
   "readme": "https://github.com/Saibot393/Rideable/blob/main/README.md",
   "changelog": "https://github.com/Saibot393/Rideable/blob/main/CHANGELOG.md",
