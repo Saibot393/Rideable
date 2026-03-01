@@ -141,7 +141,7 @@ The module should be compatible with all game systems on Foundry v10 and v11, th
 
 ### Languages:
 
-The module contains an English, a German, a French (thanks to [wirgeen](https://github.com/wirgeen)), an Italien (thanks to [Landscape](https://github.com/LandscapeNemo)), and a Polish (thanks to [Lioheart](https://github.com/Lioheart)) translation. If you want additional languages to be supported [let me know](https://github.com/Saibot393/Rideable/issues).
+The module contains an English, a German, a French (thanks to [wirgeen](https://github.com/wirgeen)), an Italien (thanks to [Landscape](https://github.com/LandscapeNemo)), a Polish (thanks to [Lioheart](https://github.com/Lioheart)), and a Brazilian Portuguese (thanks to [Paulo “Faren” Henrique](https://github.com/FarenRavirar)) translation. If you want additional languages to be supported [let me know](https://github.com/Saibot393/Rideable/issues).
 
 ### Macros:
 - `game.Rideable.MountSelected(pTargetHovered)`
