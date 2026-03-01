@@ -1,3 +1,6 @@
+## v4.1.11
+- Bug fix for ridden movement through rider
+
 ## v4.1.10
 - Fixed v12 compatibility issue
 - Fixed Terrain Mapper compatibility issue
