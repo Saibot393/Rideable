@@ -628,7 +628,7 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
     hint: Translate("Keys.ToggleFollowing.descrp"),
 	editable: [
       {
-        key: "KeyF"
+        key: "KeyG"
       }
     ],
     onDown: () => { SelectedToggleFollwing(); },

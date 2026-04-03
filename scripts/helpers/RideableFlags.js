@@ -1875,6 +1875,7 @@ class RideableFlags {
 		if (!vPoint) {
 			vPoint = {...GeometricUtils.CenterPositionXY(pToken)};
 			vPoint.elevation = pToken.elevation;
+			vPoint.level = pToken.level
 		}
 		
 		if (vPoint) {

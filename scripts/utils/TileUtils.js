@@ -13,6 +13,7 @@ class TileUtils {
 	//IMPLEMENTATIONS
 	static hoveredRideableTile() {
 		let vvalidTiles = canvas.tiles.placeables.map(vTile => vTile.document).filter(vTile => !vTile.hidden && RideableFlags.TokenissetRideable(vTile));
+		if (canvas.level) vvalidTiles = vvalidTiles.filter(vTile => vTile.levels.has(canvas.level.id));
 		let vMousePosition = canvas.mousePosition;
 		let vhoveredTile;
 		

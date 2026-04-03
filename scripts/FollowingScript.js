@@ -198,11 +198,16 @@ class FollowingManager {
 				}
 				
 				vRoute.forEach(vPoint => vPoint.RidingMovement = pInfos.RidingMovement);
-				
-				await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
-				
-				if (pInfos.StartRoute) {
-					FollowingManager.gotonextPointonRoute(pFollowers[i]);
+
+				if (game.release.generation > 12) {
+					pFollowers[i].move(vRoute, {RideableFollowingMovement : true, RidingMovement : pInfos.RidingMovement});
+				}
+				else {
+					await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
+					
+					if (pInfos.StartRoute) {
+						FollowingManager.gotonextPointonRoute(pFollowers[i]);
+					}
 				}
 			}
 		}
@@ -215,7 +220,12 @@ class FollowingManager {
 			let vPoint = RideableFlags.nextRoutePoint(pToken);
 			
 			if (vPoint && Object.keys(vPoint).length) {
-				await pToken.update(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
+				if (game.release.generation > 12) {
+					await pToken.move(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
+				}
+				else {
+					await pToken.update(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
+				}
 			}
 			else {
 				if (game.settings.get(cModuleName, "PreventFollowerStacking")) {
@@ -290,8 +300,13 @@ class FollowingManager {
 		if (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 			if ((!game.users.find(vUser => vUser.isGM && vUser.active) && pToken.isOwner) || game.user.isGM) {
 				//update path history of pToken
-				await CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
-				await RideableFlags.AddtoPathHistory(pToken, GeometricUtils.updatedGeometry(pToken, pchanges));
+				if (foundry.canvas?.animation?.CanvasAnimation) {
+					await foundry.canvas.animation.CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
+				}
+				else {
+					await CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
+				}
+				await RideableFlags.AddtoPathHistory(pToken, {...GeometricUtils.updatedGeometry(pToken, pchanges), level : pToken.level});
 			}
 		}
 	}
@@ -316,7 +331,8 @@ class FollowingManager {
 	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance, pInfos = {}) {
-		if (pFollower?.object?.center) {
+		const cFollowerCenter = pFollower?.object?.center || GeometricUtils.CenterPositionXY(pFollower);
+		if (cFollowerCenter) {
 			let vPathHistory = RideableFlags.GetPathHistory(pTarget);
 			
 			if (pInfos.changes) {
@@ -332,7 +348,7 @@ class FollowingManager {
 			while (!vLOSPointfound && i > 0) {
 				vRoute.unshift(vPathHistory[i]);
 				
-				if (!CONFIG.Canvas.polygonBackends["move"].testCollision(pFollower.object.center, vPathHistory[i], {type : "move", mode: "any"})) {
+				if (!CONFIG.Canvas.polygonBackends["move"].testCollision(cFollowerCenter, vPathHistory[i], {type : "move", mode: "any"})) {
 					vLOSPointfound = true;
 				}
 				else {
@@ -340,7 +356,7 @@ class FollowingManager {
 				}
 			}
 			
-			vRoute.unshift({...pFollower.object.center, elevation : pFollower.elevation});
+			vRoute.unshift({...cFollowerCenter, elevation : pFollower.elevation, level : pFollower.level});
 			
 			if (vLOSPointfound) {
 				vRoute = GeometricUtils.CenterRoutetoXY(vRoute, pFollower);
@@ -369,7 +385,7 @@ class FollowingManager {
 	//ons
 	static async OnTokenupdate(pToken, pchanges, pInfos, pID) {
 		//if (vFollowedList?.has(pToken.id)) {
-		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y")) {
+		if (pchanges.hasOwnProperty("x") || pchanges.hasOwnProperty("y") || pchanges.hasOwnProperty("elevation") || pchanges.hasOwnProperty("level")) {
 			if (pToken.object?.visible || !game.settings.get(cModuleName, "OnlyfollowViewed")) {
 				if (game.settings.get(cModuleName, "FollowingCompatibilityMode")) {
 					await FollowingManager.updatePathHistory(pToken, pchanges);

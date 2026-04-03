@@ -172,7 +172,7 @@ class GeometricUtils {
 		let vWidthhalf = GeometricUtils.insceneWidth(pToken)/2;
 		let vHeighthalf = GeometricUtils.insceneHeight(pToken)/2;
 		
-		return pRoute.map(vPoint => ({x: vPoint.x - vWidthhalf, y: vPoint.y - vHeighthalf, elevation : vPoint.elevation}));
+		return pRoute.map(vPoint => ({x: vPoint.x - vWidthhalf, y: vPoint.y - vHeighthalf, elevation : vPoint.elevation, level : vPoint.level}));
 	}
 	
 	static NewCenterPosition(pDocument, pChanges) {
@@ -720,7 +720,7 @@ class GeometricUtils {
 				for (let i = 1; i < vDistances.length; i++) {
 					if (vTargetLength > 0) {
 						if (vDistances[i] < vTargetLength) {
-							vResultRoute.push({x : pRoute[i].x, y : pRoute[i].y, elevation : Math.round(pRoute[i].elevation)});
+							vResultRoute.push({x : pRoute[i].x, y : pRoute[i].y, elevation : Math.round(pRoute[i].elevation), level : pRoute[i].level});
 							
 							vTargetLength = vTargetLength - vDistances[i];
 						}
@@ -737,6 +737,8 @@ class GeometricUtils {
 							if (isNaN(vNewPoint.elevation)) {
 								vNewPoint.elevation = undefined;
 							}
+							
+							vNewPoint.level = pRoute[i].level;
 							
 							vResultRoute.push(vNewPoint);
 							

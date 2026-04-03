@@ -81,7 +81,7 @@ class Ridingmanager {
 	static SyncSortRequest(pData) {} //answers a requests a sort sync
 	
 	//external movement
-	static MoveRiddenGM(pRidden, pRelativChanges, pInfos) {} //change the position of a riden token as a GM
+	static MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {} //change the position of a riden token as a GM
 	
 	static RequestMoveRidden(pRidden, pRelativChanges, pInfos) {} //request the position change of a Ridden token from the GM
 	
@@ -105,10 +105,10 @@ class Ridingmanager {
 			//Check if vToken is ridden
 			if (RideableFlags.isRidden(pToken)) {
 				//check if token position was actually changed
-				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation") || (pChanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation"))) {
+				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation") || (pChanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation")) || pChanges.hasOwnProperty("level")) {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableFlags.RiderTokens(pToken);
-					
+
 					Ridingmanager.planRiderTokens(pToken, pChanges, vRiderTokenList, !pisTile && pInfos.animate);
 				}
 			}
@@ -124,8 +124,8 @@ class Ridingmanager {
 		
 		//Check if Token is Rider
 		if (RideableFlags.isRider(pToken)) {
-			let vPositionChange = (pchanges.hasOwnProperty("x") && pToken.x != pchanges.x) || (pchanges.hasOwnProperty("y") && pToken.y != pchanges.y) || (pchanges.hasOwnProperty("rotation") && pToken.rotation != pchanges.rotation && game.settings.get(cModuleName, "RiderRotation"));
-			let vElevationChange = pchanges.hasOwnProperty("elevation") && pToken.elevation != pchanges.elevation;
+			let vPositionChange = (pchanges.hasOwnProperty("x") && pToken.x != pchanges.x) || (pchanges.hasOwnProperty("y") && pToken.y != pchanges.y) || (pchanges.hasOwnProperty("rotation") && pToken.rotation != pchanges.rotation && game.settings.get(cModuleName, "RiderRotation")) || pchanges.hasOwnProperty("level");
+			let vElevationChange = pchanges.hasOwnProperty("elevation") && pToken.elevation != pchanges.elevation || pchanges.hasOwnProperty("level");
 			
 			if (vPositionChange || vElevationChange) {
 				if (!(pInfos.RidingMovement || vIgnoreUpdate)) {
@@ -137,6 +137,7 @@ class Ridingmanager {
 						vDeleteChanges = true;
 						
 						let vRelativChanges = {...Ridingmanager.MovementDelta(pToken, pchanges), ...Ridingmanager.keydownMoveReplacement()};
+						let vTotalChanges = {...pchanges};
 						/*
 						for (let i = 0; i < cMotionProperties.length; i++) {
 							if (pchanges.hasOwnProperty(cMotionProperties[i])) {
@@ -144,8 +145,7 @@ class Ridingmanager {
 							}
 						}
 						*/
-												
-						Ridingmanager.RequestMoveRidden(vRidden, vRelativChanges, {MovedbyPilot : true, PilotID : pToken.id});
+						Ridingmanager.RequestMoveRidden(vRidden, vRelativChanges, vTotalChanges, {MovedbyPilot : true, PilotID : pToken.id});
 					}
 					else {
 						let vindependentRiderLeft = true;
@@ -156,6 +156,7 @@ class Ridingmanager {
 								delete pchanges.x;
 								delete pchanges.y;
 								delete pchanges.elevation;
+								delete pchanges.level;
 							}
 							
 							let vNewPosition = GeometricUtils.NewCenterPosition(pToken, pchanges);
@@ -202,6 +203,8 @@ class Ridingmanager {
 						if (game.settings.get(cModuleName, "RiderRotation")) {
 							delete pchanges.rotation;
 						}
+						
+						delete pchanges.level;
 					}
 				}
 			}
@@ -356,7 +359,7 @@ class Ridingmanager {
 							vytarget = vCollisions[0].y - vRiddenPoints.insceneHeight/2 + Math.sign(vRiddenPoints.y - vTargetPoints.y);
 						}
 						
-						pRidden.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget}, {animate : pInfos.animate});
+						pRidden.update({x: vxtarget, y: vytarget, elevation: vztarget, rotation: vrotationtarget, level : pChanges.level}, {animate : pInfos.animate});
 					}
 					
 					vdeleteChanges = true;
@@ -373,6 +376,7 @@ class Ridingmanager {
 				}
 				
 				delete pChanges.rotation;
+				delete pChanges.level;
 			}
 			
 			Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pChanges)
@@ -891,13 +895,13 @@ class Ridingmanager {
 			vOptions.constrainOptions = { ignoreWalls: true, ignoreCost: true }
 		}
 		
-		if ((pRider.x != vTargetx) || (pRider.y != vTargety)) {
+		if ((pRider.x != vTargetx) || (pRider.y != vTargety) || (pRider.level != pRiddenToken.level)) {
 			if (game.release.generation > 12) {
 				if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
 					await pRider.update({x: vTargetx, y: vTargety}, vOptions);
 				}
 				else {
-					await pRider.move({x: vTargetx, y: vTargety}, vOptions);
+					await pRider.move({x: vTargetx, y: vTargety, level : pRiddenToken.level}, vOptions);
 				}
 			}
 			else {
@@ -965,7 +969,7 @@ class Ridingmanager {
 	}
 	
 	//external movement
-	static MoveRiddenGM(pRidden, pRelativChanges, pInfos) {
+	static MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {
 		if (pRidden) {
 			if (pInfos.MovedbyPilot) {
 				let vScene = FCore.sceneof(pRidden);
@@ -1003,7 +1007,14 @@ class Ridingmanager {
 								}
 							}
 							
-							pRidden.update(vTarget, {RidingMovement : true});
+							vTarget.level = pTotalChanges.level;
+
+							if (game.release.generation > 12) {
+								pRidden.move(vTarget, {RidingMovement : true});
+							}
+							else {
+								pRidden.update(vTarget, {RidingMovement : true});
+							}
 						}
 					}
 					else {
@@ -1017,22 +1028,22 @@ class Ridingmanager {
 		}
 	}
 	
-	static RequestMoveRidden(pRidden, pRelativChanges, pInfos) {
+	static RequestMoveRidden(pRidden, pRelativChanges, pTotalChanges, pInfos) {
 		if (game.user.isGM) {
-			Ridingmanager.MoveRiddenGM(pRidden, pRelativChanges, pInfos);
+			Ridingmanager.MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos);
 		}
 		else {
 			if (!game.paused && pRidden) {
-				game.socket.emit("module."+cModuleName, {pFunction : "MoveRiddenRequest", pData : {pRiddenID : pRidden.id, pSceneID : FCore.sceneof(pRidden).id, pRelativChanges : pRelativChanges, pInfos : pInfos}});
+				game.socket.emit("module."+cModuleName, {pFunction : "MoveRiddenRequest", pData : {pRiddenID : pRidden.id, pSceneID : FCore.sceneof(pRidden).id, pRelativChanges : pRelativChanges, pTotalChanges : pTotalChanges, pInfos : pInfos}});
 			}
 		}
 	}
 	
-	static MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos) {
+	static MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pTotalChanges, pInfos) {
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
 			
-			Ridingmanager.MoveRiddenGM(RideableUtils.TokenfromID(pRiddenID, vScene), pRelativChanges, pInfos);
+			Ridingmanager.MoveRiddenGM(RideableUtils.TokenfromID(pRiddenID, vScene), pRelativChanges, pTotalChanges, pInfos);
 		}
 	}
 	
@@ -1096,8 +1107,8 @@ async function UnsetRidingHeight(pRiderTokens, pRiddenTokens) {
 	await Ridingmanager.UnsetRidingHeight(pRiderTokens, pRiddenTokens);
 }
 
-function MoveRiddenRequest({pRiddenID, pSceneID, pRelativChanges, pInfos} = {}) {
-	Ridingmanager.MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pInfos);
+function MoveRiddenRequest({pRiddenID, pSceneID, pRelativChanges, pTotalChanges, pInfos} = {}) {
+	Ridingmanager.MoveRiddenRequest(pRiddenID, pSceneID, pRelativChanges, pTotalChanges, pInfos);
 }
 
 function SyncSortRequest({pDocumentID, pCollectionName, pSceneID, pSort} = {}) {
