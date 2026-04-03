@@ -1,3 +1,7 @@
+## v5.0.0
+- v14 compatibility
+- Changed default following key from F to G to prevent collision with core foundry keys
+
 ## v4.1.12
 - Added Brazilian Portuguese translation (thanks to [Paulo “Faren” Henrique](https://github.com/FarenRavirar))
 
