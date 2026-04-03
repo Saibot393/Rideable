@@ -1,3 +1,6 @@
+## v4.1.12
+- Added Brazilian Portuguese translation (thanks to [Paulo “Faren” Henrique](https://github.com/FarenRavirar))
+
 ## v4.1.11
 - Bug fix for ridden movement through rider
 
