@@ -83,6 +83,10 @@ class GeometricUtils {
 	
 	static fourspread(pPoint) {} // returns 4 equally spread points around pPoint
 	
+	static insceneWH(pToken) {} //in scene width and height
+	
+	static xyandsize(pToken) {} //returns in scene size and xy position
+	
 	//sort
 	static sortbymaxdim(pTokens) {} //sorts pTokens array by their largest dimensions, returns sorted array and array with their values
 	
@@ -347,6 +351,14 @@ class GeometricUtils {
 			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y - pPoint.insceneHeight/4}, //TL
 			{x : pPoint.x - pPoint.insceneWidth/4, y : pPoint.y + pPoint.insceneHeight/4}  //BL
 		]
+	}
+	
+	static insceneWH(pToken) {
+		return {height : GeometricUtils.insceneHeight(pToken), width : GeometricUtils.insceneWidth(pToken)};
+	}
+	
+	static xyandsize(pToken) {
+		return {...GeometricUtils.insceneWH(pToken), ...GeometricUtils.CenterPositionXY(pToken)}
 	}
 	
 	//sort

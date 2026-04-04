@@ -26,6 +26,8 @@ class FollowingManager {
 	
 	static async PlanDestack(pToken) {} //plans a new position for pToken that does not collide with other followers of same target
 	
+	static async PlanDestackRoutes(pRoutes) {} //plans a destack for the given routes
+	
 	static updateFollowedList() {} //updates the followed list
 	
 	static replaceFollowerListIDs(pOldIDs, pNewIDs) {} //replaces pOldID on vFollowedList with pNewID
@@ -162,15 +164,17 @@ class FollowingManager {
 			let vSceneDistanceFactor;
 			
 			let vTarget = pInfos.Target;
-			
-			let vDistance = pInfos.Distance;
 				
 			if (vScene) {
 				vSceneDistanceFactor = (vScene.dimensions.size)/(vScene.dimensions.distance);
 			}
 
+			let vRouteData = [];
+			
 			for (let i = 0; i < pFollowers.length; i++) {
 				//calculate target and scene (if necessary)
+				let vDistance = pInfos.Distance;
+				
 				if (!pInfos.Scene) {
 					vScene = pFollowers[i].parent;
 					
@@ -199,14 +203,24 @@ class FollowingManager {
 				
 				vRoute.forEach(vPoint => vPoint.RidingMovement = pInfos.RidingMovement);
 
-				if (game.release.generation > 12) {
-					pFollowers[i].move(vRoute, {RideableFollowingMovement : true, RidingMovement : pInfos.RidingMovement});
+				vRouteData.push({token : pFollowers[i], route : vRoute});
+			}
+			
+				
+			if (game.release.generation > 12) {
+
+				let vDestackedRoutes = await FollowingManager.PlanDestackRoutes(vRouteData);
+
+				for (let vData of vDestackedRoutes) {
+					vData.token.move(vData.route, {RideableFollowingMovement : true, RidingMovement : pInfos.RidingMovement});
 				}
-				else {
-					await RideableFlags.setplannedRoute(pFollowers[i], vRoute);
+			}
+			else {
+				for (let vData of vRouteData) {
+					await RideableFlags.setplannedRoute(vData.token, vData.route);
 					
 					if (pInfos.StartRoute) {
-						FollowingManager.gotonextPointonRoute(pFollowers[i]);
+						FollowingManager.gotonextPointonRoute(vData.token);
 					}
 				}
 			}
@@ -284,6 +298,56 @@ class FollowingManager {
 				}
 			}
 		}
+	}
+	
+	static async PlanDestackRoutes(pRoutes) {
+		let vRoutesData = pRoutes.map((pRouteData) => {return {...pRouteData, tokenSize : GeometricUtils.insceneWH(pRouteData.token)}});
+		
+		for (let vTestData of vRoutesData) {
+			let vColliders = vRoutesData.filter(vData => vData != vTestData);
+			
+			let vCollided = vColliders.find(vData => GeometricUtils.DistanceXY(vData.route.at(-1), vTestData.route.at(-1)) < Math.min(vData.tokenSize.width + vTestData.tokenSize.width, vData.tokenSize.height + vTestData.tokenSize.height)/2);
+			
+			if (vCollided) {
+				let vCorrectionLength = Math.min(vCollided.tokenSize.width + vTestData.tokenSize.width, vCollided.tokenSize.height + vTestData.tokenSize.height)/8;
+				
+				let vCorrectionVector;
+				
+				const cTestDataPosition = vTestData.route.at(-1);
+				const cColidedPosition = vCollided.route.at(-1);
+				
+				if (cTestDataPosition.x != cColidedPosition.x || cTestDataPosition.y != cColidedPosition.y) {
+					vCorrectionVector = [cTestDataPosition.x - cColidedPosition.x, cTestDataPosition.y - cColidedPosition.y];
+				}
+				else {
+					//move Token with higher ID in random direction
+					if (vTestData.token.id > vCollided.token.id) {
+						let vXDir = Math.random()-0.5;
+						let vYDir = Math.random()-0.5;
+						
+						vCorrectionVector = [vXDir, vYDir];
+					}
+				}
+				if (vCorrectionVector) {
+					let vMinScale = 0;
+					
+					if (canvas.grid.type > 0) {
+						//increase move vector for grid snap
+						vMinScale = canvas.grid.size;
+					}
+					
+					vCorrectionVector = GeometricUtils.scaleto(vCorrectionVector, Math.max(vCorrectionLength, vMinScale));
+					
+					let vCorrectedPosition = GeometricUtils.GridSnapxy({x : cTestDataPosition.x + vCorrectionVector[0], y : cTestDataPosition.y + vCorrectionVector[1]});
+					
+					if (!CONFIG.Canvas.polygonBackends["move"].testCollision(cTestDataPosition, {x : vCorrectedPosition.x + vTestData.tokenSize.width/2, y : vCorrectedPosition.y + vTestData.tokenSize.height/2}, {type : "move", mode: "any"})) {
+						vTestData.route[vTestData.route.length-1] = vCorrectedPosition;
+					}
+				}
+			}
+		}
+		
+		return vRoutesData;
 	}
 	
 	static updateFollowedList(pAddTokens) {
