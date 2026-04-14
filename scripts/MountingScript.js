@@ -281,9 +281,9 @@ class MountingManager {
 				vRiddenTokens[i] = RideableFlags.RiddenToken(vRiderTokens[i]);
 			}
 				
-			await RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
-			
 			await UnsetRidingHeight(vRiderTokens, vRiddenTokens);
+						
+			await RideableFlags.stopRiding(vRiderTokens, pRemoveRiddenreference);
 			
 			for (let i = 0; i < vRiderTokens.length; i++) {
 				let vRiddenToken = RideableFlags.RiddenToken(vRiderTokens[i]);

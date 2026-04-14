@@ -341,7 +341,7 @@ class FollowingManager {
 					let vCorrectedPosition = GeometricUtils.GridSnapxy({x : cTestDataPosition.x + vCorrectionVector[0], y : cTestDataPosition.y + vCorrectionVector[1]});
 					
 					if (!CONFIG.Canvas.polygonBackends["move"].testCollision(cTestDataPosition, {x : vCorrectedPosition.x + vTestData.tokenSize.width/2, y : vCorrectedPosition.y + vTestData.tokenSize.height/2}, {type : "move", mode: "any"})) {
-						vTestData.route[vTestData.route.length-1] = vCorrectedPosition;
+						vTestData.route.push({...cTestDataPosition, ...vCorrectedPosition});//[vTestData.route.length-1] = vCorrectedPosition;
 					}
 				}
 			}
