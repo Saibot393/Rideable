@@ -1,3 +1,8 @@
+## v5.0.1
+- Fixed bugs with token following:
+  - The following distance should now be applied correctly
+  - Token destacking now works again
+
 ## v5.0.0
 - v14 compatibility
 - Changed default following key from F to G to prevent collision with core foundry keys
