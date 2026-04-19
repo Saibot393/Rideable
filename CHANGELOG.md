@@ -1,3 +1,6 @@
+## v5.0.3
+- Fixed rotation link in case of piloting
+
 ## v5.0.2
 - Small improvement to destacking route for token following
 - [D&D5e] Unmounting tokens will now move the rider token back to ground level even if the system prevents the move due to the destination being occupied by the mount
