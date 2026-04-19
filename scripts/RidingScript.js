@@ -138,6 +138,7 @@ class Ridingmanager {
 						
 						let vRelativChanges = {...Ridingmanager.MovementDelta(pToken, pchanges), ...Ridingmanager.keydownMoveReplacement()};
 						let vTotalChanges = {...pchanges};
+						
 						/*
 						for (let i = 0; i < cMotionProperties.length; i++) {
 							if (pchanges.hasOwnProperty(cMotionProperties[i])) {
@@ -985,6 +986,7 @@ class Ridingmanager {
 													
 						if (RideableFlags.CheckPilotedCollision(pRidden)) {
 							let vCurrentPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden));
+							
 							let vTargetPoints = GeometricUtils.fourspread(GeometricUtils.changedGeometry(pRidden, pRelativChanges));
 							
 							for (let i = 0; i < 4; i++) {
@@ -997,7 +999,7 @@ class Ridingmanager {
 								}
 							}
 						}
-						
+		
 						if (!vCollisions.length) {
 							let vTarget = {};
 							
@@ -1011,6 +1013,7 @@ class Ridingmanager {
 
 							if (game.release.generation > 12) {
 								pRidden.move(vTarget, {RidingMovement : true});
+								pRidden.update({rotation : vTarget.rotation}, {RidingMovement : true});
 							}
 							else {
 								pRidden.update(vTarget, {RidingMovement : true});
