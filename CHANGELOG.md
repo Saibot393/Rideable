@@ -1,3 +1,7 @@
+## v5.0.2
+- Small improvement to destacking route for token following
+- [D&D5e] Unmounting tokens will now move the rider token back to ground level even if the system prevents the move due to the destination being occupied by the mount
+
 ## v5.0.1
 - Fixed bugs with token following:
   - The following distance should now be applied correctly
