@@ -370,7 +370,10 @@ class FollowingManager {
 				else {
 					await CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
 				}
-				await RideableFlags.AddtoPathHistory(pToken, {...GeometricUtils.updatedGeometry(pToken, pchanges), level : pToken.level});
+				
+				if (RideableFlags.isFollowed(pToken)) {
+					await RideableFlags.AddtoPathHistory(pToken, {...GeometricUtils.updatedGeometry(pToken, pchanges), level : pToken.level});
+				}
 			}
 		}
 	}
