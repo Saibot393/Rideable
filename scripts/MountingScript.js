@@ -488,7 +488,8 @@ class MountingManager {
 					}
 				}
 				
-				vButton.click((pEvent) => {MountingManager.RequestToggleMount(vRiders, vMount)});
+				//vButton.click((pEvent) => {MountingManager.RequestToggleMount(vRiders, vMount)});
+				vButton.onclick = (pEvent) => {MountingManager.RequestToggleMount(vRiders, vMount)}
 			}
 		}
 	}
