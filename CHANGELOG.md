@@ -1,3 +1,6 @@
+## v5.0.4
+- Small token following performance improvement
+
 ## v5.0.3
 - Fixed rotation link in case of piloting
 
