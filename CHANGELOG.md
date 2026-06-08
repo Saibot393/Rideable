@@ -1,3 +1,6 @@
+## v5.0.5
+- Bug fix for mount token button
+
 ## v5.0.4
 - Small token following performance improvement
 
