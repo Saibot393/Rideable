@@ -5,7 +5,7 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 import { updatePathHistory, calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
-import { RideableCompUtils, cTerrainMapper, cTerrainMapperOLD} from "./compatibility/RideableCompUtils.js";
+import { RideableCompUtils } from "./compatibility/RideableCompUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
@@ -898,12 +898,12 @@ class Ridingmanager {
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety) || (pRider.level != pRiddenToken.level)) {
 			if (game.release.generation > 12) {
-				if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
+				/*if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
 					await pRider.update({x: vTargetx, y: vTargety}, vOptions);
 				}
-				else {
-					await pRider.move({x: vTargetx, y: vTargety, level : pRiddenToken.level}, vOptions);
-				}
+				else {*/
+				await pRider.move({x: vTargetx, y: vTargety, level : pRiddenToken.level}, vOptions);
+				//}
 			}
 			else {
 				await pRider.update({x: vTargetx, y: vTargety}, vOptions);
