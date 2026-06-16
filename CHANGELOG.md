@@ -1,3 +1,6 @@
+## v5.0.6
+- Removed temporary fix for terrain mapper, as bug was solved (with terrain mapper v14.0.1)
+
 ## v5.0.5
 - Bug fix for mount token button
 
