@@ -27,6 +27,8 @@ export {cTokenForms, cTileForms, cGradtoRad}
 class GeometricUtils {
 	//DECLARATIONS
 	//basics
+	static OffsetFactor(pObject) {} //1 for tokens, 0 for tiles (since x/y is saved differently)
+	
 	static Rotated(pPosition, protation) {} //gives px, py rotated by protation[degrees]
 	
 	static CenterPosition(pToken, pTokenReplacementPosition = {}) {} //returns the position of the Center of pToken
@@ -112,26 +114,38 @@ class GeometricUtils {
 	
 	//IMPLEMENTATIONS
 	//basics
+	static OffsetFactor(pObject) {
+		if (game.release.generation < 14) return 1; //pre v14 tokens and tiles worked the same (for the purpose of x/y offset calculations
+		
+		let vDocument = pObject.document ? pObject.document : pObject;
+		
+		return vDocument.documentName == "Token" ? 1 : 0;
+	}
+	
 	static Rotated(pPosition, protation) {
 		return [Math.cos(cGradtoRad * protation) * pPosition[0] - Math.sin(cGradtoRad * protation) * pPosition[1], Math.sin(cGradtoRad * protation) * pPosition[0] + Math.cos(cGradtoRad * protation) * pPosition[1]];
 	}
 	
 	static CenterPosition(pToken, pTokenReplacementPosition = {}) {
+		const cOffsetFactor = GeometricUtils.OffsetFactor(pToken);
+		
 		if (pTokenReplacementPosition.hasOwnProperty("x") && pTokenReplacementPosition.hasOwnProperty("y")) {
-			return [pTokenReplacementPosition.x + GeometricUtils.insceneWidth(pToken)/2, pTokenReplacementPosition.y + GeometricUtils.insceneHeight(pToken)/2];
+			return [pTokenReplacementPosition.x + cOffsetFactor * GeometricUtils.insceneWidth(pToken)/2, pTokenReplacementPosition.y + cOffsetFactor * GeometricUtils.insceneHeight(pToken)/2];
 		}
 		else {
-			return [pToken.x + GeometricUtils.insceneWidth(pToken)/2, pToken.y + GeometricUtils.insceneHeight(pToken)/2];
+			return [pToken.x + cOffsetFactor * GeometricUtils.insceneWidth(pToken)/2, pToken.y + cOffsetFactor * GeometricUtils.insceneHeight(pToken)/2];
 		}
 	}
 
 	static CenterPositionXY(pToken, pXYReplacement = undefined) {
+		const cOffsetFactor = GeometricUtils.OffsetFactor(pToken);
+		
 		if (pToken) {
 			if (pXYReplacement) {
-				return {x: pXYReplacement.x + GeometricUtils.insceneWidth(pToken)/2, y: pXYReplacement.y + GeometricUtils.insceneHeight(pToken)/2};
+				return {x: pXYReplacement.x + cOffsetFactor * GeometricUtils.insceneWidth(pToken)/2, y: pXYReplacement.y + cOffsetFactor * GeometricUtils.insceneHeight(pToken)/2};
 			}
 			else {
-				return {x: pToken.x + GeometricUtils.insceneWidth(pToken)/2, y: pToken.y + GeometricUtils.insceneHeight(pToken)/2};
+				return {x: pToken.x + cOffsetFactor * GeometricUtils.insceneWidth(pToken)/2, y: pToken.y + cOffsetFactor * GeometricUtils.insceneHeight(pToken)/2};
 			}
 		}
 		else {
@@ -140,6 +154,8 @@ class GeometricUtils {
 	}
 	
 	static updatedGeometry(pToken, pChange = {}) {
+		const cOffsetFactor = GeometricUtils.OffsetFactor(pToken);
+		
 		let vData = {};
 		
 		for (let vKey of ["x", "y", "width", "height", "rotation"]) {
@@ -148,10 +164,12 @@ class GeometricUtils {
 		
 		let vScale = pToken.documentName == "Token" ? FCore.sceneof(pToken).dimensions.size : 1;
 		
-		return {...vData, x : vData.x + vScale * vData.width / 2, y : vData.y + vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + vScale * vData.width / 2, 1 : vData.y + vScale * vData.height / 2};
+		return {...vData, x : vData.x + cOffsetFactor * vScale * vData.width / 2, y : vData.y + cOffsetFactor * vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + cOffsetFactor * vScale * vData.width / 2, 1 : vData.y + cOffsetFactor * vScale * vData.height / 2};
 	}
 	
 	static changedGeometry(pToken, pChange = {}) {
+		const cOffsetFactor = GeometricUtils.OffsetFactor(pToken);
+		
 		let vData = {};
 		
 		for (let vKey of ["x", "y", "width", "height", "rotation"]) {
@@ -160,7 +178,7 @@ class GeometricUtils {
 		
 		let vScale = pToken.documentName == "Token" ? FCore.sceneof(pToken).dimensions.size : 1;
 		
-		return {...vData, x : vData.x + vScale * vData.width / 2, y : vData.y + vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + vScale * vData.width / 2, 1 : vData.y + vScale * vData.height / 2};
+		return {...vData, x : vData.x + cOffsetFactor * vScale * vData.width / 2, y : vData.y + cOffsetFactor * vScale * vData.height / 2, insceneWidth : vScale * vData.width, insceneHeight : vScale * vData.height, 0 : vData.x + cOffsetFactor * vScale * vData.width / 2, 1 : vData.y + cOffsetFactor * vScale * vData.height / 2};
 	}
 	
 	static CentertoXY(pPoint, pToken) {
@@ -180,7 +198,9 @@ class GeometricUtils {
 	}
 	
 	static NewCenterPosition(pDocument, pChanges) {
-		let vPosition = [GeometricUtils.insceneWidth(pDocument)/2, GeometricUtils.insceneHeight(pDocument)/2];
+		const cOffsetFactor = GeometricUtils.OffsetFactor(pDocument);
+		
+		let vPosition = [cOffsetFactor * GeometricUtils.insceneWidth(pDocument)/2, cOffsetFactor * GeometricUtils.insceneHeight(pDocument)/2];
 		
 		if (pChanges.hasOwnProperty("x")) {
 			vPosition[0] = vPosition[0] + pChanges.x;
