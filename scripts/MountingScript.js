@@ -579,9 +579,9 @@ class MountingManager {
 				await RideableFlags.resetSize(pRider);
 			}
 			
-			RideableFlags.resetScale(pRider);
+			await RideableFlags.resetScale(pRider);
 			
-			RideableFlags.resetPositionLock(pRider);
+			await RideableFlags.resetPositionLock(pRider);
 		}
 		
 		EffectManager.onRiderUnMount(pRider, pRidden, pRidingOptions);

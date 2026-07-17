@@ -58,6 +58,7 @@ class FollowingManager {
 	}
 	
 	static async FollowToken(pFollowers, pTarget, pDistance = -1) {
+		console.log(pFollowers, pTarget, pDistance);
 		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
 		
 		for (let i = 0; i < vFollowers.length; i++) {
@@ -581,7 +582,7 @@ export function SelectedToggleFollwing() {return FollowingManager.SelectedToggle
 
 export function SelectedToggleFollwingatDistance(pDistance) {return FollowingManager.SelectedToggleFollwing(true, pDistance)};
 
-export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1) {FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
+export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1) {console.log(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1); console.log(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)),  RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID))); FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
 
 export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
 
