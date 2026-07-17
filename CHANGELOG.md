@@ -1,3 +1,6 @@
+## v5.0.7
+- Fix for tile geometry calculation in v14
+
 ## v5.0.6
 - Removed temporary fix for terrain mapper, as bug was solved (with terrain mapper v14.0.1)
 
