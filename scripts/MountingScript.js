@@ -7,6 +7,7 @@ import { RideablePopups } from "./helpers/RideablePopups.js";
 import { RequestUpdateRidderTokens, UpdateRidderTokens, UnsetRidingHeight, cGrapplePlacements } from "./RidingScript.js";
 import { TileUtils } from "./utils/TileUtils.js";
 import { EffectManager } from "./helpers/EffectManager.js";
+import { EffectManagerv2 } from "./helpers/EffectManagerv2.js";
 
 const cRideableIcon = "fas fa-horse";
 const cWeightIcon = "fa-solid fa-weight-hanging";
@@ -537,24 +538,26 @@ class MountingManager {
 				}
 			}
 			
+			await EffectManagerv2.applyEffects(pRider, pRidden, {reach : true});
+			
 			if (game.settings.get(cModuleName, "FitRidersize")) {
 				await RideableFlags.savecurrentSize(pRider);
 			}
 			
 			RideableFlags.ApplyRidersScale(pRidden, [pRider]);
+			
+			let vRidingOptions = {...pRidingOptions};
+			
+			if (game.settings.get(cModuleName, "SpeedAdjustment") == "all") {
+				pRidingOptions.RiderModifiers = RideableUtils.MovementEffectOverrides(pRidden);
+			}
+			
+			EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
+			
+			MountingManager.ProxySelect(pRider);
+			
+			MountingManager.updateMountItem(pRidden);
 		}
-		
-		let vRidingOptions = {...pRidingOptions};
-		
-		if (game.settings.get(cModuleName, "SpeedAdjustment") == "all") {
-			pRidingOptions.RiderModifiers = RideableUtils.MovementEffectOverrides(pRidden);
-		}
-		
-		EffectManager.onRiderMount(pRider, pRidden, pRidingOptions);
-		
-		MountingManager.ProxySelect(pRider);
-		
-		MountingManager.updateMountItem(pRidden);
 		
 		Hooks.callAll(cModuleName + "." + "Mount", pRider, pRidden, pRidingOptions);
 	} 
@@ -574,6 +577,8 @@ class MountingManager {
 					}
 				}
 			}
+			
+			await EffectManagerv2.deleteRideableEffects(pRider, {reach : true});
 			
 			if (game.settings.get(cModuleName, "FitRidersize")) {
 				await RideableFlags.resetSize(pRider);

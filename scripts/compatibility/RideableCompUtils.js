@@ -26,6 +26,7 @@ const cMATT = "monks-active-tiles";
 const cCPR = "chris-premades";
 const cTerrainMapper = "terrainmapper";//"fvtt-terrain-mapper";
 const cTerrainMapperOLD = "fvtt-terrain-mapper";
+const cPf1e = "pf1";
 
 //SpecialFlags
 const cPreviousIDF = "PreviousIDFlag"; //Flag for saving previous ID, used in compatibility with [stairways]
@@ -39,7 +40,7 @@ const cGrabbedEffectName = "Grappled"; //For convenient effects
 
 const cTokenFormAttachedTiles = "TokenFormAttachedTiles"; //For Token Attacher
 
-export { cDnD5e, cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT, cCPR, cTerrainMapper, cTerrainMapperOLD }
+export { cDnD5e, cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT, cCPR, cTerrainMapper, cTerrainMapperOLD, cPf1e }
 export { cRideableTag, cGrabbedEffectName, cTokenFormAttachedTiles }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility
