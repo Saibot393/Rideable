@@ -1,3 +1,6 @@
+## v5.0.8
+- Experimental fix for auto rescale bug
+
 ## v5.0.7
 - Fix for tile geometry calculation in v14
 
