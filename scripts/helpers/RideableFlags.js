@@ -48,6 +48,7 @@ const cFollowOrderPlayerIDF = "FollowOrderPlayerIDFlag"; //Player id that issued
 const cPathHistoryF = "PathHistoryFlag"; //FLag to store the Path history of a token
 const cUseRidingHeightF = "UseRidingHeightFlag"; //Flag to store wether the riding height should be used
 const cRegisteredActorEffectsF = "RegisteredActorEffectsFlag"; //FLag that stores the names of special effects for this actor
+const cApplyReachEffectF = "ApplyReachEffectFlag"; //Flag to determin if this mount applies the system specific ReachEffectFlag to adjust reach for riders
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -57,7 +58,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cRegisteredActorEffectsF, cApplyReachEffectF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -242,6 +243,8 @@ class RideableFlags {
 	static SelfApplyCustomEffects(pObject) {} //if this tokens self applies the mounting effects on mount
 	
 	static IsActorEffect(pActor, pEffect) {} //returns if pEffect is registered as special effect of pActor and if so, which kind ["riding", "grapple", "forMount"]
+	
+	static ApplyReachEffect(pToken) {} //return if this pToken applies the reach effect to its riders
 	
 	//items
 	static markasMountItem(pItem) {} //marks item object (not instance of item) as mount object (before it is created)
@@ -852,6 +855,20 @@ class RideableFlags {
 		
 		return {}; //default if anything fails			
 	}
+	
+	static #ApplyReachEffectFlag (pToken) {
+		//returns content of ApplyReachEffectFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cApplyReachEffectF)) {
+				return vFlag.ApplyReachEffectFlag;
+			}
+		}
+		
+		return false; //default if anything fails		
+	}
+	
 	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
@@ -1746,6 +1763,10 @@ class RideableFlags {
 				}
 			}
 		}
+	}
+	
+	static ApplyReachEffect(pToken) {
+		return RideableFlags.#ApplyReachEffectFlag(pToken);
 	}
 	
 	//items

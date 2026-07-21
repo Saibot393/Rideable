@@ -536,9 +536,9 @@ class MountingManager {
 						RideablePopups.TextPopUpID(pRider ,"Mounting", {pRiddenName : RideableFlags.RideableName(pRidden)}, {type : "success"}); //MESSAGE POPUP
 					}
 				}
+				
+				await EffectManagerv2.applyEffects(pRider, pRidden, {reach : RideableFlags.ApplyReachEffect(pRidden)});
 			}
-			
-			await EffectManagerv2.applyEffects(pRider, pRidden, {reach : true});
 			
 			if (game.settings.get(cModuleName, "FitRidersize")) {
 				await RideableFlags.savecurrentSize(pRider);

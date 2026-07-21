@@ -549,6 +549,11 @@
 			"PilotedbyDefaultFlag" : {
 				"name"					: "Piloted by default",
 				"descrp"				: "If everyone riding this token automatically pilots this token (not compatible with \"Riders can move freely\")"
+			},
+			
+			"ApplyReachEffectFlag" : {
+				"name"					: "Apply reach effect",
+				"descrp"				: "If this mount should apply a system specific effect to its mounts to adjust the reach to comply with system rules"
 			}
 		},
 		
@@ -558,6 +563,13 @@
 			"MountItem" : {
 				"name" 					: "Mounted weight",
 				"descrp"				: "Weight added by mounted creatures:"
+			}
+		},
+		
+		"Effects" : {
+			"Reach" : {
+				"name" 					: "Reach adjustment",
+				"descrp"				: "<p>Adjusts:</p><ul><li>Makes large (mounting will adjust visual size, you will remain large and centered while mounted)</li><li>Adjusts carry modifier to reflect not actually being large.</li><li>Adjust skills, attack, ac, cmb, etc. to reflect not actually being large.</li><li>Macro on toggle to change between long/tall to enforce correct reach rules.</li></ul>"
 			}
 		},
 		

@@ -1,8 +1,9 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cApplyReachEffectF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 import { RideableCompUtils } from "../compatibility/RideableCompUtils.js";
+import { EffectManagerv2, cEffectTypeReach } from "../helpers/EffectManagerv2.js";
 
 const cRideableIcon = "fas fa-horse";
 
@@ -208,6 +209,16 @@ class RideableSheetSettings {
 																vvalue : RideableFlags.RiderscanMoveWithin(pApp.document), 
 																vflagname : cInsideMovementF
 																}, `div[data-tab="${cModuleName}"]`);
+									
+					if (EffectManagerv2.hasSystemEffect(cEffectTypeReach)) {
+						//If this Token applies reach effects to its Mounts
+						RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cApplyReachEffectF +".name"), 
+																	vhint : Translate("TokenSettings."+ cApplyReachEffectF +".descrp"), 
+																	vtype : "checkbox", 
+																	vvalue : RideableFlags.ApplyReachEffect(pApp.document), 
+																	vflagname : cApplyReachEffectF
+																	}, `div[data-tab="${cModuleName}"]`);
+					}
 																
 					if (game.user.isGM) {//GM settings
 						let vGMTittleHTML = fromHTML(`

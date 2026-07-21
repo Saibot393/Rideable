@@ -549,6 +549,11 @@
 			"PilotedbyDefaultFlag" : {
 				"name"					: "standardmäßig gesteuert",
 				"descrp"				: "Ob jeder Spieler der diese Figur reitet sie auch automatisch steuert (nicht kompatibel mit \"Reiter können sich frei bewegen\")"
+			},
+			
+			"ApplyReachEffectFlag" : {
+				"name"					: "Reichweite Effekt Anwenden",
+				"descrp"				: "Ob dieses Reittier einen System spezifischen Effekt auf seine Reiter anwenden soll, um die Reichweite entsprechend der Regeln anzupassen"
 			}
 		},
 		
@@ -558,6 +563,13 @@
 			"MountItem" : {
 				"name" 					: "Reitgewicht",
 				"descrp"				: "Gewicht der reitenden Figuren:"
+			}
+		},
+		
+		"Effects" : {
+			"Reach" : {
+				"name" 					: "Reichweite Anpassung",
+				"descrp"				: "<p>Adjusts:</p><ul><li>Makes large (mounting will adjust visual size, you will remain large and centered while mounted)</li><li>Adjusts carry modifier to reflect not actually being large.</li><li>Adjust skills, attack, ac, cmb, etc. to reflect not actually being large.</li><li>Macro on toggle to change between long/tall to enforce correct reach rules.</li></ul>"
 			}
 		},
 		
