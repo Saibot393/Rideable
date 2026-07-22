@@ -1,3 +1,6 @@
+## v5.0.9
+- [Pf1e] : Added per mount setting to let this mount apply an effect to adjust the reach of its riders, based on system rules
+
 ## v5.0.8
 - Experimental fix for auto rescale bug
 
