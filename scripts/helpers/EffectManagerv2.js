@@ -16,7 +16,7 @@ Hooks.once("ready", () => {
 		[cPf1e] : {
 			effectIsItem : true,
 			reach : {
-			  "img": "systems/pf1/icons/feats/animal-affinity.jpg",
+			  "type": "buff",
 			  "name": `${Translate("Effects.Reach.name")} [${Translate("Titles.Rideable")}]`,
 			  "system": {
 				"description": {
@@ -26,13 +26,13 @@ Hooks.once("ready", () => {
 				"tags": [],
 				"changes": [
 				  {
-					"_id": "6vyr9Ovl",
+					"_id": "XqVuMtYd",
 					"formula": "-0.5",
 					"target": "carryMult",
 					"type": "untyped"
 				  },
 				  {
-					"_id": "BJwfC9C3",
+					"_id": "qsOA3XK4",
 					"formula": "1",
 					"target": "size",
 					"type": "untyped",
@@ -41,7 +41,7 @@ Hooks.once("ready", () => {
 				  },
 				  {
 					"type": "size",
-					"_id": "VRWk1gcD",
+					"_id": "jlYU8mp0",
 					"operator": "add",
 					"priority": 0,
 					"formula": "1",
@@ -53,7 +53,7 @@ Hooks.once("ready", () => {
 					"priority": 0,
 					"formula": "1",
 					"target": "attack",
-					"_id": "rJNiRIrd"
+					"_id": "8BWajXC5"
 				  },
 				  {
 					"type": "size",
@@ -61,7 +61,7 @@ Hooks.once("ready", () => {
 					"priority": 0,
 					"formula": "-1",
 					"target": "cmb",
-					"_id": "wEhBQ6Vk"
+					"_id": "JAbcjnrr"
 				  },
 				  {
 					"type": "size",
@@ -69,7 +69,7 @@ Hooks.once("ready", () => {
 					"priority": 0,
 					"formula": "-1",
 					"target": "cmd",
-					"_id": "5uRkhiiG"
+					"_id": "YsUZN9Kg"
 				  },
 				  {
 					"type": "size",
@@ -77,7 +77,7 @@ Hooks.once("ready", () => {
 					"priority": 0,
 					"formula": "+2",
 					"target": "skill.fly",
-					"_id": "B8gml9LI"
+					"_id": "CnnothmS"
 				  },
 				  {
 					"type": "size",
@@ -85,7 +85,7 @@ Hooks.once("ready", () => {
 					"priority": 0,
 					"formula": "+4",
 					"target": "skill.ste",
-					"_id": "GrvyMx88"
+					"_id": "hBGBReFe"
 				  }
 				],
 				"changeFlags": {
@@ -115,7 +115,10 @@ Hooks.once("ready", () => {
 				},
 				"tag": "",
 				"flags": {
-				  "boolean": {},
+				  "boolean": {
+					"bonus_effective-size": true,
+					"target_action-type": true
+				  },
 				  "dictionary": {}
 				},
 				"scriptCalls": [
@@ -135,34 +138,34 @@ Hooks.once("ready", () => {
 				"duration": {
 				  "value": "@item.level",
 				  "units": "",
-				  "end": "turnStart",
-				  "start": 1747440169
+				  "end": "turnStart"
 				},
 				"conditions": [],
 				"hideFromToken": false,
+				"showInQuickbar": false,
 				"sources": [
 				  {
 					"id": "PZO1110",
 					"pages": "277, 278"
 				  }
-				],
-				"showInQuickbar": false
+				]
 			  },
-			  "type": "buff",
+			  "img": "systems/pf1/icons/feats/animal-affinity.jpg",
 			  "effects": [
 				{
-				  "name": "Riding",
+				  "name": Translate("Effects.Reach.descrp"),
 				  "img": "systems/pf1/icons/feats/animal-affinity.jpg",
-				  "origin": ".Item.e6hU7GQCwJUqorcr",
 				  "duration": {
-					"startTime": 1747440169,
 					"seconds": 60,
-					"combat": null
+					"combat": null,
+					"startRound": 2,
+					"startTurn": 15
 				  },
 				  "disabled": false,
 				  "type": "buff",
 				  "system": {
-					"end": "turnStart"
+					"end": "turnStart",
+					"initiative": 4.03
 				  },
 				  "transfer": true,
 				  "flags": {
@@ -187,7 +190,37 @@ Hooks.once("ready", () => {
 				  }
 				}
 			  ],
-			  "flags": {},
+			  "flags": {
+				"Rideable": {
+				  "isRideableFlag": true,
+				  "RideableEffectsTypes": [
+					"reach"
+				  ]
+				},
+				"ckl-roll-bonuses": {
+				  "bonus_effective-size": "-1",
+				  "target_action-type-types": [
+					"is-weapon"
+				  ]
+				}
+			  },
+			  "_stats": {
+				"compendiumSource": "Item.ZvNEB8tVtl9q8JmP",
+				"duplicateSource": null,
+				"exportSource": {
+				  "worldId": "my-first-world",
+				  "uuid": "Item.ZvNEB8tVtl9q8JmP",
+				  "coreVersion": "13.351",
+				  "systemId": "pf1",
+				  "systemVersion": "11.11"
+				},
+				"coreVersion": "13.351",
+				"systemId": "pf1",
+				"systemVersion": "11.11",
+				"createdTime": 1784665368636,
+				"modifiedTime": 1784665453444,
+				"lastModifiedBy": "m3WheMuDXU2GGZzf"
+			  },
 			  "ownership": {
 				"default": 0
 			  }

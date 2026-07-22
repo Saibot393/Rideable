@@ -569,7 +569,7 @@
 		"Effects" : {
 			"Reach" : {
 				"name" 					: "Reichweite Anpassung",
-				"descrp"				: "<p>Adjusts:</p><ul><li>Makes large (mounting will adjust visual size, you will remain large and centered while mounted)</li><li>Adjusts carry modifier to reflect not actually being large.</li><li>Adjust skills, attack, ac, cmb, etc. to reflect not actually being large.</li><li>Macro on toggle to change between long/tall to enforce correct reach rules.</li></ul>"
+				"descrp"				: "<p>Adjusts:</p><ul><li>Makes large (mounting will adjust visual size, you will remain large and centered while mounted)</li><li>Adjusts carry modifier to reflect not actually being large.</li><li>Adjust skills, attack, effective weapon size, AC, CMB, etc. to reflect not actually being large.</li><li>Macro on toggle to change between long/tall to enforce correct reach rules.</li></ul>"
 			}
 		},
 		
