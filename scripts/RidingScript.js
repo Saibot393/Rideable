@@ -5,7 +5,7 @@ import { RideableUtils, cModuleName } from "./utils/RideableUtils.js";
 import { RideablePopups } from "./helpers/RideablePopups.js";
 import { GeometricUtils, cGradtoRad } from "./utils/GeometricUtils.js";
 import { updatePathHistory, calculatenewRoute, updateFollowedList } from "./FollowingScript.js";
-import { RideableCompUtils } from "./compatibility/RideableCompUtils.js";
+import { RideableCompUtils, cTerrainMapper, cTerrainMapperOLD } from "./compatibility/RideableCompUtils.js";
 
 //positioning options
 const cRowplacement = "RowPlacement"; //place all tokens in a RowPlacement
