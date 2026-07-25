@@ -898,12 +898,12 @@ class Ridingmanager {
 		
 		if ((pRider.x != vTargetx) || (pRider.y != vTargety) || (pRider.level != pRiddenToken.level)) {
 			if (game.release.generation > 12) {
-				/*if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
+				if (RideableCompUtils.isactiveModule(cTerrainMapper) || RideableCompUtils.isactiveModule(cTerrainMapperOLD)) {
 					await pRider.update({x: vTargetx, y: vTargety}, vOptions);
 				}
-				else {*/
-				await pRider.move({x: vTargetx, y: vTargety, level : pRiddenToken.level}, vOptions);
-				//}
+				else {
+					await pRider.move({x: vTargetx, y: vTargety, level : pRiddenToken.level}, vOptions);
+				}
 			}
 			else {
 				await pRider.update({x: vTargetx, y: vTargety}, vOptions);
