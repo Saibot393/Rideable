@@ -1,3 +1,6 @@
+## v5.0.11
+- Fixed problem with Terrain Mapper
+
 ## v5.0.10
 - [Pf1e] : Update to reach effect
 
