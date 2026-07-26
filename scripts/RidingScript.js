@@ -218,21 +218,22 @@ class Ridingmanager {
 		}
 		else {
 			if (!game.paused) {
-				game.socket.emit("module.Rideable", {pFunction : "UpdateRidderTokensRequest", pData : {pRiddenID: pRiddenToken.id, pRidersListIDs: RideableUtils.IDsfromTokens(pRiderTokenList), pSceneID : FCore.sceneof(pRiddenToken).id, pAnimations : pAnimations, pUserID : game.user.id}});
+				game.socket.emit("module.Rideable", {pFunction : "UpdateRidderTokensRequest", pData : {pRiddenID: pRiddenToken.id, pRidersListIDs: RideableUtils.IDsfromTokens(pRiderTokenList), pSceneID : FCore.sceneof(pRiddenToken).id, pAnimations : pAnimations}});
 			}
 		}
 	} 
 	
-	static UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations, pUserID) {
+	static UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations) {
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
 			let vRiddenToken = RideableUtils.TokenfromID(pRiddenID, vScene);
-			
-			if (!vRiddenToken || !vRiddenToken.document.testUserPermission(game.users.get(pUserID), "OWNER")) {
-				return;
-			}
-			
-			Ridingmanager.UpdateRidderTokens(vRiddenToken, RideableUtils.TokensfromIDs(pRidersListIDs, vScene), pAnimations);
+
+			if (!vRiddenToken) { return; }
+
+			let vAllowedRiderIDs = RideableFlags.RiderTokenIDs(vRiddenToken);
+			let vValidRiderIDs = pRidersListIDs.filter(id => vAllowedRiderIDs.includes(id));
+
+			Ridingmanager.UpdateRidderTokens(vRiddenToken, RideableUtils.TokensfromIDs(vValidRiderIDs, vScene), pAnimations);
 		}
 	}
 	
@@ -1104,8 +1105,8 @@ function RequestUpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimatio
 	Ridingmanager.RequestUpdateRidderTokens(pRiddenToken, pRiderTokenList, pAnimations);
 } 
 
-function UpdateRidderTokensRequest({pRiddenID, pRidersListIDs, pSceneID, pAnimations, pUserID} = {}) {
-	Ridingmanager.UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations, pUserID);
+function UpdateRidderTokensRequest({pRiddenID, pRidersListIDs, pSceneID, pAnimations} = {}) {
+	Ridingmanager.UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations);
 }
 
 function UpdateRidderTokens(pRiddenToken, vRiderTokenList, pAnimations = true) {
