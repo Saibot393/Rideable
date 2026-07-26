@@ -234,7 +234,7 @@ class Ridingmanager {
 	static UpdateRidderTokens(pRiddenToken, pRiderTokenList = [], pAnimations = true) {
 		if (pRiddenToken) {
 			if (pRiderTokenList.length > 0) {
-				Ridingmanager.planRiderTokens(pRiddenToken, {}, pRiderTokenList, pAnimations);
+				Ridingmanager.planRiderTokens(pRiddenToken, {}, pRiderTokenList.filter(vRider => RideableFlags.isRiddenby(priddenToken, vRider)), pAnimations);
 			}
 			else {
 				let vRiderTokenList = RideableUtils.TokensfromIDs(RideableFlags.RiderTokenIDs(pRiddenToken), FCore.sceneof(pRiddenToken));
