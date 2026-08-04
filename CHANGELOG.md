@@ -1,3 +1,6 @@
+## v5.0.12
+- Added rider proxy position for pf2e distance calculations
+
 ## v5.0.11
 - Fixed problem with Terrain Mapper
 
