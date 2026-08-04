@@ -8,6 +8,7 @@ import { GeometricUtils } from "../utils/GeometricUtils.js";
 //System Names
 
 const cDnD5e = "dnd5e";
+const cPf2e = "pf2e";
 
 //Module Names
 const cStairways = "stairways";
@@ -40,7 +41,7 @@ const cGrabbedEffectName = "Grappled"; //For convenient effects
 
 const cTokenFormAttachedTiles = "TokenFormAttachedTiles"; //For Token Attacher
 
-export { cDnD5e, cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT, cCPR, cTerrainMapper, cTerrainMapperOLD, cPf1e }
+export { cDnD5e, cPf2e, cStairways, cTagger, cWallHeight, cArmReach, cArmReachold, cLocknKey, cLockTypeRideable, cLibWrapper, cDfredCE, cTokenAttacher, cTokenZ, cRoutingLib, cMATT, cCPR, cTerrainMapper, cTerrainMapperOLD, cPf1e }
 export { cRideableTag, cGrabbedEffectName, cTokenFormAttachedTiles }
 
 //should only be imported by RideableUtils, Rideablesettings and RideableCompatibility

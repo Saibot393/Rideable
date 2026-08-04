@@ -159,6 +159,11 @@
 				"descrp"				: "Allows tokens which have the 'Rideable' trait to be ridden (the \"Rideable\" trait has to be manually added under settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
+			"RiderProxyPositionDefault" : {
+				"name"					: "Proxy Rider position default",
+				"descrp"				: "If riding tokens distance is calculated from the ridden tokens position by default"
+			},
+			
 			"FamiliarRiding" : {
 				"name" 					: "Familiar riding",
 				"descrp"				: "Allows for familiars to ride their master, the familairs will be placed at the corners of their master"				
@@ -554,6 +559,11 @@
 			"ApplyReachEffectFlag" : {
 				"name"					: "Apply reach effect",
 				"descrp"				: "If this mount should apply a system specific effect to its mounts to adjust the reach to comply with system rules"
+			},
+			
+			"RiderProxyPositionFlag" : {
+				"name"					: "Proxy Rider Position",
+				"descrp"				: "Use this tokens position when calculating the distances for its riders"
 			}
 		},
 		

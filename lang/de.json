@@ -159,6 +159,11 @@
 				"descrp"				: "Erlaube das Reiten auf Figuren mit \"Rideable\"-Eigenschaft (die \"Rideable\" Eigenschaft muss manuell eingetragen werden unter Settings>Pathfinder 2nd Edition>Manage Honebrew Elements>Creature Traits)"				
 			},
 			
+			"RiderProxyPositionDefault" : {
+				"name"					: "Rider Proxy Position Standard",
+				"descrp"				: "Ob standardmäßig für alle Reiter einer Figure ihre Distanz von der gerittenen Figure aus berechnet werden soll"
+			},
+			
 			"FamiliarRiding" : {
 				"name" 					: "Vertrauten reiten",
 				"descrp"				: "Erlaubt es Vertrauten, ihrem Meister zu folgen. Die Vertrauten werden hierbei an den Ecken ihres Meister platziert."				
@@ -554,6 +559,11 @@
 			"ApplyReachEffectFlag" : {
 				"name"					: "Reichweite Effekt Anwenden",
 				"descrp"				: "Ob dieses Reittier einen System spezifischen Effekt auf seine Reiter anwenden soll, um die Reichweite entsprechend der Regeln anzupassen"
+			},
+			
+			"RiderProxyPositionFlag" : {
+				"name"					: "Proxy Reiter Position",
+				"descrp"				: "Bei der Distanzberechnung wird für Reiter die Position dieser Figure verwendet"
 			}
 		},
 		

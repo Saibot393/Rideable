@@ -49,6 +49,7 @@ const cPathHistoryF = "PathHistoryFlag"; //FLag to store the Path history of a t
 const cUseRidingHeightF = "UseRidingHeightFlag"; //Flag to store wether the riding height should be used
 const cRegisteredActorEffectsF = "RegisteredActorEffectsFlag"; //FLag that stores the names of special effects for this actor
 const cApplyReachEffectF = "ApplyReachEffectFlag"; //Flag to determin if this mount applies the system specific ReachEffectFlag to adjust reach for riders
+const cRiderProxyPositionF = "RiderProxyPositionFlag"; //Flag to store that this tokens riders have their position at the token when calculating distance (pf2e only)
 
 //limits
 const cCornermaxRiders = 4; //4 corners
@@ -58,7 +59,7 @@ const cPointEpsilon = 1;
 const cPathMaxHistory = 100; //Maximum points saved in the path hsitory of a token
 
 export {cCornermaxRiders};
-export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cRegisteredActorEffectsF, cApplyReachEffectF}
+export {cRidingF, cFamiliarRidingF, cRidersF, caddRiderHeightF, cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cRegisteredActorEffectsF, cApplyReachEffectF, cRiderProxyPositionF}
 
 //handels all reading and writing of flags (other scripts should not touch Rideable Flags (other than possible RiderCompUtils for special compatibilityflags)
 class RideableFlags {
@@ -136,6 +137,8 @@ class RideableFlags {
 	static async resetPositionLock(pToken) {} //set the positionlock of pToken to false
 	
 	static hasPositionLock(pToken) {} //returns position lock state of pToken
+	
+	static RiderProxyPosition(pToken) {} //returns if this tokens riders should have the tokens position when calculating distances
 	
 	//additional infos
 	static TokenForm(pToken) {} //gives back the set form (either circle or rectangle)
@@ -869,6 +872,19 @@ class RideableFlags {
 		return false; //default if anything fails		
 	}
 	
+	static #RiderProxyPositionFlag(pToken) {
+		//returns content of RiderProxyPositionFlag of pToken (if any) (boolean)
+		let vFlag = this.#RideableFlags(pToken);
+		
+		if (vFlag) {
+			if (vFlag.hasOwnProperty(cRiderProxyPositionF)) {
+				return vFlag.RiderProxyPositionFlag;
+			}
+		}
+		
+		return game.settings.get(cModuleName, "RiderProxyPositionDefault"); //default if anything fails		
+	}
+	
 	
 	static async #setRidingFlag (pToken, pContent) {
 	//sets content of RiddenFlag (must be boolean)
@@ -1320,6 +1336,10 @@ class RideableFlags {
 	
 	static hasPositionLock(pToken) {
 		return this.#PositionLockFlag(pToken);
+	}
+	
+	static RiderProxyPosition(pToken) {
+		return this.#RiderProxyPositionFlag(pToken);
 	}
 	
 	//additional infos

@@ -195,6 +195,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: false
   });  
   
+  game.settings.register(cModuleName, "RiderProxyPositionDefault", {
+	name: Translate("Settings.RiderProxyPositionDefault.name"),
+	hint: Translate("Settings.RiderProxyPositionDefault.descrp"),
+	scope: "world",
+	config: RideableUtils.isPf2e(),
+	type: Boolean,
+	default: false
+  });  
+  
   game.settings.register(cModuleName, "FamiliarRiding", {
 	name: Translate("Settings.FamiliarRiding.name"),
 	hint: Translate("Settings.FamiliarRiding.descrp"),

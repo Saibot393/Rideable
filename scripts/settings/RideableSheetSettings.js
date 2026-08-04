@@ -1,5 +1,5 @@
 import { RideableUtils, cModuleName, Translate } from "../utils/RideableUtils.js";
-import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cApplyReachEffectF} from "../helpers/RideableFlags.js";
+import { RideableFlags , cMaxRiderF, cissetRideableF, cTokenFormF, cInsideMovementF, cRiderPositioningF, cSpawnRidersF, ccanbeGrappledF, cRidersScaleF, cCustomRidingheightF, cMountingEffectsF, cWorldMEffectOverrideF, cTileRideableNameF, cMountonEnterF, cGrapplePlacementF, cSelfApplyEffectsF, cAutoMountBlackListF, cAutoMountWhiteListF, cCanbePilotedF, cCheckPilotedCollisionF, cPilotedbyDefaultF, cforMountEffectsF, cRiderOffsetF, cRiderRotOffsetF, cUseRidingHeightF, cGrapplingEffectsF, cApplyReachEffectF, cRiderProxyPositionF} from "../helpers/RideableFlags.js";
 import { cTokenForms, cTileForms } from "../utils/GeometricUtils.js";
 import { cPlacementPatterns, cGrapplePlacements } from "../RidingScript.js";
 import { RideableCompUtils } from "../compatibility/RideableCompUtils.js";
@@ -217,6 +217,15 @@ class RideableSheetSettings {
 																	vtype : "checkbox", 
 																	vvalue : RideableFlags.ApplyReachEffect(pApp.document), 
 																	vflagname : cApplyReachEffectF
+																	}, `div[data-tab="${cModuleName}"]`);
+					}
+					
+					if (RideableUtils.isPf2e() && !pisTile) {
+						RideableSheetSettings.AddHTMLOption(pHTML, {vlabel : Translate("TokenSettings."+ cRiderProxyPositionF +".name"), 
+																	vhint : Translate("TokenSettings."+ cRiderProxyPositionF +".descrp"), 
+																	vtype : "checkbox", 
+																	vvalue : RideableFlags.RiderProxyPosition(pApp.document), 
+																	vflagname : cRiderProxyPositionF
 																	}, `div[data-tab="${cModuleName}"]`);
 					}
 																
