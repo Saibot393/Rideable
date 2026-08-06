@@ -228,9 +228,9 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: 0
   });
   
-  game.settings.register(cModuleName, "FamiliarRidingInner", {
-	name: Translate("Settings.FamiliarRidingInner.name"),
-	hint: Translate("Settings.FamiliarRidingInner.descrp"),
+  game.settings.register(cModuleName, "FamiliarRidingInside", {
+	name: Translate("Settings.FamiliarRidingInside.name"),
+	hint: Translate("Settings.FamiliarRidingInside.descrp"),
 	scope: "world",
 	config: true,
 	type: Boolean,

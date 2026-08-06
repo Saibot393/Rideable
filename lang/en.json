@@ -180,7 +180,7 @@
 				}
 			},
 			
-			"FamiliarRiding" : {
+			"FamiliarRidingInside" : {
 				"name" 					: "Place familiars inside",
 				"descrp"				: "Places familiars within the masters token."				
 			},

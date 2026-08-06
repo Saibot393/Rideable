@@ -180,7 +180,7 @@
 				}
 			},
 			
-			"FamiliarRiding" : {
+			"FamiliarRidingInside" : {
 				"name" 					: "Vertrauten innen platzieren",
 				"descrp"				: "Platziert die Vertrauten im inneren der Meisterfigur."				
 			},
