@@ -32,7 +32,7 @@ class FollowingManager {
 	
 	static replaceFollowerListIDs(pOldIDs, pNewIDs) {} //replaces pOldID on vFollowedList with pNewID
 	
-	static async updatePathHistory(pToken, pchanges) {} //updates the path history for pToken
+	static async updatePathHistory(pToken, pchanges, pFollowCheckOverride = false) {} //updates the path history for pToken
 	
 	//support
 	static async SimplePathHistoryRoute(pFollower, pTarget, pDistance, pInfos = {}) {} //returns the route for pFollower to follow pTarget at pDistance
@@ -58,7 +58,6 @@ class FollowingManager {
 	}
 	
 	static async FollowToken(pFollowers, pTarget, pDistance = -1) {
-		console.log(pFollowers, pTarget, pDistance);
 		let vFollowers = pFollowers.filter(vFollower => (vFollower != pTarget));//.filter(vFollower => !RideableFlags.isFollowing(vFollower));
 		
 		for (let i = 0; i < vFollowers.length; i++) {
@@ -159,6 +158,7 @@ class FollowingManager {
 	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {
+		console.log(pFollowers, pInfos);
 		if (pFollowers.length > 0) {
 			let vScene = pInfos.Scene;
 			
@@ -206,6 +206,8 @@ class FollowingManager {
 
 				vRouteData.push({token : pFollowers[i], route : vRoute});
 			}
+			
+			console.log(vRouteData);
 			
 				
 			if (game.release.generation > 12) {
@@ -361,7 +363,7 @@ class FollowingManager {
 		pNewIDs.forEach(vID => vFollowedList.add(vID));
 	}
 	
-	static async updatePathHistory(pToken, pchanges) {
+	static async updatePathHistory(pToken, pchanges, pFollowCheckOverride = false) {
 		if (game.settings.get(cModuleName, "FollowingAlgorithm") == "SimplePathHistory") {
 			if ((!game.users.find(vUser => vUser.isGM && vUser.active) && pToken.isOwner) || game.user.isGM) {
 				//update path history of pToken
@@ -372,7 +374,7 @@ class FollowingManager {
 					await CanvasAnimation.getAnimation(pToken.object?.animationName)?.promise;
 				}
 				
-				if (RideableFlags.isFollowed(pToken)) {
+				if (RideableFlags.isFollowed(pToken) || pFollowCheckOverride) {
 					await RideableFlags.AddtoPathHistory(pToken, {...GeometricUtils.updatedGeometry(pToken, pchanges), level : pToken.level});
 				}
 			}
@@ -582,7 +584,7 @@ export function SelectedToggleFollwing() {return FollowingManager.SelectedToggle
 
 export function SelectedToggleFollwingatDistance(pDistance) {return FollowingManager.SelectedToggleFollwing(true, pDistance)};
 
-export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1) {console.log(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1); console.log(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)),  RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID))); FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
+export function FollowbyID(pFollowerIDs, pTargetID, pSceneID = null, pDistance = -1) {FollowingManager.FollowToken(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)), RideableUtils.TokenfromID(pTargetID, game.scenes.get(pSceneID)), pDistance)};
 
 export function StopFollowbyID(pFollowerIDs, pSceneID = null) {FollowingManager.StopFollowing(RideableUtils.TokensfromIDs(pFollowerIDs, game.scenes.get(pSceneID)))};
 
@@ -590,7 +592,7 @@ export function calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Dista
 
 export function updateFollowedList() {FollowingManager.updateFollowedList()};
 
-export async function updatePathHistory(pToken, pChanges = undefined) {await FollowingManager.updatePathHistory(pToken, pChanges)};
+export async function updatePathHistory(pToken, pChanges = undefined, pFollowCheckOverride = false) {await FollowingManager.updatePathHistory(pToken, pChanges, pFollowCheckOverride)};
 
 export function RequestreplaceFollowerListIDs ({pPlayers, pOldIDs, pNewIDs} = {}) {if (pPlayers?.includes(game.user.id)) {FollowingManager.replaceFollowerListIDs(pOldIDs, pNewIDs)}}
 

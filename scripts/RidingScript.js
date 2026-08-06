@@ -434,7 +434,7 @@ class Ridingmanager {
 				Ridingmanager.planRelativRiderTokens(pRiddenToken, pChanges, vGrappledList, pAnimations);
 				break;
 			case cFollowing:
-				await updatePathHistory(pRiddenToken, pChanges);
+				await updatePathHistory(pRiddenToken, pChanges, true);
 				calculatenewRoute(vGrappledList, {StartRoute : true, Distance : Math.max(pRiddenToken.width, pRiddenToken.height) * pRiddenToken.parent.dimensions.distance, Target : pRiddenToken, Scene : pRiddenToken.parent, RidingMovement : true});
 				break;
 			default:
