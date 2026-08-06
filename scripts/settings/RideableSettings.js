@@ -228,6 +228,15 @@ Hooks.once("init", () => {  // game.settings.get(cModuleName, "")
 	default: 0
   });
   
+  game.settings.register(cModuleName, "FamiliarRidingInner", {
+	name: Translate("Settings.FamiliarRidingInner.name"),
+	hint: Translate("Settings.FamiliarRidingInner.descrp"),
+	scope: "world",
+	config: true,
+	type: Boolean,
+	default: false
+  });  
+  
   game.settings.register(cModuleName, "Grappling", {
 	name: Translate("Settings.Grappling.name"),
 	hint: Translate("Settings.Grappling.descrp"),

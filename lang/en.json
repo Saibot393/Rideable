@@ -180,6 +180,11 @@
 				}
 			},
 			
+			"FamiliarRiding" : {
+				"name" 					: "Place familiars inside",
+				"descrp"				: "Places familiars within the masters token."				
+			},
+			
 			"Grappling" : {
 				"name" 					: "Grappling",
 				"descrp"				: "Allows tokens to grapple one another (grappled tokens can only be unmounted by the grappling token)"				

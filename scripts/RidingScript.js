@@ -420,7 +420,7 @@ class Ridingmanager {
 		}
 		
 		//Familiars
-		Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, vRiderFamiliarList, pAnimations);
+		Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, vRiderFamiliarList, pAnimations, game.settings.get(cModuleName, "FamiliarRidingInner"));
 		
 		//Grappled
 		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {

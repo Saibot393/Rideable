@@ -180,6 +180,11 @@
 				}
 			},
 			
+			"FamiliarRiding" : {
+				"name" 					: "Vertrauten innen platzieren",
+				"descrp"				: "Platziert die Vertrauten im inneren der Meisterfigur."				
+			},
+			
 			"Grappling" : {
 				"name" 					: "Packen",
 				"descrp"				: "Erlaubt es Figuren einander zu packen (gegriffene Figuren können nur von der ergreifenden Figur losgelassen werden)"				
