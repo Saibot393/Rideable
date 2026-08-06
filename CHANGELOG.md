@@ -1,3 +1,6 @@
+## v5.0.15
+- Small bug fix
+
 ## v5.0.14
 - Added setting Place familiars inside to place familiar tokens within the master token
 
