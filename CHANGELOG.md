@@ -1,3 +1,6 @@
+## v5.0.14
+- Added setting Place familiars inside to place familiar tokens within the master token
+
 ## v5.0.13
 - Small fix to grapple mode follow
 
