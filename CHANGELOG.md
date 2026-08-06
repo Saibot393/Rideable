@@ -1,3 +1,6 @@
+## v5.0.13
+- Small fix to grapple mode follow
+
 ## v5.0.12
 - Added rider proxy position for pf2e distance calculations
 
