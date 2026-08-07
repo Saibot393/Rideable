@@ -402,7 +402,7 @@ Hooks.once("init", async () => {
 				const cRidden = RideableFlags.RiddenToken(this?.document);
 
 				if (cRidden?.object && RideableFlags.RiderProxyPosition(cRidden) && cRidden.documentName == "Token") {
-					return cRidden.object.distanceTo(pTarget.object, {reach});
+					return cRidden.object.distanceTo(pTarget, {reach});
 				}
 				
 				const cTargetRidden = RideableFlags.RiddenToken(pTarget?.document);
