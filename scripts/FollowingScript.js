@@ -158,7 +158,6 @@ class FollowingManager {
 	} 
 	
 	static async calculatenewRoute(pFollowers, pInfos = {StartRoute : true, Distance : undefined, Target : undefined, Scene : undefined, RidingMovement : false}) {
-		console.log(pFollowers, pInfos);
 		if (pFollowers.length > 0) {
 			let vScene = pInfos.Scene;
 			

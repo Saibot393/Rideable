@@ -420,7 +420,8 @@ class Ridingmanager {
 		}
 		
 		//Familiars
-		Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, vRiderFamiliarList, pAnimations, game.settings.get(cModuleName, "FamiliarRidingInside"));
+		let vBasicOffset = RideableFlags.RidersOffset(pRiddenToken, true);
+		Ridingmanager.placeRiderTokenscorner(pRiddenToken, pChanges, vRiderFamiliarList, pAnimations, game.settings.get(cModuleName, "FamiliarRidingInside"), [vBasicOffset[0]], [vBasicOffset[1]]);
 		
 		//Grappled
 		switch (RideableFlags.GrapplePlacement(pRiddenToken)) {
