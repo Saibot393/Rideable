@@ -1,3 +1,6 @@
+## v5.0.17
+- Rider offset now applies to familiars
+
 ## v5.0.16
 - Small bug fix
 
