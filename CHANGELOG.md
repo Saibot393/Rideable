@@ -1,3 +1,6 @@
+## v5.0.16
+- Small bug fix
+
 ## v5.0.15
 - Small bug fix
 
