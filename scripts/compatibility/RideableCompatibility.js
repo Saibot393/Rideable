@@ -399,13 +399,15 @@ Hooks.once("init", async () => {
 			const cOldDistance = CONFIG.Token.objectClass.prototype.distanceTo;
 			
 			function cNewDistance(pTarget, { reach = null } = {}) {
-				const cRidden = RideableFlags.RiddenToken(this?.document);
+				if (this?.document?.documentName == "Token") {
+					const cRidden = RideableFlags.RiddenToken(this?.document);
 
-				if (cRidden?.object && RideableFlags.RiderProxyPosition(cRidden) && cRidden.documentName == "Token") {
-					return cRidden.object.distanceTo(pTarget, {reach});
+					if (cRidden?.object && RideableFlags.RiderProxyPosition(cRidden) && cRidden.documentName == "Token") {
+						return cRidden.object.distanceTo(pTarget, {reach});
+					}
 				}
 				
-				const cTargetRidden = RideableFlags.RiddenToken(pTarget?.document);
+				const cTargetRidden = pTarget?.document?.documentName == "Token" ? RideableFlags.RiddenToken(pTarget?.document) : undefined;
 
 				const cActualTarget = cTargetRidden?.object && RideableFlags.RiderProxyPosition(cTargetRidden) && cTargetRidden.documentName == "Token" ? cTargetRidden.object : pTarget;
 				
