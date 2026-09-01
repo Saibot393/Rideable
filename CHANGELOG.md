@@ -1,3 +1,6 @@
+## v5.0.19
+- Fixed bug that caused riding height to not be unset when dismounting by moving token out of mount
+
 ## v5.0.18
 - Small bug fix
 
