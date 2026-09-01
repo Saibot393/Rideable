@@ -103,13 +103,17 @@ class Ridingmanager {
 			*/
 			
 			//Check if vToken is ridden
-			if (RideableFlags.isRidden(pToken)) {
 				//check if token position was actually changed
-				if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation") || (pChanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation")) || pChanges.hasOwnProperty("level")) {
+			if (pChanges.hasOwnProperty("x") || pChanges.hasOwnProperty("y") || pChanges.hasOwnProperty("elevation") || (pChanges.hasOwnProperty("rotation") && game.settings.get(cModuleName, "RiderRotation")) || pChanges.hasOwnProperty("level")) {
+				if (RideableFlags.isRidden(pToken)) {
 					//check if ridden Token exists
 					let vRiderTokenList = RideableFlags.RiderTokens(pToken);
 
 					Ridingmanager.planRiderTokens(pToken, pChanges, vRiderTokenList, !pisTile && pInfos.animate);
+				}
+				
+				if (pInfos.postManageIndependentRidermovement) {
+					Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pChanges);
 				}
 			}
 		}
@@ -381,7 +385,8 @@ class Ridingmanager {
 				delete pChanges.level;
 			}
 			
-			Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pChanges)
+			pInfos.postManageIndependentRidermovement = true;
+			//Hooks.call(cModuleName+".IndependentRiderMovement", pToken, pChanges)
 		}
 	}
 	
@@ -936,6 +941,7 @@ class Ridingmanager {
 				} 
 
 				if (!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) {
+
 					await pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
 				}
 			}
