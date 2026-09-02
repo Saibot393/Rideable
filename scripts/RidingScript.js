@@ -230,8 +230,14 @@ class Ridingmanager {
 	static UpdateRidderTokensRequest(pRiddenID, pRidersListIDs, pSceneID, pAnimations) {
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
-			
-			Ridingmanager.UpdateRidderTokens(RideableUtils.TokenfromID(pRiddenID, vScene), RideableUtils.TokensfromIDs(pRidersListIDs, vScene), pAnimations);
+			let vRiddenToken = RideableUtils.TokenfromID(pRiddenID, vScene);
+
+			if (!vRiddenToken) { return; }
+
+			let vAllowedRiderIDs = RideableFlags.RiderTokenIDs(vRiddenToken);
+			let vValidRiderIDs = pRidersListIDs.filter(id => vAllowedRiderIDs.includes(id));
+
+			Ridingmanager.UpdateRidderTokens(vRiddenToken, RideableUtils.TokensfromIDs(vValidRiderIDs, vScene), pAnimations);
 		}
 	}
 	
