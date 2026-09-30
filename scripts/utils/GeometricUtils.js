@@ -292,8 +292,9 @@ class GeometricUtils {
 	static TokenDistance(pTokenA, pTokenB, pTokenAReplacementPosition = {}) {
 		if ((pTokenA) && (pTokenB)) {
 			let vTokenAPosition = {...pTokenA, ...pTokenAReplacementPosition};
-			const aOffsetFactor = GeometricUtils.OffsetFactor(pTokenA);
-			return Math.sqrt( ((vTokenAPosition.x+aOffsetFactor*GeometricUtils.insceneWidth(pTokenA)/2)-(pTokenB.x+GeometricUtils.insceneWidth(pTokenB)/2))**2 + ((vTokenAPosition.y+aOffsetFactor*GeometricUtils.insceneHeight(pTokenA)/2)-(pTokenB.y+GeometricUtils.insceneHeight(pTokenB)/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
+			const cOffsetFactorA = GeometricUtils.OffsetFactor(pTokenA);
+			const cOffsetFactorB = GeometricUtils.OffsetFactor(pTokenB);
+			return Math.sqrt( ((vTokenAPosition.x+cOffsetFactorA*GeometricUtils.insceneWidth(pTokenA)/2)-(pTokenB.x+cOffsetFactorB*GeometricUtils.insceneWidth(pTokenB)/2))**2 + ((vTokenAPosition.y+cOffsetFactorA*GeometricUtils.insceneHeight(pTokenA)/2)-(pTokenB.y+cOffsetFactorB*GeometricUtils.insceneHeight(pTokenB)/2))**2)/(canvas.scene.dimensions.size)*(canvas.scene.dimensions.distance);
 		}
 		
 		return 0;
