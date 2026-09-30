@@ -1,3 +1,7 @@
+## v5.0.20
+- Tokens can now mount tiles that are present on all levels (thanks to [surface-tension](https://github.com/surface-tension))
+- Distance to/from tiles in v14 should now be calculated correctly (thanks to [surface-tension](https://github.com/surface-tension))
+
 ## v5.0.19
 - Fixed bug that caused riding height to not be unset when dismounting by moving token out of mount
 
