@@ -241,8 +241,6 @@ class MountingManager {
 	static RequestMount(pselectedTokens, pTarget, pRidingOptions) {
 		//starts a mount reequest
 		if (pTarget) {
-			pRidingOptions.isGM = game.user.isGM;
-			
 			if (game.user.isGM) {
 				MountingManager.MountSelectedGM(pTarget, pselectedTokens, pRidingOptions);
 			}
@@ -258,11 +256,13 @@ class MountingManager {
 		MountingManager.RequestMount(RideableUtils.TokensfromIDs(pselectedTokens, pSceneID), RideableUtils.TokenfromID(pTarget, pSceneID), pRidingOptions);
 	}
 	
-	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) { 
+	static MountRequest(pTargetID, pselectedTokensID, pSceneID, pRidingOptions) {
 		//Handels Mount request by matching TokenIDs to Tokens and mounting them
 		if (game.user.isGM) {
 			let vScene = game.scenes.get(pSceneID);
-			
+
+			pRidingOptions.isGM = false;
+
 			MountingManager.MountSelectedGM(RideableUtils.TokenfromID(pTargetID, vScene), RideableUtils.TokensfromIDs(pselectedTokensID, vScene), pRidingOptions);
 		}
 		
