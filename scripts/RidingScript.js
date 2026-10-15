@@ -81,7 +81,7 @@ class Ridingmanager {
 	static SyncSortRequest(pData) {} //answers a requests a sort sync
 	
 	//external movement
-	static MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {} //change the position of a riden token as a GM
+	static async MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {} //change the position of a riden token as a GM
 	
 	static RequestMoveRidden(pRidden, pRelativChanges, pInfos) {} //request the position change of a Ridden token from the GM
 	
@@ -978,7 +978,7 @@ class Ridingmanager {
 	}
 	
 	//external movement
-	static MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {
+	static async MoveRiddenGM(pRidden, pRelativChanges, pTotalChanges, pInfos) {
 		if (pRidden) {
 			if (pInfos.MovedbyPilot) {
 				let vScene = FCore.sceneof(pRidden);
@@ -1020,8 +1020,10 @@ class Ridingmanager {
 							vTarget.level = pTotalChanges.level;
 
 							if (game.release.generation > 12) {
-								pRidden.move(vTarget, {RidingMovement : true});
-								pRidden.update({rotation : vTarget.rotation}, {RidingMovement : true});
+								console.log(pRidden);
+								console.log(vTarget);
+								await pRidden.move ? pRidden.move(vTarget, {RidingMovement : true}) : pRidden.update(vTarget, {RidingMovement : true});
+								await pRidden.update({rotation : vTarget.rotation}, {RidingMovement : true});
 							}
 							else {
 								pRidden.update(vTarget, {RidingMovement : true});
