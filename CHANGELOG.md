@@ -1,3 +1,6 @@
+## v5.0.22
+- Bug fix for tile piloting
+
 ## v5.0.21
 - Token following now applies token auto rotation if activated in the core world settings
 
