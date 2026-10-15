@@ -1,3 +1,6 @@
+## v5.0.21
+- Token following now applies token auto rotation if activated in the core world settings
+
 ## v5.0.20
 - Tokens can now mount tiles that are present on all levels (thanks to [surface-tension](https://github.com/surface-tension))
 - Distance to/from tiles in v14 should now be calculated correctly (thanks to [surface-tension](https://github.com/surface-tension))
