@@ -214,7 +214,7 @@ class FollowingManager {
 				let vDestackedRoutes = await FollowingManager.PlanDestackRoutes(vRouteData);
 
 				for (let vData of vDestackedRoutes) {
-					vData.token.move(vData.route, {RideableFollowingMovement : true, RidingMovement : pInfos.RidingMovement});
+					vData.token.move(vData.route, {RideableFollowingMovement : true, RidingMovement : pInfos.RidingMovement, autoRotate : game.settings.get("core", "tokenAutoRotate")});
 				}
 			}
 			else {
@@ -237,7 +237,7 @@ class FollowingManager {
 			
 			if (vPoint && Object.keys(vPoint).length) {
 				if (game.release.generation > 12) {
-					await pToken.move(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
+					await pToken.move(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement, autoRotate : game.settings.get("core", "tokenAutoRotate")});
 				}
 				else {
 					await pToken.update(vPoint, {RideableFollowingMovement : true, RidingMovement : vPoint.RidingMovement});
