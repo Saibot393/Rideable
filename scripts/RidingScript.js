@@ -668,7 +668,7 @@ class Ridingmanager {
 	static async placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			
-			if (RideableFlags.UseRidingHeight(pRiddenToken)) {
+			if (RideableFlags.UseRidingHeight(pRiddenToken) && !(RideableCompUtils.isactiveModule("levels-3d-preview") && game.Levels3DPreview?._active)) {
 				let vTargetz = pRiddenToken.elevation;
 				
 				if (!isFinite(vTargetz)) {
@@ -940,7 +940,7 @@ class Ridingmanager {
 					Ridingmanager.SyncSort(pRiderTokens[i], 0);
 				} 
 
-				if (!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) {
+				if ((!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) && !(RideableCompUtils.isactiveModule("levels-3d-preview") && game.Levels3DPreview?._active)) {
 
 					await pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
 				}
