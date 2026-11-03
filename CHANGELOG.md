@@ -1,3 +1,6 @@
+## v5.0.23
+- Added world setting "Disable Riding height"
+
 ## v5.0.22
 - Bug fix for tile piloting
 
