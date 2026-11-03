@@ -55,6 +55,11 @@
 				"descrp"				: "Die Z-Höhe welche eine reitende Figur im Vergleich zur getrittenen Figur hat (es wird ein Wert über 0 empfohlen)"
 			},
 			
+			"disableRidingHeight" : {
+				"name" 					: "Reithöhe ignorieren",
+				"descrp"				: "Ignoriert die Reithöhe global"
+			},
+			
 			"useRidingHeight" : {
 				"name" 					: "Reithöhe standardmäßig genutzt",
 				"descrp"				: "Ob Figuren die Reithöhe standardmäßig nutzen"

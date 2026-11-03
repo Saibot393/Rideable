@@ -55,6 +55,11 @@
 				"descrp"				: "The z-height which a riding token has compared to its mount (recommended to be above 0)"
 			},
 			
+			"disableRidingHeight" : {
+				"name" 					: "Disable Riding height",
+				"descrp"				: "Disables riding height globally"
+			},
+			
 			"useRidingHeight" : {
 				"name" 					: "Use riding height by default",
 				"descrp"				: "If tokens use riding height by default"

@@ -313,12 +313,15 @@ class Ridingmanager {
 						}
 						
 						let vztarget = pRidden.elevation;
-						if (pChanges.hasOwnProperty("elevation")) {
-							if (vChange.hasOwnProperty("elevation")) {
-								vztarget = pRidden.elevation + vChange.elevation;
-							}
-							else {
-								vztarget = pRidden.elevation + (pChanges.elevation - pToken.elevation);
+						
+						if (!game.settings.get(cModuleName, "disableRidingHeight")) {
+							if (pChanges.hasOwnProperty("elevation")) {
+								if (vChange.hasOwnProperty("elevation")) {
+									vztarget = pRidden.elevation + vChange.elevation;
+								}
+								else {
+									vztarget = pRidden.elevation + (pChanges.elevation - pToken.elevation);
+								}
 							}
 						}
 						/*
@@ -668,7 +671,7 @@ class Ridingmanager {
 	static async placeRiderHeight(pRiddenToken, pRiderTokenList, pPlaceSameheight = false) {
 		for (let i = 0; i < pRiderTokenList.length; i++) {
 			
-			if (RideableFlags.UseRidingHeight(pRiddenToken)) {
+			if (RideableFlags.UseRidingHeight(pRiddenToken) && !game.settings.get(cModuleName, "disableRidingHeight")) {
 				let vTargetz = pRiddenToken.elevation;
 				
 				if (!isFinite(vTargetz)) {
@@ -940,8 +943,7 @@ class Ridingmanager {
 					Ridingmanager.SyncSort(pRiderTokens[i], 0);
 				} 
 
-				if (!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) {
-
+				if ((!pRiddenTokens[i] || RideableFlags.UseRidingHeight(pRiddenTokens[i])) && !game.settings.get(cModuleName, "disableRidingHeight")) {
 					await pRiderTokens[i].update({elevation: vTargetz}, {RidingMovement : true});
 				}
 			}
