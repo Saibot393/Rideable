@@ -1,3 +1,6 @@
+## v5.0.24
+- System specific fix for mounting weight feature
+
 ## v5.0.23
 - Added world setting "Disable Riding height"
 

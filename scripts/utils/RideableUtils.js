@@ -470,7 +470,7 @@ class RideableUtils {
 					}
 				}
 				
-				if (vItem.system?.properties?.has("weightlessContents")) { //e.g. d&d bag of holding
+				if (vItem.system?.properties?.has && vItem.system?.properties?.has("weightlessContents")) { //e.g. d&d bag of holding
 					if (!isNaN(vItem.system?.contentsWeight)) {
 						vWeight = vWeight - Number(vItem.system?.contentsWeight);
 					}
